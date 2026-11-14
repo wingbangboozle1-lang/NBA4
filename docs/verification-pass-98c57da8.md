@@ -58,12 +58,12 @@ The table has 26 rows: 21 cited primary web URLs (20 distinct pages; several row
 | --- | --- | --- | --- | --- |
 | V4-01 | Low | IR-01 was a false positive. The creation page carries the server-side-language sentence as a Note. | Withdrawn on the review page; the original claim stands. | [Creating a site](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site) |
 | V4-02 | Low | The coordination-board row still attributed the calibration sentence to the model-evaluation page. | Row split. | [Probability calibration](https://scikit-learn.org/stable/modules/calibration.html) |
-| V4-03 | Low | README and landing page stated 47 engine unit tests; the suite has 90. | Corrected; checker guard added. | [tests folder](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
+| V4-03 | Low | README and landing page stated 47 engine unit tests; the suite has 90. | Corrected; checker guard added. Same finding as T-01 in `docs/verification-pass-88673f07.md` (fixed on main first). | [tests folder](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
 | V4-04 | Low | `docs/engine.md` attributed the 43-test count to the discover command. | Corrected to `tests.test_engine_models`. | [engine guide](https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/engine.md) |
 | V4-05 | Low | Duplicate "Suggestions" sidebar link on six pages. | Removed; checker guard added. | [review page](https://github.com/wingbangboozle1-lang/NBA4/blob/main/review.html) |
 | V4-06 | Low | A Ksa citation path is a redirect to the canonical Ksa page. | Citations moved to the canonical URL in `docs/audit.md` and `docs/validation-plan.md`. | [Ksa canonical page](https://kansspelautoriteit.nl/belangrijkste-regels-voor-kansspelreclame) |
 | V4-07 | Medium | The official Ksa advertising page links to `prod.kansspelautoriteit.hosted-temp.com`, a host not on kansspelautoriteit.nl. | Open for counsel. Not cited by the repository. | [Ksa advertising rules](https://kansspelautoriteit.nl/belangrijkste-regels-voor-kansspelreclame) |
-| V4-08 | Medium | The cited injury PDF is one dated snapshot. The official page lists later 14 Nov 2026 reports. | Open (IR-04). No player rows are republished. | [NBA injury report](https://official.nba.com/nba-injury-report-2026-27-season/) |
+| V4-08 | Medium | The cited injury PDF is one dated snapshot. The official page lists later 14 Nov 2026 reports. | Open (IR-04; same finding as T-02). No player rows are republished. | [NBA injury report](https://official.nba.com/nba-injury-report-2026-27-season/) |
 | V4-09 | Low | The board asks for session branches, while the session branch rule names one branch for this session. | Recorded on the board; no file scope overlaps with another session. | [coordination board](https://github.com/wingbangboozle1-lang/NBA4/blob/main/COORDINATION.md) |
 
 ## 4. Not re-verified in this pass

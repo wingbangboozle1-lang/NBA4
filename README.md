@@ -4,7 +4,7 @@
 
 ## Current status
 
-This repository contains an evidence-first research plan **and a working reference engine** for it: data contracts with a hard rights gate, model-originated fair lines and prices, de-vigging, parlay/prop-combo joint probabilities, correlation estimators with game-cluster bootstrap intervals, validation metrics, a gate-aware leaderboard, and a three-day slate pipeline with an append-only ledger. The engine ships with synthetic fixtures and 90 passing unit tests (47 in `tests/test_engine.py`, 43 in `tests/test_engine_models.py`); it contains **no NBA or market data**, no trained model and no published pick.
+This repository contains an evidence-first research plan **and a working reference engine** for it: data contracts with a hard rights gate, model-originated fair lines and prices, de-vigging, parlay/prop-combo joint probabilities, correlation estimators with game-cluster bootstrap intervals, validation metrics, a gate-aware leaderboard, and a three-day slate pipeline with an append-only ledger. The engine ships with synthetic fixtures and 90 passing unit tests (47 + 43, both suites); it contains **no NBA or market data**, no trained model and no published pick.
 
 The blocking issue is still data rights, not code. NBA's Stats FAQ states its statistics are "not available for download for either academic or personal use", and NBA.com's Terms of Use restrict NBA Statistics to "legitimate news reporting or private, non-commercial purposes" and state they "may not be used in connection with any gambling activity (including legal gambling activity)", nor with a "database ... of comprehensive, regularly updated statistics" without the Operator's express prior consent. No NBA statistics, player data, team data, odds or schedule rows have been added, and the engine refuses any record whose permission flag is not set. Obtain written permission or a licensed contract, plus legal review of the product and rewards, before a betting model or public picks are considered.
 
@@ -69,6 +69,7 @@ A second model-side subsystem from session `arena/2c06c7f9-nba4` lives alongside
 - [`docs/suggestions.md`](docs/suggestions.md) — the suggestions register and the four gating decisions.
 - [`docs/engine.md`](docs/engine.md) — model-side engine guide: ratings/props/injury/game-flow methods, UNFITTED parameter register, inputs spec.
 - [`docs/leaderboard.md`](docs/leaderboard.md) — leaderboard competition rules, anti-luck scoring and proposed reward tiers (supplementary design record).
+- [`docs/verification-pass-88673f07.md`](docs/verification-pass-88673f07.md) — fourth live re-check of the primary sources, with the test-count, injury-snapshot and privacy-wording corrections (T-01…T-03) and observations O-1…O-3.
 - [`docs/verification-pass-2c06c7f9.md`](docs/verification-pass-2c06c7f9.md) — third independent verification pass (18 sources quote-checked; 5 irregularities I-1…I-5).
 - [`docs/suggestions-2c06c7f9.md`](docs/suggestions-2c06c7f9.md) — supplementary suggestion register (paths A/B/C and decision log) from the same session.
 - [`COORDINATION.md`](COORDINATION.md) — task board, verification notes and publication record.
@@ -84,7 +85,7 @@ python3 scripts/run_pipeline.py \
     --now 2026-11-14T12:00:00Z                # synthetic smoke test
 ```
 
-The checker verifies each page's title and single heading, every local link and fragment, every HTML table row's final source cell, every Markdown table row in `docs/` for an HTTPS source on an approved official-source domain, and that no page on disk is missing from the checked set. It does not fetch external sites; each cited source must be reviewed directly (the review log is in `docs/source-verification.md`). The site uses static HTML/CSS only, with no third-party scripts, cookies or data collection.
+The checker verifies each page's title and single heading, every local link and fragment, every HTML table row's final source cell, every Markdown table row in `docs/` for an HTTPS source on an approved official-source domain, and that no page on disk is missing from the checked set. It does not fetch external sites; each cited source must be reviewed directly (the review log is in `docs/source-verification.md`). The site's own code uses static HTML/CSS only, with no third-party scripts or cookies and no form or data collection. GitHub Pages is different: GitHub states that "when a GitHub Pages site is visited, the visitor's IP address is logged and stored for security purposes" ([GitHub Docs, What is GitHub Pages?](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)). This was flagged as T-03 on the Flagged for Review page.
 
 ## Publication record
 
