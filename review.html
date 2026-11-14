@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Flagged for Review — unresolved data rights, legal, model, injury, correlation and leaderboard questions with official sources.">
+  <title>NBA4 — Flagged for review</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Site navigation">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N4</span><span class="brand-copy">NBA4<small>RESEARCH DASHBOARD</small></span></a>
+    <p class="nav-label">Workspace</p>
+    <nav class="primary-nav" aria-label="Primary navigation"><ul>
+      <li><a href="index.html"><span class="nav-icon" aria-hidden="true">◆</span>Overview</a></li>
+      <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
+      <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
+      <li><a href="strategies.html"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
+      <li><a href="questions.html"><span class="nav-icon" aria-hidden="true">?</span>Decision questions</a></li>
+      <li><a href="sources.html"><span class="nav-icon" aria-hidden="true">↗</span>Sources</a></li>
+      <li><a href="review.html" aria-current="page"><span class="nav-icon" aria-hidden="true">⚑</span>Flagged for review</a></li>
+    </ul></nav>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-note"><strong>Review queue</strong><p>Open issues are not “verified” by this dashboard.</p></div>
+    <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
+  </aside>
+  <div class="content-shell">
+    <header class="topbar"><div><p class="topbar-title">Flagged for review</p><p class="topbar-meta">Open blockers · 14 Nov 2026 UTC</p></div><span class="status-pill">NO PICKS ISSUED</span></header>
+    <main id="main" class="main-content">
+      <header class="page-header"><p class="eyebrow">Human decision queue</p><h1>Flagged for Review</h1><p>This dedicated page collects what is unresolved, why it matters, a concrete way to discover the answer and an official source for manual review. A flag may remain open without blocking this informational site; it does block any affected pick/model output.</p></header>
+
+      <div class="notice notice-danger"><span class="notice-icon" aria-hidden="true">!</span><div><strong>No betting outputs are enabled.</strong><p>Unverified or missing values stay blank. Do not treat this queue as user approval, legal advice, a data licence or a successful model validation.</p></div></div>
+
+      <section class="section" aria-labelledby="review-title">
+        <div class="section-heading"><div><h2 id="review-title">Issues and next discovery step</h2><p>Priorities are project recommendations, not source-assigned ratings.</p></div><a class="section-link" href="questions.html">Open full decision register →</a></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">ID / priority</th><th scope="col">Flagged issue</th><th scope="col">What is verified</th><th scope="col">What remains unknown</th><th scope="col">Suggested discovery</th><th scope="col">Official source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>F-01 · P0</strong><br><span class="flag flag-red">Critical</span></td><td><strong>NBA data-use rights</strong></td><td>NBA Stats says its statistics are for viewing, not downloading; NBA Terms restrict NBA Statistics in gambling, including legal gambling.</td><td>Written permission/license for betting use, derivative features, automation, storage and public display.</td><td>Obtain explicit written permission or a separately licensed source contract covering every intended use. No scraping or data publication before clearance.</td><td><a class="source-link" href="https://www.nba.com/stats/help/faq" target="_blank" rel="noopener noreferrer">NBA Stats FAQ</a><br><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms</a></td></tr>
+              <tr><td><strong>F-02 · P0</strong><br><span class="flag flag-red">Critical</span></td><td><strong>No authorized point-in-time data feed</strong></td><td>Only public official reference pages were checked; report updates are continual.</td><td>Historical event/player/minute/lineup snapshots, update latency, change history, data rights and API credentials.</td><td>After F-01, request sample payloads/contracts from licensed providers and audit IDs, timestamps, corrections, coverage and SLA.</td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury-report policy</a><br><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms</a></td></tr>
+              <tr><td><strong>F-03 · P0</strong><br><span class="flag flag-red">Critical</span></td><td><strong>Market prices and settlement rules missing</strong></td><td>No book/market/quote source or settlement rule is in the repository.</td><td>Odds/lines, price timestamps, vig/fees, payout, overtime and push/void/correction handling.</td><td>Select an authorized price/settlement source after rights/legal review; write a contract/schema for each bet type before testing edge.</td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA data-use terms</a><br><a class="source-link" href="https://kansspelautoriteit.nl/remote-gambling-act-force" target="_blank" rel="noopener noreferrer">Ksa guidance</a></td></tr>
+              <tr><td><strong>F-04 · P0</strong><br><span class="flag flag-red">Critical</span></td><td><strong>Product/jurisdiction classification unresolved</strong></td><td>Ksa says online gambling operators need a licence in the Netherlands and publishes advertising/affiliate guidance.</td><td>Target geographies, wager flow, bookmaker links, marketing, entry fees, prizes, age controls and whether this is an operator/affiliate/service.</td><td>Document the user journey and get qualified jurisdiction-specific review against full current laws/rules before launch or rewards.</td><td><a class="source-link" href="https://kansspelautoriteit.nl/remote-gambling-act-force" target="_blank" rel="noopener noreferrer">Ksa licensing</a><br><a class="source-link" href="https://kansspelautoriteit.nl/ksa-attendeert-affiliatewebsites-op-regels-voor-reclame-kansspelen" target="_blank" rel="noopener noreferrer">Ksa affiliate guidance</a></td></tr>
+              <tr><td><strong>F-05 · P1</strong><br><span class="flag">High</span></td><td><strong>No strategy has been validated</strong></td><td>Research/validation plan exists; there is no prediction/outcome ledger or trained model in the starting repo.</td><td>Model accuracy, calibration, baseline comparison, uncertainty, net outcome and out-of-sample “skill.”</td><td>Build only on authorized data; preregister baselines and metrics, conduct chronological walk-forward tests, and preserve an untouched holdout.</td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">Time-series validation</a><br><a class="source-link" href="https://scikit-learn.org/stable/modules/calibration.html" target="_blank" rel="noopener noreferrer">Calibration methods</a></td></tr>
+              <tr><td><strong>F-06 · P1</strong><br><span class="flag">High</span></td><td><strong>Correlation values unavailable</strong></td><td>NIST provides the statistical definition of correlation; this repo has no paired outcomes or predictions.</td><td>Pair definitions, sample windows, coefficients, uncertainty and joint-probability calibration for same-game legs.</td><td>Estimate from licensed matched legs/residuals, include sample count and game-cluster uncertainty, and test on future data.</td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST correlation</a><br><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms</a></td></tr>
+              <tr><td><strong>F-07 · P1</strong><br><span class="flag">High</span></td><td><strong>Injury reports do not supply modeled minutes</strong></td><td>Official reports describe team-reported status/reason and update continually.</td><td>Point-in-time status feed/history, availability model, lineups/minutes, player production impact and scenario coverage.</td><td>Archive permitted updates and validate status → availability → minutes → production separately. Keep all impact cells blank until then.</td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury-report policy</a></td></tr>
+              <tr><td><strong>F-08 · P1</strong><br><span class="flag">High</span></td><td><strong>Official schedule is dated, not a live slate</strong></td><td>The official 2026–27 PDF is labeled “as of August 13, 2026” and “subject to change.”</td><td>Authorized, continuously updated schedule/change feed and rights to display its rows.</td><td>Use a licensed live feed; enforce the three-day horizon with an explicit timezone/cutoff; suppress on stale schedule.</td><td><a class="source-link" href="https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf" target="_blank" rel="noopener noreferrer">Official NBA schedule PDF</a></td></tr>
+              <tr><td><strong>F-09 · P1</strong><br><span class="flag">High</span></td><td><strong>Rewards and leaderboard policy undefined</strong></td><td>No participants, score, samples, eligibility or prizes exist in repo.</td><td>Reward nature/amount, funding, risk limits, ties, audit, legal and tax treatment.</td><td>Use a non-monetary validation audit first. Define locked versions, risk policy and eligibility and obtain legal review before rewards.</td><td><a class="source-link" href="https://kansspelautoriteit.nl/belangrijkste-regels-voor-kansspelreclame" target="_blank" rel="noopener noreferrer">Ksa advertising rules</a><br><a class="source-link" href="https://kansspelautoriteit.nl/10-tips-gambling-safely" target="_blank" rel="noopener noreferrer">Ksa consumer guidance</a></td></tr>
+              <tr><td><strong>F-10 · P2</strong><br><span class="flag flag-blue">Conditional</span></td><td><strong>GitHub Pages may not fit a commercial/live product</strong></td><td>Pages is static and GitHub excludes commercial SaaS/online-business hosting.</td><td>Whether the intended final product is an informational public site or a commercial live service.</td><td>Keep this site informational; if product scope is commercial/live, choose a permitted host/backend before implementation.</td><td><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site" target="_blank" rel="noopener noreferrer">Pages docs</a><br><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits" target="_blank" rel="noopener noreferrer">Pages limits</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section two-column" aria-label="How to resolve flags">
+        <article class="panel"><h2>Review sequence</h2><ol><li>Resolve F-01 through F-04 first; they are hard blockers.</li><li>Only then evaluate data feeds and point-in-time completeness.</li><li>Use the preregistered validation plan to decide whether any strategy qualifies.</li><li>Publish a model/pick only if all linked requirements pass; otherwise retain “no pick.”</li></ol></article>
+        <article class="panel"><h2>Related registers</h2><p><a href="questions.html">Decision questions</a> · <a href="sources.html">Official source register</a> · <a href="strategies.html">Strategy gates</a></p><p>Unresolved flags do not block this informational site. They block unverified betting outputs.</p></article>
+      </section>
+      <footer class="footer"><p>Flags reflect the evidence snapshot, not a legal opinion.</p><p><a href="index.html">Return to overview →</a></p></footer>
+    </main>
+  </div>
+</div>
+</body>
+</html>
