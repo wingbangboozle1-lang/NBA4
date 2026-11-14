@@ -1,7 +1,6 @@
 # Final acceptance and release-readiness audit
 
-**Audit date:** 2026-11-14 UTC  
-**Scope:** Clean-room repository acceptance and policy-consistency review after PR #26. This is not a fresh re-verification of every external source.
+**Audit date:** 2026-11-14 UTC. **Scope:** Clean-room repository acceptance and policy-consistency review after PR #26. This is not a fresh re-verification of every external source.
 
 ## Executive decision
 
