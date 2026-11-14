@@ -13,8 +13,8 @@
     "rule": "requested maximum horizon of 3 days from the observation time; games tipping off on or after 2026-11-18T00:30:00Z are outside the window"
   },
   "extraction_notes": [
-    "The PDF prints two local-time columns per game. Both are recorded verbatim below as tip_et_home_venue and tip_et_second_column; the column headers are not reproduced in the extracted text, so the mapping of each column is not asserted.",
-    "Out-of-window follow-on rows 253-257 (11/17: NYK@TOR 7:30 PM, POR@MIN 8:00 PM, DET@SAS 8:00 PM, CHA@LAL 10:00 PM, UTA@LAC 11:00 PM ET) were read but are excluded because they tip off after 2026-11-18T00:30:00Z.",
+    "The PDF text carries the column header \"LOCAL | ET\" (read 2026-11-14 from the first chunk of the PDF text). The first time column (tip_et_col1) is the local tip time at the home venue and the second (tip_et_col2) is Eastern time. Checked for all 22 window rows: the Eastern value equals the home venue's local time converted to ET in 22 of 22 rows, and the away team's time zone fits only 7 of 22. This is a consistency check against venue time zones, not a statement taken from the document; both values stay verbatim.",
+    "Out-of-window follow-on rows 253-257 (11/17) were read but are excluded because they tip off after 2026-11-18T00:30:00Z. The PDF prints no 'at' token on these rows, so no away/home order is asserted; the printed order and ET tip times are: New York / Toronto 7:30 PM; Portland / Minnesota 8:00 PM; Detroit / San Antonio 8:00 PM; Charlotte / LA Lakers 10:00 PM; Utah / LA Clippers 11:00 PM.",
     "No venue, broadcast-independent status, odds, probability or pick is present in this file or taken from the PDF."
   ],
   "games": [

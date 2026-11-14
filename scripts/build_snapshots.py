@@ -121,8 +121,8 @@ def render_slate() -> str:
         '<div class="table-card table-wrap">\n'
         '          <table class="data-table">\n'
         "            <thead><tr>"
-        '<th scope="col">Date (ET)</th>'
-        '<th scope="col">Tip-off, schedule columns 1 / 2</th>'
+        '<th scope="col">Date (as printed)</th>'
+        '<th scope="col">Tip-off: home-venue local / ET (PDF header LOCAL | ET)</th>'
         '<th scope="col">Game</th>'
         '<th scope="col">Matchup</th>'
         '<th scope="col">Originated line</th>'
