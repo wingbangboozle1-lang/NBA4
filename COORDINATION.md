@@ -2,7 +2,7 @@
 
 Updated: 2026-11-14 (UTC). The starting repository contained only `README.md` and no coordination board or task claims. The session IDs below use the active Arena branch identifiers because no separate session ID is exposed in the repository.
 
-**Sessions and concurrency.** Five sessions contributed to this repository, in this order:
+**Sessions and concurrency.** Six sessions contributed to this repository, in this order:
 
 1. `arena/c5eef6bb-nba4` wrote the evidence-first dashboard (tasks A–D) and merged it as PR #1.
 2. `arena/eb3064e3-nba4` performed the first final integration and Pages publication (task E, PR #2).
@@ -154,7 +154,10 @@ Two independent source-verification logs exist and both are preserved: [`docs/so
 | PR #8 (build incident record) | [PR #8](https://github.com/wingbangboozle1-lang/NBA4/pull/8) merged as `74307ee`. |
 | PR #9 (record PR #5 merge) | [PR #9](https://github.com/wingbangboozle1-lang/NBA4/pull/9) merged as `3a8d069`. |
 | PR #10 (engine, 11-page site, integration) | [PR #10](https://github.com/wingbangboozle1-lang/NBA4/pull/10) from `arena/248bb9ab-nba4` to `main`. **Merged** as `f9c63d2` at 2026-11-14T01:26Z. Pages built `f9c63d2` successfully (29.3s, `status: built`). |
-| GitHub Pages | `status: built`; published from `main` at `/`; HTTPS enforced; public. Rechecked after each merge; the build-incident history is recorded above. |
+| PR #11 (third verification pass, model-side engine, leaderboard design, parallel-merge reconciliation) | [PR #11](https://github.com/wingbangboozle1-lang/NBA4/pull/11) from `arena/2c06c7f9-nba4` to `main`; **merged** as `6d837a2ea06dd4b57ec273a67b1e430975d6b06f` at 2026-11-14T01:35:03Z after resolving the parallel-session conflicts (log above; two merge rounds were needed because PRs #10/#12 landed mid-flight). GitHub Pages build **`status: built`** (19.9 s, no error, 2026-11-14T01:35:23Z) and the live site was fetched and confirmed serving the merged 11-page dashboard. |
+| PR #12 (PR #10 record and task N completion) | [PR #12](https://github.com/wingbangboozle1-lang/NBA4/pull/12) from `arena/248bb9ab-nba4` to `main`; merged as `452c0db`. |
+| PR #13 (record PR #11 merge and Pages deployment) | [PR #13](https://github.com/wingbangboozle1-lang/NBA4/pull/13) from `arena/2c06c7f9-nba4` to `main`; this bookkeeping changeset. |
+| GitHub Pages | `status: built`; published from `main` at `/`; HTTPS enforced; public. Rechecked after each merge — most recently after PR #11 (build `built`, 19.9 s; live site content confirmed 2026-11-14 ~01:36 UTC). The build-incident history is recorded above. |
 | Live URL | [https://wingbangboozle1-lang.github.io/NBA4/](https://wingbangboozle1-lang.github.io/NBA4/) |
 | Post-merge check | Site re-fetched after every merge; all pages served with intact tables and source links. After PR #3 the Pages build completed for commit `2a7b565` (`status: built` at 01:07:30Z) and `/suggestions.html` plus `/review.html` were fetched live with the then-new content and the VF-01 … VF-04 flags. After PR #10 the Pages build completed for `f9c63d2` (`status: built`, 29.3s) and the live pages were re-fetched: the merged 11-page navigation, the combined suggestion registers (D-1…D-4, P-01…P-12, S-01…S-23) and the F/VF/IR flags are all present. |
 ## Handoff and integrity rules
