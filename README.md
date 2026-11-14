@@ -69,6 +69,7 @@ A second model-side subsystem from session `arena/2c06c7f9-nba4` lives alongside
 - [`docs/suggestions.md`](docs/suggestions.md) — the suggestions register and the four gating decisions.
 - [`docs/engine.md`](docs/engine.md) — model-side engine guide: ratings/props/injury/game-flow methods, UNFITTED parameter register, inputs spec.
 - [`docs/leaderboard.md`](docs/leaderboard.md) — leaderboard competition rules, anti-luck scoring and proposed reward tiers (supplementary design record).
+- [`docs/verification-pass-c6ae3e43.md`](docs/verification-pass-c6ae3e43.md) — fourth verification pass (task V, PR #17): 19 primary pages re-read and quoted, live-site and Pages API check, flag V-01.
 - [`docs/verification-pass-88673f07.md`](docs/verification-pass-88673f07.md) — fourth live re-check of the primary sources, with the test-count, injury-snapshot and privacy-wording corrections (T-01…T-03) and observations O-1…O-3.
 - [`docs/verification-pass-2c06c7f9.md`](docs/verification-pass-2c06c7f9.md) — third independent verification pass (18 sources quote-checked; 5 irregularities I-1…I-5).
 - [`docs/suggestions-2c06c7f9.md`](docs/suggestions-2c06c7f9.md) — supplementary suggestion register (paths A/B/C and decision log) from the same session.
