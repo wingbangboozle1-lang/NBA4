@@ -43,7 +43,7 @@
       <section class="hero" aria-labelledby="page-title">
         <p class="eyebrow">Executive summary · evidence first</p>
         <h1 id="page-title">Originate NBA lines responsibly.</h1>
-        <p class="hero-copy">This repository contains a source-checked research plan, validation gates, a missing-information register, a review dashboard — and a working reference engine that originates lines, measures correlations, runs a gate-aware leaderboard and executes a three-day slate pipeline. It has no licensed point-in-time dataset and no validated model, so every line, pick, correlation, injury-minute impact and performance field is left blank rather than guessed.</p>
+        <p class="hero-copy">This repository contains a source-checked research plan, validation gates, a missing-information register, a review dashboard — a working reference engine that originates lines, measures correlations, runs a gate-aware leaderboard and executes a three-day slate pipeline — and, for the current slate, <strong>the official observations published row by row with links to the source documents</strong>. It has no licensed point-in-time dataset and no validated model, so every line, pick, correlation, injury-minute impact and performance field is left blank rather than guessed.
         <div class="hero-actions">
           <a class="button" href="review.html">Review the blockers</a>
           <a class="button button-secondary" href="line-origination.html">See how lines are originated</a>
@@ -53,8 +53,9 @@
       <section class="metric-grid" aria-label="Current project status">
         <article class="metric-card blocked"><p class="metric-label">Validated strategies</p><p class="metric-value">None</p><p class="metric-detail">No training or holdout results exist.</p></article>
         <article class="metric-card blocked"><p class="metric-label">Published picks</p><p class="metric-value">None</p><p class="metric-detail">The rights gate refuses uncleared input by design.</p></article>
+        <article class="metric-card ready"><p class="metric-label">Official observations</p><p class="metric-value">22 games · 49 rows</p><p class="metric-detail">Schedule rows and one injury report, each linked to its document; fetched 14 Nov 2026.</p></article>
         <article class="metric-card"><p class="metric-label">Correlation values</p><p class="metric-value">Not measured</p><p class="metric-detail">Paired, licensed outcomes are missing.</p></article>
-        <article class="metric-card ready"><p class="metric-label">Engine status</p><p class="metric-value">Implemented &amp; tested</p><p class="metric-detail">47 unit tests over synthetic fixtures; no NBA data.</p></article>
+        <article class="metric-card ready"><p class="metric-label">Engine status</p><p class="metric-value">Implemented &amp; tested</p><p class="metric-detail">101 unit tests over synthetic fixtures; no NBA-derived model values.</p></article>
       </section>
 
       <section class="section" aria-labelledby="important-title">
@@ -99,13 +100,13 @@
             <li>Select an authorized provider for historical stats, point-in-time injuries, prices and settlement data.</li>
             <li>Pre-register baselines, market definitions, validation thresholds and a chronological holdout.</li>
             <li>Measure joint probabilities and correlations from licensed, paired outcomes; issue no pick while a gate fails.</li>
-            <li>Connect the licensed feed to the existing adapters, run the pipeline in shadow mode, and review the 23 site suggestions before changing the dashboard.</li>
+            <li>Connect the licensed feed to the existing adapters, run the pipeline in shadow mode, and review the registered site suggestions (SG-14 … SG-25 are the newest) before changing the dashboard.</li>
           </ol>
           <p>These are proposed controls, not evidence that a particular betting strategy works.</p>
         </article>
         <article class="panel">
           <h2>Suggestions &amp; decisions</h2>
-          <p>Four gating decisions, twelve decision-queue proposals and twenty-three review-register proposals are collected on a dedicated review page, each with options, trade-offs, effort and a source, so a path can be chosen before anything is built.</p>
+          <p>Four gating decisions, twelve decision-queue proposals, twenty-three review-register proposals and a session register of twelve decision paths (SG-14 … SG-25) are collected on a dedicated review page, each with options, trade-offs, effort and a source, so a path can be chosen before anything is built.</p>
           <div><a class="button button-secondary" href="suggestions.html">Review suggestions</a></div>
         </article>
         <article class="panel">
@@ -122,6 +123,9 @@
             <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/source-verification.md">Source verification log</a>
             <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/verification-log.md">Independent verification log</a>
             <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/suggestions.md">Suggestions register</a>
+            <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/suggestions-634f12d9.md">Session decision paths</a>
+            <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/verification-pass-634f12d9.md">Verification pass log</a>
+            <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/tree/main/data/snapshots">Snapshot provenance</a>
             <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/tree/main/engine">Reference engine</a>
           </div>
         </article>
