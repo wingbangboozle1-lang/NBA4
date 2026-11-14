@@ -296,6 +296,23 @@ class ValidationTests(unittest.TestCase):
         for train, test in splits:
             self.assertLess(max(e.tipoff_utc for e in train), min(e.tipoff_utc for e in test))
 
+        train, test = validation.walk_forward_splits(
+            events, train_days=3, test_days=2, embargo_days=2
+        )[0]
+        train_days = [(event.tipoff_utc - NOW).days for event in train]
+        test_days = [(event.tipoff_utc - NOW).days for event in test]
+        self.assertEqual(train_days, [0, 1, 2])
+        self.assertEqual(test_days, [5, 6])
+        gap = min(event.tipoff_utc for event in test) - max(
+            event.tipoff_utc for event in train
+        )
+        self.assertEqual(gap, timedelta(days=3))
+
+        with self.assertRaises(ValueError):
+            validation.walk_forward_splits(
+                events, train_days=5, test_days=2, embargo_days=-1
+            )
+
     def test_net_return_sums_the_settled_records(self) -> None:
         picks = [{"net_return": 1.0}, {"net_return": -1.0}, {"net_return": 0.0}]
         self.assertAlmostEqual(validation.net_return(picks), 0.0)
