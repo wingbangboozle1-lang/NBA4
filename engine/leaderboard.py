@@ -68,7 +68,11 @@ class LeaderboardEntry:
 
 @dataclass(frozen=True)
 class LeaderboardPolicy:
-    """Declared ranking policy. Every weight must be supplied explicitly."""
+    """Declared ranking policy. Every weight must be supplied explicitly.
+
+    ``tie_breaker`` is required as a policy declaration but is not yet applied
+    by :func:`rank`; see IR-09 on the Flagged for Review page.
+    """
 
     metric_weights: Mapping[str, float]
     minimum_sample_size: int
@@ -150,11 +154,14 @@ def rank(
     entries: Sequence[LeaderboardEntry],
     policy: LeaderboardPolicy,
 ) -> list[dict[str, object]]:
-    """Rank the eligible entries.
+    """Rank eligible entries using the current deterministic fallback.
 
-    Returns an empty list when no entry passes every gate. Each ranked row
-    keeps the sample size, window, uncertainty context and the failed-gate
-    information for ineligible entries is reported separately by the caller.
+    Returns an empty list when no entry passes every gate. Rows contain the
+    stored score, sample/window and other explicit entry fields; uncertainty
+    intervals and preregistration timestamps are not part of the schema. The
+    declared ``policy.tie_breaker`` is not applied yet: equal scores sort by
+    strategy ID then model version. This is a known mismatch, not an approved
+    tie policy (IR-09 on the Flagged for Review page).
     """
     eligible: list[tuple[float, LeaderboardEntry]] = []
     for entry in entries:

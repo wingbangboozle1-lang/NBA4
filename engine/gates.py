@@ -25,12 +25,12 @@ from typing import Callable, List, Optional, Sequence, Tuple
 
 from .ledger import IntegrityReport
 
-# --- PROPOSED thresholds (blank in docs/validation-plan.md until the owner
-# preregisters them; defaults below are engineering placeholders). ---------
-MIN_SAMPLE_PROPOSED = 30        # minimum settled forecasts before ranking
+# The settled-forecast minimum is deliberately unset until a power/precision
+# analysis is completed on development data and the policy is preregistered.
+# Callers may report an explicit declared value; this module does not supply
+# an engineering default or treat the value as proof that G12 has passed.
 BOOTSTRAP_ALPHA = 0.05
 TRIALS_ADJUSTMENT = "bonferroni"
-# -------------------------------------------------------------------------
 
 
 @dataclass
@@ -124,8 +124,20 @@ def run_gates(
     has_market_spec: bool,
     n_settled_forecasts: int,
     n_trials: int = 1,
+    declared_minimum_sample_size: Optional[int] = None,
 ) -> List[GateState]:
-    """Structural gate report for the current repository state."""
+    """Structural gate report for the current repository state.
+
+    The minimum settled-sample size is a required preregistered policy input,
+    not an engine default. When it is absent, the report says UNSET; a supplied
+    positive value is reported but does not by itself pass G12.
+    """
+    if declared_minimum_sample_size is not None and declared_minimum_sample_size <= 0:
+        raise ValueError("declared_minimum_sample_size must be positive when supplied")
+    minimum_sample = (
+        "UNSET" if declared_minimum_sample_size is None
+        else str(declared_minimum_sample_size)
+    )
     states: List[GateState] = []
 
     states.append(GateState(
@@ -164,8 +176,9 @@ def run_gates(
                             "shadow ledger format defined; no backend/feed yet"))
     states.append(GateState(
         "G12 leaderboard/rewards", "blocked",
-        f"n_settled_forecasts={n_settled_forecasts} (proposed minimum "
-        f"{MIN_SAMPLE_PROPOSED}); n_trials={n_trials} => adjusted alpha="
+        f"n_settled_forecasts={n_settled_forecasts}; "
+        f"declared_minimum_sample_size={minimum_sample}; n_trials={n_trials} "
+        f"=> adjusted alpha="
         f"{trials_adjusted_alpha(BOOTSTRAP_ALPHA, n_trials):.4f}; reward policy "
         "and legal sign-off missing (F-09)",
     ))

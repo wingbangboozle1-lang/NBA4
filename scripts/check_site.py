@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+import re
+import json
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
@@ -22,6 +24,9 @@ PAGES = (
     "sources.html",
     "review.html",
 )
+# The unified sidebar: every page must carry exactly these 11 links in this
+# order, with no duplicates and with aria-current pointing at its own page.
+CANONICAL_NAV = tuple(PAGES)
 OFFICIAL_HOSTS = (
     "nba.com",
     "github.com",
@@ -51,6 +56,9 @@ class PageAudit(HTMLParser):
         self.in_h1 = False
         self.title_text: list[str] = []
         self.h1_text: list[str] = []
+        self.nav_links: list[str] = []
+        self.nav_current: list[str] = []
+        self._in_primary_nav = False
         self.table_rows = 0
         self.bad_rows: list[int] = []
         self._row_number = 0
@@ -63,7 +71,9 @@ class PageAudit(HTMLParser):
         attrs_dict = dict(attrs)
         if attrs_dict.get("id"):
             self.ids.add(attrs_dict["id"] or "")
-        if tag == "title":
+        if tag == "nav" and attrs_dict.get("class") == "primary-nav":
+            self._in_primary_nav = True
+        elif tag == "title":
             self.in_title = True
         elif tag == "h1":
             self.in_h1 = True
@@ -80,13 +90,19 @@ class PageAudit(HTMLParser):
         elif tag == "a":
             href = attrs_dict.get("href") or ""
             self.links.append(href)
+            if self._in_primary_nav:
+                self.nav_links.append(href)
+                if attrs_dict.get("aria-current") == "page":
+                    self.nav_current.append(href)
             if self._in_td and is_official_https(href):
                 self._cell_official = True
         elif tag == "link":
             self.links.append(attrs_dict.get("href") or "")
 
     def handle_endtag(self, tag: str) -> None:
-        if tag == "title":
+        if tag == "nav" and self._in_primary_nav:
+            self._in_primary_nav = False
+        elif tag == "title":
             self.in_title = False
         elif tag == "h1":
             self.in_h1 = False
@@ -132,6 +148,18 @@ def audit_page(name: str) -> tuple[list[str], int]:
         errors.append(f"{name}: expected exactly one non-empty <h1>, found {parser.h1_count}")
     if parser.bad_rows:
         errors.append(f"{name}: table data row(s) missing an official HTTPS source in the final cell: {parser.bad_rows}")
+    if tuple(parser.nav_links) != CANONICAL_NAV:
+        duplicates = sorted({href for href in parser.nav_links if parser.nav_links.count(href) > 1})
+        if duplicates:
+            errors.append(f"{name}: duplicate sidebar link(s): {duplicates}")
+        errors.append(
+            f"{name}: sidebar navigation must be the canonical {len(CANONICAL_NAV)}-item list in order; "
+            f"found {parser.nav_links!r}"
+        )
+    if parser.nav_current != [name]:
+        errors.append(
+            f"{name}: expected exactly one sidebar aria-current=\"page\" on its own link, found {parser.nav_current!r}"
+        )
 
     for href in parser.links:
         parsed_href = urlsplit(href)
@@ -179,6 +207,72 @@ def audit_markdown_tables() -> tuple[list[str], int]:
     return errors, row_count
 
 
+def audit_consistency() -> list[str]:
+    """Counts stated on the public pages must match the repository; primary navigation must not repeat links."""
+    errors: list[str] = []
+    tests = 0
+    for path in (ROOT / "tests").glob("test_*.py"):
+        tests += len(re.findall(r"^\s*def test_", path.read_text(encoding="utf-8"), re.M))
+    # README may split the suite by file (e.g. "47 + 43") while the index states a
+    # single total; each stated number must add up to the real count.
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    stated = re.search(r"(\d+(?:\s*\+\s*\d+)*)\s+passing unit tests", readme)
+    if not stated:
+        errors.append("README.md does not state a passing unit-test count")
+    elif sum(int(part) for part in re.findall(r"\d+", stated.group(1))) != tests:
+        errors.append(
+            f"README.md states {stated.group(1)} passing unit tests but the suite has {tests}"
+        )
+    checks = (("index.html", rf"\b{tests} unit tests\b"),)
+    for name, pattern in checks:
+        if not re.search(pattern, (ROOT / name).read_text(encoding="utf-8")):
+            errors.append(f"{name} does not state the current engine unit-test count ({tests})")
+    for name in PAGES:
+        text = (ROOT / name).read_text(encoding="utf-8")
+        nav = re.search(r'<nav class="primary-nav".*?</nav>', text, re.S)
+        if nav:
+            hrefs = re.findall(r'href="([^"]+)"', nav.group(0))
+            repeated = sorted({href for href in hrefs if hrefs.count(href) > 1})
+            if repeated:
+                errors.append(f"{name}: primary navigation repeats {repeated}")
+    return errors
+
+
+def audit_snapshots() -> list[str]:
+    """Published snapshot tables must be in sync and their data files must keep provenance."""
+    import importlib.util
+
+    errors: list[str] = []
+    spec = importlib.util.spec_from_file_location(
+        "build_snapshots", ROOT / "scripts" / "build_snapshots.py"
+    )
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    for block_id, (page_name, render) in module.BLOCKS.items():
+        try:
+            stale = module.splice(ROOT / page_name, block_id, render())
+        except SystemExit as exc:  # missing markers
+            errors.append(str(exc))
+            continue
+        if stale is not None:
+            errors.append(
+                f"{page_name}: snapshot table out of date; run python3 scripts/build_snapshots.py"
+            )
+    for path in sorted((ROOT / "data" / "snapshots").glob("*.json")):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            errors.append(f"{path.name}: invalid JSON ({exc})")
+            continue
+        for key in ("source_url", "source_document_header", "fetched_at_utc", "extraction_tool"):
+            if not payload.get(key):
+                errors.append(f"{path.name}: missing provenance field {key}")
+        if not str(payload.get("source_url", "")).startswith("https://"):
+            errors.append(f"{path.name}: source_url is not https")
+    return errors
+
+
 def audit_page_inventory() -> list[str]:
     """Every HTML page in the repository root must be part of the checked set."""
     errors: list[str] = []
@@ -208,6 +302,8 @@ def run_engine_tests() -> list[str]:
 def main() -> int:
     all_errors: list[str] = []
     all_errors.extend(audit_page_inventory())
+    all_errors.extend(audit_snapshots())
+    all_errors.extend(audit_consistency())
     html_rows = 0
     for name in PAGES:
         errors, row_count = audit_page(name)
@@ -236,9 +332,11 @@ def main() -> int:
     if "--with-tests" in sys.argv[1:]:
         test_errors = run_engine_tests()
         if test_errors:
-            all_errors.extend(test_errors)
-        else:
-            print("OK engine unit tests")
+            print("\nSite check failed:")
+            for error in test_errors:
+                print(f"- {error}")
+            return 1
+        print("OK engine unit tests")
 
     print(f"\nPASS: {len(PAGES)} pages, {html_rows} HTML data rows and {markdown_rows} Markdown data rows passed.")
     print("External source URLs are checked for HTTPS and official hostnames; this script does not fetch the web.")

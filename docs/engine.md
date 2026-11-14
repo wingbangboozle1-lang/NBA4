@@ -60,7 +60,8 @@ These constants are engineering defaults so the code runs deterministically. The
 | Recency half-life | 30 days | `engine/ratings.py` | UNFITTED default; to be selected on development data only [scikit-learn cross-validation](https://scikit-learn.org/stable/modules/cross_validation.html) |
 | Home advantage | 0.0 points | `engine/ratings.py` | UNFITTED; deliberately neutral until calibrated [NBA glossary](https://www.nba.com/stats/help/glossary) |
 | Predictive margin sd | 12.0 points | `engine/ratings.py` | UNFITTED; replace with residual sd once authorized residuals exist [NIST bootstrap](https://www.itl.nist.gov/div898/handbook/eda/section3/bootplot.htm) |
-| Minimum games per team/prop | 5 | `engine/ratings.py`, `engine/player_props.py` | PROPOSED; final minimum must come from a power/precision plan [scikit-learn evaluation](https://scikit-learn.org/stable/modules/model_evaluation.html) |
+| Minimum games per team/prop | 5 | `engine/ratings.py`, `engine/player_props.py` | PROPOSED, UNVALIDATED and not approved for production (IR-08); final minimum must come from a power/precision plan [scikit-learn evaluation](https://scikit-learn.org/stable/modules/model_evaluation.html) |
+| Minimum settled forecasts (G12) |  | `engine/gates.py` | UNSET; only a preregistered power/precision policy may supply it; CLI output reports UNSET by default [scikit-learn evaluation](https://scikit-learn.org/stable/modules/model_evaluation.html) |
 | Shrinkage prior weight | 10 game clusters / 8 games | `engine/corrstats.py`, `engine/player_props.py` | PROPOSED fixed rule; must be preregistered [NIST correlation](https://www.itl.nist.gov/div898/handbook/glossary.htm) |
 | Injury status → availability/minutes | Out 0.0 / Doubtful 0.25 / Questionable 0.5 / Probable 0.9 / Available 1.0 (avail); 0 / 0.4 / 0.7 / 1.0 / 1.0 (minutes) | `engine/injuries.py` | PROPOSED, UNVALIDATED scenario mapping; the report status is an observation, not a minutes projection [NBA Injury Report](https://official.nba.com/nba-injury-report-2026-27-season/) |
 | Game-flow thresholds | competitive \|margin\| ≤ 5; separation \|margin\| ≥ 12 | `engine/gameflow.py` | PROPOSED scenario definitions; to be preregistered [NBA glossary](https://www.nba.com/stats/help/glossary) |
@@ -87,7 +88,7 @@ When (and only when) Q1/F-01 data rights are cleared, place JSONL files under `d
 
 ## Verification performed
 
-- `python3 -m unittest discover -s tests` — 43 tests, all passing (schema rejection rules, ledger provenance enforcement, future-leak guard, min-sample gates, shrinkage direction, injury resolution, game-flow partition, Pearson/phi known values, bootstrap determinism, Brier/log-loss known values, chronological folds, horizon filter, NO PICK suppression, parlay dependence rule, selftest smoke).
+- `python3 -m unittest tests.test_engine_models` — 43 tests, all passing (`python3 -m unittest discover -s tests -t .` runs all 90) (schema rejection rules, ledger provenance enforcement, future-leak guard, min-sample gates, shrinkage direction, injury resolution, game-flow partition, Pearson/phi known values, bootstrap determinism, Brier/log-loss known values, chronological folds, horizon filter, NO PICK suppression, parlay dependence rule, selftest smoke).
 - `python3 -m engine.cli status` on the real repository state reports `NO AUTHORIZED INPUTS -> no lines, no picks` — the honest output the site mirrors.
 - Method statements in the module map were quote-checked against their official sources in [`docs/verification-log.md`](verification-log.md) (ML-01…ML-03, STAT-01…STAT-02, NBA-03…NBA-06).
 
