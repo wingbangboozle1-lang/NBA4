@@ -1,7 +1,7 @@
 # Final acceptance and release-readiness audit
 
 **Audit date:** 2026-11-14 UTC  
-**Scope:** Clean-room repository acceptance and policy-consistency review after PR #18. This is not a fresh re-verification of every external source.
+**Scope:** Clean-room repository acceptance and policy-consistency review after PR #26. This is not a fresh re-verification of every external source.
 
 ## Executive decision
 
@@ -35,7 +35,7 @@ The following results are local checks against the current branch, not results i
 - `python3 -m unittest discover -s tests -t . -v` — **Ran 90 tests; OK** on synthetic fixtures.
 - `python3 -m engine.cli status` — zero records loaded; the expected ledger files are absent; status is **NO AUTHORIZED INPUTS → no lines, no picks**.
 - `python3 -m engine.cli validate` — G0, G1, G2, G6, G9 and G12 are blocked; G3–G5, G7–G8 and G10–G11 are not run. The default G12 threshold is **UNSET**.
-- `python3 scripts/run_pipeline.py --inputs data/inbox-example --out /tmp/nba4-z-final --now 2026-11-14T12:00:00Z` — synthetic fixture only; 2 events inside the 72-hour horizon, rights not cleared, 0 forecasts, 0 bet picks and 0 no-bet picks.
+- `python3 scripts/run_pipeline.py --inputs data/inbox-example --out /tmp/nba4-aa-final --now 2026-11-14T12:00:00Z` — synthetic fixture only; 2 events inside the 72-hour horizon, rights not cleared, 0 forecasts, 0 bet picks and 0 no-bet picks.
 
 **Source-check limitation:** `scripts/check_site.py` checks source-link shape and approved hosts; it does not fetch or quote-check the external pages. Earlier quote-based review evidence is preserved in [`docs/source-verification.md`](source-verification.md), [`docs/verification-pass-98c57da8.md`](verification-pass-98c57da8.md), [`docs/verification-pass-c6ae3e43.md`](verification-pass-c6ae3e43.md), and [`docs/verification-pass-644efa79.md`](verification-pass-644efa79.md). Each log states its own scope and any partial reads. The audit did not promote un-rechecked claims to newly verified facts.
 
