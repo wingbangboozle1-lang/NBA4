@@ -2,7 +2,15 @@
 
 Updated: 2026-11-14 (UTC). The starting repository contained only `README.md` and no coordination board or task claims. The session IDs below use the active Arena branch identifiers because no separate session ID is exposed in the repository.
 
-**Concurrency note.** A second session (`arena/ddc81141-nba4`) ran in parallel with the final integration session. It found that task E was completed and merged via PR #2 while its own work was in progress. On rebasing, that session's `COORDINATION.md` claim was superseded by the integration record below rather than overwriting it. The remaining deltas from that session — the source re-verification, two corrections and the new suggestions section — are recorded as tasks F, G and H, and were merged by PR #3.
+**Sessions and concurrency.** Five sessions contributed to this repository, in this order:
+
+1. `arena/c5eef6bb-nba4` wrote the evidence-first dashboard (tasks A–D) and merged it as PR #1.
+2. `arena/eb3064e3-nba4` performed the first final integration and Pages publication (task E, PR #2).
+3. `arena/ddc81141-nba4` ran **in parallel** with the later sessions: it re-verified every source with literal quotations, applied two corrections, and added the suggestions/decision-queue section (its tasks F–H; PRs #3, #4, #6, #8). On rebasing, its coordination claim was superseded by the integration record rather than overwriting it.
+4. `arena/7fcd5eef-nba4` ran an independent replication pass (PRs #5, #9), recorded in `docs/verification-log.md`.
+5. `arena/248bb9ab-nba4` built the synthetic reference engine, the automation/correlation/leaderboard specifications, expanded the site to 11 pages, and ran a second source-verification log (its tasks I–N below; logged as F–K on that session's branch before this merge and re-lettered here because F–H were already taken by session 3's merged work).
+
+Task letters are unique across the merged board: rows A–E are shared history, F–H belong to session 3, and I–N to session 5.
 
 | Task | Status | Owner / session ID | Exact file scope | Verification / sources / notes |
 | --- | --- | --- | --- | --- |
@@ -11,10 +19,17 @@ Updated: 2026-11-14 (UTC). The starting repository contained only `README.md` an
 | C. Executive summary, questions, missing-information register and source catalog | done | `arena/c5eef6bb-nba4` | `docs/decision-register.md`, `docs/sources.md` | Completed executive summary, 12 decision questions, discovery recommendations, known/missing inputs and official source catalog. Checked every Markdown data row for an official source link; the structural/link-presence check passed. |
 | D. Site information architecture and content specification (no shared pages/data) | done | `arena/c5eef6bb-nba4` | `docs/site-spec.md` | Spec defines seven categories, source-linked-table rules, blank/unverified handling, rights safeguards, accessibility and local link checks; verified against NBA Terms, official schedule/injury pages, and GitHub Pages docs/API. Shared index/navigation/data remained untouched until integration. |
 | E. Final site integration, full verification, build/link checks, PR and Pages deployment | done | `arena/eb3064e3-nba4` | `COORDINATION.md`, `index.html`, `slate.html`, `injuries.html`, `strategies.html`, `questions.html`, `sources.html`, `review.html`, `assets/**`, `scripts/check_site.py`, `.nojekyll`, `README.md` | Claim committed before work. Merged A–D content, ran the static checker, verified every live page and every distinct external source against its primary page, confirmed GitHub Pages build/deployment, then opened and merged the integration PR (see Publication record below). |
-
 | F. Independent line-by-line source re-verification and correction log | done | `arena/ddc81141-nba4` | `docs/verification-log.md`, `docs/audit.md`, `docs/decision-register.md`, `docs/sources.md` | All 22 cited sources fetched again and compared with the claim text; exact quotations recorded. 22/22 exist and support the claim. Four irregularities logged (VF-01 … VF-04); two were factual errors and are corrected. Evidence: [`docs/verification-log.md`](docs/verification-log.md). |
 | G. Suggestions review section | done | `arena/ddc81141-nba4` | `suggestions.html`, `docs/suggestions.md`, navigation on all pages | 12 proposals and 4 gating decisions, each with options, trade-off, effort, status and an official source, so a reviewer can choose a path before anything is built. Added to navigation on all eight pages and to the site checker. |
 | H. Second integration pass, PR and deployment re-confirmation | done | `arena/ddc81141-nba4` | `COORDINATION.md`, `README.md`, `scripts/check_site.py` | Rebased onto the PR #2 merge; re-ran the checker (8 pages, 107 HTML rows, 104 Markdown rows). PR and deploy result recorded in the Publication record. |
+| I. Line-origination engine + reference implementation (originated fair lines, fair odds, vig removal) | done | `arena/248bb9ab-nba4` | `engine/**`, `tests/**`, `docs/line-origination.md` | DONE. `engine/lineorigination.py` (fair spread/total/prop lines, fair price, net edge, multiplicative/additive/Shin de-vig), `engine/parlay.py` (Gaussian-copula joint probability with the independence shortcut reported beside it) and `engine/contracts.py` (provenance, rights gate, leakage check). 47 unit tests pass over synthetic fixtures (`python3 -m unittest discover -s tests -t .`). No NBA or market data; no invented constants - every model parameter must be supplied by the caller. |
+| J. Automated three-day slate pipeline and runbook (no manual input) | done | `arena/248bb9ab-nba4` | `engine/pipeline.py`, `scripts/run_pipeline.py`, `docs/automation.md` | DONE. `engine/pipeline.py` enforces the 72-hour cap (a longer horizon raises), rejects stale inputs, refuses records whose `allowed_use` flag is false, emits `no_bet` with reason codes, and appends to an append-only JSON Lines ledger. `scripts/run_pipeline.py` runs one cycle; the synthetic example run selects 2 events and is then suppressed by `RIGHTS_NOT_CLEARED` (0 forecasts, 0 picks). Documented in `docs/automation.md` and on `automation.html`. |
+| K. Correlation estimators and gate-aware leaderboard engine | done | `arena/248bb9ab-nba4` | `engine/correlation.py`, `engine/leaderboard.py`, `docs/correlation-and-leaderboard.md` | DONE. `engine/correlation.py` (Pearson, Spearman with tie handling, phi, Yule's Q, game-cluster bootstrap interval, preregistered shrinkage) and `engine/leaderboard.py` (a gate the candidate does not report counts as failed; nothing is ranked when no candidate passes). Every coefficient, sample and interval cell on the site stays blank and flagged unverified. Documented in `docs/correlation-and-leaderboard.md` and on `leaderboard.html`. |
+| L. Site expansion: line-origination, automation, leaderboard and suggestions pages; navigation and checker updates | done | `arena/248bb9ab-nba4` | `index.html`, `slate.html`, `injuries.html`, `strategies.html`, `questions.html`, `sources.html`, `review.html`, `line-origination.html`, `automation.html`, `leaderboard.html`, `suggestions.html`, `assets/site.css`, `scripts/check_site.py` | DONE. The site now has 11 pages (7 existing + 4 new categories), a unified sidebar, the "what is built and what still blocks it" table on the overview, Q13-Q16 on the decision register, F-11/F-12 plus the IR-01..IR-06 irregularity table on the review page, and a dedicated suggestions page whose Decision column is empty for the reviewer. `scripts/check_site.py` now also fails when an HTML page on disk is missing from the checked list and can run the engine tests (`--with-tests`). Verified: 11 pages, 203 HTML data rows, 264 Markdown data rows and 47 engine tests all pass. |
+| M. Source re-verification and irregularity log | done | `arena/248bb9ab-nba4` | `docs/source-verification.md`, `docs/sources.md` | DONE. Every cited primary URL was re-opened on 2026-11-14 and the exact wording read from the page: NBA Stats FAQ, NBA Terms §§1 and 9(i)-(vii), the injury-report policy, the 2026-11-13 07:30 PM PDF (header and column schema), the schedule PDF header, the NBA glossary (PACE), GitHub Pages (What is / Creating / Limits) and the repository Pages API, the four Ksa pages, the three scikit-learn pages and both NIST pages. The repository's starting state was additionally confirmed through the GitHub API (root commit d6f5066 added only README.md with the line `# NBA4`). Six irregularities were logged (IR-01…IR-06): GitHub Pages citation precision, a scikit-learn mis-attribution, an incorrect location in our own decision register, a stale injury snapshot described as "latest", and two precision fixes. IR-02/IR-03/IR-04 are the same findings as the independent VF-04/VF-02/VF-01 flags (see the cross-log note below); the two logs overlap on three findings and are not counted twice. Full log: `docs/source-verification.md`. |
+| N. Final integration, build verification, PR, merge and Pages deployment check | in progress | `arena/248bb9ab-nba4` | `COORDINATION.md`, `README.md` | Runs the site checker plus the engine test suite, opens the PR to `main`, merges, confirms the Pages deployment and records the PR link and deployment result here. |
+
+(Rows I–N were logged as tasks F–K on branch `arena/248bb9ab-nba4` before this merge with `main`; they are re-lettered here because tasks F–H were already taken by session 3's merged work.)
 
 ## Second verification pass and corrections (session `arena/ddc81141-nba4`)
 
@@ -85,17 +100,18 @@ Updated: 2026-11-14 (UTC). The starting repository contained only `README.md` an
 - **Transient root-cache artifact.** The first bare-root fetch of the deployed landing page returned a cached older `# NBA4` README render. The explicit `index.html` path and a cache-busted root both served the correct landing page (`NBA4 — Research overview`). This is a fetch/CDN cache artifact, not a site defect; the deployment is correct.
 - **Prior work already merged.** The dashboard and its integration/verification record were merged into `main` via PR #1 and PR #2 before this session. This session fast-forwarded its branch to that merged commit, re-verified independently, and recorded the replication result here.
 
-## Publication record
+## Engine, documentation and 11-page expansion verification (session `arena/248bb9ab-nba4`)
 
-| Item | Result |
-| --- | --- |
-| PR #2 (integration) | Created from `arena/eb3064e3-nba4` to `main`; merged. |
-| PR #3 (suggestions, verification and corrections) | [PR #3](https://github.com/wingbangboozle1-lang/NBA4/pull/3) created from `arena/ddc81141-nba4` to `main` after rebasing onto the PR #2 merge. **Merged** as `2a7b565` at 2026-11-14T01:07:03Z. |
-| PR #5 (independent re-verification) | [PR #5](https://github.com/wingbangboozle1-lang/NBA4/pull/5) created from `arena/7fcd5eef-nba4` to `main`. **Merged** as `3eccbb9` at 2026-11-14T01:08:38Z. Independent re-run of the static checker and re-fetch of all cited sources and the live site; no new irregularities (record in the "Independent re-verification" section above). |
-| GitHub Pages | `status: built`; published from `main` at `/`; HTTPS enforced; public. |
-| Live URL | [https://wingbangboozle1-lang.github.io/NBA4/](https://wingbangboozle1-lang.github.io/NBA4/) |
-| PR #7 (build recovery) | [PR #7](https://github.com/wingbangboozle1-lang/NBA4/pull/7) merged as `473f178`; Pages rebuilt successfully (22.4s, `status: built`). |
-| Post-merge check | Site re-fetched after merge; all seven pages served with intact tables and source links. After PR #3 the Pages build completed for commit `2a7b565` (`status: built` at 01:07:30Z) and `/suggestions.html` plus `/review.html` were fetched live with the new content, 8-page navigation and the VF-01 … VF-04 flags. |
+**Static check (passed).** `python3 scripts/check_site.py --with-tests` → `PASS: 11 pages, 203 HTML data rows and 264 Markdown data rows passed.` plus `OK engine unit tests` (47/47 over synthetic fixtures). The site grew from 8 to 11 pages: `line-origination.html`, `automation.html` and `leaderboard.html` were added beside the merged `suggestions.html`, and every page carries the same 11-item sidebar with the correct `aria-current`.
+
+**Engine.** `engine/` is a rights-aware reference implementation (contracts and rights gate, distribution/line origination with multiplicative/additive/Shin de-vig, Gaussian-copula parlays, validation metrics, gate-aware leaderboard, hard 72-hour pipeline, source registry). The synthetic smoke run (`scripts/run_pipeline.py`) selects 2 example events, suppresses the run with `RIGHTS_NOT_CLEARED`, and writes 0 forecasts and 0 picks — exactly as designed. No NBA or market data is committed anywhere.
+
+**Local build/link checks.** All 11 pages and `assets/site.css` returned HTTP 200 from a local static server before the merge; every table row ends in an official HTTPS source cell and every local link and fragment resolves (enforced by `scripts/check_site.py`).
+
+## Cross-log note (IR flags vs VF flags)
+
+Two independent source-verification logs exist and both are preserved: [`docs/source-verification.md`](docs/source-verification.md) (IR-01…IR-06, session `arena/248bb9ab-nba4`) and [`docs/verification-log.md`](docs/verification-log.md) (VF-01…VF-04, sessions `arena/ddc81141-nba4` / `arena/7fcd5eef-nba4`). Three findings were discovered independently by both passes and are **not** counted twice: IR-02 = VF-04 (Brier-decomposition attribution), IR-03 = VF-02 (owner location wording), IR-04 = VF-01 (stale injury snapshot called "latest"; the VF pass additionally recorded that the official page lists 7:45 p.m. and 8:00 p.m. ET reports). Findings unique to one log: IR-01 (GitHub Pages citation precision), IR-05, IR-06 (precision), VF-03 (Dutch-language Ksa pages flagged for readers). Seven distinct findings in total.
+
 
 ## Build incident and recovery (2026-11-14, session `arena/ddc81141-nba4`)
 
@@ -103,15 +119,34 @@ Updated: 2026-11-14 (UTC). The starting repository contained only `README.md` an
 
 **Diagnosis.** Both failing commits changed documentation only — 16 lines and 1 line of `COORDINATION.md` respectively. Both failures reported `duration: 0`, meaning the build never executed. The last successful build (`b5911a0`) ran 34.3s. The repository has no `.github/` workflows, no custom 404 page, no Jekyll plugins or dependencies, and is plain static HTML/CSS plus `.nojekyll`, so there was no content defect to find. The pattern — four merges in roughly ten minutes, then zero-duration rejections — matches the [Pages build-rate limit](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits) of 10 builds per hour for branch-published sites, which GitHub applies by declining to run the build.
 
-**Impact.** None to readers. The previously published deployment kept serving correctly; `/suggestions.html` and `/review.html` were fetched live during the incident and returned current content with the 8-page navigation and all source links intact.
+**Impact.** None to readers. The previously published deployment kept serving correctly; `/suggestions.html` and `/review.html` were fetched live during the incident and returned current content with the then-current navigation and all source links intact.
 
 **Recovery.** The Pages rebuild endpoint returned `403 Resource not accessible by integration`, and a settings `PATCH` returned `404`, so neither was available. Recovery was an empty commit on a throwaway branch, merged as PR #7 (`473f178`). That build completed in 22.4s with `status: built`, which confirms the diagnosis: the same tree built without error once the service would run a build again.
 
 **Recorded for the next session.** Do not diagnose a zero-duration Pages failure as a content bug. Check the build count in the preceding hour first, then confirm against the Pages builds endpoint before changing any file.
 
+
+## Publication record
+
+| Item | Result |
+| --- | --- |
+| PR #1 (initial dashboard) | [PR #1](https://github.com/wingbangboozle1-lang/NBA4/pull/1) from `arena/c5eef6bb-nba4` to `main`; merged as `8914341`. |
+| PR #2 (integration) | [PR #2](https://github.com/wingbangboozle1-lang/NBA4/pull/2) from `arena/eb3064e3-nba4` to `main`; merged as `d8de9a1`. |
+| PR #3 (suggestions, verification and corrections) | [PR #3](https://github.com/wingbangboozle1-lang/NBA4/pull/3) from `arena/ddc81141-nba4` to `main` after rebasing onto the PR #2 merge. **Merged** as `2a7b565` at 2026-11-14T01:07:03Z. |
+| PR #4 (record PR #3 merge) | [PR #4](https://github.com/wingbangboozle1-lang/NBA4/pull/4) merged as `b5911a0`. |
+| PR #5 (independent re-verification) | [PR #5](https://github.com/wingbangboozle1-lang/NBA4/pull/5) from `arena/7fcd5eef-nba4` to `main`. **Merged** as `3eccbb9` at 2026-11-14T01:08:38Z. Independent re-run of the static checker and re-fetch of all cited sources and the live site; no new irregularities (record in the "Independent re-verification" section above). |
+| PR #6 (superseded-checker-figures note) | [PR #6](https://github.com/wingbangboozle1-lang/NBA4/pull/6) merged as `c52b26c`. |
+| PR #7 (build recovery) | [PR #7](https://github.com/wingbangboozle1-lang/NBA4/pull/7) merged as `473f178`; Pages rebuilt successfully (22.4s, `status: built`). |
+| PR #8 (build incident record) | [PR #8](https://github.com/wingbangboozle1-lang/NBA4/pull/8) merged as `74307ee`. |
+| PR #9 (record PR #5 merge) | [PR #9](https://github.com/wingbangboozle1-lang/NBA4/pull/9) merged as `3a8d069`. |
+| PR #10 (engine, 11-page site, integration) | [PR #10](https://github.com/wingbangboozle1-lang/NBA4/pull/10) from `arena/248bb9ab-nba4` to `main`; result recorded below after the merge and Pages build. |
+| GitHub Pages | `status: built`; published from `main` at `/`; HTTPS enforced; public. Rechecked after each merge; the build-incident history is recorded above. |
+| Live URL | [https://wingbangboozle1-lang.github.io/NBA4/](https://wingbangboozle1-lang.github.io/NBA4/) |
+| Post-merge check | Site re-fetched after every merge; all pages served with intact tables and source links. After PR #3 the Pages build completed for commit `2a7b565` (`status: built` at 01:07:30Z) and `/suggestions.html` plus `/review.html` were fetched live with the then-new content and the VF-01 … VF-04 flags. The PR #10 post-merge check is appended when task N closes. |
 ## Handoff and integrity rules
 
 - Keep file scopes non-overlapping and update this board before starting work. If a needed file is owned by another session, log a request here rather than editing it.
 - Every factual data value must have an official primary source, a source timestamp, and a verification status. Leave unknown values blank and flag them; do not manufacture picks, probabilities, correlations, or performance.
 - Strategy claims are hypotheses until a pre-registered, leakage-free, out-of-sample validation supports them. This board records status and evidence; it is not itself evidence.
-- GitHub Pages publication is conditional on verified inputs, a passing site build/link check, and repository Pages configuration. Deployment was confirmed successful in the Publication record above.
+- Code in `engine/` is a reference implementation and test harness. It ships with clearly labelled synthetic fixtures only; it must never be fed unlicensed NBA data, and its synthetic outputs are never published as NBA values.
+- GitHub Pages publication is conditional on verified inputs, a passing site build/link check, and repository Pages configuration. Publication results are recorded in the Publication record above; deployment was confirmed successful, with the one build-rate-limit incident documented above.

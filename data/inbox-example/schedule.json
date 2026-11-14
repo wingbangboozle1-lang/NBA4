@@ -1,0 +1,37 @@
+{
+  "note": "SYNTHETIC EXAMPLE ONLY - these records are generated for a smoke test of the pipeline and are not NBA data. Replace the whole directory with an authorised feed adapter before any real run.",
+  "records": [
+    {
+      "event_id": "SYNTHETIC-EVENT-001",
+      "tipoff_utc": "2026-11-15T00:30:00+00:00",
+      "home_team_id": "SYNTHETIC-HOME",
+      "away_team_id": "SYNTHETIC-AWAY",
+      "provenance": {
+        "source_id": "EXAMPLE-SYNTHETIC",
+        "source_name": "Synthetic example feed (not NBA data)",
+        "source_url": "https://example.invalid/synthetic-feed",
+        "source_timestamp": "2026-11-14T11:00:00+00:00",
+        "observed_at": "2026-11-14T11:01:00+00:00",
+        "version": "example-1",
+        "allowed_use": false,
+        "allowed_use_note": "Left false on purpose: the example demonstrates the rights gate refusing to publish."
+      }
+    },
+    {
+      "event_id": "SYNTHETIC-EVENT-002",
+      "tipoff_utc": "2026-11-16T01:00:00+00:00",
+      "home_team_id": "SYNTHETIC-HOME-2",
+      "away_team_id": "SYNTHETIC-AWAY-2",
+      "provenance": {
+        "source_id": "EXAMPLE-SYNTHETIC",
+        "source_name": "Synthetic example feed (not NBA data)",
+        "source_url": "https://example.invalid/synthetic-feed",
+        "source_timestamp": "2026-11-14T11:00:00+00:00",
+        "observed_at": "2026-11-14T11:01:00+00:00",
+        "version": "example-1",
+        "allowed_use": false,
+        "allowed_use_note": "Left false on purpose: the example demonstrates the rights gate refusing to publish."
+      }
+    }
+  ]
+}

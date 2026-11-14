@@ -13,16 +13,22 @@
   <aside class="sidebar" aria-label="Site navigation">
     <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N4</span><span class="brand-copy">NBA4<small>RESEARCH DASHBOARD</small></span></a>
     <p class="nav-label">Workspace</p>
-    <nav class="primary-nav" aria-label="Primary navigation"><ul>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <ul>
       <li><a href="index.html"><span class="nav-icon" aria-hidden="true">◆</span>Overview</a></li>
       <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
       <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
+      <li><a href="line-origination.html"><span class="nav-icon" aria-hidden="true">≡</span>Line origination</a></li>
+      <li><a href="automation.html"><span class="nav-icon" aria-hidden="true">⟳</span>Automation</a></li>
       <li><a href="strategies.html" aria-current="page"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
+      <li><a href="leaderboard.html"><span class="nav-icon" aria-hidden="true">▤</span>Leaderboard</a></li>
       <li><a href="questions.html"><span class="nav-icon" aria-hidden="true">?</span>Decision questions</a></li>
+      <li><a href="suggestions.html"><span class="nav-icon" aria-hidden="true">✦</span>Suggestions</a></li>
       <li><a href="sources.html"><span class="nav-icon" aria-hidden="true">↗</span>Sources</a></li>
       <li><a href="suggestions.html"><span class="nav-icon" aria-hidden="true">✎</span>Suggestions</a></li>
       <li><a href="review.html"><span class="nav-icon" aria-hidden="true">⚑</span>Flagged for review</a></li>
-    </ul></nav>
+      </ul>
+    </nav>
     <div class="sidebar-spacer"></div>
     <div class="sidebar-note"><strong>Research-only state</strong><p>All strategy rows are hypotheses. No model has passed a gate.</p></div>
     <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
@@ -90,9 +96,25 @@
         </div>
       </section>
 
+      <section class="section" aria-labelledby="next-title">
+        <div class="section-heading"><div><h2 id="next-title">Where each candidate would be executed</h2><p>The machinery for these hypotheses now exists; the data and the permission to use it do not.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Candidate</th><th scope="col">Execution point</th><th scope="col">State</th><th scope="col">Reference</th></tr></thead>
+            <tbody>
+              <tr><td><strong>S1 / S2 · singles and totals</strong></td><td>Fair spread and total from the model's score distribution, with a fair price and a de-vigged benchmark comparison.</td><td><span class="flag flag-green">Implemented &amp; tested</span><br>No authorised parameters.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://www.nba.com/stats/help/glossary" target="_blank" rel="noopener noreferrer">NBA metric definitions</a></td></tr>
+              <tr><td><strong>S3 · player props</strong></td><td>Minutes × rate distribution producing the line, the probability and the uncertainty band.</td><td><span class="flag flag-green">Implemented &amp; tested</span><br>No authorised player or minute history.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury report</a></td></tr>
+              <tr><td><strong>S4 · parlays and combos</strong></td><td>Joint probability from the leg marginals and the estimated correlation matrix, with the independence shortcut shown for comparison.</td><td><span class="flag flag-green">Implemented &amp; tested</span><br>No licensed paired outcomes.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/parlay.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST correlation</a></td></tr>
+              <tr><td><strong>S5 / S6 · injury and flow scenarios</strong></td><td>Scenario-dependent minutes and production inside the pipeline, with suppression when availability is unresolved.</td><td><span class="flag">Mechanism ready</span><br>No authorised injury history or minute model.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury policy</a></td></tr>
+              <tr><td><strong>Promotion</strong></td><td>Only gate-passing, version-locked candidates are ranked; the board is empty until one passes.</td><td><span class="flag flag-green">Implemented &amp; tested</span><br>No candidate to evaluate.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/leaderboard.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">validation method</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <section class="section two-column" aria-label="Luck and leaderboard notes">
         <article class="panel"><h2>Reducing luck, not promising to remove it</h2><p>Use frozen predictions, future-only tests, baselines, calibration, uncertainty intervals and robustness checks to reduce hindsight and overfitting. Random game outcomes remain. The Ksa’s safe-gambling guidance makes a general chance warning; it is not a basketball-specific study.</p><p><a href="https://kansspelautoriteit.nl/10-tips-gambling-safely" target="_blank" rel="noopener noreferrer">Ksa consumer guidance ↗</a></p></article>
-        <article class="panel"><h2>Rewards stay disabled</h2><p>No score weights, minimum samples, ROI threshold, drawdown limit, prize, tie policy or payment schedule has been defined. A leader board is not a substitute for a valid holdout or legal review.</p><p><a href="questions.html">Review the open decisions →</a></p></article>
+        <article class="panel"><h2>Rewards stay disabled</h2><p>No score weights, minimum samples, ROI threshold, drawdown limit, prize, tie policy or payment schedule has been defined. A leader board is not a substitute for a valid holdout or legal review.</p><p><a href="leaderboard.html">Open the leaderboard design →</a> · <a href="questions.html">Review the open decisions →</a></p></article>
       </section>
       <footer class="footer"><p>Every candidate is a hypothesis; no winner or active pick exists.</p><p><a href="review.html">Flagged blockers →</a></p></footer>
     </main>

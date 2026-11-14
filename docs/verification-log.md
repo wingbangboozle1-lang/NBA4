@@ -4,6 +4,8 @@
 
 **Result: 22 sources checked, 22 exist and support the claim made about them.** No source was found to be fabricated, dead, or misquoted. Two statements *about* the sources were wrong and are corrected (see [Irregularities](#irregularities-found)).
 
+**Cross-log note.** A second, independent verification pass (session `arena/248bb9ab-nba4`) produced its own log, [`docs/source-verification.md`](source-verification.md) (flags IR-01…IR-06). The two logs overlap on three findings that were discovered independently — VF-01 = IR-04 (stale injury snapshot), VF-02 = IR-03 (owner location), VF-04 = IR-02 (Brier-decomposition attribution) — so those are counted once, not twice. Unique to this log: VF-03 (Dutch-language Ksa pages). Unique to the IR log: IR-01 (GitHub Pages citation precision), IR-05, IR-06 (precision fixes).
+
 **Scope limits, stated plainly:**
 - A non-empty page with matching text proves the claim is *accurately quoted*. It does not prove the source is correct about basketball, and it does not authorise reuse (see the NBA Terms entry).
 - Three of these are method references (scikit-learn, NIST). They are cited for definitions only, never as evidence that a betting edge exists.

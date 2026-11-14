@@ -1,6 +1,6 @@
 # Site information architecture and publication specification
 
-**Scope:** static, informational research dashboard. This is a design specification only; shared navigation, index, content tables, and Pages deployment are reserved for final integration after the audit, research framework, decision register, and this spec are complete.
+**Scope:** static, informational research dashboard. This document is the information-architecture specification; the eleven pages it describes are now built, and the final integration and Pages deployment are recorded in [`COORDINATION.md`](../COORDINATION.md). Publication rules below remain in force for every future change.
 
 ## User-facing promise
 
@@ -17,8 +17,12 @@ A prominent “not associated with the NBA” disclaimer will be included. The p
 - **Questions (`questions.html`)** — a readable decision register: known fact, unknown, why it matters, suggested discovery, status and official source link.
 - **Sources (`sources.html`)** — primary-source ledger with verified scope, publication/snapshot date and interpretation limits.
 - **Flagged for Review (`review.html`)** — data-licensing, legal/jurisdiction, hosting, data-availability, stale-schedule, validation and reward blockers; each flag contains its official source and a specific next discovery step.
+- **Line origination (`line-origination.html`)** — how a model-originated line is produced from a predictive distribution, how it is kept separate from a market quote, how a two-way price is de-vigged, and which inputs each formula needs. Every numeric cell stays blank until an authorised dataset exists.
+- **Automation (`automation.html`)** — the daily, no-manual-input pipeline: the 72-hour horizon, the freshness and rights gates, the reason codes a run can emit, and the runbook that publishes the next slate.
+- **Leaderboard (`leaderboard.html`)** — the gate-aware leaderboard design, the eligible-versus-ineligible rules, the declared scoring policy, and the current (empty) standings table.
+- **Suggestions (`suggestions.html`)** — a dedicated review page carrying both proposal sets: the decision queue (four gating decisions and twelve prioritised proposals with options and trade-offs) and the review register (23 proposals with an empty **Decision** column for the reviewer), so the path is chosen before anything is implemented.
 
-The full written versions remain in [`docs/audit.md`](audit.md), [`docs/strategy-framework.md`](strategy-framework.md), [`docs/validation-plan.md`](validation-plan.md), [`docs/decision-register.md`](decision-register.md), and [`docs/sources.md`](sources.md). They are linked to the repository source view for review, not presented as live feed data.
+The full written versions remain in [`docs/audit.md`](audit.md), [`docs/strategy-framework.md`](strategy-framework.md), [`docs/validation-plan.md`](validation-plan.md), [`docs/decision-register.md`](decision-register.md), [`docs/sources.md`](sources.md), [`docs/line-origination.md`](line-origination.md), [`docs/automation.md`](automation.md), [`docs/correlation-and-leaderboard.md`](correlation-and-leaderboard.md), [`docs/suggestions.md`](suggestions.md), [`docs/source-verification.md`](source-verification.md) and [`docs/verification-log.md`](verification-log.md). They are linked to the repository source view for review, not presented as live feed data.
 
 ## Table and status rules
 

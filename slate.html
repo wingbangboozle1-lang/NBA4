@@ -13,16 +13,22 @@
   <aside class="sidebar" aria-label="Site navigation">
     <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N4</span><span class="brand-copy">NBA4<small>RESEARCH DASHBOARD</small></span></a>
     <p class="nav-label">Workspace</p>
-    <nav class="primary-nav" aria-label="Primary navigation"><ul>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <ul>
       <li><a href="index.html"><span class="nav-icon" aria-hidden="true">◆</span>Overview</a></li>
       <li><a href="slate.html" aria-current="page"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
       <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
+      <li><a href="line-origination.html"><span class="nav-icon" aria-hidden="true">≡</span>Line origination</a></li>
+      <li><a href="automation.html"><span class="nav-icon" aria-hidden="true">⟳</span>Automation</a></li>
       <li><a href="strategies.html"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
+      <li><a href="leaderboard.html"><span class="nav-icon" aria-hidden="true">▤</span>Leaderboard</a></li>
       <li><a href="questions.html"><span class="nav-icon" aria-hidden="true">?</span>Decision questions</a></li>
+      <li><a href="suggestions.html"><span class="nav-icon" aria-hidden="true">✦</span>Suggestions</a></li>
       <li><a href="sources.html"><span class="nav-icon" aria-hidden="true">↗</span>Sources</a></li>
       <li><a href="suggestions.html"><span class="nav-icon" aria-hidden="true">✎</span>Suggestions</a></li>
       <li><a href="review.html"><span class="nav-icon" aria-hidden="true">⚑</span>Flagged for review</a></li>
-    </ul></nav>
+      </ul>
+    </nav>
     <div class="sidebar-spacer"></div>
     <div class="sidebar-note"><strong>Research-only state</strong><p>No validated strategies, licensed feed, or NBA picks are available in this repository.</p></div>
     <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
@@ -40,7 +46,7 @@
           <table class="data-table">
             <thead><tr><th scope="col">Field</th><th scope="col">Value</th><th scope="col">Status / decision</th><th scope="col">Official source</th></tr></thead>
             <tbody>
-              <tr><td><strong>Forecast horizon</strong></td><td>Maximum 3 days ahead, per project request; exact timezone/cutoff not configured.</td><td><span class="flag flag-blue">Requirement only</span><br>No rolling feed exists.</td><td><a class="source-link" href="https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf" target="_blank" rel="noopener noreferrer">NBA schedule PDF</a></td></tr>
+              <tr><td><strong>Forecast horizon</strong></td><td>Maximum 3 days ahead, per project request; exact timezone/cutoff not configured. The pipeline enforces a hard 72-hour cap.</td><td><span class="flag flag-green">Cap enforced &amp; tested</span><br>No rolling feed exists.</td><td><a class="source-link" href="https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf" target="_blank" rel="noopener noreferrer">NBA schedule PDF</a></td></tr>
               <tr><td><strong>Live game slate</strong></td><td class="empty-value"></td><td><span class="flag">Unverified</span><br>No authorized schedule/change feed loaded; the linked PDF is a dated, changeable snapshot.</td><td><a class="source-link" href="https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf" target="_blank" rel="noopener noreferrer">NBA schedule PDF</a></td></tr>
               <tr><td><strong>Single-bet fair line</strong></td><td class="empty-value"></td><td><span class="flag">Not generated</span><br>No trained model or permitted historical inputs.</td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms</a></td></tr>
               <tr><td><strong>Player-prop line / probability</strong></td><td class="empty-value"></td><td><span class="flag">Not generated</span><br>No authorized player/minutes feed, market definition or validated distribution.</td><td><a class="source-link" href="https://www.nba.com/stats/help/faq" target="_blank" rel="noopener noreferrer">NBA Stats FAQ</a><br><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms</a></td></tr>
@@ -52,7 +58,7 @@
       </section>
 
       <section class="section two-column" aria-label="Feed and release requirements">
-        <article class="panel"><h2>Release checklist</h2><ul><li>Authorized schedule source and correction history.</li><li>Declared timezone and rolling three-day boundary.</li><li>Point-in-time injuries, player availability and lineup snapshots.</li><li>Licensed benchmark price and exact market settlement rule.</li><li>Strategy version, passed validation gates and immutable forecast timestamp.</li></ul></article>
+        <article class="panel"><h2>Release checklist</h2><ul><li>Authorized schedule source and correction history.</li><li>Declared timezone and rolling three-day boundary.</li><li>Point-in-time injuries, player availability and lineup snapshots.</li><li>Licensed benchmark price and exact market settlement rule.</li><li>Strategy version, passed validation gates and immutable forecast timestamp.</li></ul><p><a href="automation.html">See the automated pipeline that would run this cycle →</a></p></article>
         <article class="panel"><h2>Why the official link is not a live feed</h2><p>The NBA schedule PDF states it is “as of August 13, 2026” and “subject to change.” It is provided for manual review only; this dashboard intentionally does not republish its fixture rows.</p><p><a href="https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf" target="_blank" rel="noopener noreferrer">Open the official schedule source ↗</a></p></article>
       </section>
       <footer class="footer"><p>No bet recommendation or guarantee. Independent project; not affiliated with the NBA.</p><p><a href="review.html">Review missing data and rights →</a></p></footer>

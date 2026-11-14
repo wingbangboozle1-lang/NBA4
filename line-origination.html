@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="How a model-originated NBA line is produced, kept separate from market quotes, and de-vigged — with every numeric cell blank until an authorised dataset exists.">
+  <title>NBA4 — Line origination</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Site navigation">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N4</span><span class="brand-copy">NBA4<small>RESEARCH DASHBOARD</small></span></a>
+    <p class="nav-label">Workspace</p>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <ul>
+      <li><a href="index.html"><span class="nav-icon" aria-hidden="true">◆</span>Overview</a></li>
+      <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
+      <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
+      <li><a href="line-origination.html" aria-current="page"><span class="nav-icon" aria-hidden="true">≡</span>Line origination</a></li>
+      <li><a href="automation.html"><span class="nav-icon" aria-hidden="true">⟳</span>Automation</a></li>
+      <li><a href="strategies.html"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
+      <li><a href="leaderboard.html"><span class="nav-icon" aria-hidden="true">▤</span>Leaderboard</a></li>
+      <li><a href="questions.html"><span class="nav-icon" aria-hidden="true">?</span>Decision questions</a></li>
+      <li><a href="suggestions.html"><span class="nav-icon" aria-hidden="true">✦</span>Suggestions</a></li>
+      <li><a href="sources.html"><span class="nav-icon" aria-hidden="true">↗</span>Sources</a></li>
+      <li><a href="review.html"><span class="nav-icon" aria-hidden="true">⚑</span>Flagged for review</a></li>
+      </ul>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-note"><strong>No line published</strong><p>Origination needs an authorised dataset. Until then every number stays blank.</p></div>
+    <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
+  </aside>
+  <div class="content-shell">
+    <header class="topbar"><div><p class="topbar-title">Line origination desk</p><p class="topbar-meta">Method &amp; implementation · 14 Nov 2026 UTC</p></div><span class="status-pill">NO LINES PUBLISHED</span></header>
+    <main id="main" class="main-content">
+      <header class="page-header"><p class="eyebrow">Own lines, separate from the market</p><h1>How a line is originated</h1><p>An originated line is the output of this project's own model, derived only from a predictive distribution estimated on authorised data. It is never copied from or anchored to a market price. A market quote is stored separately, with its own timestamp, and the comparison between the two is a separate, later step that has its own gates.</p></header>
+
+      <div class="notice notice-danger"><span class="notice-icon" aria-hidden="true">!</span><div><strong>No line, price or probability has been produced.</strong><p>NBA Statistics may not be used in connection with gambling, including legal gambling, and a comprehensive regularly updated statistics database needs the Operator's express prior consent. The origination code below is implemented and unit-tested, but it has never run on NBA data.</p></div></div>
+
+      <section class="section" aria-labelledby="objects-title">
+        <div class="section-heading"><div><h2 id="objects-title">The objects in the pipeline</h2><p>Each object is stored separately so that no derived figure can silently inherit a market value.</p></div><a class="section-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/line-origination.md">Full method document →</a></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Object</th><th scope="col">What it holds</th><th scope="col">Produced by</th><th scope="col">Never contains</th><th scope="col">Implementation / source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Game score model</strong></td><td>Expected home/away points, margin and total dispersion, model version.</td><td>A team-strength model fitted on authorised history.</td><td>Any market price.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine/lineorigination.py</a></td></tr>
+              <tr><td><strong>Player prop model</strong></td><td>Minutes distribution, per-minute rate, the correlation between them, model version.</td><td>A minutes × rate model fitted on authorised history.</td><td>An injury label used directly as a minutes adjustment.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine/lineorigination.py</a></td></tr>
+              <tr><td><strong>Market quote</strong></td><td>Line, decimal price, provider, quote timestamp.</td><td>A licensed price feed only.</td><td>Model output.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/contracts.py" target="_blank" rel="noopener noreferrer">engine/contracts.py</a></td></tr>
+              <tr><td><strong>Forecast</strong></td><td>Originated line, probability, model version, input snapshot hash, emission time.</td><td>The origination code.</td><td>A later quote, a later injury update, or the result.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/contracts.py" target="_blank" rel="noopener noreferrer">engine/contracts.py</a></td></tr>
+              <tr><td><strong>Pick</strong></td><td>bet / no_bet decision, stake fraction, edge, reason codes.</td><td>The pipeline, after every gate has been evaluated.</td><td>An edit after settlement.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine/pipeline.py</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="formula-title">
+        <div class="section-heading"><div><h2 id="formula-title">The formulas, written out</h2><p>Each quantity needs parameters from an authorised dataset. The value column stays blank until those exist.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Quantity</th><th scope="col">Formula</th><th scope="col">Value</th><th scope="col">Status</th><th scope="col">Method / source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Fair spread</strong></td><td>Expected home points − expected away points; rounded to the market increment only at publication.</td><td class="empty-value"></td><td><span class="flag">Implemented</span><br>No authorised parameters.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://www.nba.com/stats/help/glossary" target="_blank" rel="noopener noreferrer">NBA metric definitions</a></td></tr>
+              <tr><td><strong>Fair total</strong></td><td>Expected home points + expected away points, from the total distribution rather than the margin.</td><td class="empty-value"></td><td><span class="flag">Implemented</span><br>No authorised parameters.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://www.nba.com/stats/help/glossary" target="_blank" rel="noopener noreferrer">NBA metric definitions</a></td></tr>
+              <tr><td><strong>P(home covers L)</strong></td><td>1 − F<sub>margin</sub>(−L) from the model's margin distribution; the away side is the complement.</td><td class="empty-value"></td><td><span class="flag">Implemented</span><br>No authorised parameters.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine source</a></td></tr>
+              <tr><td><strong>P(over L)</strong></td><td>1 − F<sub>total</sub>(L) from the model's total distribution.</td><td class="empty-value"></td><td><span class="flag">Implemented</span><br>No authorised parameters.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine source</a></td></tr>
+              <tr><td><strong>Fair decimal price</strong></td><td>1 ÷ p. A no-margin price, not a bookmaker quote.</td><td class="empty-value"></td><td><span class="flag">Implemented</span><br>Arithmetic only.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine source</a></td></tr>
+              <tr><td><strong>Net edge per unit</strong></td><td>p × price − 1, computed only against a licensed quote with a defined settlement rule.</td><td class="empty-value"></td><td><span class="flag">Implemented</span><br>No licensed quote exists.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms</a></td></tr>
+              <tr><td><strong>Player prop line</strong></td><td>Quantile of the minutes × rate distribution (default: the median — the centre of the distribution, not the most likely value).</td><td class="empty-value"></td><td><span class="flag">Implemented</span><br>No authorised parameters.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine source</a></td></tr>
+              <tr><td><strong>Joint probability (parlay)</strong></td><td>Monte Carlo over a Gaussian copula using the estimated correlation matrix; the product of marginals is reported only as a comparison.</td><td class="empty-value"></td><td><span class="flag">Implemented</span><br>No licensed leg outcomes.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/parlay.py" target="_blank" rel="noopener noreferrer">engine/parlay.py</a><br><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST correlation</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="devig-title">
+        <div class="section-heading"><div><h2 id="devig-title">De-vigging: declared, not assumed</h2><p>Removing the bookmaker's margin needs a method, and the method changes the comparison.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Method</th><th scope="col">Assumption</th><th scope="col">Status</th><th scope="col">Implementation / source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Proportional (multiplicative)</strong></td><td>The margin is spread in proportion to the implied probabilities.</td><td><span class="flag flag-green">Implemented &amp; tested</span></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine source</a></td></tr>
+              <tr><td><strong>Additive</strong></td><td>The margin is split evenly between the two sides.</td><td><span class="flag flag-green">Implemented &amp; tested</span></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine source</a></td></tr>
+              <tr><td><strong>Shin</strong></td><td>The favourite-longshot bias is present, so the favourite is protected; the insider-trading parameter must be supplied.</td><td><span class="flag flag-green">Implemented &amp; tested</span></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine source</a></td></tr>
+              <tr><td><strong>Method chosen for this project</strong></td><td>Must be written into the market specification before any comparison is made.</td><td><span class="flag flag-red">Not chosen</span><br>Depends on the market decision.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/decision-register.md" target="_blank" rel="noopener noreferrer">decision register</a><br><a class="source-link" href="https://kansspelautoriteit.nl/remote-gambling-act-force" target="_blank" rel="noopener noreferrer">Ksa context</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section two-column" aria-label="Publish rules and verification">
+        <article class="panel"><h2>Publish rules</h2><ol><li>A line is published with its probability, model version, input snapshot hash and emission time.</li><li>A forecast is immutable: a correction is a new version, never an overwrite.</li><li>A pick needs a specified market, a licensed benchmark quote and every gate passed; otherwise it is a <code>no_bet</code> with a reason code.</li><li>The stake fraction is a separate, declared policy — the engine returns 0 by design.</li><li>No league-derived value enters a model without written permission.</li></ol><p><a href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms of Use ↗</a></p></article>
+        <article class="panel"><h2>What is verified today</h2><p>The arithmetic is pinned by unit tests over synthetic fixtures: fair-price round trip, complementary cover probabilities, de-vig behaviour on a known pair, and the fact that a positively correlated leg pair has a joint probability above the product of its marginals.</p><p><a href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_engine.py" target="_blank" rel="noopener noreferrer">Read the test source ↗</a></p></article>
+      </section>
+      <footer class="footer"><p>No line, price or probability has been published from NBA data.</p><p><a href="review.html">See the blocking issues →</a></p></footer>
+    </main>
+  </div>
+</div>
+</body>
+</html>
