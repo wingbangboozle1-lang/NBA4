@@ -74,10 +74,10 @@ Updated: 2026-11-14 (UTC). The starting repository contained only `README.md` an
 | Item | Result |
 | --- | --- |
 | PR #2 (integration) | Created from `arena/eb3064e3-nba4` to `main`; merged. |
-| PR #3 (suggestions, verification and corrections) | Created from `arena/ddc81141-nba4` to `main` after rebasing onto the PR #2 merge; merge result appended below by that session. |
+| PR #3 (suggestions, verification and corrections) | [PR #3](https://github.com/wingbangboozle1-lang/NBA4/pull/3) created from `arena/ddc81141-nba4` to `main` after rebasing onto the PR #2 merge. **Merged** as `2a7b565` at 2026-11-14T01:07:03Z. |
 | GitHub Pages | `status: built`; published from `main` at `/`; HTTPS enforced; public. |
 | Live URL | [https://wingbangboozle1-lang.github.io/NBA4/](https://wingbangboozle1-lang.github.io/NBA4/) |
-| Post-merge check | Site re-fetched after merge; all seven pages served with intact tables and source links. |
+| Post-merge check | Site re-fetched after merge; all seven pages served with intact tables and source links. After PR #3 the Pages build completed for commit `2a7b565` (`status: built` at 01:07:30Z) and `/suggestions.html` plus `/review.html` were fetched live with the new content, 8-page navigation and the VF-01 … VF-04 flags. |
 
 ## Handoff and integrity rules
 
