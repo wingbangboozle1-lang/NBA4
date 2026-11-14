@@ -164,19 +164,26 @@ def walk_forward_splits(
     test_days: int,
     embargo_days: int = 0,
 ) -> list[tuple[list[GameEvent], list[GameEvent]]]:
-    """Chronological train/test splits over time.
+    """Create expanding chronological train/test splits using UTC time windows.
 
-    Each split trains on everything strictly before the test window and tests on
-    the next window. ``embargo_days`` can be used to leave a gap between train
-    and test so that features which need time to mature cannot leak across the
-    boundary.
+    Each fold trains on all events strictly before ``train_end``. If
+    ``embargo_days`` is nonzero, events in the interval from ``train_end`` up
+    to ``test_start`` are excluded from both sets; the test window then remains
+    exactly ``test_days`` wide. Later folds move forward by one test-window
+    width, so test windows are adjacent while each training set expands.
 
-    The returned order is chronological, which is the property the validation
-    plan requires: a model is never evaluated on the past after being trained
-    on the future.
+    These are duration-based windows, not a sample-count equivalent of
+    scikit-learn's ``TimeSeriesSplit``; irregular event spacing can give folds
+    different sample counts. Only complete test windows are emitted, so a
+    trailing partial window is not included.
+
+    The returned order is chronological: no fold is evaluated on an event
+    earlier than any event used to train that fold.
     """
     if train_days <= 0 or test_days <= 0:
         raise ValueError("train_days and test_days must be positive")
+    if embargo_days < 0:
+        raise ValueError("embargo_days must be non-negative")
     ordered = sorted(events, key=lambda e: e.tipoff_utc)
     if not ordered:
         return []
@@ -186,15 +193,12 @@ def walk_forward_splits(
     cursor = start
     while True:
         train_end = cursor + timedelta(days=train_days)
-        test_end = train_end + timedelta(days=embargo_days) + timedelta(days=test_days)
+        test_start = train_end + timedelta(days=embargo_days)
+        test_end = test_start + timedelta(days=test_days)
         if test_end > end:
             break
-        train = [
-            e
-            for e in ordered
-            if e.tipoff_utc < train_end - timedelta(days=embargo_days)
-        ]
-        test = [e for e in ordered if train_end <= e.tipoff_utc < test_end]
+        train = [e for e in ordered if e.tipoff_utc < train_end]
+        test = [e for e in ordered if test_start <= e.tipoff_utc < test_end]
         if train and test:
             splits.append((train, test))
         cursor = cursor + timedelta(days=test_days)
