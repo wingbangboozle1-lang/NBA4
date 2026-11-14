@@ -1,0 +1,5 @@
+# Generated pipeline artefacts (never published).
+data/out/
+data/out-example/
+__pycache__/
+*.pyc
