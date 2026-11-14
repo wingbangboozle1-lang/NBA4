@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import re
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
@@ -179,6 +180,30 @@ def audit_markdown_tables() -> tuple[list[str], int]:
     return errors, row_count
 
 
+def audit_consistency() -> list[str]:
+    """Counts stated on the public pages must match the repository; primary navigation must not repeat links."""
+    errors: list[str] = []
+    tests = 0
+    for path in (ROOT / "tests").glob("test_*.py"):
+        tests += len(re.findall(r"^\s*def test_", path.read_text(encoding="utf-8"), re.M))
+    checks = (
+        ("README.md", rf"\b{tests} passing unit tests\b"),
+        ("index.html", rf"\b{tests} unit tests\b"),
+    )
+    for name, pattern in checks:
+        if not re.search(pattern, (ROOT / name).read_text(encoding="utf-8")):
+            errors.append(f"{name} does not state the current engine unit-test count ({tests})")
+    for name in PAGES:
+        text = (ROOT / name).read_text(encoding="utf-8")
+        nav = re.search(r'<nav class="primary-nav".*?</nav>', text, re.S)
+        if nav:
+            hrefs = re.findall(r'href="([^"]+)"', nav.group(0))
+            repeated = sorted({href for href in hrefs if hrefs.count(href) > 1})
+            if repeated:
+                errors.append(f"{name}: primary navigation repeats {repeated}")
+    return errors
+
+
 def audit_page_inventory() -> list[str]:
     """Every HTML page in the repository root must be part of the checked set."""
     errors: list[str] = []
@@ -208,6 +233,7 @@ def run_engine_tests() -> list[str]:
 def main() -> int:
     all_errors: list[str] = []
     all_errors.extend(audit_page_inventory())
+    all_errors.extend(audit_consistency())
     html_rows = 0
     for name in PAGES:
         errors, row_count = audit_page(name)

@@ -61,11 +61,22 @@
 
 **Result: 19 of 19 distinct sources checked this session exist and support the statement made about them.** No fabricated source, dead link or misquote was found. No NBA-derived data value was added or changed anywhere.
 
+## Cross-reference to the parallel sessions' flags (added after the parallel merge)
+
+While this session worked, sessions `arena/88673f07-nba4` and `arena/98c57da8-nba4` merged PRs #15–#21 with the same corrections from the same root causes. After this session's branch merged `origin/main`, the canonical flags on the [Flagged for Review page](https://wingbangboozle1-lang.github.io/NBA4/review.html) are theirs; this session's findings map to them as follows, and the duplicates are not repeated there:
+
+| This session | Equivalent on `main` (merged) | Note | Source |
+| --- | --- | --- | --- |
+| VI-01 (stale “47 unit tests” count) | T-01 (corrected by `arena/88673f07-nba4`, PR #15) and V4-03 (guard added by `arena/98c57da8-nba4`, PR #18; “same finding as T-01”) | Identical finding, independently reproduced. Main also adds a checker guard so the count cannot drift again. | [tests/test_engine_models.py](https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_engine_models.py) · [Flagged for Review](https://wingbangboozle1-lang.github.io/NBA4/review.html) |
+| VI-02 (duplicated “✎ Suggestions” sidebar entry on six pages) | V4-05 (removed by `arena/98c57da8-nba4`, PR #18, with a checker guard against repeated primary-navigation links) | Identical finding, independently reproduced. | [Flagged for Review](https://wingbangboozle1-lang.github.io/NBA4/review.html) · [NBA4 site pages](https://github.com/wingbangboozle1-lang/NBA4/tree/main) |
+
+This session's unique additions to the merged tree are this log and the board entry; every overlapping fix is present on `main` and was kept intact during the parallel-merge resolution (see the parallel-merge log in `COORDINATION.md`).
+
 ## Local checks re-run this session
 
 | Check | Command | Result | Source |
 | --- | --- | --- | --- |
-| Static site/link/table/source check + engine tests | `python3 scripts/check_site.py --with-tests` | PASS: 11 pages, 203 HTML data rows, 341 Markdown data rows; every data row ends in an official HTTPS source; engine tests OK | [NBA4 check script](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/check_site.py) |
+| Static site/link/table/source check + engine tests | `python3 scripts/check_site.py --with-tests` | PASS on this session's branch before the parallel merge (11 pages, 203 HTML data rows, 341 Markdown data rows) and PASS again on the merged tree with the guarded checker from `main` (11 pages, 223 HTML data rows, 492 Markdown data rows); every data row ends in an official HTTPS source; engine tests OK | [NBA4 check script](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/check_site.py) |
 | Unit tests (discover both suites) | `python3 -m unittest discover -s tests` and `-s tests -t .` | 90/90 OK | [NBA4 tests](https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_engine.py) |
 | Synthetic pipeline smoke test | `python3 scripts/run_pipeline.py --inputs data/inbox-example --out data/out-example --now 2026-11-14T12:00:00Z --run-id verify-644efa79` | 2 synthetic events in horizon; `rights_cleared: False`; 0 forecasts; 0 picks; suppressed with `RIGHTS_NOT_CLEARED`; append-only ledger written with SHA-256 input snapshot hash | [NBA4 pipeline](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py) · [NBA injury policy](https://official.nba.com/nba-injury-report-2026-27-season/) |
 | Pages deployment | `curl https://api.github.com/repos/wingbangboozle1-lang/NBA4/pages`, `gh api …/pages`, live fetch | `status: built` from `main` at `/`, HTTPS enforced, public; live landing page serves current content | [NBA4 Pages API](https://api.github.com/repos/wingbangboozle1-lang/NBA4/pages) · [Live site](https://wingbangboozle1-lang.github.io/NBA4/) |

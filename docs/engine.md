@@ -87,7 +87,7 @@ When (and only when) Q1/F-01 data rights are cleared, place JSONL files under `d
 
 ## Verification performed
 
-- `python3 -m unittest discover -s tests` — 90 tests, all passing (47 in `tests/test_engine.py`: contracts, line origination, parlay, correlation, validation, leaderboard, pipeline; plus 43 in `tests/test_engine_models.py`: schema rejection rules, ledger provenance enforcement, future-leak guard, min-sample gates, shrinkage direction, injury resolution, game-flow partition, Pearson/phi known values, bootstrap determinism, Brier/log-loss known values, chronological folds, horizon filter, NO PICK suppression, parlay dependence rule, selftest smoke).
+- `python3 -m unittest tests.test_engine_models` — 43 tests, all passing (`python3 -m unittest discover -s tests -t .` runs all 90) (schema rejection rules, ledger provenance enforcement, future-leak guard, min-sample gates, shrinkage direction, injury resolution, game-flow partition, Pearson/phi known values, bootstrap determinism, Brier/log-loss known values, chronological folds, horizon filter, NO PICK suppression, parlay dependence rule, selftest smoke).
 - `python3 -m engine.cli status` on the real repository state reports `NO AUTHORIZED INPUTS -> no lines, no picks` — the honest output the site mirrors.
 - Method statements in the module map were quote-checked against their official sources in [`docs/verification-log.md`](verification-log.md) (ML-01…ML-03, STAT-01…STAT-02, NBA-03…NBA-06).
 
