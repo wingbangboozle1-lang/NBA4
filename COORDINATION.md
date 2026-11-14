@@ -115,6 +115,23 @@ Task letters are unique across the merged board: rows A–E are shared history, 
 
 **Local build/link checks.** All 11 pages and `assets/site.css` returned HTTP 200 from a local static server before the merge; every table row ends in an official HTTPS source cell and every local link and fragment resolves (enforced by `scripts/check_site.py`).
 
+## Independent verification pass and fixes (session `arena/644efa79-nba4`, 2026-11-14)
+
+**Scope.** A fourth independent line-by-line pass over the merged tree at `d51ed9f` (PR #13 merge). Every page and document was read line by line; every cited official source was re-fetched and quote-checked (19 distinct sources, all confirmed verbatim); the checker, the 90 unit tests, the synthetic pipeline smoke test and the Pages deployment were re-run; and the requirements checklist from the project brief was mapped to the site. Full evidence with quotations: [`docs/verification-pass-644efa79.md`](docs/verification-pass-644efa79.md).
+
+**Sources.** NBA Stats FAQ (verbatim); NBA.com Terms §1 and §9 clauses (i)–(vii) (verbatim); NBA 2026–27 injury-report policy page (deadlines and continual updates, now also listing 14 Nov reports); the 2026-11-13 07:30 PM injury PDF (header and schema); the 2026–27 schedule PDF header; NBA Stats glossary; GitHub Pages creating/limits docs and the repository Pages API (`status: built` on `main` at `/`, confirmed by `curl` and `gh`); the four Ksa pages; the three scikit-learn pages; the two NIST pages; and the live deployed site. **19/19 sources support the claims made about them.** One tooling observation: the web-fetch tool returned a transient 404 for the Pages API JSON endpoint while `curl` and `gh` confirmed `status: built`; recorded so future sessions do not misread it.
+
+**Checks re-run (all passed).** `python3 scripts/check_site.py --with-tests` → PASS (11 pages, 203 HTML data rows, 341 Markdown data rows, engine tests OK). `python3 -m unittest discover -s tests` → 90/90 OK. Pipeline smoke test (`--run-id verify-644efa79`) → 2 synthetic events, `rights_cleared: False`, 0 forecasts, 0 picks, `RIGHTS_NOT_CLEARED`, append-only ledger with SHA-256 snapshot hash.
+
+**Irregularities found and fixed (logged on the Flagged for Review page).**
+
+| Flag | Irregularity | Severity | Resolution |
+| --- | --- | --- | --- |
+| VI-01 | Live-facing pages and current-state documents still cited “47 unit tests” after the 43-test model-side suite merged; the merged suite has 90 (47 + 43). Also, `docs/engine.md` stated the discover command runs 43 tests. | Low — stale count | Corrected to 90 (with the per-file split) on `index.html`, `automation.html`, `sources.html`, `README.md`, `docs/automation.md`, `docs/decision-register.md`, `docs/sources.md`, `docs/audit.md`, `docs/engine.md`. Historical session-log entries describing each session's own contribution were left as history. |
+| VI-02 | Six pages carried a duplicated “✎ Suggestions” sidebar entry next to “✦ Suggestions”. | Low — navigation | Duplicate removed on `slate.html`, `injuries.html`, `strategies.html`, `questions.html`, `sources.html`, `review.html`; all pages now show the eleven-item navigation once. |
+
+**No data changes.** No NBA-derived value was added, changed or inferred; every unverified numeric cell remains blank and flagged. The findings are documentation-accuracy issues only and do not block the informational site.
+
 ## Cross-log note (IR flags vs VF flags)
 
 Two independent source-verification logs exist and both are preserved: [`docs/source-verification.md`](docs/source-verification.md) (IR-01…IR-06, session `arena/248bb9ab-nba4`) and [`docs/verification-log.md`](docs/verification-log.md) (VF-01…VF-04, sessions `arena/ddc81141-nba4` / `arena/7fcd5eef-nba4`). Three findings were discovered independently by both passes and are **not** counted twice: IR-02 = VF-04 (Brier-decomposition attribution), IR-03 = VF-02 (owner location wording), IR-04 = VF-01 (stale injury snapshot called "latest"; the VF pass additionally recorded that the official page lists 7:45 p.m. and 8:00 p.m. ET reports). Findings unique to one log: IR-01 (GitHub Pages citation precision), IR-05, IR-06 (precision), VF-03 (Dutch-language Ksa pages flagged for readers). Seven distinct findings in total.
