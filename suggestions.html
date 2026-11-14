@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="NBA4 suggestions register: candidate paths, trade-offs and a decision queue to review before any change is implemented.">
+  <title>NBA4 — Suggestions</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Site navigation">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N4</span><span class="brand-copy">NBA4<small>RESEARCH DASHBOARD</small></span></a>
+    <p class="nav-label">Workspace</p>
+    <nav class="primary-nav" aria-label="Primary navigation"><ul>
+      <li><a href="index.html"><span class="nav-icon" aria-hidden="true">◆</span>Overview</a></li>
+      <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
+      <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
+      <li><a href="strategies.html"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
+      <li><a href="leaderboard.html"><span class="nav-icon" aria-hidden="true">★</span>Leaderboard</a></li>
+      <li><a href="suggestions.html" aria-current="page"><span class="nav-icon" aria-hidden="true">✎</span>Suggestions</a></li>
+      <li><a href="questions.html"><span class="nav-icon" aria-hidden="true">?</span>Decision questions</a></li>
+      <li><a href="sources.html"><span class="nav-icon" aria-hidden="true">↗</span>Sources</a></li>
+      <li><a href="review.html"><span class="nav-icon" aria-hidden="true">⚑</span>Flagged for review</a></li>
+    </ul></nav>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-note"><strong>Decision queue</strong><p>Suggestions are options to choose from — nothing is implemented before a decision is recorded.</p></div>
+    <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
+  </aside>
+  <div class="content-shell">
+    <header class="topbar"><div><p class="topbar-title">Suggestion review</p><p class="topbar-meta">Options · trade-offs · recommended paths</p></div><span class="status-pill">ALL PENDING</span></header>
+    <main id="main" class="main-content">
+      <header class="page-header"><p class="eyebrow">Choose the best path before implementation</p><h1>Suggestions &amp; decision queue</h1><p>Every proposed change is listed with its candidate paths, trade-offs and a recommended option. Nothing is implemented until a decision is recorded in the <a href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/suggestions.md">decision log</a>. Blank decision cells are waiting on you — that is the point of this page.</p></header>
+
+      <div class="notice notice-info"><span class="notice-icon" aria-hidden="true">i</span><div><strong>How to review.</strong><p>Pick a row, compare paths A/B/C, record your choice (path, date, initials) in the decision log, then let implementation follow. Recommendations are proposals, not legal advice; rows touching rights or rewards depend on the open blockers.</p></div></div>
+
+      <section class="section" aria-labelledby="queue-title">
+        <div class="section-heading"><div><h2 id="queue-title">Decision queue</h2><p>Ten cross-cutting choices, in rough dependency order (SG-01/SG-03 unblock the rest).</p></div><a class="section-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/suggestions.md">Full register with trade-offs →</a></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">ID / area</th><th scope="col">The choice</th><th scope="col">Paths</th><th scope="col">Recommended</th><th scope="col">Decision</th><th scope="col">Official source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>SG-01 · Data rights</strong></td><td>How to obtain authorized NBA data</td><td><strong>A</strong> NBA written permission · <strong>B</strong> licensed vendor · <strong>C</strong> synthetic/public-domain dry runs</td><td>A + B in parallel (C already built in the engine)</td><td><span class="flag flag-blue">Pending</span></td><td><a class="source-link" href="https://www.nba.com/stats/help/faq" target="_blank" rel="noopener noreferrer">NBA Stats FAQ</a><br><a class="source-link" href="https://www.nba.com/termsofuse#nba-statistics" target="_blank" rel="noopener noreferrer">NBA Terms §9</a></td></tr>
+              <tr><td><strong>SG-02 · Slate display</strong></td><td>How much fixture data the site may show</td><td><strong>A</strong> link-only (current) · <strong>B</strong> minimal rows + source links after rights review · <strong>C</strong> full feed under licence</td><td>A now; B only after written clearance</td><td><span class="flag flag-blue">Pending</span></td><td><a class="source-link" href="https://www.nba.com/termsofuse#ownership-and-use-restrictions" target="_blank" rel="noopener noreferrer">NBA Terms §1</a><br><a class="source-link" href="https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf" target="_blank" rel="noopener noreferrer">NBA schedule PDF</a></td></tr>
+              <tr><td><strong>SG-03 · Product scope</strong></td><td>What this product is classified as</td><td><strong>A</strong> research-only dashboard (current) · <strong>B</strong> picks/leaderboard with rewards · <strong>C</strong> commercial live service</td><td>A until qualified counsel classifies the user journey</td><td><span class="flag flag-blue">Pending</span></td><td><a class="source-link" href="https://kansspelautoriteit.nl/remote-gambling-act-force" target="_blank" rel="noopener noreferrer">Ksa licensing</a><br><a class="source-link" href="https://kansspelautoriteit.nl/belangrijkste-regels-voor-kansspelreclame" target="_blank" rel="noopener noreferrer">Ksa advertising rules</a></td></tr>
+              <tr><td><strong>SG-04 · Rewards</strong></td><td>The leaderboard reward model</td><td><strong>A</strong> non-monetary badges · <strong>B</strong> monetary prizes after legal review · <strong>C</strong> no rewards</td><td>A now; B only after SG-03 sign-off</td><td><span class="flag flag-blue">Pending</span></td><td><a class="source-link" href="https://kansspelautoriteit.nl/belangrijkste-regels-voor-kansspelreclame" target="_blank" rel="noopener noreferrer">Ksa advertising rules</a><br><a class="source-link" href="https://kansspelautoriteit.nl/10-tips-gambling-safely" target="_blank" rel="noopener noreferrer">Ksa safer gambling</a></td></tr>
+              <tr><td><strong>SG-05 · Hosting</strong></td><td>Where the product will run</td><td><strong>A</strong> GitHub Pages informational (current) · <strong>B</strong> Pages + backend when live · <strong>C</strong> commercial host</td><td>A now; B when live inputs exist</td><td><span class="flag flag-blue">Pending</span></td><td><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site" target="_blank" rel="noopener noreferrer">Pages docs</a><br><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits" target="_blank" rel="noopener noreferrer">Pages limits</a></td></tr>
+              <tr><td><strong>SG-06 · Model parameters</strong></td><td>How engine thresholds get set</td><td><strong>A</strong> owner judgement now · <strong>B</strong> power analysis then preregister · <strong>C</strong> keep unfitted (current)</td><td>B; C stays as the honest interim</td><td><span class="flag flag-blue">Pending</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/model_evaluation.html" target="_blank" rel="noopener noreferrer">scikit-learn evaluation</a></td></tr>
+              <tr><td><strong>SG-07 · Injury archive</strong></td><td>How injury history is captured</td><td><strong>A</strong> authorized manual snapshots · <strong>B</strong> licensed feed · <strong>C</strong> nothing until rights (current)</td><td>A or B once permitted</td><td><span class="flag flag-blue">Pending</span></td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA Injury Report</a></td></tr>
+              <tr><td><strong>SG-08 · Correlation scope</strong></td><td>Which leg pairs to measure first</td><td><strong>A</strong> same-game player props · <strong>B</strong> game vs props · <strong>C</strong> all pairs</td><td>A first, B second</td><td><span class="flag flag-blue">Pending</span></td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST correlation</a></td></tr>
+              <tr><td><strong>SG-09 · Site decision support</strong></td><td>How the site best supports decisions</td><td><strong>A</strong> unified decision desk · <strong>B</strong> separate pages + cross-links (current) · <strong>C</strong> B + CSV downloads</td><td>B + C (low cost, high value)</td><td><span class="flag flag-blue">Pending</span></td><td><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site" target="_blank" rel="noopener noreferrer">Pages docs</a></td></tr>
+              <tr><td><strong>SG-10 · Review workflow</strong></td><td>How suggestions get approved</td><td><strong>A</strong> decisions recorded here via pull requests · <strong>B</strong> external form · <strong>C</strong> GitHub Issues + record here</td><td>A + C (auditable history)</td><td><span class="flag flag-blue">Pending</span></td><td><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site" target="_blank" rel="noopener noreferrer">GitHub docs</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="site-title">
+        <div class="section-heading"><div><h2 id="site-title">Site-improvement suggestions</h2><p>Low-risk dashboard improvements that sharpen decision making; each can be accepted on its own.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">ID</th><th scope="col">Improvement</th><th scope="col">Why it improves decisions</th><th scope="col">Effort</th><th scope="col">Decision</th><th scope="col">Official source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>SG-11</strong></td><td>Snapshot timestamp + “re-verify” link on every table caption</td><td>Reviewers know how fresh each claim is and can re-check it in one click.</td><td>Small</td><td><span class="flag flag-blue">Pending</span></td><td><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site" target="_blank" rel="noopener noreferrer">Pages docs</a></td></tr>
+              <tr><td><strong>SG-12</strong></td><td>Static CSV of every table next to the HTML</td><td>Offline sorting, filtering and snapshot diffs.</td><td>Small</td><td><span class="flag flag-blue">Pending</span></td><td><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site" target="_blank" rel="noopener noreferrer">Pages docs</a></td></tr>
+              <tr><td><strong>SG-13</strong></td><td>Publish the engine's <code>status</code>/<code>validate</code> output verbatim on the slate page</td><td>The site mirrors machine state instead of a hand-written summary.</td><td>Medium</td><td><span class="flag flag-blue">Pending</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/model_evaluation.html" target="_blank" rel="noopener noreferrer">scikit-learn evaluation</a></td></tr>
+              <tr><td><strong>SG-14</strong></td><td>“What changed since last snapshot” section on the overview</td><td>Drift (e.g. newer injury reports) becomes visible immediately.</td><td>Medium</td><td><span class="flag flag-blue">Pending</span></td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA Injury Report</a></td></tr>
+              <tr><td><strong>SG-15</strong></td><td>Link every blank/flagged cell to the question ID that blocks it</td><td>Every gap becomes an actionable question, not an empty box.</td><td>Small</td><td><span class="flag flag-blue">Pending</span></td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST glossary</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section two-column" aria-label="Discovery and workflow">
+        <article class="panel"><h2>Discovering the missing information</h2><p>Each open question names its missing fact and the exact discovery step: vendor/rights RFI with written use-terms (Q1–Q2), product-flow legal classification before any reward (Q3), sample payloads with timestamps before model choice (Q2), preregistration before holdouts (Q6), point-in-time injury snapshots once permitted (Q8), and informational hosting until classified (Q4).</p><p><a href="questions.html">Open the full question register →</a></p></article>
+        <article class="panel"><h2>Decision workflow</h2><ol><li>Read the row and its trade-offs in the full register.</li><li>Choose a path (or propose a new one) — recommendations are proposals only.</li><li>Record the decision with date and initials in the register's decision log.</li><li>Only then implement; re-verify affected rows afterwards.</li></ol><p><a href="review.html">Blocked by these flags →</a></p></article>
+      </section>
+      <footer class="footer"><p>Every suggestion is Pending until a decision is recorded. Nothing here is legal advice.</p><p><a href="index.html">Return to overview →</a></p></footer>
+    </main>
+  </div>
+</div>
+</body>
+</html>
