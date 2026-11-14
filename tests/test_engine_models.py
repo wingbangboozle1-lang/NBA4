@@ -299,6 +299,26 @@ class TestValidation(unittest.TestCase):
         self.assertEqual(names["G6 net value"], "blocked")
         self.assertEqual(len(states), 13)  # G0..G12
 
+        g12 = next(state for state in states if state.gate == "G12 leaderboard/rewards")
+        self.assertIn("declared_minimum_sample_size=UNSET", g12.detail)
+        self.assertNotIn("proposed minimum 30", g12.detail)
+        supplied = run_gates(
+            rep,
+            has_market_spec=False,
+            n_settled_forecasts=0,
+            declared_minimum_sample_size=50,
+        )
+        supplied_g12 = next(state for state in supplied if state.gate == "G12 leaderboard/rewards")
+        self.assertIn("declared_minimum_sample_size=50", supplied_g12.detail)
+        self.assertEqual(supplied_g12.state, "blocked")  # a number alone cannot pass G12
+        with self.assertRaises(ValueError):
+            run_gates(
+                rep,
+                has_market_spec=False,
+                n_settled_forecasts=0,
+                declared_minimum_sample_size=0,
+            )
+
 
 class TestPicks(unittest.TestCase):
     def test_horizon_filter(self):

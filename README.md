@@ -61,12 +61,12 @@ A second model-side subsystem from session `arena/2c06c7f9-nba4` lives alongside
 - [`docs/line-origination.md`](docs/line-origination.md) — how an originated line is produced and kept separate from the market.
 - [`docs/automation.md`](docs/automation.md) — the daily, no-manual-input runbook for the three-day slate.
 - [`docs/correlation-and-leaderboard.md`](docs/correlation-and-leaderboard.md) — correlation measurement plan and leaderboard design.
-- [`docs/suggestions.md`](docs/suggestions.md) — 23 site-improvement proposals for review before implementation.
+- [`docs/suggestions.md`](docs/suggestions.md) — four gating decisions, 12 decision-queue proposals and 23 site-improvement proposals for reviewer action.
 - [`docs/source-verification.md`](docs/source-verification.md) — per-source verification log and the irregularities that were found.
 - [`docs/sources.md`](docs/sources.md) — official-source register and interpretation limits.
 - [`docs/site-spec.md`](docs/site-spec.md) — dashboard organization and integrity rules.
 - [`docs/verification-log.md`](docs/verification-log.md) — line-by-line re-verification of all 22 cited sources and the corrections made.
-- [`docs/suggestions.md`](docs/suggestions.md) — the suggestions register and the four gating decisions.
+- [`docs/release-audit-607c89a8.md`](docs/release-audit-607c89a8.md) — final acceptance map, verification results, open flags and production-data blockers.
 - [`docs/engine.md`](docs/engine.md) — model-side engine guide: ratings/props/injury/game-flow methods, UNFITTED parameter register, inputs spec.
 - [`docs/leaderboard.md`](docs/leaderboard.md) — leaderboard competition rules, anti-luck scoring and proposed reward tiers (supplementary design record).
 - [`docs/verification-pass-c6ae3e43.md`](docs/verification-pass-c6ae3e43.md) — fourth verification pass (task V, PR #17): 19 primary pages re-read and quoted, live-site and Pages API check, flag V-01.
