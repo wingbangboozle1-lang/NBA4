@@ -143,7 +143,6 @@ Two independent source-verification logs exist and both are preserved: [`docs/so
 | GitHub Pages | `status: built`; published from `main` at `/`; HTTPS enforced; public. Rechecked after each merge; the build-incident history is recorded above. |
 | Live URL | [https://wingbangboozle1-lang.github.io/NBA4/](https://wingbangboozle1-lang.github.io/NBA4/) |
 | Post-merge check | Site re-fetched after every merge; all pages served with intact tables and source links. After PR #3 the Pages build completed for commit `2a7b565` (`status: built` at 01:07:30Z) and `/suggestions.html` plus `/review.html` were fetched live with the then-new content and the VF-01 … VF-04 flags. The PR #10 post-merge check is appended when task N closes. |
-
 ## Handoff and integrity rules
 
 - Keep file scopes non-overlapping and update this board before starting work. If a needed file is owned by another session, log a request here rather than editing it.
