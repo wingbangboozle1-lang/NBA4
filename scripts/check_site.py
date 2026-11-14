@@ -134,11 +134,50 @@ def is_local_target(href: str) -> tuple[Path, str | None] | None:
     return (target, parsed.fragment or None)
 
 
+VOID_ELEMENTS = {
+    "area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta",
+    "param", "source", "track", "wbr",
+}
+
+
+class NestingAudit(HTMLParser):
+    """Stack check: every closing tag must match the most recent open tag."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.stack: list[str] = []
+        self.problems: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs) -> None:
+        if tag not in VOID_ELEMENTS:
+            self.stack.append(tag)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in VOID_ELEMENTS:
+            return
+        if self.stack and self.stack[-1] == tag:
+            self.stack.pop()
+        else:
+            top = self.stack[-1] if self.stack else "nothing"
+            self.problems.append(f"</{tag}> closes while <{top}> is open at {self.getpos()}")
+
+
+def audit_nesting(path: Path) -> list[str]:
+    audit = NestingAudit()
+    audit.feed(path.read_text(encoding="utf-8"))
+    audit.close()
+    problems = list(audit.problems)
+    if audit.stack:
+        problems.append(f"unclosed element(s) at end of page: {audit.stack[-5:]}")
+    return problems
+
+
 def audit_page(name: str) -> tuple[list[str], int]:
     errors: list[str] = []
     path = ROOT / name
     if not path.is_file():
         return [f"missing page: {name}"], 0
+    errors.extend(f"{name}: invalid nesting: {p}" for p in audit_nesting(path))
     parser = PageAudit()
     parser.feed(path.read_text(encoding="utf-8"))
     parser.close()
