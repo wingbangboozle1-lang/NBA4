@@ -1,6 +1,6 @@
 # Verification pass 6: line-by-line re-check of the published official observations
 
-**Session:** `arena/b9938e48-nba4` · **Board task:** AF · **Date:** 14 Nov 2026, read between 10:20 and 10:50 UTC (the 04:30 AM injury snapshot was fetched at 10:20 UTC; `date -u` at the start of the injury comparison read 10:25:56 UTC).
+**Session:** `arena/b9938e48-nba4` · **Board task:** AG (first written as AF; re-lettered because PR #36 merged task AF first) · **Date:** 14 Nov 2026, read between 10:20 and 10:50 UTC (the 04:30 AM injury snapshot was fetched at 10:20 UTC; `date -u` at the start of the injury comparison read 10:25:56 UTC).
 
 ## 1. Scope and method
 
@@ -52,7 +52,7 @@ Zone rules come from the public IANA time-zone database (a reference, not an NBA
 | `index.html` (hero paragraph closing tag) | Added the missing `</p>`. | Flag P6-09. | [Landing page](https://github.com/wingbangboozle1-lang/NBA4/blob/main/index.html) |
 | `review.html` (V4-09 cell only) | Raw `<id>`/`<task>` escaped so the sentence renders in full. | Flag P6-08. | [Review page](https://github.com/wingbangboozle1-lang/NBA4/blob/main/review.html) |
 | `scripts/check_site.py` | New nesting audit on every page (stack check; void elements excluded). | Prevents the P6-08 and P6-09 class of error from returning. | [Checker](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/check_site.py) |
-| `COORDINATION.md` | Task AF claimed and recorded. Stale row AA closed. | Board hygiene. | [Board](https://github.com/wingbangboozle1-lang/NBA4/blob/main/COORDINATION.md) |
+| `COORDINATION.md` | Task AG claimed and recorded. Row AA was already done on `main` (PR #28, PR #36); not changed here. | Board hygiene. | [Board](https://github.com/wingbangboozle1-lang/NBA4/blob/main/COORDINATION.md) |
 
 **No model output, line, probability, pick or player-level value was added or changed.** The injury rows and the 22 slate rows are unchanged.
 
@@ -64,7 +64,7 @@ Zone rules come from the public IANA time-zone database (a reference, not an NBA
 | P6-02 | Low | 11/17 matchups were given with "@" although the PDF prints no "at" on those rows. Printed rows 215–230 and 253–259 also lack "at". None is in the published window. | Corrected for 11/17. The rest are out of window and unused. | [Schedule PDF](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) |
 | P6-03 | Medium | NBA Terms of Use returned 502 on both attempts, so §9 was not re-read today. | Open. Re-read before the next publication change. | [NBA Terms of Use](https://www.nba.com/termsofuse) |
 | P6-04 | Low | "Date (ET)" asserted a time zone the schedule PDF does not state. | Relabelled "Date (as printed)". | [Schedule PDF](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) |
-| P6-05 | Low | Board row AA stayed "in progress" after its audit merged. | Closed. | [Release audit](https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/release-audit-607c89a8.md) |
+| P6-05 | Low | Board row AA showed "in progress" in the copy this session started from, although its audit was on `main`. | `main` already shows AA as done (PR #28 and PR #36). No further change. | [Release audit](https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/release-audit-607c89a8.md) |
 | P6-06 | Medium | Duplicate engine modules (IR-T1) are still on `main`. | Open. Owner decision needed. | [Review record eb9d2e0b](https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/review-eb9d2e0b.md) |
 | P6-07 | Info | Re-comparison: 22 of 22 schedule rows and 49 of 49 injury rows agree with the official PDFs. | Result only. | [Injury report PDF, 04:30 AM](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-14_04_30AM.pdf) |
 | P6-08 | Low | Page rendering: the pass-4 row V4-09 on `review.html` contained raw `<id>` and `<task>`, which the browser read as tags, so part of the sentence was lost. The page also failed a nesting check there. | Fixed by escaping (`&lt;id&gt;`, `&lt;task&gt;`). | [Review page](https://github.com/wingbangboozle1-lang/NBA4/blob/main/review.html) |
@@ -87,4 +87,4 @@ Zone rules come from the public IANA time-zone database (a reference, not an NBA
 
 - `python3 scripts/build_snapshots.py --check` (in sync) and `python3 scripts/check_site.py --with-tests` (the result is recorded in the board row AF).
 - `python3 -m unittest discover -s tests -t .` (101 tests on synthetic fixtures).
-- The live GitHub Pages result is recorded in the board row AF after the merge.
+- The live GitHub Pages result is recorded in the board row AG after the merge.

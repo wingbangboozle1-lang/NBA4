@@ -40,4 +40,9 @@ The following results are local checks against the current branch, not results i
 
 ## GitHub Pages deployment
 
-The acceptance branch is not itself the deployed site. The final Pages API status, built commit and cache-busted live-page check must be recorded after the acceptance PR is merged. Until that post-merge check succeeds, do not describe this audit branch as deployed or the release as complete.
+**Confirmed complete (post-merge, 2026-11-14, session `arena/ad4e7bf0-nba4`).** After this audit merged (PR #28) and the subsequent bookkeeping/snapshot PRs #29–#35, the final acceptance pass re-checked the deployment and recorded it in [`docs/verification-pass-ad4e7bf0.md`](verification-pass-ad4e7bf0.md):
+
+- GitHub Pages API: `status: built`, source `main` at `/`, `public: true`, `https_enforced: true`.
+- Cache-busted live checks: the landing overview, `slate.html` (22 official schedule rows, each with a reason-coded NO PICK and a schedule-PDF source link) and `injuries.html` (49-row official 2026-11-14 04:30 AM ET report, row-level PDF links, the one lost team cell left blank and flagged unverified) all serve with intact tables and source links.
+
+The informational dashboard is therefore deployed and serving. The release condition this section previously left open is now closed. Production picks/forecasts/leaderboard/rewards remain blocked on data rights, licensed inputs, a validated model and legal review, as described above.
