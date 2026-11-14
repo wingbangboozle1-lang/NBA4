@@ -14,6 +14,12 @@ A “luck-free” strategy cannot be promised. The responsible target is to redu
 
 Primary sources: [NBA Stats FAQ](https://www.nba.com/stats/help/faq) · [NBA.com Terms of Use](https://www.nba.com/termsofuse) · [GitHub Pages limits](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits) · [Ksa remote-gambling guidance](https://kansspelautoriteit.nl/remote-gambling-act-force)
 
+## Independent verification and corrections (second pass)
+
+A second, independent pass re-fetched all 22 cited sources and recorded the literal quoted passage behind each claim in [`verification-log.md`](verification-log.md). **22 of 22 sources exist and support the statement made about them**; no fabricated source, dead link or misquote was found. Two statements *about* the sources were wrong and have been corrected: the 2026-11-13 7:30 p.m. ET injury PDF was not the newest report of that date (7:45 p.m. and 8:00 p.m. ET reports also exist), and the owner location recorded here was corrected. Neither correction changes a data value, because no NBA-derived data value is stored anywhere in this repository.
+
+A "no pick" is not a defect in this dashboard; it is the control that says the evidence chain did not close. Proposed improvements and the four gating decisions are on the [Suggestions](https://wingbangboozle1-lang.github.io/NBA4/suggestions.html) page so a path can be chosen before anything is built.
+
 ## Questions, known information, missing information, and discovery plan
 
 | ID / priority | Question that must be answered | What is known from verified sources / current repo | Missing answer / current status | Recommendation to discover it | Source (context; not necessarily authorization) |
