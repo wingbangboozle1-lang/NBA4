@@ -71,6 +71,7 @@ A second model-side subsystem from session `arena/2c06c7f9-nba4` lives alongside
 - [`docs/leaderboard.md`](docs/leaderboard.md) — leaderboard competition rules, anti-luck scoring and proposed reward tiers (supplementary design record).
 - [`docs/verification-pass-c6ae3e43.md`](docs/verification-pass-c6ae3e43.md) — fourth verification pass (task V, PR #17): 19 primary pages re-read and quoted, live-site and Pages API check, flag V-01.
 - [`docs/verification-pass-88673f07.md`](docs/verification-pass-88673f07.md) — fourth live re-check of the primary sources, with the test-count, injury-snapshot and privacy-wording corrections (T-01…T-03) and observations O-1…O-3.
+- [`docs/verification-pass-644efa79.md`](docs/verification-pass-644efa79.md) — fourth independent verification pass by the final-integration session (19 sources quote-checked, requirements checklist; VI-01/VI-02 cross-referenced to T-01/V4-03 and V4-05 on the review page).
 - [`docs/verification-pass-2c06c7f9.md`](docs/verification-pass-2c06c7f9.md) — third independent verification pass (18 sources quote-checked; 5 irregularities I-1…I-5).
 - [`docs/suggestions-2c06c7f9.md`](docs/suggestions-2c06c7f9.md) — supplementary suggestion register (paths A/B/C and decision log) from the same session.
 - [`COORDINATION.md`](COORDINATION.md) — task board, verification notes and publication record.
