@@ -69,6 +69,22 @@ Updated: 2026-11-14 (UTC). The starting repository contained only `README.md` an
 - **Pre-existing merge.** The A–D content and the site files were already merged into `main` via PR #1 before this session; task E's remaining work was final verification, board completion, and the integration PR. The prior board entry left E "in progress"; this entry closes it.
 - **No external-source changes required.** Every claim in the site matched the primary source at verification time. Time-sensitive NBA schedule/injury pages were checked against their dated snapshots; they are explicitly labelled as dated/changeable rather than live feeds.
 
+## Independent re-verification (session `arena/7fcd5eef-nba4`, 2026-11-14 UTC)
+
+**Scope.** A second, independent verification pass over the already-merged tree. No site content, table, or source was modified; this entry is a replication check (aligned with gate G10, robustness/independent replication) and closes this session's work.
+
+**Static check (re-run, passed).** `python3 scripts/check_site.py` → `PASS: 7 pages, 82 HTML data rows and 72 Markdown data rows passed.` Every HTML table data row ends in an official HTTPS source cell; every Markdown table data row in `docs/` contains an official HTTPS source link; every page has exactly one non-empty `<h1>`; all local links and fragments resolve.
+
+**Source re-verification (all 19 distinct external sources re-fetched from their primary pages).** Each URL was fetched and matched to the statement in its row; results matched the board's record with no corrections needed: NBA Stats FAQ; NBA.com Terms §§1 and 9; NBA Official 2026–27 injury policy; the 2026-11-13 07:30 PM injury PDF; the 2026–27 regular-season schedule PDF; NBA Stats glossary; GitHub Pages creation docs, limits, and this repo's Pages API; four Ksa pages (Remote Gambling Act, advertising rules, affiliate guidance, 10 tips); three scikit-learn pages (cross-validation, model evaluation/Brier, calibration); two NIST pages (correlation glossary, bootstrap plot). Links are listed in [`docs/sources.md`](docs/sources.md) and the [Sources page](sources.html).
+
+**Live site re-verification.** All seven pages were re-fetched from [https://wingbangboozle1-lang.github.io/NBA4/](https://wingbangboozle1-lang.github.io/NBA4/) and returned full content with intact tables and source links. GitHub Pages API again reported `status: built`, source `main` at `/`, `https_enforced: true`, public.
+
+**Irregularities / observations.**
+
+- **No new irregularities.** No fabricated picks, lines, probabilities, correlations, injury-minute effects, ROI, or strategy results exist; all numeric model fields remain blank and flagged unverified.
+- **Transient root-cache artifact.** The first bare-root fetch of the deployed landing page returned a cached older `# NBA4` README render. The explicit `index.html` path and a cache-busted root both served the correct landing page (`NBA4 — Research overview`). This is a fetch/CDN cache artifact, not a site defect; the deployment is correct.
+- **Prior work already merged.** The dashboard and its integration/verification record were merged into `main` via PR #1 and PR #2 before this session. This session fast-forwarded its branch to that merged commit, re-verified independently, and recorded the replication result here.
+
 ## Publication record
 
 | Item | Result |
