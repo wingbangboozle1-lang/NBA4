@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="NBA4 strategy leaderboard competition framework: eligibility gates, scoring rules and proposed rewards. No entries rank until every validation gate passes.">
+  <title>NBA4 — Leaderboard &amp; rewards</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Site navigation">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N4</span><span class="brand-copy">NBA4<small>RESEARCH DASHBOARD</small></span></a>
+    <p class="nav-label">Workspace</p>
+    <nav class="primary-nav" aria-label="Primary navigation"><ul>
+      <li><a href="index.html"><span class="nav-icon" aria-hidden="true">◆</span>Overview</a></li>
+      <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
+      <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
+      <li><a href="strategies.html"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
+      <li><a href="leaderboard.html" aria-current="page"><span class="nav-icon" aria-hidden="true">★</span>Leaderboard</a></li>
+      <li><a href="suggestions.html"><span class="nav-icon" aria-hidden="true">✎</span>Suggestions</a></li>
+      <li><a href="questions.html"><span class="nav-icon" aria-hidden="true">?</span>Decision questions</a></li>
+      <li><a href="sources.html"><span class="nav-icon" aria-hidden="true">↗</span>Sources</a></li>
+      <li><a href="review.html"><span class="nav-icon" aria-hidden="true">⚑</span>Flagged for review</a></li>
+    </ul></nav>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-note"><strong>Research-only state</strong><p>No validated strategies, licensed feed, or NBA picks are available in this repository.</p></div>
+    <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
+  </aside>
+  <div class="content-shell">
+    <header class="topbar"><div><p class="topbar-title">Strategy competition</p><p class="topbar-meta">Rules first · rankings only after gates pass</p></div><span class="status-pill">NO ENTRIES RANKED</span></header>
+    <main id="main" class="main-content">
+      <header class="page-header"><p class="eyebrow">Leaderboard · rewards · anti-luck rules</p><h1>Strategy leaderboard &amp; rewards framework</h1><p>The competition shape is fixed here, before any result exists. Entries are version-locked strategies that must clear every validation gate before they can be ranked. A lucky streak cannot win: ranking requires an uncertainty interval that beats the baseline, a minimum settled sample, and a multiple-trials correction. Rewards are proposed tiers only — nothing is offered until legal review clears the reward model.</p></header>
+
+      <div class="notice notice-danger"><span class="notice-icon" aria-hidden="true">!</span><div><strong>No standings, no winners, no rewards today.</strong><p>No entry has passed any gate (data-rights gate G0 and rewards gate G12 are blocked). This page publishes the rules and an empty standings table — never fabricated scores. <a href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/leaderboard.md">Full competition design →</a></p></div></div>
+
+      <section class="section" aria-labelledby="standings-title">
+        <div class="section-heading"><div><h2 id="standings-title">Current standings</h2><p>Only gate-passing, version-locked entries appear here. Blank cells are unverified, not zero.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Rank</th><th scope="col">Entry (version-locked)</th><th scope="col">Market</th><th scope="col">Primary metric</th><th scope="col">Uncertainty interval</th><th scope="col">Sample / window</th><th scope="col">Gate status</th><th scope="col">Official source</th></tr></thead>
+            <tbody>
+              <tr><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td><span class="flag flag-red">No eligible entries</span><br>Nothing has passed G0–G12.</td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/model_evaluation.html" target="_blank" rel="noopener noreferrer">scikit-learn evaluation</a><br><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA data terms</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="eligibility-title">
+        <div class="section-heading"><div><h2 id="eligibility-title">Eligibility gates</h2><p>All must pass on a frozen entry. One failed or missing gate means no rank and no reward.</p></div><a class="section-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/validation-plan.md">Validation plan →</a></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Gate</th><th scope="col">Requirement</th><th scope="col">State</th><th scope="col">Official source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>G0 · Rights / jurisdiction</strong></td><td>Written data rights plus legal review of the reward model in each target territory.</td><td><span class="flag flag-red">Blocked</span></td><td><a class="source-link" href="https://www.nba.com/termsofuse#nba-statistics" target="_blank" rel="noopener noreferrer">NBA Terms §9</a><br><a class="source-link" href="https://kansspelautoriteit.nl/belangrijkste-regels-voor-kansspelreclame" target="_blank" rel="noopener noreferrer">Ksa advertising rules</a></td></tr>
+              <tr><td><strong>G3 · Preregistration</strong></td><td>Hypothesis, features, parameters, baselines and primary metric frozen before evaluation.</td><td><span class="flag">Not run</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">scikit-learn cross-validation</a></td></tr>
+              <tr><td><strong>G4 · Chronological testing</strong></td><td>Walk-forward evaluation with an untouched final holdout; timestamp audit for leakage.</td><td><span class="flag">Not run</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation-of-time-series-data" target="_blank" rel="noopener noreferrer">Time-series splits</a></td></tr>
+              <tr><td><strong>G5 · Calibration</strong></td><td>Brier/log loss and reliability reported vs baselines; a lower Brier loss alone is not proof.</td><td><span class="flag">Not run</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/calibration.html" target="_blank" rel="noopener noreferrer">scikit-learn calibration</a></td></tr>
+              <tr><td><strong>G6 · Net value</strong></td><td>Net result only from licensed, timestamped quotes under exact settlement rules.</td><td><span class="flag flag-red">Blocked</span></td><td><a class="source-link" href="https://www.nba.com/termsofuse#nba-statistics" target="_blank" rel="noopener noreferrer">NBA Terms §9</a></td></tr>
+              <tr><td><strong>G7 · Luck control</strong></td><td>Game-cluster bootstrap interval must beat the baseline; trials adjustment applied.</td><td><span class="flag">Not run</span></td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/eda/section3/bootplot.htm" target="_blank" rel="noopener noreferrer">NIST bootstrap</a></td></tr>
+              <tr><td><strong>G8 · Combo dependence</strong></td><td>Measured leg correlations with sample counts, or a justified independence declaration.</td><td><span class="flag">Not run</span></td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST correlation</a></td></tr>
+              <tr><td><strong>G12 · Minimum sample</strong></td><td>Preregistered settled-sample minimum (proposed placeholder 30; final number from a power analysis).</td><td><span class="flag flag-blue">Threshold blank</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/model_evaluation.html" target="_blank" rel="noopener noreferrer">scikit-learn evaluation</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="scoring-title">
+        <div class="section-heading"><div><h2 id="scoring-title">Scoring &amp; anti-luck rules</h2><p>Blanks stay blank until the owner preregisters values against a power analysis.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Element</th><th scope="col">Proposed rule</th><th scope="col">Value</th><th scope="col">Status</th><th scope="col">Official source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Primary metric</strong></td><td>Mean proper-score improvement over the preregistered baseline on settled out-of-sample forecasts.</td><td class="empty-value"></td><td><span class="flag flag-blue">Proposed</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/model_evaluation.html" target="_blank" rel="noopener noreferrer">scikit-learn evaluation</a></td></tr>
+              <tr><td><strong>Uncertainty display</strong></td><td>Game-cluster bootstrap interval beside every score; the favourable bound must exclude zero to rank.</td><td class="empty-value"></td><td><span class="flag flag-blue">Proposed</span></td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/eda/section3/bootplot.htm" target="_blank" rel="noopener noreferrer">NIST bootstrap</a></td></tr>
+              <tr><td><strong>Trials adjustment</strong></td><td>Bonferroni-style correction across all entries examined, so “try many, publish the best” cannot win.</td><td class="empty-value"></td><td><span class="flag flag-blue">Proposed</span></td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST glossary</a></td></tr>
+              <tr><td><strong>Ranking rule</strong></td><td>Gate-passing entries only; ties broken by narrower interval, then earlier preregistration timestamp.</td><td class="empty-value"></td><td><span class="flag flag-blue">Proposed</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">scikit-learn cross-validation</a></td></tr>
+              <tr><td><strong>Minimum sample</strong></td><td>Settled-forecast minimum derived from a power/precision analysis.</td><td class="empty-value"></td><td><span class="flag">Blank — not yet decided</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/model_evaluation.html" target="_blank" rel="noopener noreferrer">scikit-learn evaluation</a></td></tr>
+              <tr><td><strong>Drawdown / risk limit</strong></td><td>Set before the holdout opens, never after seeing results.</td><td class="empty-value"></td><td><span class="flag">Blank — not yet decided</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">scikit-learn cross-validation</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="rewards-title">
+        <div class="section-heading"><div><h2 id="rewards-title">Proposed reward tiers</h2><p>Nothing is offered today. Non-monetary research credit is the safe default while legal review is open.</p></div><a class="section-link" href="suggestions.html">Review reward options →</a></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Tier</th><th scope="col">Trigger</th><th scope="col">Reward</th><th scope="col">Status</th><th scope="col">Official source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Tier 0 · Research credit</strong></td><td>Entry passes all gates on a frozen version.</td><td>Named entry + verification badge on this board (non-monetary).</td><td><span class="flag flag-blue">Proposed</span></td><td><a class="source-link" href="https://kansspelautoriteit.nl/10-tips-gambling-safely" target="_blank" rel="noopener noreferrer">Ksa safer-gambling guidance</a></td></tr>
+              <tr><td><strong>Tier 1 · Season champion</strong></td><td>Top primary metric among gate-passing entries at season review.</td><td class="empty-value"></td><td><span class="flag flag-red">Blocked — legal review</span></td><td><a class="source-link" href="https://kansspelautoriteit.nl/belangrijkste-regels-voor-kansspelreclame" target="_blank" rel="noopener noreferrer">Ksa advertising rules</a></td></tr>
+              <tr><td><strong>Tier 2 · Improvement prize</strong></td><td>Largest validated improvement over an entry's own prior version.</td><td class="empty-value"></td><td><span class="flag flag-red">Blocked — legal review</span></td><td><a class="source-link" href="https://kansspelautoriteit.nl/ksa-attendeert-affiliatewebsites-op-regels-voor-reclame-kansspelen" target="_blank" rel="noopener noreferrer">Ksa affiliate guidance</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section two-column" aria-label="Entry flow and cautions">
+        <article class="panel"><h2>How to enter (when blockers clear)</h2><ol><li>Resolve data rights (Q1) and product/jurisdiction classification (Q3).</li><li>Freeze one market, one candidate strategy and the full parameter register.</li><li>Preregister baselines, metric, sample/power plan, holdout window and reward terms.</li><li>Run in the shadow ledger for the preregistered window.</li><li>Publish only if every gate passes; otherwise show the failure reason and keep scores blank.</li></ol><p><a href="strategies.html">Strategy catalogue →</a></p></article>
+        <article class="panel"><h2>What this board is not</h2><p>Not a promise of profit, not a ranking of luck, and not a substitute for a valid holdout. Past placement never guarantees future results, and gambling outcomes are almost always determined by chance rather than insight — a general consumer caution from the Ksa, not a basketball-specific study.</p><p><a href="https://kansspelautoriteit.nl/10-tips-gambling-safely" target="_blank" rel="noopener noreferrer">Ksa consumer guidance ↗</a></p></article>
+      </section>
+      <footer class="footer"><p>Competition rules are proposals; no entry is ranked and no reward is offered.</p><p><a href="review.html">Flagged blockers →</a></p></footer>
+    </main>
+  </div>
+</div>
+</body>
+</html>
