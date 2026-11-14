@@ -6,6 +6,7 @@ These files are verbatim, dated extractions of **official NBA publications**, ke
 | --- | --- | --- | --- | --- |
 | `slate-2026-11-14.json` | Rows 231–252 of the official 2026–27 schedule PDF: the 22 games that tip off inside the requested three-day window from the observation time. | [2026–27 schedule PDF](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) | header: "AS OF AUGUST 13, 2026 \| SUBJECT TO CHANGE" | 2026-11-14T09:46:00Z |
 | `injuries-2026-11-14-0430am.json` | Every row of the 2026-11-14 04:30 AM ET official injury report, including `NOT YET SUBMITTED` teams and cells lost at PDF page breaks. | [Injury report PDF, 2026-11-14 04:30 AM](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-14_04_30AM.pdf) | header: "Injury Report: 11/14/26 04:30 AM" | 2026-11-14T10:20:00Z |
+| `injuries-newest-pointer-2026-11-14.json` | Metadata only: the 11/14 05:00 PM ET report was the newest listed on the official index at 22:09 UTC. Its rows are not transcribed. | [Injury report index](https://official.nba.com/nba-injury-report-2026-27-season/) and [5:00 PM PDF](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-14_05_00PM.pdf) | header: "Injury Report: 11/14/26 05:00 PM" | 2026-11-14T22:09:00Z |
 
 ## Rules these files follow
 
