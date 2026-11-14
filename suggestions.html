@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="NBA4 Suggestions — a review queue of proposed improvements to the decision process, each with options, trade-offs, effort and an official source. Nothing is implemented until a path is chosen.">
+  <title>NBA4 — Suggestions</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Site navigation">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N4</span><span class="brand-copy">NBA4<small>RESEARCH DASHBOARD</small></span></a>
+    <p class="nav-label">Workspace</p>
+    <nav class="primary-nav" aria-label="Primary navigation"><ul>
+      <li><a href="index.html"><span class="nav-icon" aria-hidden="true">◆</span>Overview</a></li>
+      <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
+      <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
+      <li><a href="strategies.html"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
+      <li><a href="questions.html"><span class="nav-icon" aria-hidden="true">?</span>Decision questions</a></li>
+      <li><a href="sources.html"><span class="nav-icon" aria-hidden="true">↗</span>Sources</a></li>
+      <li><a href="suggestions.html" aria-current="page"><span class="nav-icon" aria-hidden="true">✎</span>Suggestions</a></li>
+      <li><a href="review.html"><span class="nav-icon" aria-hidden="true">⚑</span>Flagged for review</a></li>
+    </ul></nav>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-note"><strong>Proposals only</strong><p>Nothing on this page is built. Each item is a decision waiting on you.</p></div>
+    <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
+  </aside>
+
+  <div class="content-shell">
+    <header class="topbar"><div><p class="topbar-title">Improvement proposals</p><p class="topbar-meta">Decision queue · 14 Nov 2026 UTC</p></div><span class="status-pill">NOTHING BUILT</span></header>
+
+    <main id="main" class="main-content">
+      <header class="page-header">
+        <p class="eyebrow">Choose a path before implementing</p>
+        <h1>Suggestions</h1>
+        <p>This page exists so improvements can be reviewed and selected <em>before</em> any code, data or copy changes. Each entry states the problem it solves, the options, the trade-off, the effort and an official source for its factual basis. Suggested status values are <strong>Proposed</strong>, <strong>Needs a decision</strong>, <strong>Blocked</strong> or <strong>Rejected</strong>. Nothing here is implemented by the research sessions.</p>
+      </header>
+
+      <div class="notice notice-info"><span class="notice-icon" aria-hidden="true">i</span><div><strong>How to use this page.</strong><p>Pick a path in the decision queue at the bottom, then open a request. Editing this page is the approved way to change a proposal — do not implement a suggestion that still reads “Needs a decision”.</p></div></div>
+
+      <section class="section" aria-labelledby="why-title">
+        <div class="section-heading"><div><h2 id="why-title">Why these suggestions exist</h2><p>The current dashboard is honest but static: it can tell you a number is missing, not what to do next.</p></div><a class="section-link" href="review.html">See the blockers →</a></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Gap observed</th><th scope="col">Effect on decisions today</th><th scope="col">Addressed by</th><th scope="col">Official source (basis)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>No permitted data</strong></td><td>No line, pick or correlation can be computed, so every strategy question is unanswerable.</td><td>S-01, S-02</td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms of Use §9</a></td></tr>
+              <tr><td><strong>Gates are described, not scored</strong></td><td>You cannot see how close a candidate strategy is to passing, or which gate fails first.</td><td>S-04, S-05</td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/calibration.html" target="_blank" rel="noopener noreferrer">scikit-learn: probability calibration</a></td></tr>
+              <tr><td><strong>Correlation has no measurement plan</strong></td><td>Parlay and combo decisions cannot be justified or rejected with evidence.</td><td>S-06</td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST: correlation</a></td></tr>
+              <tr><td><strong>Injury status is not a minutes estimate</strong></td><td>Rotation and game-flow pages stop at “unknown”, with no way to test a chain.</td><td>S-07</td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA Official injury report</a></td></tr>
+              <tr><td><strong>No decision record</strong></td><td>Rejected ideas get re-litigated; accepted ones cannot be audited later.</td><td>S-08</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4" target="_blank" rel="noopener noreferrer">NBA4 repository history</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="sug-title">
+        <div class="section-heading"><div><h2 id="sug-title">Proposed improvements</h2><p>Options are mutually exclusive where stated. Effort is a rough build estimate for one session, not a promise.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">ID</th><th scope="col">Suggestion</th><th scope="col">Options and trade-off</th><th scope="col">Effort</th><th scope="col">Status</th><th scope="col">Official source (basis or method)</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>S-01</strong></td>
+                <td>Publish a <strong>rights decision record</strong> for data: which provider, which contract clause, which fields, which territories, which retention.</td>
+                <td><em>A:</em> licensed provider covering betting use — unblocks everything, costs money and negotiation time. <em>B:</em> private non-commercial research only — cheap, still bars picks and any public numbers. <em>C:</em> no data — the site stays an evidence shell. Mixed A+B is impossible to display safely, because the display itself is the restricted act.</td>
+                <td>1 session plus legal review</td>
+                <td><span class="flag flag-red">Needs a decision</span></td>
+                <td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms §9</a><br><a class="source-link" href="https://www.nba.com/stats/help/faq" target="_blank" rel="noopener noreferrer">NBA Stats FAQ</a></td>
+              </tr>
+              <tr>
+                <td><strong>S-02</strong></td>
+                <td>Add a <strong>data-source matrix</strong> page: every required input, its owner, refresh cadence, timestamp field, correction policy and permission status.</td>
+                <td><em>A:</em> one table per input type (schedule, box score, lineup, injury, price, settlement). <em>B:</em> single flat table — faster to read, harder to maintain. A is recommended, because permissions differ per field and a flat table hides that.</td>
+                <td>½ session</td>
+                <td><span class="flag flag-blue">Proposed</span></td>
+                <td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury report policy</a></td>
+              </tr>
+              <tr>
+                <td><strong>S-03</strong></td>
+                <td>Add an <strong>immutable forecast ledger</strong> schema, so every future line is stored with model version, input snapshot IDs and issue time before the event.</td>
+                <td><em>A:</em> append-only JSON/CSV with a hash per record. <em>B:</em> database table with version rows. Both are static-hostable if written at build time; A is simpler and diffable in Git, B needs a backend the current host cannot run.</td>
+                <td>1 session (schema only)</td>
+                <td><span class="flag flag-blue">Proposed</span></td>
+                <td><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">scikit-learn: time-series validation</a></td>
+              </tr>
+              <tr>
+                <td><strong>S-04</strong></td>
+                <td>Turn the validation gates into a <strong>pass/fail scorecard</strong> with an explicit “first failing gate” column.</td>
+                <td><em>A:</em> binary pass/fail per gate. <em>B:</em> pass/fail plus a distance-to-threshold. B risks implying partial credit for an unvalidated model, so A is recommended until real data exists.</td>
+                <td>½ session</td>
+                <td><span class="flag flag-blue">Proposed</span></td>
+                <td><a class="source-link" href="https://scikit-learn.org/stable/modules/model_evaluation.html" target="_blank" rel="noopener noreferrer">scikit-learn: metrics and scoring</a></td>
+              </tr>
+              <tr>
+                <td><strong>S-05</strong></td>
+                <td>Pre-register the <strong>leaderboard rules</strong> (objective, baselines, holdout, tie-breaks, reward terms) as a dated, versioned document <em>before</em> any model is scored.</td>
+                <td><em>A:</em> preregister now, reward-free. <em>B:</em> wait for data then preregister — risks rules being fitted to results. A is strongly preferred; the whole point is that rules precede results.</td>
+                <td>1 session</td>
+                <td><span class="flag flag-red">Needs a decision</span></td>
+                <td><a class="source-link" href="https://scikit-learn.org/stable/modules/calibration.html" target="_blank" rel="noopener noreferrer">scikit-learn: proper scoring rules</a></td>
+              </tr>
+              <tr>
+                <td><strong>S-06</strong></td>
+                <td>Add a <strong>correlation worksheet</strong>: leg pair, conditioning set, estimator, sample count, game-clustered interval, shrinkage rule.</td>
+                <td><em>A:</em> residual Pearson for continuous legs plus joint-frequency for threshold legs. <em>B:</em> one generic coefficient for everything — misleading, because a parlay needs a joint probability, not a linear association. A is recommended.</td>
+                <td>½ session (template only)</td>
+                <td><span class="flag flag-blue">Proposed</span></td>
+                <td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST: correlation definition</a><br><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/eda/section3/bootplot.htm" target="_blank" rel="noopener noreferrer">NIST: bootstrap uncertainty</a></td>
+              </tr>
+              <tr>
+                <td><strong>S-07</strong></td>
+                <td>Build the <strong>injury-to-production chain</strong> as four separately validated steps: status, availability, minutes, production.</td>
+                <td><em>A:</em> four models with separate error reporting. <em>B:</em> one end-to-end model — fewer moving parts, but it hides which step failed and invites treating a status label as an impact estimate. A is recommended.</td>
+                <td>2 sessions (design), blocked on data</td>
+                <td><span class="flag flag-red">Blocked</span></td>
+                <td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury reporting policy</a></td>
+              </tr>
+              <tr>
+                <td><strong>S-08</strong></td>
+                <td>Keep a <strong>decision log</strong> page: date, question, options, choice, who decided, and what would reverse it.</td>
+                <td><em>A:</em> a table on this site. <em>B:</em> an ADR folder in the repository. Both are cheap; A is visible to a non-technical reviewer, B is better for versioning. Doing both with A as a rendered view of B avoids duplicate truth.</td>
+                <td>½ session</td>
+                <td><span class="flag flag-blue">Proposed</span></td>
+                <td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4" target="_blank" rel="noopener noreferrer">NBA4 repository</a></td>
+              </tr>
+              <tr>
+                <td><strong>S-09</strong></td>
+                <td>Add a <strong>staleness banner</strong> that flips the whole slate page to “no picks” whenever its newest source timestamp exceeds a declared threshold.</td>
+                <td><em>A:</em> hard suppression. <em>B:</em> a warning while still showing numbers — rejected, because a stale line that looks current is exactly the failure mode that costs money.</td>
+                <td>½ session (logic spec only until data exists)</td>
+                <td><span class="flag flag-blue">Proposed</span></td>
+                <td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury report (continual updates)</a></td>
+              </tr>
+              <tr>
+                <td><strong>S-10</strong></td>
+                <td>Separate <strong>“no edge found”</strong> from <strong>“no data”</strong> everywhere a blank appears.</td>
+                <td><em>A:</em> three states — not computed, computed and excluded, computed and eligible. <em>B:</em> keep one blank state. A is recommended: the current single blank makes a tested-and-rejected strategy look identical to an untested one.</td>
+                <td>½ session</td>
+                <td><span class="flag flag-blue">Proposed</span></td>
+                <td><a class="source-link" href="https://scikit-learn.org/stable/modules/calibration.html" target="_blank" rel="noopener noreferrer">scikit-learn: calibration limits</a></td>
+              </tr>
+              <tr>
+                <td><strong>S-11</strong></td>
+                <td>Move commercial or live functionality to <strong>permitted hosting</strong> if, and only if, the product becomes commercial.</td>
+                <td><em>A:</em> stay static and informational. <em>B:</em> backend host with secrets and access control. B is required the moment there are accounts, rewards, paid access or live ingestion; the current host cannot serve it.</td>
+                <td>Depends on scope</td>
+                <td><span class="flag flag-blue">Proposed</span></td>
+                <td><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits" target="_blank" rel="noopener noreferrer">GitHub Pages limits</a></td>
+              </tr>
+              <tr>
+                <td><strong>S-12</strong></td>
+                <td>Show a <strong>responsible-use and age note</strong> beside any future reward or contest content.</td>
+                <td><em>A:</em> static notice. <em>B:</em> age-gate. B is a compliance decision, not a design one; both belong to legal review for the target jurisdictions.</td>
+                <td>Minutes (copy), gated by review</td>
+                <td><span class="flag flag-red">Blocked</span></td>
+                <td><a class="source-link" href="https://kansspelautoriteit.nl/10-tips-gambling-safely" target="_blank" rel="noopener noreferrer">Ksa: 10 tips for gambling safely</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="dq-title">
+        <div class="section-heading"><div><h2 id="dq-title">Decision queue — pick a path</h2><p>These are the only decisions that unlock the rest. Until one is chosen, the supported answer to “build the model” is “not yet”.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Decision</th><th scope="col">Path A</th><th scope="col">Path B</th><th scope="col">What each path unlocks</th><th scope="col">Official source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>D-1 · Data rights</strong></td><td>License a provider that permits betting use in writing.</td><td>Stay private, non-commercial, with no published numbers.</td><td>A: model work and public lines become possible. B: research only; picks stay off. Neither is possible from NBA Stats directly.</td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms §9</a></td></tr>
+              <tr><td><strong>D-2 · Product type</strong></td><td>Informational analytics, no wagers, no rewards.</td><td>Picks/leaderboard with rewards — a regulated activity needing review.</td><td>A: this site is sufficient hosting. B: legal classification, age controls and a different host are prerequisites.</td><td><a class="source-link" href="https://kansspelautoriteit.nl/remote-gambling-act-force" target="_blank" rel="noopener noreferrer">Ksa: licence requirement</a></td></tr>
+              <tr><td><strong>D-3 · First market</strong></td><td>One single-bet market, e.g. game total.</td><td>Player props or same-game parlays first.</td><td>A: fewer inputs, faster honest result. B: joint distributions and minutes models are needed before any number is meaningful.</td><td><a class="source-link" href="https://www.nba.com/stats/help/glossary" target="_blank" rel="noopener noreferrer">NBA Stats glossary (definitions)</a></td></tr>
+              <tr><td><strong>D-4 · Success rule</strong></td><td>Calibration-first: proper score plus reliability curve.</td><td>Return-first: ROI against a benchmark price.</td><td>A is testable without prices. B needs a licensed price and settlement record, so it cannot start first.</td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/calibration.html" target="_blank" rel="noopener noreferrer">scikit-learn: calibration</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="ask-title">
+        <div class="section-heading"><div><h2 id="ask-title">What we still need from you</h2><p>Facts only you can supply — no source can answer these.</p></div><a class="section-link" href="questions.html">Full question register →</a></div>
+        <div class="panel">
+          <ol>
+            <li><strong>Intended use.</strong> Personal research, a public tipster page, or a commercial product with rewards?</li>
+            <li><strong>Budget for data.</strong> Licensed feeds are the gating cost; “free NBA stats” is not an available route.</li>
+            <li><strong>Jurisdictions.</strong> Which countries would see picks, and would any link to a bookmaker?</li>
+            <li><strong>Risk tolerance for being wrong.</strong> Whether a silent “no pick” is acceptable, or whether you need a measurable pipeline even before it is profitable.</li>
+            <li><strong>Timeline.</strong> Whether a correct empty dashboard now beats an attractive but unvalidated one later.</li>
+          </ol>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p>Independent research project. Not affiliated with, endorsed by, or licensed by the NBA. Nothing here is betting advice, a prediction, or a guarantee. No picks or lines are published. <a href="review.html">Flagged for review</a> · <a href="sources.html">Sources</a></p>
+      </footer>
+    </main>
+  </div>
+</div>
+</body>
+</html>
