@@ -50,7 +50,7 @@ A "no pick" is not a defect in this dashboard; it is the control that says the e
 5. **Rotation and game-flow evidence.** Obtain point-in-time report snapshots and authorized lineup/minutes history. Measure uncertainty for status-to-availability, availability-to-minutes and minutes-to-production separately; do not treat a reported injury as a causal impact estimate.
 6. **Hosting decision.** Keep GitHub Pages for an informational static dashboard only. If automated ingestion, private keys, account-level rewards, a commercial product or a paid service is intended, select compliant hosting and implementation architecture before adding live operation.
 7. **Site improvement review.** Review the 23 proposals in [`docs/suggestions.md`](suggestions.md) and record a decision for each row before any of them is implemented; the suggestions page on the live site mirrors the register so the decisions can be made on the published site.
-8. **Run the pipeline on authorised data.** The command-line pipeline, its contracts and its 47 passing tests already exist ([`docs/automation.md`](automation.md)). The remaining work is the adapters and the rights, not the machinery.
+8. **Run the pipeline on authorised data.** The command-line pipeline, its contracts and its 90 passing tests (47 + 43) already exist ([`docs/automation.md`](automation.md)). The remaining work is the adapters and the rights, not the machinery.
 
 ## “What we have” versus “what we do not have”
 
