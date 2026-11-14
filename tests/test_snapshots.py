@@ -141,5 +141,23 @@ class RenderedPageTests(unittest.TestCase):
         )
 
 
+class AwayHomeBasisTests(unittest.TestCase):
+    """The slate page shows "at" only where an official document prints the same matchup code."""
+
+    def test_corroborated_rows_are_exactly_231_to_244(self) -> None:
+        report_codes = {g["matchup"] for g in load("injuries-2026-11-14-0430am.json")["games"]}
+        corroborated = set()
+        for game in load("slate-2026-11-14.json")["games"]:
+            if f"{build_snapshots.ABBR[game['away']]}@{build_snapshots.ABBR[game['home']]}" in report_codes:
+                corroborated.add(game["row"])
+        self.assertEqual(corroborated, set(range(231, 245)))
+
+    def test_rendered_slate_marks_uncorroborated_order(self) -> None:
+        html = build_snapshots.render_slate()
+        self.assertEqual(html.count("</strong> at <strong>"), 14)
+        self.assertEqual(html.count("(order unverified)"), 8)
+        self.assertEqual(html.count('prints no "at"'), 8)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,32 @@
+{
+  "snapshot_id": "injuries-newest-pointer-2026-11-14",
+  "kind": "official_report_pointer_metadata_only",
+  "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-14_05_00PM.pdf",
+  "source_document_header": "Injury Report: 11/14/26 05:00 PM",
+  "fetched_at_utc": "2026-11-14T22:09:00Z",
+  "extraction_tool": "fetch_page (PDF text extraction); the index was read through fetch_page as well",
+  "purpose": "Records that a later official injury report than the published 04:30 AM snapshot was listed on the NBA index at the check time. It stores no player rows, statuses, minutes, probabilities or picks.",
+  "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+  "source_index_title": "NBA Injury Report: 2026-27 Season | NBA Official",
+  "index_listing_checked": "The 11/14 entries of the index, read in two chunks through the 5:00 p.m ET entry, which was the last 11/14 entry listed at the check time.",
+  "newest_report_listed_at_check": {
+    "label": "11/14 05:00 PM ET report",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-14_05_00PM.pdf",
+    "source_document_header": "Injury Report: 11/14/26 05:00 PM",
+    "checked_at_utc": "2026-11-14T22:09:00Z",
+    "rows_transcribed": false,
+    "transcription_reason_not_done": "The PDF text repeats matchup, tip time and team cells only on the first row of each block and loses them across page breaks (for example Lively II, Dereck and Harden, James). A row-level snapshot needs per-row schedule repair, exactly as in injuries-2026-11-14-0430am.json, and a verified count; it is queued as a follow-up, not guessed."
+  },
+  "superseded_snapshot": {
+    "snapshot_id": "injuries-2026-11-14-0430am",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-14_04_30AM.pdf",
+    "status_on_site": "Shown as a dated snapshot, not as the current report. Re-read 2026-11-14 22:09 UTC: all 49 rows still match the PDF text."
+  },
+  "example_of_change": {
+    "team": "New Orleans Pelicans (DEN@NOP, tip 7:00 PM ET on 11/14)",
+    "in_04_30_am_report": "NOT YET SUBMITTED",
+    "in_05_00_pm_report": "Eight player rows are listed: Dia, Malik; McGowens, Bryce; Missi, Yves; Murphy III, Trey; Murray, Dejounte; Pierre Jr., Jaron; Reese, Julian; Watford, Trendon."
+  },
+  "fetch_method": "fetch_page (PDF text extraction), 2026-11-14 22:08-22:09 UTC, the same method as the 04:30 AM snapshot.",
+  "no_inference": "No availability, minute, production or game-flow value is derived from the 5:00 PM report in this repository. Status labels are reported as printed only."
+}

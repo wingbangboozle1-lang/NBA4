@@ -94,10 +94,24 @@ def load(name: str) -> dict:
 
 def render_slate() -> str:
     data = load("slate-2026-11-14.json")
+    # The schedule PDF text prints no "at" token on rows 215-259, so away/home order
+    # is shown as "at" only when the 04:30 AM injury report independently prints the
+    # same AWAY@HOME code. Every other row shows printed order and is flagged.
+    report_codes = {g["matchup"] for g in load("injuries-2026-11-14-0430am.json")["games"]}
     rows: list[str] = []
     for game in data["games"]:
         away, home = game["away"], game["home"]
-        matchup = f"{ABBR[away]} @ {ABBR[home]}"
+        corroborated = f"{ABBR[away]}@{ABBR[home]}" in report_codes
+        if corroborated:
+            matchup = f"{ABBR[away]} @ {ABBR[home]}"
+            game_cell = f"<strong>{e(away)}</strong> at <strong>{e(home)}</strong>"
+        else:
+            matchup = f"{ABBR[away]} / {ABBR[home]} (order unverified)"
+            game_cell = (
+                f"<strong>{e(away)}</strong> / <strong>{e(home)}</strong>"
+                '<br><span class="muted">Printed order only: this schedule row prints no "at" '
+                "and no injury-report matchup code confirms it. Flagged unverified.</span>"
+            )
         tips = f'{game["tip_et_col1"]} / {game["tip_et_col2"]}'
         note = game.get("note", "")
         reason_html = "<br>".join(e(r.split(":")[0]) for r in NO_PICK_REASONS)
@@ -106,7 +120,7 @@ def render_slate() -> str:
             "              <tr>"
             f'<td>{e(game["weekday"])} {e(game["date"])}</td>'
             f"<td>{e(tips)}</td>"
-            f"<td><strong>{e(away)}</strong> at <strong>{e(home)}</strong>"
+            f"<td>{game_cell}"
             + (f'<br><span class="muted">{e(note)}</span>' if note else "")
             + "</td>"
             f"<td>{e(matchup)}</td>"
