@@ -86,6 +86,11 @@ python3 scripts/run_pipeline.py \
 
 The checker verifies each page's title and single heading, every local link and fragment, every HTML table row's final source cell, every Markdown table row in `docs/` for an HTTPS source on an approved official-source domain, and that no page on disk is missing from the checked set. It does not fetch external sites; each cited source must be reviewed directly (the review log is in `docs/source-verification.md`). The site uses static HTML/CSS only, with no third-party scripts, cookies or data collection.
 
+## Publication record
+
+- **PR #10** (`arena/248bb9ab-nba4` → `main`, merged `2026-11-14`) brought the reference engine, the 11-page dashboard and the integration of all parallel sessions' work into `main`. GitHub Pages built the merge commit `f9c63d2` successfully (`status: built`, 29.3s) and every page was re-fetched from the live URL with intact tables, merged suggestion registers and source links.
+- PRs #1–#9 (initial dashboard, integrations, independent verification and the one Pages build-rate-limit incident) are recorded in [`COORDINATION.md`](COORDINATION.md).
+
 ## Scope and disclaimer
 
 The dashboard is informational and independent. It is not affiliated with or endorsed by the NBA, is not a betting service or financial advice, and does not promise that statistical testing can remove luck or guarantee results. If the product becomes a commercial or live picks/rewards service, re-evaluate data rights, jurisdiction, responsible-use requirements and hosting before launch; GitHub Pages is not intended for commercial SaaS or online-business hosting.
