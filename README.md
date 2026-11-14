@@ -68,6 +68,7 @@ A second model-side subsystem from session `arena/2c06c7f9-nba4` lives alongside
 - [`docs/site-spec.md`](docs/site-spec.md) — dashboard organization and integrity rules.
 - [`docs/verification-log.md`](docs/verification-log.md) — line-by-line re-verification of all 22 cited sources and the corrections made.
 - [`docs/release-audit-607c89a8.md`](docs/release-audit-607c89a8.md) — final acceptance map, verification results, open flags and production-data blockers.
+- [`docs/verification-pass-ad4e7bf0.md`](docs/verification-pass-ad4e7bf0.md) — final acceptance completion: post-merge deployment confirmation, local checks, live-site re-fetch and the NBA Terms §9 transient-fetch observation (AA-01/AA-02).
 - [`docs/engine.md`](docs/engine.md) — model-side engine guide: ratings/props/injury/game-flow methods, UNFITTED parameter register, inputs spec.
 - [`docs/leaderboard.md`](docs/leaderboard.md) — leaderboard competition rules, anti-luck scoring and proposed reward tiers (supplementary design record).
 - [`docs/verification-pass-c6ae3e43.md`](docs/verification-pass-c6ae3e43.md) — fourth verification pass (task V, PR #17): 19 primary pages re-read and quoted, live-site and Pages API check, flag V-01.
