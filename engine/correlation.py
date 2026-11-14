@@ -1,15 +1,22 @@
-"""Correlation and joint-event estimation for parlays/prop combos (gate G8).
+"""Correlation estimators for same-game legs.
 
-"Correlation" is measured per leg pair and conditioning set - never assumed.
-Continuous relationships use Pearson correlation of pregame-model residuals
-(NIST definition, docs/sources.md STAT-01). Binary threshold legs use direct
-joint-event rates and the phi coefficient. Uncertainty is estimated by
-bootstrapping GAME clusters so legs from one game are not treated as
-independent observations (STAT-02), and unstable estimates shrink toward
-zero under a fixed prior weight.
+Everything here is a *measurement tool*. None of it produces an NBA number by
+itself: a coefficient is only meaningful when the caller supplies the leg
+definitions, the sample window and the conditioning set, and when the sample
+is large enough for the estimate to mean anything.
 
-Every estimate is returned with its sample count and interval; a blank
-(empty) result means "not measured", never zero.
+Implemented:
+
+* ``pearson``  - linear association between two continuous series (the
+  definition NIST's handbook uses; range -1..+1).
+* ``spearman`` - rank association, robust to monotone non-linearity.
+* ``phi`` / ``yule_q`` - association between two binary legs (a player prop
+  crossing a threshold is binary).
+* ``cluster_bootstrap_ci`` - uncertainty interval that resamples whole games
+  (or dates) rather than individual observations, because several legs of one
+  game are not independent observations.
+* ``shrink`` - the preregistered rule that pulls unstable estimates toward a
+  prior, so that a single noisy game cannot create a "signal".
 """
 
 from __future__ import annotations
@@ -17,192 +24,196 @@ from __future__ import annotations
 import math
 import random
 from dataclasses import dataclass
-from typing import Callable, List, Optional, Sequence, Tuple
+from typing import Callable, Sequence
+
+__all__ = [
+    "pearson",
+    "spearman",
+    "phi",
+    "yule_q",
+    "cluster_bootstrap_ci",
+    "shrink",
+    "CorrelationResult",
+]
 
 
-@dataclass
-class CorrelationEstimate:
-    kind: str  # "pearson_residual" | "phi_binary" | "joint_rate"
-    value: Optional[float]
-    ci_low: Optional[float]
-    ci_high: Optional[float]
-    n: int
-    clusters: int
-    shrunk: bool
-    notes: Tuple[str, ...]
+@dataclass(frozen=True)
+class CorrelationResult:
+    """An estimate with the information required to judge it."""
+
+    estimate: float
+    lower: float | None
+    upper: float | None
+    sample_size: int
+    cluster_count: int
+    method: str
+
+    def as_dict(self) -> dict[str, object]:
+        return {
+            "estimate": self.estimate,
+            "lower": self.lower,
+            "upper": self.upper,
+            "sample_size": self.sample_size,
+            "cluster_count": self.cluster_count,
+            "method": self.method,
+        }
 
 
-def pearson(x: Sequence[float], y: Sequence[float]) -> Optional[float]:
-    n = len(x)
-    if n != len(y) or n < 2:
-        return None
-    mx = sum(x) / n
-    my = sum(y) / n
-    sxx = sum((a - mx) ** 2 for a in x)
-    syy = sum((b - my) ** 2 for b in y)
-    if sxx <= 0 or syy <= 0:
-        return None
-    sxy = sum((a - mx) * (b - my) for a, b in zip(x, y))
-    return sxy / math.sqrt(sxx * syy)
+def _mean(values: Sequence[float]) -> float:
+    return sum(values) / len(values)
 
 
-def phi(a: Sequence[bool], b: Sequence[bool]) -> Optional[float]:
-    n = len(a)
-    if n != len(b) or n < 2:
-        return None
-    n11 = sum(1 for p, q in zip(a, b) if p and q)
-    n10 = sum(1 for p, q in zip(a, b) if p and not q)
-    n01 = sum(1 for p, q in zip(a, b) if not p and q)
-    n00 = sum(1 for p, q in zip(a, b) if not p and not q)
-    den = math.sqrt((n11 + n10) * (n01 + n00) * (n11 + n01) * (n10 + n00))
-    if den == 0:
-        return None
-    return (n11 * n00 - n10 * n01) / den
+def pearson(xs: Sequence[float], ys: Sequence[float]) -> float:
+    """Pearson product-moment correlation coefficient.
 
-
-def joint_rate(a: Sequence[bool], b: Sequence[bool]) -> Optional[float]:
-    if not a or len(a) != len(b):
-        return None
-    return sum(1 for p, q in zip(a, b) if p and q) / len(a)
-
-
-def shrink_toward_zero(r: float, n: int, prior_n: float = 10.0) -> float:
-    """Fixed shrinkage rule: r * n / (n + prior_n).
-
-    prior_n is a preregisterable parameter (default 10 games of prior weight).
-    Shrinkage is applied to unstable small-sample estimates, not to hide them:
-    the raw value is always reported beside the shrunk value.
+    Requires at least two paired observations and non-zero variance in both
+    series; otherwise the estimate is undefined and a :class:`ValueError` is
+    raised rather than a silent 0.0.
     """
-    return r * n / (n + prior_n)
+    if len(xs) != len(ys):
+        raise ValueError("xs and ys must have the same length")
+    if len(xs) < 2:
+        raise ValueError("at least two paired observations are required")
+    mx, my = _mean(xs), _mean(ys)
+    num = sum((x - mx) * (y - my) for x, y in zip(xs, ys))
+    den_x = math.sqrt(sum((x - mx) ** 2 for x in xs))
+    den_y = math.sqrt(sum((y - my) ** 2 for y in ys))
+    if den_x == 0 or den_y == 0:
+        raise ValueError("correlation is undefined for a constant series")
+    return num / (den_x * den_y)
+
+
+def _ranks(values: Sequence[float]) -> list[float]:
+    """Average ranks, handling ties."""
+    order = sorted(range(len(values)), key=lambda i: values[i])
+    ranks = [0.0] * len(values)
+    i = 0
+    while i < len(order):
+        j = i
+        while j + 1 < len(order) and values[order[j + 1]] == values[order[i]]:
+            j += 1
+        average = (i + j) / 2 + 1
+        for k in range(i, j + 1):
+            ranks[order[k]] = average
+        i = j + 1
+    return ranks
+
+
+def spearman(xs: Sequence[float], ys: Sequence[float]) -> float:
+    """Spearman rank correlation (Pearson correlation of the ranks)."""
+    return pearson(_ranks(xs), _ranks(ys))
+
+
+def phi(xs: Sequence[bool], ys: Sequence[bool]) -> float:
+    """Phi coefficient for two binary series in {0, 1}."""
+    if len(xs) != len(ys):
+        raise ValueError("xs and ys must have the same length")
+    n11 = sum(1 for x, y in zip(xs, ys) if x and y)
+    n10 = sum(1 for x, y in zip(xs, ys) if x and not y)
+    n01 = sum(1 for x, y in zip(xs, ys) if not x and y)
+    n00 = sum(1 for x, y in zip(xs, ys) if not x and not y)
+    denom = math.sqrt((n11 + n10) * (n01 + n00) * (n11 + n01) * (n10 + n00))
+    if denom == 0:
+        raise ValueError("phi is undefined when a series is constant")
+    return (n11 * n00 - n10 * n01) / denom
+
+
+def yule_q(xs: Sequence[bool], ys: Sequence[bool]) -> float:
+    """Yule's Q association for two binary series (odds-ratio based)."""
+    n11 = sum(1 for x, y in zip(xs, ys) if x and y)
+    n10 = sum(1 for x, y in zip(xs, ys) if x and not y)
+    n01 = sum(1 for x, y in zip(xs, ys) if not x and y)
+    n00 = sum(1 for x, y in zip(xs, ys) if not x and not y)
+    if n11 * n00 == 0 or n10 * n01 == 0:
+        raise ValueError("yule_q is undefined when a cell count is zero")
+    return (n11 * n00 - n10 * n01) / (n11 * n00 + n10 * n01)
 
 
 def cluster_bootstrap_ci(
-    values: Sequence[Tuple[str, float]],
-    stat_fn: Callable[[List[float]], Optional[float]],
-    n_boot: int = 1000,
-    alpha: float = 0.05,
+    values_by_cluster: dict[str, list[tuple[float, float]]],
+    statistic: Callable[[Sequence[tuple[float, float]]], float],
+    resamples: int = 1000,
+    confidence: float = 0.95,
     seed: int = 20261114,
-) -> Tuple[Optional[float], Optional[float]]:
-    """Percentile CI from resampling game clusters with replacement.
+) -> tuple[float, float]:
+    """Bootstrap interval that resamples whole clusters (games or dates).
 
-    values: (game_id, observation) pairs. The statistic is computed per
-    bootstrap resample of whole games (STAT-02 caution: bootstrap is not
-    universally appropriate - intervals are reported as estimates, not
-    guarantees).
+    ``values_by_cluster`` maps a cluster id (for example a game id) to the
+    paired observations inside that cluster. Resampling clusters - rather than
+    rows - keeps the dependence between legs of the same game intact, which is
+    the point of the method.
+
+    The returned interval is an estimate of sampling uncertainty under the
+    bootstrap's assumptions. It is not a guarantee about future results.
     """
-    by_game: dict = {}
-    for gid, v in values:
-        by_game.setdefault(gid, []).append(v)
-    games = sorted(by_game)
-    if len(games) < 2:
-        return None, None
+    if not values_by_cluster:
+        raise ValueError("no clusters supplied")
+    if not 0.0 < confidence < 1.0:
+        raise ValueError("confidence must lie strictly between 0 and 1")
     rng = random.Random(seed)
-    samples: List[float] = []
-    for _ in range(n_boot):
-        picked: List[float] = []
-        for _ in range(len(games)):
-            picked.extend(by_game[rng.choice(games)])
-        s = stat_fn(picked)
-        if s is not None:
-            samples.append(s)
-    if len(samples) < 10:
-        return None, None
-    samples.sort()
-    lo = samples[int((alpha / 2) * len(samples))]
-    hi = samples[min(int((1 - alpha / 2) * len(samples)), len(samples) - 1)]
-    return lo, hi
+    cluster_ids = list(values_by_cluster)
+    estimates: list[float] = []
+    for _ in range(resamples):
+        sample: list[tuple[float, float]] = []
+        for _ in range(len(cluster_ids)):
+            chosen = rng.choice(cluster_ids)
+            sample.extend(values_by_cluster[chosen])
+        try:
+            estimates.append(statistic(sample))
+        except ValueError:
+            # A degenerate resample (constant series) has no estimate; skip it
+            # rather than substituting a value.
+            continue
+    if not estimates:
+        raise ValueError("bootstrap produced no usable estimates")
+    estimates.sort()
+    alpha = (1.0 - confidence) / 2.0
+    lower = estimates[max(0, int(math.floor(alpha * len(estimates))))]
+    upper = estimates[min(len(estimates) - 1, int(math.ceil((1 - alpha) * len(estimates))) - 1)]
+    return lower, upper
 
 
-def residual_correlation_estimate(
-    residuals_x: Sequence[Tuple[str, float]],
-    residuals_y: Sequence[Tuple[str, float]],
-    shrink: bool = True,
-) -> CorrelationEstimate:
-    """Pearson correlation of two residual series paired by game_id.
+def shrink(estimate: float, prior: float, weight: float) -> float:
+    """Shrink an estimate toward a prior with a preregistered weight.
 
-    Within each game, observations pair in their listed order (leg 1 with
-    leg 1, leg 2 with leg 2, ...). Games with unequal leg counts are
-    truncated to the shorter side and noted.
+    ``weight`` is the share of the prior in the result (0 keeps the estimate,
+    1 replaces it with the prior). The weight must be fixed before the
+    holdout is opened; the engine does not choose it.
     """
-    x_by_game: dict = {}
-    y_by_game: dict = {}
-    for g, v in residuals_x:
-        x_by_game.setdefault(g, []).append(v)
-    for g, v in residuals_y:
-        y_by_game.setdefault(g, []).append(v)
-    pairs: List[Tuple[str, float, float]] = []
-    truncated = False
-    for g in sorted(set(x_by_game) & set(y_by_game)):
-        xs_g, ys_g = x_by_game[g], y_by_game[g]
-        if len(xs_g) != len(ys_g):
-            truncated = True
-        for xv, yv in zip(xs_g, ys_g):
-            pairs.append((g, xv, yv))
-    if len(pairs) < 2:
-        return CorrelationEstimate(
-            "pearson_residual", None, None, None, len(pairs), 0, False,
-            ("no paired licensed residual observations; value stays blank",),
-        )
-    games = [g for g, _, _ in pairs]
-    xs = [v for _, v, _ in pairs]
-    ys = [v for _, _, v in pairs]
-    r = pearson(xs, ys)
-    clusters = len(set(games))
+    if not 0.0 <= weight <= 1.0:
+        raise ValueError("weight must lie within [0, 1]")
+    return (1.0 - weight) * estimate + weight * prior
 
-    # Bootstrap over game clusters using paired per-game lists.
-    by_game: dict = {}
-    for g, xv, yv in pairs:
-        by_game.setdefault(g, []).append((xv, yv))
-    gids = sorted(by_game)
-    lo = hi = None
-    if clusters >= 2:
-        rng = random.Random(20261114)
-        boot: List[float] = []
-        for _ in range(1000):
-            xs_b: List[float] = []
-            ys_b: List[float] = []
-            for _ in range(len(gids)):
-                for xv, yv in by_game[rng.choice(gids)]:
-                    xs_b.append(xv)
-                    ys_b.append(yv)
-            rb = pearson(xs_b, ys_b)
-            if rb is not None:
-                boot.append(rb)
-        if len(boot) >= 10:
-            boot.sort()
-            lo = boot[25]
-            hi = boot[min(974, len(boot) - 1)]
-    shrunk = shrink_toward_zero(r, clusters) if (r is not None and shrink) else r
-    notes = [
-        "raw r="
-        + (f"{r:.4f}" if r is not None else "n/a")
-        + "; shrunk toward 0 with prior_n=10 game clusters; interval is a "
-        "bootstrap estimate, not a guarantee (STAT-02)",
-    ]
-    if truncated:
-        notes.append("games with unequal leg counts were truncated to the shorter side")
-    return CorrelationEstimate(
-        "pearson_residual", r if not shrink else shrunk, lo, hi,
-        len(pairs), clusters, shrink, tuple(notes),
+
+def correlation_with_uncertainty(
+    values_by_cluster: dict[str, list[tuple[float, float]]],
+    method: str = "pearson",
+    resamples: int = 1000,
+    confidence: float = 0.95,
+    seed: int = 20261114,
+) -> CorrelationResult:
+    """Convenience wrapper: estimate a correlation and its cluster interval."""
+    flat = [pair for pairs in values_by_cluster.values() for pair in pairs]
+    if method == "pearson":
+        estimate = pearson([p[0] for p in flat], [p[1] for p in flat])
+        statistic: Callable[[Sequence[tuple[float, float]]], float] = lambda pairs: pearson(
+            [p[0] for p in pairs], [p[1] for p in pairs]
+        )
+    elif method == "spearman":
+        estimate = spearman([p[0] for p in flat], [p[1] for p in flat])
+        statistic = lambda pairs: spearman(  # noqa: E731
+            [p[0] for p in pairs], [p[1] for p in pairs]
+        )
+    else:
+        raise ValueError(f"unsupported method: {method!r}")
+    lower, upper = cluster_bootstrap_ci(
+        values_by_cluster, statistic, resamples=resamples, confidence=confidence, seed=seed
     )
-
-
-def joint_event_estimate(
-    legs_a: Sequence[Tuple[str, bool]],
-    legs_b: Sequence[Tuple[str, bool]],
-) -> CorrelationEstimate:
-    """Direct joint-event probability and phi for two binary legs."""
-    dict_b = dict(legs_b)
-    pairs = [(g, v, dict_b[g]) for g, v in legs_a if g in dict_b]
-    if len(pairs) < 2:
-        return CorrelationEstimate(
-            "phi_binary", None, None, None, len(pairs), 0, False,
-            ("no paired settled leg outcomes; joint probability stays blank",),
-        )
-    a = [v for _, v, _ in pairs]
-    b = [v for _, _, v in pairs]
-    r = phi(a, b)
-    return CorrelationEstimate(
-        "phi_binary", r, None, None, len(pairs), len({g for g, _, _ in pairs}), False,
-        (f"joint rate = {joint_rate(a, b):.4f}; phi reported with sample count",),
+    return CorrelationResult(
+        estimate=estimate,
+        lower=lower,
+        upper=upper,
+        sample_size=len(flat),
+        cluster_count=len(values_by_cluster),
+        method=method,
     )

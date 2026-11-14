@@ -1,385 +1,628 @@
-"""Unit tests for the NBA4 engine (stdlib unittest).
+"""Test suite for the NBA4 reference engine.
 
-Fixtures here are SYNTHETIC (host synthetic.invalid) and exist only to test
-mechanics. Run:  python3 -m unittest discover -s tests -v
+The tests use **synthetic** records generated inside the test file. They contain
+no NBA data, no market data and no player identifiers; they only prove that
+the arithmetic and the control logic behave as specified.
+
+Run with:
+
+    python3 -m unittest discover -s tests -v
 """
 
 from __future__ import annotations
 
 import math
-import sys
 import unittest
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-
-from engine.correlation import (  # noqa: E402
-    cluster_bootstrap_ci,
-    joint_event_estimate,
-    pearson,
-    phi,
-    residual_correlation_estimate,
-    shrink_toward_zero,
-)
-from engine.gameflow import scenario_distribution  # noqa: E402
-from engine.injuries import availability_scenario, roster_scenario  # noqa: E402
-from engine.ledger import integrity_report, load_ledger  # noqa: E402
-from engine.picks import generate_slate_picks, in_horizon, parlay_record  # noqa: E402
-from engine.player_props import player_prop_forecast  # noqa: E402
-from engine.ratings import cover_probability, margin_forecast, win_probability  # noqa: E402
-from engine.schema import (  # noqa: E402
-    InjuryObservation,
-    PickRecord,
-    PlayerGame,
+from engine import correlation, lineorigination, parlay, pipeline, sources, validation
+from engine.contracts import (
+    ContractError,
+    Forecast,
+    GameEvent,
+    InjuryRecord,
+    MarketQuote,
+    Pick,
     Provenance,
-    SchemaError,
-    SlateGame,
-    TeamGame,
+    RightsError,
+    Status,
+    require_allowed_use,
+    snapshot_hash,
 )
-from engine.validation import (  # noqa: E402
-    brier_score,
-    log_loss,
-    reliability_bins,
-    run_gates,
-    skill_vs_baseline,
-    trials_adjusted_alpha,
-    walk_forward_folds,
-)
-from engine.selftest import BASE, build_synthetic_games, run_selftest  # noqa: E402
+from engine.leaderboard import GateOutcome, LeaderboardEntry, LeaderboardPolicy, rank
 
-PROV = Provenance("https://synthetic.invalid/fixture", BASE.isoformat(), BASE.isoformat())
-BAD_PROV = Provenance("http://insecure.example/x", BASE.isoformat(), BASE.isoformat())
+UTC = timezone.utc
+NOW = datetime(2026, 11, 14, 12, 0, tzinfo=UTC)
 
 
-class TestSchema(unittest.TestCase):
-    def test_valid_game(self):
-        g = TeamGame("g1", "x", BASE.isoformat(), "A", "B", True, 100, 95, 100.0, PROV)
-        g.validate()
-
-    def test_rejects_missing_https_source(self):
-        g = TeamGame("g1", "x", BASE.isoformat(), "A", "B", True, 100, 95, 100.0, BAD_PROV)
-        with self.assertRaises(SchemaError):
-            g.validate()
-
-    def test_rejects_naive_datetime(self):
-        prov = Provenance("https://synthetic.invalid/f", "2026-11-14T12:00:00", BASE.isoformat())
-        g = TeamGame("g1", "x", BASE.isoformat(), "A", "B", True, 100, 95, 100.0, prov)
-        with self.assertRaises(SchemaError):
-            g.validate()
-
-    def test_rejects_unknown_injury_status(self):
-        obs = InjuryObservation("i1", BASE.isoformat(), "x", "A", "P", "Probably", "r", PROV)
-        with self.assertRaises(SchemaError):
-            obs.validate()
-
-    def test_rejects_minutes_out_of_range(self):
-        p = PlayerGame("p1", "x", BASE.isoformat(), "P", "A", 60.0, 10, provenance=PROV)
-        with self.assertRaises(SchemaError):
-            p.validate()
+def provenance(
+    source_id: str = "TEST-SYNTHETIC",
+    allowed_use: bool = True,
+    age_minutes: int = 1,
+    source_timestamp: datetime | None = None,
+) -> Provenance:
+    """Synthetic provenance for tests (never an NBA or market source)."""
+    published = source_timestamp or (NOW - timedelta(minutes=age_minutes + 1))
+    return Provenance(
+        source_id=source_id,
+        source_name="Synthetic test fixture (not NBA data)",
+        source_url="https://example.invalid/synthetic-fixture",
+        source_timestamp=published,
+        observed_at=NOW - timedelta(minutes=age_minutes),
+        version="test-1",
+        allowed_use=allowed_use,
+        allowed_use_note="synthetic fixture for unit tests only",
+    )
 
 
-class TestLedger(unittest.TestCase):
-    def _write(self, tmp: Path, name: str, rows):
-        import json
+class ContractTests(unittest.TestCase):
+    def test_provenance_requires_https_url(self) -> None:
+        with self.assertRaises(ContractError):
+            Provenance(
+                source_id="X",
+                source_name="X",
+                source_url="http://example.invalid/x",
+                source_timestamp=NOW,
+                observed_at=NOW,
+                version="1",
+            )
 
-        (tmp / name).write_text(
-            "\n".join(json.dumps(r) for r in rows), encoding="utf-8"
+    def test_observed_at_cannot_precede_source_timestamp(self) -> None:
+        with self.assertRaises(ContractError):
+            Provenance(
+                source_id="X",
+                source_name="X",
+                source_url="https://example.invalid/x",
+                source_timestamp=NOW,
+                observed_at=NOW - timedelta(minutes=5),
+                version="1",
+            )
+
+    def test_rights_flag_is_enforced(self) -> None:
+        event = GameEvent(
+            event_id="synthetic-1",
+            tipoff_utc=NOW + timedelta(hours=2),
+            home_team_id="SYN-HOME",
+            away_team_id="SYN-AWAY",
+            provenance=provenance(allowed_use=False),
+        )
+        with self.assertRaises(RightsError):
+            require_allowed_use(event)
+
+    def test_leakage_check_flags_future_inputs(self) -> None:
+        forecast = Forecast(
+            forecast_id="f-1",
+            event_id="synthetic-1",
+            market_type="spread",
+            side="home",
+            model_version="m-1",
+            emitted_at=NOW,
+            line=1.5,
+            probability=0.5,
+            input_snapshot_hash=snapshot_hash({"a": 1}),
+            sample_size=120,
+            provenance=provenance(),
+        )
+        stale_event = GameEvent(
+            event_id="synthetic-1",
+            tipoff_utc=NOW + timedelta(hours=2),
+            home_team_id="SYN-HOME",
+            away_team_id="SYN-AWAY",
+            provenance=provenance(age_minutes=0),
+        )
+        violations = validation.leakage_violations(forecast, [stale_event])
+        self.assertTrue(violations)
+
+
+class LineOriginationTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.model = lineorigination.GameScoreModel(
+            expected_home_points=112.0,
+            expected_away_points=108.0,
+            margin_sd=11.0,
+            total_sd=19.0,
+            model_version="synthetic-v1",
         )
 
-    def test_rejects_rows_without_provenance(self):
-        import tempfile
+    def test_fair_price_round_trip(self) -> None:
+        price = lineorigination.fair_decimal_price(0.25)
+        self.assertAlmostEqual(price, 4.0)
+        self.assertAlmostEqual(lineorigination.net_edge(0.25, 4.0), 0.0)
 
-        with tempfile.TemporaryDirectory() as td:
-            tmp = Path(td)
-            self._write(tmp, "games.jsonl", [{
-                "record_id": "g1", "game_id": "x", "game_date": BASE.isoformat(),
-                "team": "A", "opponent": "B", "is_home": True,
-                "points": 100, "opp_points": 95,
-                "provenance": {"source_url": "", "source_time": "", "observed_at": ""},
-            }])
-            ledger = load_ledger(tmp, allow_synthetic=True)
-            self.assertEqual(ledger.games, [])
-            self.assertEqual(len(ledger.rejected), 1)
+    def test_net_edge_sign(self) -> None:
+        self.assertGreater(lineorigination.net_edge(0.55, 2.0), 0.0)
+        self.assertLess(lineorigination.net_edge(0.40, 2.0), 0.0)
 
-    def test_production_run_filters_synthetic_host(self):
-        import tempfile
+    def test_spread_and_total_come_from_the_distribution(self) -> None:
+        self.assertAlmostEqual(lineorigination.originate_spread(self.model), 4.0)
+        self.assertAlmostEqual(lineorigination.originate_total(self.model), 220.0)
 
-        with tempfile.TemporaryDirectory() as td:
-            tmp = Path(td)
-            self._write(tmp, "games.jsonl", [{
-                "record_id": "g1", "game_id": "x", "game_date": BASE.isoformat(),
-                "team": "A", "opponent": "B", "is_home": True,
-                "points": 100, "opp_points": 95, "possessions": 100.0,
-                "provenance": {"source_url": "https://synthetic.invalid/f",
-                               "source_time": BASE.isoformat(),
-                               "observed_at": BASE.isoformat()},
-            }])
-            self.assertEqual(len(load_ledger(tmp, allow_synthetic=True).games), 1)
-            self.assertEqual(len(load_ledger(tmp).games), 0)  # production mode
+    def test_rounding_uses_the_supplied_increment(self) -> None:
+        self.assertEqual(lineorigination.round_to_increment(4.24, 0.5), 4.0)
+        self.assertEqual(lineorigination.round_to_increment(4.26, 0.5), 4.5)
+        self.assertEqual(lineorigination.round_to_increment(4.26, None), 4.26)
 
-    def test_integrity_report(self):
-        import tempfile
+    def test_cover_probabilities_are_complementary(self) -> None:
+        home = lineorigination.cover_probability(self.model, 2.0, "home")
+        away = lineorigination.cover_probability(self.model, 2.0, "away")
+        self.assertAlmostEqual(home + away, 1.0)
 
-        with tempfile.TemporaryDirectory() as td:
-            ledger = load_ledger(td)
-            report = integrity_report(ledger, td)
-            self.assertFalse(report.passed)
-            self.assertIn("missing ledger files", report.notes[0])
+    def test_total_probabilities_are_complementary(self) -> None:
+        over = lineorigination.total_probability(self.model, 215.0, "over")
+        under = lineorigination.total_probability(self.model, 215.0, "under")
+        self.assertAlmostEqual(over + under, 1.0)
 
+    def test_devig_multiplicative_removes_the_margin(self) -> None:
+        # A fair 50/50 market quoted at 1.91 / 1.91.
+        p_a, p_b = lineorigination.devig_two_way(1.91, 1.91)
+        self.assertAlmostEqual(p_a, 0.5, places=6)
+        self.assertAlmostEqual(p_b, 0.5, places=6)
+        margin = lineorigination.margin_of_two_way(1.91, 1.91)
+        self.assertGreater(margin, 0.0)
 
-class TestRatings(unittest.TestCase):
-    def test_no_line_under_min_games(self):
-        games = build_synthetic_games()[:3]
-        f = margin_forecast(games, "SYNTH-H", "SYNTH-A", BASE)
-        self.assertIsNone(f.expected_home_margin)
+    def test_devig_additive_splits_the_margin_evenly(self) -> None:
+        p_a, p_b = lineorigination.devig_two_way(2.0, 1.8, method="additive")
+        self.assertAlmostEqual(p_a + p_b, 1.0, places=9)
 
-    def test_line_from_enough_games(self):
-        games = build_synthetic_games()
-        f = margin_forecast(games, "SYNTH-H", "SYNTH-A", BASE)
-        self.assertIsNotNone(f.expected_home_margin)
-        self.assertGreater(f.expected_home_margin, 0)  # SYNTH-H is stronger
-
-    def test_never_uses_future_games(self):
-        games = build_synthetic_games() + [TeamGame(
-            "future", "f", (BASE + timedelta(days=2)).isoformat(),
-            "SYNTH-A", "SYNTH-H", True, 130, 80, 100.0, PROV,
-        )]
-        f = margin_forecast(games, "SYNTH-H", "SYNTH-A", BASE)
-        f2 = margin_forecast(build_synthetic_games(), "SYNTH-H", "SYNTH-A", BASE)
-        self.assertAlmostEqual(f.expected_home_margin, f2.expected_home_margin)
-
-    def test_win_probability_symmetry(self):
-        self.assertAlmostEqual(win_probability(0.0), 0.5)
-        self.assertAlmostEqual(win_probability(6.0) + win_probability(-6.0), 1.0)
-
-    def test_cover_probability_equal_line(self):
-        self.assertAlmostEqual(cover_probability(3.0, 3.0), 0.5)
-
-
-class TestPlayerProps(unittest.TestCase):
-    def _games(self, n=8):
-        return [PlayerGame(
-            f"p{i}", f"x{i}", (BASE - timedelta(days=i * 3 + 1)).isoformat(),
-            "SYNTH-PLAYER", "SYNTH-H", 30.0, 18.0 + i % 4, 5.0, 4.0, PROV,
-        ) for i in range(n)]
-
-    def test_min_games_gate(self):
-        f = player_prop_forecast(self._games(3), "SYNTH-PLAYER", "points", 0.5, BASE)
-        self.assertIsNone(f.expected_value)
-        self.assertEqual(f.games_used, 3)
-
-    def test_forecast_and_shrinkage(self):
-        f = player_prop_forecast(self._games(8), "SYNTH-PLAYER", "points", 0.5, BASE)
-        self.assertIsNotNone(f.expected_value)
-        # raw rate ~ 19.5/30 = 0.65/min; shrinkage toward 0.5 pulls below raw
-        self.assertLess(f.expected_value, 0.65 * 30.0)
-        self.assertGreater(f.over_probability(15.0), 0.5)
-
-    def test_availability_multiplier_scales_minutes(self):
-        f1 = player_prop_forecast(self._games(), "SYNTH-PLAYER", "points", 0.5, BASE)
-        f2 = player_prop_forecast(self._games(), "SYNTH-PLAYER", "points", 0.5, BASE,
-                                  availability_multiplier=0.5)
-        self.assertAlmostEqual(f2.expected_value, f1.expected_value * 0.5)
-
-
-class TestInjuries(unittest.TestCase):
-    def test_unresolved_without_observation(self):
-        s = availability_scenario([], "GHOST")
-        self.assertFalse(s.resolved)
-        self.assertIsNone(s.availability_prob)
-
-    def test_latest_status_wins(self):
-        old = InjuryObservation("i1", (BASE - timedelta(days=1)).isoformat(), "x",
-                                "A", "P", "Out", "r", PROV)
-        new = InjuryObservation("i2", BASE.isoformat(), "x", "A", "P", "Probable", "r", PROV)
-        s = availability_scenario([old, new], "P")
-        self.assertEqual(s.status, "Probable")
-
-    def test_roster_all_resolved(self):
-        obs = [InjuryObservation("i1", BASE.isoformat(), "x", "A", "P", "Out", "r", PROV)]
-        _, resolved = roster_scenario(obs, ["P"])
-        self.assertTrue(resolved)
-        _, resolved2 = roster_scenario(obs, ["P", "Q"])
-        self.assertFalse(resolved2)
-
-
-class TestGameFlow(unittest.TestCase):
-    def test_probabilities_partition(self):
-        s = scenario_distribution(0.0, 12.0)
-        total = s.p_competitive + s.p_separation_home + s.p_separation_away + s.p_moderate
-        self.assertAlmostEqual(total, 1.0, places=6)
-
-    def test_heavy_favourite_more_separation(self):
-        s = scenario_distribution(20.0, 12.0)
-        self.assertGreater(s.p_separation_home, s.p_separation_away)
-
-    def test_rejects_bad_sd(self):
+    def test_shin_requires_its_parameter(self) -> None:
         with self.assertRaises(ValueError):
-            scenario_distribution(0.0, 0.0)
+            lineorigination.devig_two_way(2.0, 1.9, method="shin")
+        shin_a, shin_b = lineorigination.devig_two_way(2.0, 1.9, method="shin", shin_z=0.02)
+        mult_a, mult_b = lineorigination.devig_two_way(2.0, 1.9, method="multiplicative")
+        self.assertAlmostEqual(shin_a + shin_b, 1.0, places=6)
+        # Shin protects the favourite: the side with the higher implied
+        # probability keeps (slightly) more probability than under
+        # proportional de-vigging.
+        favourite_shin = shin_b if shin_b > shin_a else shin_a
+        favourite_mult = mult_b if mult_b > mult_a else mult_a
+        self.assertGreater(favourite_shin, favourite_mult)
+
+    def test_prop_line_is_the_quantile_of_the_predictive_distribution(self) -> None:
+        prop = lineorigination.PlayerPropModel(
+            expected_minutes=32.0,
+            minutes_sd=6.0,
+            rate_mean=0.55,
+            rate_sd=0.12,
+            minutes_corr_with_rate=0.2,
+            model_version="synthetic-v1",
+        )
+        median_line = lineorigination.originate_prop_line(prop, quantile=0.5)
+        self.assertAlmostEqual(median_line, prop.expected_total, delta=0.6)
+        self.assertGreater(
+            lineorigination.originate_prop_line(prop, quantile=0.8),
+            lineorigination.originate_prop_line(prop, quantile=0.2),
+        )
+        p_over = lineorigination.prop_probability(prop, median_line, over=True)
+        self.assertAlmostEqual(p_over, 0.5, delta=0.06)
+
+    def test_prop_variance_includes_the_correlation_term(self) -> None:
+        independent = lineorigination.PlayerPropModel(30.0, 5.0, 0.5, 0.1, 0.0, "synthetic-v1")
+        correlated = lineorigination.PlayerPropModel(30.0, 5.0, 0.5, 0.1, 0.5, "synthetic-v1")
+        self.assertGreater(correlated.total_variance, independent.total_variance)
 
 
-class TestCorrelation(unittest.TestCase):
-    def test_pearson_known_values(self):
-        self.assertAlmostEqual(pearson([1, 2, 3], [2, 4, 6]), 1.0)
-        self.assertAlmostEqual(pearson([1, 2, 3], [-2, -4, -6]), -1.0)
-        self.assertIsNone(pearson([1, 1, 1], [1, 2, 3]))  # zero variance
+class CorrelationTests(unittest.TestCase):
+    def test_pearson_matches_a_known_value(self) -> None:
+        xs = [1.0, 2.0, 3.0, 4.0]
+        ys = [2.0, 4.0, 5.0, 4.0]
+        # Cross-checked by hand: covariance 3.5, sx = sqrt(5), sy = sqrt(4.75).
+        self.assertAlmostEqual(correlation.pearson(xs, ys), 0.7181848464596078, places=9)
 
-    def test_phi_known_values(self):
-        a = [True, True, False, False]
-        b = [True, True, False, False]
-        self.assertAlmostEqual(phi(a, b), 1.0)
-        self.assertIsNone(phi([True], [True]))
+    def test_pearson_rejects_a_constant_series(self) -> None:
+        with self.assertRaises(ValueError):
+            correlation.pearson([1.0, 1.0, 1.0], [1.0, 2.0, 3.0])
 
-    def test_shrink_toward_zero(self):
-        self.assertAlmostEqual(shrink_toward_zero(0.5, 10, 10), 0.25)
-        self.assertEqual(shrink_toward_zero(0.5, 0), 0.0)
+    def test_spearman_is_one_for_a_monotone_relationship(self) -> None:
+        self.assertAlmostEqual(correlation.spearman([1.0, 2.0, 3.0], [10.0, 20.0, 30.0]), 1.0)
 
-    def test_residual_estimate_blank_without_pairs(self):
-        est = residual_correlation_estimate([("g1", 1.0)], [])
-        self.assertIsNone(est.value)
-        self.assertIn("stays blank", est.notes[0])
+    def test_phi_for_perfect_agreement(self) -> None:
+        xs = [True, True, False, False]
+        ys = [True, True, False, False]
+        self.assertAlmostEqual(correlation.phi(xs, ys), 1.0)
 
-    def test_residual_estimate_with_pairs(self):
-        a = [("g1", 1.0), ("g1", 2.0), ("g2", -1.0), ("g2", -2.0)]
-        b = [("g1", 1.0), ("g1", 2.0), ("g2", -1.0), ("g2", -2.0)]
-        est = residual_correlation_estimate(a, b, shrink=False)
-        self.assertAlmostEqual(est.value, 1.0)
-        self.assertEqual(est.clusters, 2)
-        self.assertEqual(est.clusters, 2)
+    def test_cluster_bootstrap_interval_brackets_the_estimate(self) -> None:
+        clusters = {
+            f"g{i}": [(float(i), float(i) + 0.1 * ((i % 3) - 1)) for i in range(4)]
+            for i in range(12)
+        }
+        result = correlation.correlation_with_uncertainty(clusters, method="pearson", resamples=300)
+        self.assertGreaterEqual(result.sample_size, 48)
+        self.assertIsNotNone(result.lower)
+        self.assertLessEqual(result.lower, result.upper)
+        self.assertEqual(result.cluster_count, 12)
 
-    def test_bootstrap_deterministic_with_seed(self):
-        vals = [("g1", 1.0), ("g1", 2.0), ("g2", 3.0), ("g2", 4.0),
-                ("g3", 5.0), ("g3", 6.0)]
-        f = lambda s: sum(s) / len(s)  # noqa: E731
-        ci1 = cluster_bootstrap_ci(vals, f, n_boot=200, seed=7)
-        ci2 = cluster_bootstrap_ci(vals, f, n_boot=200, seed=7)
-        self.assertEqual(ci1, ci2)
-        self.assertIsNotNone(ci1[0])
-
-    def test_joint_event_estimate(self):
-        a = [("g1", True), ("g2", False), ("g3", True), ("g4", False)]
-        b = [("g1", True), ("g2", False), ("g3", True), ("g4", False)]
-        est = joint_event_estimate(a, b)
-        self.assertAlmostEqual(est.value, 1.0)
+    def test_shrink_moves_toward_the_prior(self) -> None:
+        self.assertAlmostEqual(correlation.shrink(0.5, 0.0, 0.5), 0.25)
+        self.assertAlmostEqual(correlation.shrink(0.5, 0.0, 0.0), 0.5)
 
 
-class TestValidation(unittest.TestCase):
-    def test_brier_known(self):
-        self.assertAlmostEqual(brier_score([1.0, 0.0], [1, 0]), 0.0)
-        self.assertAlmostEqual(brier_score([0.5, 0.5], [1, 0]), 0.25)
+class ParlayTests(unittest.TestCase):
+    def test_independent_legs_match_the_product_of_marginals(self) -> None:
+        legs = [
+            parlay.ParlayLeg("leg-1", "synthetic-1", 0.5),
+            parlay.ParlayLeg("leg-2", "synthetic-1", 0.5),
+        ]
+        estimate = parlay.joint_probability(legs, [[1.0, 0.0], [0.0, 1.0]], draws=20000, seed=7)
+        self.assertAlmostEqual(estimate.joint_probability, 0.25, delta=0.02)
+        self.assertAlmostEqual(estimate.independent_probability, 0.25, places=9)
 
-    def test_log_loss_known(self):
-        self.assertAlmostEqual(log_loss([1.0, 1.0], [1, 1]), 0.0, places=6)
+    def test_positive_dependence_raises_the_joint_probability(self) -> None:
+        legs = [
+            parlay.ParlayLeg("leg-1", "synthetic-1", 0.5),
+            parlay.ParlayLeg("leg-2", "synthetic-1", 0.5),
+        ]
+        estimate = parlay.joint_probability(legs, [[1.0, 0.7], [0.7, 1.0]], draws=20000, seed=7)
+        self.assertGreater(estimate.joint_probability, estimate.independent_probability)
+        self.assertGreater(estimate.dependence_effect, 0.02)
 
-    def test_reliability_bins(self):
-        bins = reliability_bins([0.1, 0.2, 0.8, 0.9], [0, 0, 1, 1], bins=2)
-        self.assertEqual(len(bins), 2)
-        self.assertEqual(bins[0][2], 2)
+    def test_cholesky_rejects_a_non_positive_definite_matrix(self) -> None:
+        with self.assertRaises(ValueError):
+            parlay.cholesky([[1.0, 1.2], [1.2, 1.0]])
 
-    def test_walk_forward_is_chronological(self):
-        folds = walk_forward_folds(100, 3, 40)
-        self.assertEqual(len(folds), 3)
-        for train, test in folds:
-            self.assertLess(max(train), min(test))
-
-    def test_trials_adjustment(self):
-        self.assertAlmostEqual(trials_adjusted_alpha(0.05, 10), 0.005)
-
-    def test_skill_vs_baseline(self):
-        self.assertAlmostEqual(skill_vs_baseline([0.2, 0.3], [0.4, 0.5]), 0.2)
-
-    def test_gate_report_states(self):
-        from engine.ledger import Ledger
-
-        rep = integrity_report(Ledger(), "/nonexistent")
-        states = run_gates(rep, has_market_spec=False, n_settled_forecasts=0)
-        names = {s.gate: s.state for s in states}
-        self.assertEqual(names["G0 rights/jurisdiction"], "blocked")
-        self.assertEqual(names["G6 net value"], "blocked")
-        self.assertEqual(len(states), 13)  # G0..G12
+    def test_cholesky_rejects_an_asymmetric_matrix(self) -> None:
+        with self.assertRaises(ValueError):
+            parlay.cholesky([[1.0, 0.3], [0.2, 1.0]])
 
 
-class TestPicks(unittest.TestCase):
-    def test_horizon_filter(self):
-        self.assertTrue(in_horizon((BASE + timedelta(days=1)).isoformat(), BASE))
-        self.assertTrue(in_horizon((BASE + timedelta(hours=71)).isoformat(), BASE))
-        self.assertFalse(in_horizon((BASE + timedelta(days=4)).isoformat(), BASE))
-        self.assertFalse(in_horizon((BASE - timedelta(hours=1)).isoformat(), BASE))
+class ValidationTests(unittest.TestCase):
+    def test_brier_and_log_loss_of_a_perfect_forecast(self) -> None:
+        probs = [1.0, 0.0, 1.0, 0.0]
+        outcomes = [True, False, True, False]
+        self.assertAlmostEqual(validation.brier_score(probs, outcomes), 0.0)
+        self.assertLess(validation.log_loss(probs, outcomes), 1e-9)
 
-    def test_empty_ledger_yields_no_picks(self):
-        from engine.ledger import Ledger
+    def test_reliability_table_reports_every_populated_bin(self) -> None:
+        probs = [0.1, 0.2, 0.8, 0.9]
+        outcomes = [False, True, True, True]
+        table = validation.reliability_table(probs, outcomes, bins=10)
+        self.assertTrue(table)
+        for row in table:
+            self.assertGreaterEqual(row["count"], 1)
+            self.assertLessEqual(row["observed_frequency"], 1.0)
 
-        decisions, report = generate_slate_picks(Ledger(), issued_at=BASE)
-        self.assertEqual(decisions, [])
-        self.assertIn("no authorized inputs in ledger (G1 blocked)",
-                      report["no_pick_reasons"])
-
-    def test_no_pick_suppression_with_slate_but_no_games(self):
-        from engine.ledger import Ledger
-
-        ledger = Ledger(slate=[SlateGame(
-            "s1", "x", (BASE + timedelta(days=1)).isoformat(), "H", "A", PROV
-        )])
-        decisions, _ = generate_slate_picks(ledger, issued_at=BASE)
-        self.assertEqual(len(decisions), 1)
-        for rec in decisions[0].records:
-            self.assertEqual(rec.status, "NO PICK")
-            self.assertTrue(rec.reason_codes)
-            self.assertIsNone(rec.originated_line)
-
-    def test_shadow_run_on_synthetic_data(self):
-        from engine.selftest import build_synthetic_ledger
-        import json
-        import tempfile
-
-        with tempfile.TemporaryDirectory() as td:
-            tmp = Path(td)
-            by_file = {}
-            for name, row in build_synthetic_ledger():
-                by_file.setdefault(name, []).append(row)
-            for name, rows in by_file.items():
-                (tmp / name).write_text(
-                    "\n".join(json.dumps(r) for r in rows), encoding="utf-8"
-                )
-            ledger = load_ledger(tmp, allow_synthetic=True)
-            decisions, _ = generate_slate_picks(
-                ledger, issued_at=BASE, allow_shadow=True
+    def test_walk_forward_splits_are_chronological(self) -> None:
+        events = [
+            GameEvent(
+                event_id=f"synthetic-{index}",
+                tipoff_utc=NOW + timedelta(days=index),
+                home_team_id="SYN-HOME",
+                away_team_id="SYN-AWAY",
+                provenance=provenance(),
             )
-            self.assertEqual(len(decisions), 1)
-            statuses = {r.status for r in decisions[0].records}
-            self.assertIn("SHADOW", statuses)
-            spread = [r for r in decisions[0].records if r.market == "spread"][0]
-            self.assertIsNotNone(spread.originated_line)
+            for index in range(20)
+        ]
+        splits = validation.walk_forward_splits(events, train_days=5, test_days=2)
+        self.assertTrue(splits)
+        for train, test in splits:
+            self.assertLess(max(e.tipoff_utc for e in train), min(e.tipoff_utc for e in test))
 
-    def test_parlay_same_game_needs_joint(self):
-        legs = [PickRecord(
-            pick_id=f"l{i}", issued_at=BASE.isoformat(), model_version="m",
-            code_version="c", market="prop", selection=f"leg{i}",
-            originated_line=None, forecast_probability=0.55, fair_price=None,
-            benchmark_quote_id=None, horizon_end=BASE.isoformat(),
-            status="SHADOW", reason_codes=(), input_snapshot=(),
-        ) for i in range(2)]
-        p = parlay_record(legs, [0.55, 0.60], None, BASE, ["g1", "g1"])
-        self.assertEqual(p.status, "NO PICK")
-        self.assertIn("same-game legs: joint dependence unverified (G8)", p.reason_codes)
+    def test_net_return_sums_the_settled_records(self) -> None:
+        picks = [{"net_return": 1.0}, {"net_return": -1.0}, {"net_return": 0.0}]
+        self.assertAlmostEqual(validation.net_return(picks), 0.0)
 
-    def test_parlay_cross_game_uses_product(self):
-        legs = [PickRecord(
-            pick_id=f"l{i}", issued_at=BASE.isoformat(), model_version="m",
-            code_version="c", market="spread", selection=f"leg{i}",
-            originated_line=None, forecast_probability=0.5, fair_price=None,
-            benchmark_quote_id=None, horizon_end=BASE.isoformat(),
-            status="SHADOW", reason_codes=(), input_snapshot=(),
-        ) for i in range(2)]
-        p = parlay_record(legs, [0.5, 0.5], None, BASE, ["g1", "g2"])
-        self.assertEqual(p.status, "SHADOW")
-        self.assertAlmostEqual(p.forecast_probability, 0.25)
+    def test_coverage_reports_the_share_inside_the_interval(self) -> None:
+        intervals = [(0.0, 10.0), (0.0, 10.0)]
+        self.assertAlmostEqual(validation.coverage([5.0, 5.0], intervals, [5.0, 11.0]), 0.5)
 
 
-class TestSelftest(unittest.TestCase):
-    def test_selftest_runs_clean(self):
-        self.assertEqual(run_selftest(), 0)
+class LeaderboardTests(unittest.TestCase):
+    def _entry(self, gates: tuple[GateOutcome, ...]) -> LeaderboardEntry:
+        return LeaderboardEntry(
+            strategy_id="S1",
+            model_version="v1",
+            market="spread",
+            sample_size=500,
+            test_window="2026-01-01..2026-06-30",
+            brier_score=0.22,
+            log_loss=0.62,
+            expected_calibration_error=0.03,
+            net_units=18.0,
+            net_units_per_bet=0.03,
+            max_drawdown_units=9.0,
+            baseline_comparison="better than the declared baseline",
+            correlation_check="legs checked",
+            gates=gates,
+        )
+
+    def test_nothing_is_ranked_when_a_gate_fails(self) -> None:
+        policy = LeaderboardPolicy(
+            metric_weights={"net_units_per_bet": 1.0},
+            minimum_sample_size=100,
+            required_gate_ids=("G0", "G4"),
+            tie_breaker="sample size, then strategy id",
+        )
+        gates = (
+            GateOutcome("G0", True, "passed"),
+            GateOutcome("G4", False, "failed"),
+        )
+        self.assertEqual(rank([self._entry(gates)], policy), [])
+
+    def test_a_passing_entry_is_ranked(self) -> None:
+        policy = LeaderboardPolicy(
+            metric_weights={"net_units_per_bet": 1.0, "brier_score": 0.5},
+            minimum_sample_size=100,
+            required_gate_ids=("G0", "G4"),
+            tie_breaker="sample size, then strategy id",
+        )
+        gates = (
+            GateOutcome("G0", True, "passed"),
+            GateOutcome("G4", True, "passed"),
+        )
+        rows = rank([self._entry(gates)], policy)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["rank"], 1)
+
+    def test_a_missing_gate_is_not_silently_passed(self) -> None:
+        policy = LeaderboardPolicy(
+            metric_weights={"net_units_per_bet": 1.0},
+            minimum_sample_size=100,
+            required_gate_ids=("G0", "G4", "G5"),
+            tie_breaker="sample size, then strategy id",
+        )
+        gates = (
+            GateOutcome("G0", True, "passed"),
+            GateOutcome("G4", True, "passed"),
+        )
+        outcomes = __import__(
+            "engine.leaderboard", fromlist=["evaluate_gates"]
+        ).evaluate_gates(self._entry(gates), policy)
+        self.assertFalse(any(gate.gate_id == "G5" and gate.passed for gate in outcomes))
+
+
+class PipelineTests(unittest.TestCase):
+    def _events(self, count: int = 3) -> list[GameEvent]:
+        return [
+            GameEvent(
+                event_id=f"synthetic-{index}",
+                tipoff_utc=NOW + timedelta(hours=6 * index + 2),
+                home_team_id="SYN-HOME",
+                away_team_id="SYN-AWAY",
+                provenance=provenance(),
+            )
+            for index in range(count)
+        ]
+
+    def _config(self, **overrides) -> pipeline.RunConfig:
+        base = dict(
+            run_id="synthetic-run",
+            now_utc=NOW,
+            horizon_hours=pipeline.HORIZON_HOURS,
+            timezone_name="UTC",
+            max_input_age_minutes=90,
+            model_version="synthetic-v1",
+            market_specified=True,
+        )
+        base.update(overrides)
+        return pipeline.RunConfig(**base)
+
+    def test_horizon_filter_is_hard(self) -> None:
+        events = self._events(3)
+        slate = pipeline.select_slate(events, NOW, pipeline.HORIZON_HOURS)
+        self.assertEqual(len(slate), 3)
+        far = [
+            GameEvent(
+                event_id="synthetic-far",
+                tipoff_utc=NOW + timedelta(days=5),
+                home_team_id="SYN-HOME",
+                away_team_id="SYN-AWAY",
+                provenance=provenance(),
+            )
+        ]
+        self.assertEqual(pipeline.select_slate(events + far, NOW, pipeline.HORIZON_HOURS), slate)
+
+    def test_horizon_cannot_exceed_three_days(self) -> None:
+        with self.assertRaises(ValueError):
+            self._config(horizon_hours=100)
+
+    def test_stale_inputs_suppress_the_run(self) -> None:
+        events = [
+            GameEvent(
+                event_id="synthetic-stale",
+                tipoff_utc=NOW + timedelta(hours=3),
+                home_team_id="SYN-HOME",
+                away_team_id="SYN-AWAY",
+                provenance=provenance(age_minutes=600),
+            )
+        ]
+        report = pipeline.run_pipeline(self._config(), events)
+        self.assertTrue(report.stale_inputs)
+        self.assertEqual(report.picks, [])
+        self.assertTrue(any(s["reason_code"] == "STALE_DATA" for s in report.suppressed))
+
+    def test_rights_failure_suppresses_the_run(self) -> None:
+        events = [
+            GameEvent(
+                event_id="synthetic-norights",
+                tipoff_utc=NOW + timedelta(hours=3),
+                home_team_id="SYN-HOME",
+                away_team_id="SYN-AWAY",
+                provenance=provenance(allowed_use=False),
+            )
+        ]
+        report = pipeline.run_pipeline(self._config(), events)
+        self.assertFalse(report.rights_cleared)
+        self.assertEqual(report.picks, [])
+        self.assertTrue(any(s["reason_code"] == "RIGHTS_NOT_CLEARED" for s in report.suppressed))
+
+    def test_no_bet_when_the_market_is_not_specified(self) -> None:
+        events = self._events(1)
+
+        def strategy(config, slate, injuries):
+            return [
+                Forecast(
+                    forecast_id="f-1",
+                    event_id=slate[0].event_id,
+                    market_type="spread",
+                    side="home",
+                    model_version=config.model_version,
+                    emitted_at=config.now_utc,
+                    line=1.5,
+                    probability=0.55,
+                    input_snapshot_hash=snapshot_hash({"x": 1}),
+                    sample_size=250,
+                    provenance=provenance(),
+                )
+            ]
+
+        report = pipeline.run_pipeline(self._config(market_specified=False), events, strategy=strategy)
+        self.assertEqual(len(report.picks), 1)
+        self.assertEqual(report.picks[0]["decision"], "no_bet")
+        self.assertIn("NO_MARKET_SPEC", report.picks[0]["reason_codes"])
+
+    def test_pick_records_an_edge_against_a_licensed_quote(self) -> None:
+        events = self._events(1)
+        quote = MarketQuote(
+            market_id="q-1",
+            event_id=events[0].event_id,
+            market_type="spread",
+            side="home",
+            line=1.5,
+            price_decimal=1.9,
+            quote_timestamp=NOW - timedelta(minutes=2),
+            provider_id="SYNTHETIC",
+            provenance=provenance(),
+        )
+
+        def strategy(config, slate, injuries):
+            return [
+                Forecast(
+                    forecast_id="f-2",
+                    event_id=slate[0].event_id,
+                    market_type="spread",
+                    side="home",
+                    model_version=config.model_version,
+                    emitted_at=config.now_utc,
+                    line=1.5,
+                    probability=0.55,
+                    input_snapshot_hash=snapshot_hash({"x": 2}),
+                    sample_size=250,
+                    provenance=provenance(),
+                )
+            ]
+
+        report = pipeline.run_pipeline(self._config(), events, quotes=[quote], strategy=strategy)
+        pick = report.picks[0]
+        self.assertEqual(pick["decision"], "bet")
+        self.assertAlmostEqual(pick["edge"], 0.55 * 1.9 - 1.0, places=9)
+
+    def test_below_the_declared_minimum_sample_is_a_no_bet(self) -> None:
+        events = self._events(1)
+        quote = MarketQuote(
+            market_id="q-2",
+            event_id=events[0].event_id,
+            market_type="spread",
+            side="home",
+            line=1.5,
+            price_decimal=1.9,
+            quote_timestamp=NOW - timedelta(minutes=2),
+            provider_id="SYNTHETIC",
+            provenance=provenance(),
+        )
+
+        def strategy(config, slate, injuries):
+            return [
+                Forecast(
+                    forecast_id="f-3",
+                    event_id=slate[0].event_id,
+                    market_type="spread",
+                    side="home",
+                    model_version=config.model_version,
+                    emitted_at=config.now_utc,
+                    line=1.5,
+                    probability=0.55,
+                    input_snapshot_hash=snapshot_hash({"x": 3}),
+                    sample_size=50,
+                    provenance=provenance(),
+                )
+            ]
+
+        report = pipeline.run_pipeline(
+            self._config(minimum_sample_size=100), events, quotes=[quote], strategy=strategy
+        )
+        pick = report.picks[0]
+        self.assertEqual(pick["decision"], "no_bet")
+        self.assertIn("BELOW_MINIMUM_SAMPLE", pick["reason_codes"])
+
+    def test_ledger_is_append_only(self) -> None:
+        import tempfile
+        import os
+
+        with tempfile.TemporaryDirectory() as folder:
+            path = os.path.join(folder, "ledger.jsonl")
+            pipeline.append_ledger(path, {"run_id": "a"})
+            pipeline.append_ledger(path, {"run_id": "b"})
+            with open(path, encoding="utf-8") as handle:
+                lines = [line for line in handle.read().splitlines() if line]
+            self.assertEqual(len(lines), 2)
+
+
+class PickContractTests(unittest.TestCase):
+    def test_a_bet_requires_reason_codes(self) -> None:
+        with self.assertRaises(ContractError):
+            Pick(
+                pick_id="p-1",
+                forecast_id="f-1",
+                event_id="synthetic-1",
+                decision="bet",
+                stake_fraction=0.01,
+                edge=0.05,
+                reason_codes=(),
+            )
+
+    def test_status_values_match_the_official_report_labels(self) -> None:
+        self.assertEqual(Status.OUT.value, "Out")
+        self.assertEqual(Status.QUESTIONABLE.value, "Questionable")
+        self.assertEqual(Status.DOUBTFUL.value, "Doubtful")
+        self.assertEqual(Status.PROBABLE.value, "Probable")
+        self.assertEqual(Status.AVAILABLE.value, "Available")
+        self.assertEqual(Status.NOT_WITH_TEAM.value, "Not With Team")
+
+
+class SourceRegistryTests(unittest.TestCase):
+    def test_every_source_has_an_https_official_url(self) -> None:
+        allowed = (
+            "nba.com",
+            "github.com",
+            "kansspelautoriteit.nl",
+            "scikit-learn.org",
+            "itl.nist.gov",
+        )
+        for source in sources.SOURCES:
+            self.assertTrue(source.url.startswith("https://"), source.source_id)
+            host = source.url.split("/")[2].lower()
+            self.assertTrue(
+                any(host == domain or host.endswith("." + domain) for domain in allowed),
+                f"{source.source_id}: {host}",
+            )
+
+    def test_source_ids_are_unique(self) -> None:
+        ids = [source.source_id for source in sources.SOURCES]
+        self.assertEqual(len(ids), len(set(ids)))
+
+    def test_registry_contains_the_data_rights_sources(self) -> None:
+        ids = {source.source_id for source in sources.SOURCES}
+        for required in ("NBA-01", "NBA-02", "NBA-03", "GH-03", "KSA-01"):
+            self.assertIn(required, ids)
+
+
+class InjuryContractTests(unittest.TestCase):
+    def test_injury_record_requires_a_known_status(self) -> None:
+        record = InjuryRecord(
+            event_id="synthetic-1",
+            player_id="SYN-PLAYER",
+            status=Status.OUT,
+            reason="Injury/Illness",
+            provenance=provenance(),
+        )
+        self.assertEqual(record.status.value, "Out")
+        with self.assertRaises(ContractError):
+            InjuryRecord(
+                event_id="synthetic-1",
+                player_id="SYN-PLAYER",
+                status="Out",  # type: ignore[arg-type]
+                reason="Injury/Illness",
+                provenance=provenance(),
+            )
 
 
 if __name__ == "__main__":

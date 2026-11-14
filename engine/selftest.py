@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
 
-from .correlation import joint_event_estimate, residual_correlation_estimate
+from .corrstats import joint_event_estimate, residual_correlation_estimate
 from .gameflow import minutes_multiplier_by_flow, scenario_distribution
 from .injuries import roster_scenario
 from .picks import generate_slate_picks

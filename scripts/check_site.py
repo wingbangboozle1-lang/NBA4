@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import sys
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -12,16 +13,19 @@ PAGES = (
     "index.html",
     "slate.html",
     "injuries.html",
+    "line-origination.html",
+    "automation.html",
     "strategies.html",
     "leaderboard.html",
-    "suggestions.html",
     "questions.html",
+    "suggestions.html",
     "sources.html",
     "review.html",
 )
 OFFICIAL_HOSTS = (
     "nba.com",
     "github.com",
+    "wingbangboozle1-lang.github.io",  # this project's own published site
     "kansspelautoriteit.nl",
     "scikit-learn.org",
     "itl.nist.gov",
@@ -175,8 +179,35 @@ def audit_markdown_tables() -> tuple[list[str], int]:
     return errors, row_count
 
 
+def audit_page_inventory() -> list[str]:
+    """Every HTML page in the repository root must be part of the checked set."""
+    errors: list[str] = []
+    on_disk = {path.name for path in ROOT.glob("*.html")}
+    missing = on_disk - set(PAGES)
+    for name in sorted(missing):
+        errors.append(f"page present on disk but not in the checked page list: {name}")
+    return errors
+
+
+def run_engine_tests() -> list[str]:
+    """Run the engine unit tests so a broken engine cannot be published."""
+    import subprocess
+    import sys
+
+    result = subprocess.run(
+        [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-t", "."],
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return [f"engine unit tests failed:\n{result.stdout[-2000:]}\n{result.stderr[-2000:]}"]
+    return []
+
+
 def main() -> int:
     all_errors: list[str] = []
+    all_errors.extend(audit_page_inventory())
     html_rows = 0
     for name in PAGES:
         errors, row_count = audit_page(name)
@@ -201,6 +232,14 @@ def main() -> int:
         return 1
 
     print(f"OK docs/*.md: {markdown_rows} source-linked data rows")
+
+    if "--with-tests" in sys.argv[1:]:
+        test_errors = run_engine_tests()
+        if test_errors:
+            all_errors.extend(test_errors)
+        else:
+            print("OK engine unit tests")
+
     print(f"\nPASS: {len(PAGES)} pages, {html_rows} HTML data rows and {markdown_rows} Markdown data rows passed.")
     print("External source URLs are checked for HTTPS and official hostnames; this script does not fetch the web.")
     return 0

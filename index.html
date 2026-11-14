@@ -13,17 +13,21 @@
   <aside class="sidebar" aria-label="Site navigation">
     <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N4</span><span class="brand-copy">NBA4<small>RESEARCH DASHBOARD</small></span></a>
     <p class="nav-label">Workspace</p>
-    <nav class="primary-nav" aria-label="Primary navigation"><ul>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <ul>
       <li><a href="index.html" aria-current="page"><span class="nav-icon" aria-hidden="true">◆</span>Overview</a></li>
       <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
       <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
+      <li><a href="line-origination.html"><span class="nav-icon" aria-hidden="true">≡</span>Line origination</a></li>
+      <li><a href="automation.html"><span class="nav-icon" aria-hidden="true">⟳</span>Automation</a></li>
       <li><a href="strategies.html"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
-      <li><a href="leaderboard.html"><span class="nav-icon" aria-hidden="true">★</span>Leaderboard</a></li>
-      <li><a href="suggestions.html"><span class="nav-icon" aria-hidden="true">✎</span>Suggestions</a></li>
+      <li><a href="leaderboard.html"><span class="nav-icon" aria-hidden="true">▤</span>Leaderboard</a></li>
       <li><a href="questions.html"><span class="nav-icon" aria-hidden="true">?</span>Decision questions</a></li>
+      <li><a href="suggestions.html"><span class="nav-icon" aria-hidden="true">✦</span>Suggestions</a></li>
       <li><a href="sources.html"><span class="nav-icon" aria-hidden="true">↗</span>Sources</a></li>
       <li><a href="review.html"><span class="nav-icon" aria-hidden="true">⚑</span>Flagged for review</a></li>
-    </ul></nav>
+      </ul>
+    </nav>
     <div class="sidebar-spacer"></div>
     <div class="sidebar-note"><strong>Research-only state</strong><p>No validated strategies, licensed feed, or NBA picks are available in this repository.</p></div>
     <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
@@ -39,19 +43,18 @@
       <section class="hero" aria-labelledby="page-title">
         <p class="eyebrow">Executive summary · evidence first</p>
         <h1 id="page-title">Originate NBA lines responsibly.</h1>
-        <p class="hero-copy">This repo now contains a source-checked research plan, validation gates, missing-information register and review dashboard. It has no licensed point-in-time dataset or tested model. Therefore every line, pick, correlation, injury-minute impact and performance field is left blank—not guessed.</p>
+        <p class="hero-copy">This repository contains a source-checked research plan, validation gates, a missing-information register, a review dashboard — and a working reference engine that originates lines, measures correlations, runs a gate-aware leaderboard and executes a three-day slate pipeline. It has no licensed point-in-time dataset and no validated model, so every line, pick, correlation, injury-minute impact and performance field is left blank rather than guessed.</p>
         <div class="hero-actions">
           <a class="button" href="review.html">Review the blockers</a>
-          <a class="button button-secondary" href="strategies.html">Explore strategy gates</a>
-          <a class="button button-secondary" href="suggestions.html">Choose the next path</a>
+          <a class="button button-secondary" href="line-origination.html">See how lines are originated</a>
         </div>
       </section>
 
       <section class="metric-grid" aria-label="Current project status">
         <article class="metric-card blocked"><p class="metric-label">Validated strategies</p><p class="metric-value">None</p><p class="metric-detail">No training or holdout results exist.</p></article>
-        <article class="metric-card blocked"><p class="metric-label">Published picks</p><p class="metric-value">None</p><p class="metric-detail">No live lines or selections generated.</p></article>
+        <article class="metric-card blocked"><p class="metric-label">Published picks</p><p class="metric-value">None</p><p class="metric-detail">The rights gate refuses uncleared input by design.</p></article>
         <article class="metric-card"><p class="metric-label">Correlation values</p><p class="metric-value">Not measured</p><p class="metric-detail">Paired, licensed outcomes are missing.</p></article>
-        <article class="metric-card ready"><p class="metric-label">Research state</p><p class="metric-value">Evidence scaffold + tested engine</p><p class="metric-detail">43 mechanics tests pass; no calibrated model.</p></article>
+        <article class="metric-card ready"><p class="metric-label">Engine status</p><p class="metric-value">Implemented &amp; tested</p><p class="metric-detail">47 unit tests over synthetic fixtures; no NBA data.</p></article>
       </section>
 
       <section class="section" aria-labelledby="important-title">
@@ -71,6 +74,23 @@
         </div>
       </section>
 
+      <section class="section" aria-labelledby="built-title">
+        <div class="section-heading"><div><h2 id="built-title">What is built, and what still blocks it</h2><p>The machinery is implemented and unit-tested. Every value that needs licensed data is still blank.</p></div><a class="section-link" href="automation.html">See the daily pipeline →</a></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Capability</th><th scope="col">State</th><th scope="col">What it still needs</th><th scope="col">Reference</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Model-originated lines and fair prices</strong></td><td><span class="flag flag-green">Implemented &amp; tested</span><br>Lines come from a predictive distribution, never from a market quote.</td><td>Authorised history to estimate the distributions, and a written market specification for rounding and settlement.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms</a></td></tr>
+              <tr><td><strong>De-vigging and edge against a benchmark</strong></td><td><span class="flag flag-green">Implemented &amp; tested</span><br>Proportional, additive and Shin methods; the method must be declared.</td><td>A licensed price feed with quote timestamps, plus the market's payout and void rules.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/lineorigination.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://kansspelautoriteit.nl/remote-gambling-act-force" target="_blank" rel="noopener noreferrer">Ksa context</a></td></tr>
+              <tr><td><strong>Parlay and prop-combo joint probabilities</strong></td><td><span class="flag flag-green">Implemented &amp; tested</span><br>Joint probability via a Gaussian copula, with the independence shortcut shown beside it.</td><td>Licensed paired outcomes to estimate the correlation matrix and validate the joint probability.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/parlay.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST correlation</a></td></tr>
+              <tr><td><strong>Three-day slate pipeline, no manual input</strong></td><td><span class="flag flag-green">Implemented &amp; tested</span><br>72-hour horizon, freshness and rights gates, append-only ledger, reason codes.</td><td>Feed adapters for the licensed provider, a scheduled trigger and a decision on where the job runs.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury policy</a></td></tr>
+              <tr><td><strong>Gate-aware leaderboard</strong></td><td><span class="flag flag-green">Implemented &amp; tested</span><br>Only gate-passing, version-locked candidates are ranked; a missing gate counts as failed.</td><td>Weights, minimum sample size, risk policy and reward terms — and the validated candidates themselves.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/leaderboard.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://kansspelautoriteit.nl/belangrijkste-regels-voor-kansspelreclame" target="_blank" rel="noopener noreferrer">Ksa advertising rules</a></td></tr>
+              <tr><td><strong>Published lines, picks and rewards</strong></td><td><span class="flag flag-red">Blocked</span><br>No data rights, no market contract, no validated model, no legal classification.</td><td>Written permission or a licensed contract, a market specification, a successful holdout and jurisdiction-specific review.</td><td><a class="source-link" href="https://www.nba.com/stats/help/faq" target="_blank" rel="noopener noreferrer">NBA Stats FAQ</a><br><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <section class="section two-column" aria-label="Research recommendations and project files">
         <article class="panel">
           <h2>Recommended path</h2>
@@ -79,8 +99,14 @@
             <li>Select an authorized provider for historical stats, point-in-time injuries, prices and settlement data.</li>
             <li>Pre-register baselines, market definitions, validation thresholds and a chronological holdout.</li>
             <li>Measure joint probabilities and correlations from licensed, paired outcomes; issue no pick while a gate fails.</li>
+            <li>Connect the licensed feed to the existing adapters, run the pipeline in shadow mode, and review the 23 site suggestions before changing the dashboard.</li>
           </ol>
           <p>These are proposed controls, not evidence that a particular betting strategy works.</p>
+        </article>
+        <article class="panel">
+          <h2>Suggestions &amp; decisions</h2>
+          <p>Twelve proposed improvements and four gating decisions are collected on a dedicated review page, each with options, trade-offs and a source, so a path can be chosen before anything is built.</p>
+          <div><a class="button button-secondary" href="suggestions.html">Review suggestions</a></div>
         </article>
         <article class="panel">
           <h2>Research files</h2>
@@ -90,10 +116,13 @@
             <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/strategy-framework.md">Strategy framework</a>
             <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/validation-plan.md">Validation gates</a>
             <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/decision-register.md">Decision register</a>
-            <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/engine.md">Engine guide</a>
-            <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/verification-log.md">Verification log</a>
-            <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/leaderboard.md">Leaderboard design</a>
+            <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/line-origination.md">Line origination</a>
+            <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/automation.md">Automation runbook</a>
+            <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/correlation-and-leaderboard.md">Correlation &amp; leaderboard</a>
+            <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/source-verification.md">Source verification log</a>
+            <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/verification-log.md">Independent verification log</a>
             <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/suggestions.md">Suggestions register</a>
+            <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/tree/main/engine">Reference engine</a>
           </div>
         </article>
       </section>

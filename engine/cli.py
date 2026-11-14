@@ -23,7 +23,7 @@ from datetime import datetime, timezone
 from . import ENGINE_VERSION, MODEL_VERSION
 from .ledger import integrity_report, load_ledger
 from .picks import generate_slate_picks
-from .validation import run_gates
+from .gates import run_gates
 
 
 def cmd_status(args: argparse.Namespace) -> int:

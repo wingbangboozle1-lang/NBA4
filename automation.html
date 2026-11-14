@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The automated three-day slate pipeline: horizon rules, freshness and rights gates, reason codes, and the daily runbook that needs no manual input.">
+  <title>NBA4 — Automation</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Site navigation">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N4</span><span class="brand-copy">NBA4<small>RESEARCH DASHBOARD</small></span></a>
+    <p class="nav-label">Workspace</p>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <ul>
+      <li><a href="index.html"><span class="nav-icon" aria-hidden="true">◆</span>Overview</a></li>
+      <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
+      <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
+      <li><a href="line-origination.html"><span class="nav-icon" aria-hidden="true">≡</span>Line origination</a></li>
+      <li><a href="automation.html" aria-current="page"><span class="nav-icon" aria-hidden="true">⟳</span>Automation</a></li>
+      <li><a href="strategies.html"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
+      <li><a href="leaderboard.html"><span class="nav-icon" aria-hidden="true">▤</span>Leaderboard</a></li>
+      <li><a href="questions.html"><span class="nav-icon" aria-hidden="true">?</span>Decision questions</a></li>
+      <li><a href="suggestions.html"><span class="nav-icon" aria-hidden="true">✦</span>Suggestions</a></li>
+      <li><a href="sources.html"><span class="nav-icon" aria-hidden="true">↗</span>Sources</a></li>
+      <li><a href="review.html"><span class="nav-icon" aria-hidden="true">⚑</span>Flagged for review</a></li>
+      </ul>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-note"><strong>No scheduled job yet</strong><p>The pipeline runs on demand. The trigger and the host are still undecided.</p></div>
+    <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
+  </aside>
+  <div class="content-shell">
+    <header class="topbar"><div><p class="topbar-title">Automation desk</p><p class="topbar-meta">Three-day horizon · no manual input · 14 Nov 2026 UTC</p></div><span class="status-pill">NO SLATE EMITTED</span></header>
+    <main id="main" class="main-content">
+      <header class="page-header"><p class="eyebrow">Daily cycle, run without a human</p><h1>Automation &amp; the three-day slate</h1><p>The requested behaviour is a system that produces picks for every upcoming slate up to three days ahead, using this project's own originated lines, with no manual step. That machinery is implemented and unit-tested. It has never run on NBA data, because the rights gate refuses input that is not cleared — and that gate is the correct behaviour.</p></header>
+
+      <div class="notice notice-info"><span class="notice-icon" aria-hidden="true">i</span><div><strong>What "no manual input" means here.</strong><p>Every step — ingest, rights check, freshness check, horizon filter, forecast, pick decision, ledger append — is executed by the pipeline. The only remaining human decisions are policy ones taken once, in advance: the data contract, the market specification, the validation thresholds and the stake policy.</p></div></div>
+
+      <section class="section" aria-labelledby="cycle-title">
+        <div class="section-heading"><div><h2 id="cycle-title">The daily cycle</h2><p>Each step fails closed: a problem suppresses output instead of producing a stale forecast.</p></div><a class="section-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/automation.md">Full runbook →</a></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Step</th><th scope="col">What happens</th><th scope="col">Automatic?</th><th scope="col">Failure behaviour</th><th scope="col">Implementation / source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1 · Ingest</strong></td><td>Adapters write schedule, injury, results and quote records, each with provenance, timestamps and a permission flag.</td><td>Yes</td><td>A record without provenance or a timestamp aborts the run.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/contracts.py" target="_blank" rel="noopener noreferrer">engine/contracts.py</a></td></tr>
+              <tr><td><strong>2 · Rights check</strong></td><td>Every record is tested against its <code>allowed_use</code> flag.</td><td>Yes</td><td>Run suppressed with <code>RIGHTS_NOT_CLEARED</code>: no forecast, no pick.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine/pipeline.py</a><br><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms</a></td></tr>
+              <tr><td><strong>3 · Freshness check</strong></td><td>Records older than the declared tolerance (90 minutes by default) are rejected.</td><td>Yes</td><td>Run suppressed with <code>STALE_DATA</code>.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine/pipeline.py</a><br><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury policy</a></td></tr>
+              <tr><td><strong>4 · Slate selection</strong></td><td>Events whose tip-off falls inside the rolling horizon are selected; the horizon is hard-capped at 72 hours.</td><td>Yes</td><td>Events outside the horizon are never forecast; a started game is never re-forecast.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine/pipeline.py</a></td></tr>
+              <tr><td><strong>5 · Forecasting</strong></td><td>Each enabled strategy emits immutable forecasts bound to an input snapshot hash.</td><td>Yes</td><td>A failing strategy is recorded as suppressed.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/contracts.py" target="_blank" rel="noopener noreferrer">engine/contracts.py</a></td></tr>
+              <tr><td><strong>6 · Pick decision</strong></td><td>Every forecast becomes a <code>bet</code> or a <code>no_bet</code> with reason codes.</td><td>Yes</td><td>A missing market specification or benchmark quote forces <code>no_bet</code>.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine/pipeline.py</a></td></tr>
+              <tr><td><strong>7 · Ledger</strong></td><td>The run report is appended to an append-only JSON Lines ledger with a SHA-256 digest.</td><td>Yes</td><td>A write failure stops the run rather than publishing partial output.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine/pipeline.py</a></td></tr>
+              <tr><td><strong>8 · Publication</strong></td><td>A separate, explicit step copies approved records into the site's data file.</td><td>Yes, but gated</td><td>Publication requires the rights and validation gates; the site never shows an unverified value.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/check_site.py" target="_blank" rel="noopener noreferrer">scripts/check_site.py</a><br><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages" target="_blank" rel="noopener noreferrer">Pages is static hosting</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="horizon-title">
+        <div class="section-heading"><div><h2 id="horizon-title">The three-day horizon, made precise</h2><p>Horizon parameters are declared, bounded and testable.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Parameter</th><th scope="col">Value in the code</th><th scope="col">Why</th><th scope="col">Status</th><th scope="col">Source / reference</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Maximum horizon</strong></td><td>72 hours (<code>HORIZON_HOURS</code>); a longer value raises an error.</td><td>The project request caps the forecast horizon at three days.</td><td><span class="flag flag-green">Enforced &amp; tested</span></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/decision-register.md" target="_blank" rel="noopener noreferrer">decision register</a></td></tr>
+              <tr><td><strong>Timezone</strong></td><td>Declared per run (default UTC); the value itself is still undecided.</td><td>League reporting deadlines are stated in local time and ET, so one declared zone is needed.</td><td><span class="flag">Parameterised, not chosen</span></td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury-report policy</a></td></tr>
+              <tr><td><strong>Horizon boundary</strong></td><td>Inclusive window <code>[now, now + horizon]</code>.</td><td>Keeps the rule simple and auditable; a started game is out of scope.</td><td><span class="flag flag-green">Enforced &amp; tested</span></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine source</a></td></tr>
+              <tr><td><strong>Stale tolerance</strong></td><td>90 minutes by default, configurable per run.</td><td>Reports are updated continually through the day, so a snapshot must be recent to be usable.</td><td><span class="flag">Parameterised</span></td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury-report policy</a></td></tr>
+              <tr><td><strong>Run trigger</strong></td><td>Manual command today; a scheduled job is not configured.</td><td>Automatic operation needs a host and a scheduler that the product decision has not chosen yet.</td><td><span class="flag flag-red">Open</span></td><td><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits" target="_blank" rel="noopener noreferrer">Pages limits</a><br><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/decision-register.md" target="_blank" rel="noopener noreferrer">decision register</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="reason-title">
+        <div class="section-heading"><div><h2 id="reason-title">Reason codes a run can emit</h2><p>Every suppression is explained rather than silently blank.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Code</th><th scope="col">Meaning</th><th scope="col">What the operator sees</th><th scope="col">Implementation / source</th></tr></thead>
+            <tbody>
+              <tr><td><strong><code>RIGHTS_NOT_CLEARED</code></strong></td><td>A record is not cleared for the intended use.</td><td>Run suppressed; no forecasts and no picks.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms</a></td></tr>
+              <tr><td><strong><code>STALE_DATA</code></strong></td><td>An input is older than the freshness tolerance.</td><td>Run suppressed; no forecasts and no picks.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine source</a></td></tr>
+              <tr><td><strong><code>NO_MARKET_SPEC</code></strong></td><td>The market and settlement rule are not written down.</td><td>That forecast becomes <code>no_bet</code>.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine source</a></td></tr>
+              <tr><td><strong><code>NO_BENCHMARK_QUOTE</code></strong></td><td>No licensed quote exists for that market.</td><td>That forecast becomes <code>no_bet</code>.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine source</a></td></tr>
+              <tr><td><strong><code>UNRESOLVED_INJURY</code></strong></td><td>Availability of a relevant player is unresolved.</td><td>That forecast becomes <code>no_bet</code>.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury policy</a></td></tr>
+              <tr><td><strong><code>GATE_FAILED</code></strong></td><td>A promotion gate did not pass.</td><td>That forecast becomes <code>no_bet</code>.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py" target="_blank" rel="noopener noreferrer">engine source</a><br><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">validation method</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section two-column" aria-label="How to run and what is verified">
+        <article class="panel"><h2>Run it now</h2>
+<pre class="code-block"><code>python3 scripts/run_pipeline.py \
+    --inputs data/inbox-example \
+    --out data/out-example \
+    --now 2026-11-14T12:00:00Z \
+    --run-id example-run
+
+python3 -m unittest discover -s tests -t .</code></pre>
+<p>The example inputs are synthetic and deliberately carry <code>allowed_use: false</code>, so the run is suppressed by the rights gate and writes no pick. That is the intended demonstration.</p>
+</article>
+        <article class="panel"><h2>Verified today</h2><ul><li>47 engine unit tests pass over synthetic fixtures.</li><li>The example run selects 2 events inside the horizon and then suppresses the run with <code>RIGHTS_NOT_CLEARED</code>.</li><li>The horizon constructor rejects a horizon longer than 72 hours.</li><li>Stale inputs and uncleared inputs both produce zero forecasts and zero picks.</li><li>A pick records its edge against a licensed quote; without a market specification it becomes <code>no_bet</code>.</li><li>A forecast below the declared minimum sample becomes <code>no_bet</code> (<code>BELOW_MINIMUM_SAMPLE</code>), and the ledger is append-only across runs.</li></ul><p><a href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_engine.py" target="_blank" rel="noopener noreferrer">Read the test source ↗</a></p></article>
+      </section>
+      <footer class="footer"><p>No slate has been emitted from NBA data.</p><p><a href="review.html">See the blocking issues →</a></p></footer>
+    </main>
+  </div>
+</div>
+</body>
+</html>
