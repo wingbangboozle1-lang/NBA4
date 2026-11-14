@@ -23,6 +23,9 @@ PAGES = (
     "sources.html",
     "review.html",
 )
+# The unified sidebar: every page must carry exactly these 11 links in this
+# order, with no duplicates and with aria-current pointing at its own page.
+CANONICAL_NAV = tuple(PAGES)
 OFFICIAL_HOSTS = (
     "nba.com",
     "github.com",
@@ -52,6 +55,9 @@ class PageAudit(HTMLParser):
         self.in_h1 = False
         self.title_text: list[str] = []
         self.h1_text: list[str] = []
+        self.nav_links: list[str] = []
+        self.nav_current: list[str] = []
+        self._in_primary_nav = False
         self.table_rows = 0
         self.bad_rows: list[int] = []
         self._row_number = 0
@@ -64,7 +70,9 @@ class PageAudit(HTMLParser):
         attrs_dict = dict(attrs)
         if attrs_dict.get("id"):
             self.ids.add(attrs_dict["id"] or "")
-        if tag == "title":
+        if tag == "nav" and attrs_dict.get("class") == "primary-nav":
+            self._in_primary_nav = True
+        elif tag == "title":
             self.in_title = True
         elif tag == "h1":
             self.in_h1 = True
@@ -81,13 +89,19 @@ class PageAudit(HTMLParser):
         elif tag == "a":
             href = attrs_dict.get("href") or ""
             self.links.append(href)
+            if self._in_primary_nav:
+                self.nav_links.append(href)
+                if attrs_dict.get("aria-current") == "page":
+                    self.nav_current.append(href)
             if self._in_td and is_official_https(href):
                 self._cell_official = True
         elif tag == "link":
             self.links.append(attrs_dict.get("href") or "")
 
     def handle_endtag(self, tag: str) -> None:
-        if tag == "title":
+        if tag == "nav" and self._in_primary_nav:
+            self._in_primary_nav = False
+        elif tag == "title":
             self.in_title = False
         elif tag == "h1":
             self.in_h1 = False
@@ -133,6 +147,18 @@ def audit_page(name: str) -> tuple[list[str], int]:
         errors.append(f"{name}: expected exactly one non-empty <h1>, found {parser.h1_count}")
     if parser.bad_rows:
         errors.append(f"{name}: table data row(s) missing an official HTTPS source in the final cell: {parser.bad_rows}")
+    if tuple(parser.nav_links) != CANONICAL_NAV:
+        duplicates = sorted({href for href in parser.nav_links if parser.nav_links.count(href) > 1})
+        if duplicates:
+            errors.append(f"{name}: duplicate sidebar link(s): {duplicates}")
+        errors.append(
+            f"{name}: sidebar navigation must be the canonical {len(CANONICAL_NAV)}-item list in order; "
+            f"found {parser.nav_links!r}"
+        )
+    if parser.nav_current != [name]:
+        errors.append(
+            f"{name}: expected exactly one sidebar aria-current=\"page\" on its own link, found {parser.nav_current!r}"
+        )
 
     for href in parser.links:
         parsed_href = urlsplit(href)
@@ -262,9 +288,11 @@ def main() -> int:
     if "--with-tests" in sys.argv[1:]:
         test_errors = run_engine_tests()
         if test_errors:
-            all_errors.extend(test_errors)
-        else:
-            print("OK engine unit tests")
+            print("\nSite check failed:")
+            for error in test_errors:
+                print(f"- {error}")
+            return 1
+        print("OK engine unit tests")
 
     print(f"\nPASS: {len(PAGES)} pages, {html_rows} HTML data rows and {markdown_rows} Markdown data rows passed.")
     print("External source URLs are checked for HTTPS and official hostnames; this script does not fetch the web.")
