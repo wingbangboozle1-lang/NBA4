@@ -56,11 +56,7 @@ Both commands are safe to run on any machine with Python 3.11+. The engine has n
 
 | Verification | Result | Where | Source link |
 | --- | --- | --- | --- |
-<<<<<<< HEAD
 | Engine test suites | 90 tests pass (47 in `test_engine.py` + 43 in `test_engine_models.py`) | [`tests/test_engine.py`](../tests/test_engine.py) | [test source](https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_engine.py) and [`test_engine_models.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_engine_models.py) |
-=======
-| Engine test suite | 90 tests pass (47 in [`tests/test_engine.py`](../tests/test_engine.py) + 43 in [`tests/test_engine_models.py`](../tests/test_engine_models.py)) | `python3 -m unittest discover -s tests -t .` | [suite 1](https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_engine.py) · [suite 2](https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_engine_models.py) |
->>>>>>> c1cc336 (Correct stale 47-test claims to 90 (47+43) on unclaimed surfaces; link both suites)
 | Example run | 2 synthetic events inside the horizon, 0 forecasts, 0 picks, run suppressed by `RIGHTS_NOT_CLEARED` | [`data/inbox-example`](../data/inbox-example/README.md) | [example folder](https://github.com/wingbangboozle1-lang/NBA4/tree/main/data/inbox-example) |
 
 ## What still has to be decided before this runs on real data
