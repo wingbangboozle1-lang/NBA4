@@ -14,31 +14,208 @@
   },
   "extraction_notes": [
     "The PDF text carries the column header \"LOCAL | ET\" (read 2026-11-14 from the first chunk of the PDF text). The first time column (tip_et_col1) is the local tip time at the home venue and the second (tip_et_col2) is Eastern time. Checked for all 22 window rows: the Eastern value equals the home venue's local time converted to ET in 22 of 22 rows, and the away team's time zone fits only 7 of 22. This is a consistency check against venue time zones, not a statement taken from the document; both values stay verbatim.",
-    "Out-of-window follow-on rows 253-257 (11/17) were read but are excluded because they tip off after 2026-11-18T00:30:00Z. The PDF prints no 'at' token on these rows, so no away/home order is asserted; the printed order and ET tip times are: New York / Toronto 7:30 PM; Portland / Minnesota 8:00 PM; Detroit / San Antonio 8:00 PM; Charlotte / LA Lakers 10:00 PM; Utah / LA Clippers 11:00 PM.",
+    "Out-of-window follow-on rows 253-257 (11/17) were read but are excluded because they tip off at or after 2026-11-18T00:30:00Z, past the window end of 2026-11-17T09:40:00Z (row 253, New York / Toronto at 7:30 PM ET on 11/17, is exactly 2026-11-18T00:30:00Z, so the earlier wording \"after\" was imprecise; corrected 2026-11-14 by session `arena/c4d167da-nba4`, flag AJ-02). The PDF prints no 'at' token on these rows, so no away/home order is asserted; the printed order and ET tip times are: New York / Toronto 7:30 PM; Portland / Minnesota 8:00 PM; Detroit / San Antonio 8:00 PM; Charlotte / LA Lakers 10:00 PM; Utah / LA Clippers 11:00 PM.",
     "No venue, broadcast-independent status, odds, probability or pick is present in this file or taken from the PDF."
   ],
   "games": [
-    {"row": 231, "date": "2026-11-14", "weekday": "Sat.", "away": "Denver", "home": "New Orleans", "tip_et_col1": "6:00 PM", "tip_et_col2": "7:00 PM"},
-    {"row": 232, "date": "2026-11-14", "weekday": "Sat.", "away": "Dallas", "home": "Cleveland", "tip_et_col1": "7:30 PM", "tip_et_col2": "7:30 PM"},
-    {"row": 233, "date": "2026-11-14", "weekday": "Sat.", "away": "Detroit", "home": "Miami", "tip_et_col1": "8:00 PM", "tip_et_col2": "8:00 PM"},
-    {"row": 234, "date": "2026-11-14", "weekday": "Sat.", "away": "Brooklyn", "home": "Memphis", "tip_et_col1": "7:00 PM", "tip_et_col2": "8:00 PM"},
-    {"row": 235, "date": "2026-11-14", "weekday": "Sat.", "away": "Chicago", "home": "Minnesota", "tip_et_col1": "7:00 PM", "tip_et_col2": "8:00 PM"},
-    {"row": 236, "date": "2026-11-15", "weekday": "Sun.", "away": "Indiana", "home": "Philadelphia", "tip_et_col1": "1:00 PM", "tip_et_col2": "1:00 PM"},
-    {"row": 237, "date": "2026-11-15", "weekday": "Sun.", "away": "LA Lakers", "home": "Phoenix", "tip_et_col1": "2:00 PM", "tip_et_col2": "4:00 PM"},
-    {"row": 238, "date": "2026-11-15", "weekday": "Sun.", "away": "Charlotte", "home": "LA Clippers", "tip_et_col1": "1:30 PM", "tip_et_col2": "4:30 PM"},
-    {"row": 239, "date": "2026-11-15", "weekday": "Sun.", "away": "San Antonio", "home": "Utah", "tip_et_col1": "3:00 PM", "tip_et_col2": "5:00 PM"},
-    {"row": 240, "date": "2026-11-15", "weekday": "Sun.", "away": "Dallas", "home": "Boston", "tip_et_col1": "6:00 PM", "tip_et_col2": "6:00 PM"},
-    {"row": 241, "date": "2026-11-15", "weekday": "Sun.", "away": "New York", "home": "Toronto", "tip_et_col1": "6:00 PM", "tip_et_col2": "6:00 PM"},
-    {"row": 242, "date": "2026-11-15", "weekday": "Sun.", "away": "Houston", "home": "Washington", "tip_et_col1": "7:00 PM", "tip_et_col2": "7:00 PM"},
-    {"row": 243, "date": "2026-11-15", "weekday": "Sun.", "away": "Atlanta", "home": "Milwaukee", "tip_et_col1": "7:00 PM", "tip_et_col2": "8:00 PM"},
-    {"row": 244, "date": "2026-11-15", "weekday": "Sun.", "away": "Oklahoma City", "home": "Sacramento", "tip_et_col1": "6:00 PM", "tip_et_col2": "9:00 PM"},
-    {"row": 245, "date": "2026-11-16", "weekday": "Mon.", "away": "Orlando", "home": "Boston", "tip_et_col1": "7:00 PM", "tip_et_col2": "7:00 PM", "note": "PDF broadcast column reads PCK/NBCSN"},
-    {"row": 246, "date": "2026-11-16", "weekday": "Mon.", "away": "Chicago", "home": "Cleveland", "tip_et_col1": "7:00 PM", "tip_et_col2": "7:00 PM"},
-    {"row": 247, "date": "2026-11-16", "weekday": "Mon.", "away": "Memphis", "home": "Washington", "tip_et_col1": "7:00 PM", "tip_et_col2": "7:00 PM"},
-    {"row": 248, "date": "2026-11-16", "weekday": "Mon.", "away": "Philadelphia", "home": "Brooklyn", "tip_et_col1": "7:30 PM", "tip_et_col2": "7:30 PM"},
-    {"row": 249, "date": "2026-11-16", "weekday": "Mon.", "away": "Houston", "home": "Miami", "tip_et_col1": "7:30 PM", "tip_et_col2": "7:30 PM"},
-    {"row": 250, "date": "2026-11-16", "weekday": "Mon.", "away": "Portland", "home": "Minnesota", "tip_et_col1": "7:00 PM", "tip_et_col2": "8:00 PM"},
-    {"row": 251, "date": "2026-11-16", "weekday": "Mon.", "away": "Golden State", "home": "New Orleans", "tip_et_col1": "7:00 PM", "tip_et_col2": "8:00 PM"},
-    {"row": 252, "date": "2026-11-16", "weekday": "Mon.", "away": "Phoenix", "home": "Denver", "tip_et_col1": "7:00 PM", "tip_et_col2": "9:00 PM"}
+    {
+      "row": 231,
+      "date": "2026-11-14",
+      "weekday": "Sat.",
+      "away": "Denver",
+      "home": "New Orleans",
+      "tip_et_col1": "6:00 PM",
+      "tip_et_col2": "7:00 PM"
+    },
+    {
+      "row": 232,
+      "date": "2026-11-14",
+      "weekday": "Sat.",
+      "away": "Dallas",
+      "home": "Cleveland",
+      "tip_et_col1": "7:30 PM",
+      "tip_et_col2": "7:30 PM"
+    },
+    {
+      "row": 233,
+      "date": "2026-11-14",
+      "weekday": "Sat.",
+      "away": "Detroit",
+      "home": "Miami",
+      "tip_et_col1": "8:00 PM",
+      "tip_et_col2": "8:00 PM"
+    },
+    {
+      "row": 234,
+      "date": "2026-11-14",
+      "weekday": "Sat.",
+      "away": "Brooklyn",
+      "home": "Memphis",
+      "tip_et_col1": "7:00 PM",
+      "tip_et_col2": "8:00 PM"
+    },
+    {
+      "row": 235,
+      "date": "2026-11-14",
+      "weekday": "Sat.",
+      "away": "Chicago",
+      "home": "Minnesota",
+      "tip_et_col1": "7:00 PM",
+      "tip_et_col2": "8:00 PM"
+    },
+    {
+      "row": 236,
+      "date": "2026-11-15",
+      "weekday": "Sun.",
+      "away": "Indiana",
+      "home": "Philadelphia",
+      "tip_et_col1": "1:00 PM",
+      "tip_et_col2": "1:00 PM"
+    },
+    {
+      "row": 237,
+      "date": "2026-11-15",
+      "weekday": "Sun.",
+      "away": "LA Lakers",
+      "home": "Phoenix",
+      "tip_et_col1": "2:00 PM",
+      "tip_et_col2": "4:00 PM"
+    },
+    {
+      "row": 238,
+      "date": "2026-11-15",
+      "weekday": "Sun.",
+      "away": "Charlotte",
+      "home": "LA Clippers",
+      "tip_et_col1": "1:30 PM",
+      "tip_et_col2": "4:30 PM"
+    },
+    {
+      "row": 239,
+      "date": "2026-11-15",
+      "weekday": "Sun.",
+      "away": "San Antonio",
+      "home": "Utah",
+      "tip_et_col1": "3:00 PM",
+      "tip_et_col2": "5:00 PM"
+    },
+    {
+      "row": 240,
+      "date": "2026-11-15",
+      "weekday": "Sun.",
+      "away": "Dallas",
+      "home": "Boston",
+      "tip_et_col1": "6:00 PM",
+      "tip_et_col2": "6:00 PM"
+    },
+    {
+      "row": 241,
+      "date": "2026-11-15",
+      "weekday": "Sun.",
+      "away": "New York",
+      "home": "Toronto",
+      "tip_et_col1": "6:00 PM",
+      "tip_et_col2": "6:00 PM"
+    },
+    {
+      "row": 242,
+      "date": "2026-11-15",
+      "weekday": "Sun.",
+      "away": "Houston",
+      "home": "Washington",
+      "tip_et_col1": "7:00 PM",
+      "tip_et_col2": "7:00 PM"
+    },
+    {
+      "row": 243,
+      "date": "2026-11-15",
+      "weekday": "Sun.",
+      "away": "Atlanta",
+      "home": "Milwaukee",
+      "tip_et_col1": "7:00 PM",
+      "tip_et_col2": "8:00 PM"
+    },
+    {
+      "row": 244,
+      "date": "2026-11-15",
+      "weekday": "Sun.",
+      "away": "Oklahoma City",
+      "home": "Sacramento",
+      "tip_et_col1": "6:00 PM",
+      "tip_et_col2": "9:00 PM"
+    },
+    {
+      "row": 245,
+      "date": "2026-11-16",
+      "weekday": "Mon.",
+      "away": "Orlando",
+      "home": "Boston",
+      "tip_et_col1": "7:00 PM",
+      "tip_et_col2": "7:00 PM",
+      "note": "PDF broadcast column reads PCK/NBCSN"
+    },
+    {
+      "row": 246,
+      "date": "2026-11-16",
+      "weekday": "Mon.",
+      "away": "Chicago",
+      "home": "Cleveland",
+      "tip_et_col1": "7:00 PM",
+      "tip_et_col2": "7:00 PM"
+    },
+    {
+      "row": 247,
+      "date": "2026-11-16",
+      "weekday": "Mon.",
+      "away": "Memphis",
+      "home": "Washington",
+      "tip_et_col1": "7:00 PM",
+      "tip_et_col2": "7:00 PM"
+    },
+    {
+      "row": 248,
+      "date": "2026-11-16",
+      "weekday": "Mon.",
+      "away": "Philadelphia",
+      "home": "Brooklyn",
+      "tip_et_col1": "7:30 PM",
+      "tip_et_col2": "7:30 PM"
+    },
+    {
+      "row": 249,
+      "date": "2026-11-16",
+      "weekday": "Mon.",
+      "away": "Houston",
+      "home": "Miami",
+      "tip_et_col1": "7:30 PM",
+      "tip_et_col2": "7:30 PM"
+    },
+    {
+      "row": 250,
+      "date": "2026-11-16",
+      "weekday": "Mon.",
+      "away": "Portland",
+      "home": "Minnesota",
+      "tip_et_col1": "7:00 PM",
+      "tip_et_col2": "8:00 PM"
+    },
+    {
+      "row": 251,
+      "date": "2026-11-16",
+      "weekday": "Mon.",
+      "away": "Golden State",
+      "home": "New Orleans",
+      "tip_et_col1": "7:00 PM",
+      "tip_et_col2": "8:00 PM"
+    },
+    {
+      "row": 252,
+      "date": "2026-11-16",
+      "weekday": "Mon.",
+      "away": "Phoenix",
+      "home": "Denver",
+      "tip_et_col1": "7:00 PM",
+      "tip_et_col2": "9:00 PM"
+    }
   ]
 }
