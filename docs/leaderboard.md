@@ -17,8 +17,10 @@ Strategy candidates (S1–S6 families from [`docs/strategy-framework.md`](strate
 | Net value (G6) | Net result computed only from licensed, timestamped quotes under exact settlement rules | [NBA.com Terms §9](https://www.nba.com/termsofuse#nba-statistics) |
 | Uncertainty / luck control (G7) | Game-cluster bootstrap interval on the primary metric; the interval's favourable bound must exclude zero; multiple-trials adjustment applied | [NIST bootstrap](https://www.itl.nist.gov/div898/handbook/eda/section3/bootplot.htm) |
 | Combo dependence (G8) | Parlay/prop-combo entries must publish measured leg correlations (with sample counts) or declare and justify independence | [NIST correlation](https://www.itl.nist.gov/div898/handbook/glossary.htm) |
-| Minimum sample (G12) | Entry must reach the preregistered settled-sample minimum. Proposed placeholder: 30 settled forecasts; **final number must come from a power/precision analysis, not from this document** | [scikit-learn model evaluation](https://scikit-learn.org/stable/modules/model_evaluation.html) |
+| Minimum sample (G12) | Entry must reach a preregistered settled-sample minimum. Numeric value: **blank pending a power/precision analysis on development data**; never select it from the final holdout. | [scikit-learn model evaluation](https://scikit-learn.org/stable/modules/model_evaluation.html) · [NIST bootstrap guidance](https://www.itl.nist.gov/div898/handbook/eda/section3/bootplot.htm) |
 | Integrity | No edited forecast records; all timestamps present; data rights flags valid | [NBA Injury Report policy (point-in-time discipline)](https://official.nba.com/nba-injury-report-2026-27-season/) |
+
+**Implementation follow-up (flagged IR-07).** The current `engine.cli validate` output still reports a proposed fixed minimum-sample default from [`engine/gates.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/gates.py), even though this policy leaves the numeric value blank. No authorized development data or preregistered power/precision analysis supports that default. It is **not an approved threshold** and must not be used to promote a strategy. The requested follow-up is to remove the hard-coded value or require an explicit preregistered policy input; the model-side code is left unchanged in this integration audit.
 
 ## Scoring (proposed; blanks are deliberate)
 
