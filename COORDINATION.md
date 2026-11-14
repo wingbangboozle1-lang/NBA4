@@ -93,7 +93,20 @@ Updated: 2026-11-14 (UTC). The starting repository contained only `README.md` an
 | PR #3 (suggestions, verification and corrections) | [PR #3](https://github.com/wingbangboozle1-lang/NBA4/pull/3) created from `arena/ddc81141-nba4` to `main` after rebasing onto the PR #2 merge. **Merged** as `2a7b565` at 2026-11-14T01:07:03Z. |
 | GitHub Pages | `status: built`; published from `main` at `/`; HTTPS enforced; public. |
 | Live URL | [https://wingbangboozle1-lang.github.io/NBA4/](https://wingbangboozle1-lang.github.io/NBA4/) |
+| PR #7 (build recovery) | [PR #7](https://github.com/wingbangboozle1-lang/NBA4/pull/7) merged as `473f178`; Pages rebuilt successfully (22.4s, `status: built`). |
 | Post-merge check | Site re-fetched after merge; all seven pages served with intact tables and source links. After PR #3 the Pages build completed for commit `2a7b565` (`status: built` at 01:07:30Z) and `/suggestions.html` plus `/review.html` were fetched live with the new content, 8-page navigation and the VF-01 … VF-04 flags. |
+
+## Build incident and recovery (2026-11-14, session `arena/ddc81141-nba4`)
+
+**Symptom.** After PR #6 merged, the Pages API reported `status: errored`. Two consecutive builds failed: `3eccbb9` and `c52b26c`.
+
+**Diagnosis.** Both failing commits changed documentation only — 16 lines and 1 line of `COORDINATION.md` respectively. Both failures reported `duration: 0`, meaning the build never executed. The last successful build (`b5911a0`) ran 34.3s. The repository has no `.github/` workflows, no custom 404 page, no Jekyll plugins or dependencies, and is plain static HTML/CSS plus `.nojekyll`, so there was no content defect to find. The pattern — four merges in roughly ten minutes, then zero-duration rejections — matches the [Pages build-rate limit](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits) of 10 builds per hour for branch-published sites, which GitHub applies by declining to run the build.
+
+**Impact.** None to readers. The previously published deployment kept serving correctly; `/suggestions.html` and `/review.html` were fetched live during the incident and returned current content with the 8-page navigation and all source links intact.
+
+**Recovery.** The Pages rebuild endpoint returned `403 Resource not accessible by integration`, and a settings `PATCH` returned `404`, so neither was available. Recovery was an empty commit on a throwaway branch, merged as PR #7 (`473f178`). That build completed in 22.4s with `status: built`, which confirms the diagnosis: the same tree built without error once the service would run a build again.
+
+**Recorded for the next session.** Do not diagnose a zero-duration Pages failure as a content bug. Check the build count in the preceding hour first, then confirm against the Pages builds endpoint before changing any file.
 
 ## Handoff and integrity rules
 
