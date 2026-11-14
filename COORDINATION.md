@@ -91,6 +91,7 @@ Updated: 2026-11-14 (UTC). The starting repository contained only `README.md` an
 | --- | --- |
 | PR #2 (integration) | Created from `arena/eb3064e3-nba4` to `main`; merged. |
 | PR #3 (suggestions, verification and corrections) | [PR #3](https://github.com/wingbangboozle1-lang/NBA4/pull/3) created from `arena/ddc81141-nba4` to `main` after rebasing onto the PR #2 merge. **Merged** as `2a7b565` at 2026-11-14T01:07:03Z. |
+| PR #5 (independent re-verification) | [PR #5](https://github.com/wingbangboozle1-lang/NBA4/pull/5) created from `arena/7fcd5eef-nba4` to `main`. **Merged** as `3eccbb9` at 2026-11-14T01:08:38Z. Independent re-run of the static checker and re-fetch of all cited sources and the live site; no new irregularities (record in the "Independent re-verification" section above). |
 | GitHub Pages | `status: built`; published from `main` at `/`; HTTPS enforced; public. |
 | Live URL | [https://wingbangboozle1-lang.github.io/NBA4/](https://wingbangboozle1-lang.github.io/NBA4/) |
 | PR #7 (build recovery) | [PR #7](https://github.com/wingbangboozle1-lang/NBA4/pull/7) merged as `473f178`; Pages rebuilt successfully (22.4s, `status: built`). |
