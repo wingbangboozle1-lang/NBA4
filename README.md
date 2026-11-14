@@ -15,6 +15,7 @@ A material source/rights issue is documented: the NBA Stats FAQ says its statist
 - [Injuries, rotation and game flow](https://wingbangboozle1-lang.github.io/NBA4/injuries.html)
 - [Strategies and validation gates](https://wingbangboozle1-lang.github.io/NBA4/strategies.html)
 - [Decision questions and missing information](https://wingbangboozle1-lang.github.io/NBA4/questions.html)
+- [Suggestions and decision queue](https://wingbangboozle1-lang.github.io/NBA4/suggestions.html)
 - [Verified source register](https://wingbangboozle1-lang.github.io/NBA4/sources.html)
 - [Flagged for Review](https://wingbangboozle1-lang.github.io/NBA4/review.html)
 
@@ -26,6 +27,8 @@ A material source/rights issue is documented: the NBA Stats FAQ says its statist
 - [`docs/decision-register.md`](docs/decision-register.md) — executive summary, open questions and discovery suggestions.
 - [`docs/sources.md`](docs/sources.md) — official-source register and interpretation limits.
 - [`docs/site-spec.md`](docs/site-spec.md) — dashboard organization and integrity rules.
+- [`docs/verification-log.md`](docs/verification-log.md) — line-by-line re-verification of all 22 cited sources and the corrections made.
+- [`docs/suggestions.md`](docs/suggestions.md) — the suggestions register and the four gating decisions.
 - [`COORDINATION.md`](COORDINATION.md) — task board, verification notes and publication record.
 
 ## Local verification
