@@ -43,7 +43,7 @@
       <section class="hero" aria-labelledby="page-title">
         <p class="eyebrow">Executive summary · evidence first</p>
         <h1 id="page-title">Originate NBA lines responsibly.</h1>
-        <p class="hero-copy">This repository contains a source-checked research plan, validation gates, a missing-information register, a review dashboard — and a working reference engine that originates lines, measures correlations, runs a gate-aware leaderboard and executes a three-day slate pipeline. It has no licensed point-in-time dataset and no validated model, so every line, pick, correlation, injury-minute impact and performance field is left blank rather than guessed.</p>
+        <p class="hero-copy">This repository contains a source-checked research plan, validation gates, a missing-information register, a review dashboard — a working reference engine that originates lines, measures correlations, runs a gate-aware leaderboard and executes a three-day slate pipeline — and, for the current slate, <strong>the official observations published row by row with links to the source documents</strong>. It has no licensed point-in-time dataset and no validated model, so every line, pick, correlation, injury-minute impact and performance field is left blank rather than guessed.
         <div class="hero-actions">
           <a class="button" href="review.html">Review the blockers</a>
           <a class="button button-secondary" href="line-origination.html">See how lines are originated</a>
@@ -53,8 +53,9 @@
       <section class="metric-grid" aria-label="Current project status">
         <article class="metric-card blocked"><p class="metric-label">Validated strategies</p><p class="metric-value">None</p><p class="metric-detail">No training or holdout results exist.</p></article>
         <article class="metric-card blocked"><p class="metric-label">Published picks</p><p class="metric-value">None</p><p class="metric-detail">The rights gate refuses uncleared input by design.</p></article>
+        <article class="metric-card ready"><p class="metric-label">Official observations</p><p class="metric-value">22 games · 49 rows</p><p class="metric-detail">Schedule rows and one injury report, each linked to its document; fetched 14 Nov 2026.</p></article>
         <article class="metric-card"><p class="metric-label">Correlation values</p><p class="metric-value">Not measured</p><p class="metric-detail">Paired, licensed outcomes are missing.</p></article>
-        <article class="metric-card ready"><p class="metric-label">Engine status</p><p class="metric-value">Implemented &amp; tested</p><p class="metric-detail">90 unit tests (47 + 43) over synthetic fixtures; no NBA data.</p></article>
+        <article class="metric-card ready"><p class="metric-label">Engine status</p><p class="metric-value">Implemented &amp; tested</p><p class="metric-detail">101 unit tests over synthetic fixtures; no NBA-derived model values.</p></article>
       </section>
 
       <section class="section" aria-labelledby="important-title">
@@ -66,7 +67,7 @@
               <tr><td><strong>NBA data rights</strong></td><td>NBA Stats says statistics are for viewing, not downloading; NBA Terms restrict NBA Statistics used in gambling, including legal gambling.</td><td><span class="flag flag-red">Hard blocker</span><br>Do not scrape or use without written authorization.</td><td><a class="source-link" href="https://www.nba.com/stats/help/faq" target="_blank" rel="noopener noreferrer">NBA Stats FAQ</a><br><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms</a></td></tr>
               <tr><td><strong>Model evidence</strong></td><td>The starting repo has no historical outcomes, market prices, predictions or settlements.</td><td>No ROI, calibration, “skill” or correlation claim is supportable.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4" target="_blank" rel="noopener noreferrer">Repository state</a><br><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST method context</a></td></tr>
               <tr><td><strong>Injuries &amp; rotation</strong></td><td>NBA reports update continually and describe reported status/reason.</td><td>Minutes and production impact remain blank; status is not a minutes forecast.</td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA Official report</a></td></tr>
-              <tr><td><strong>Upcoming slate</strong></td><td>The official 2026–27 schedule PDF is labeled as of 13 Aug 2026 and subject to change.</td><td>No live slate copied or forecast; a licensed refresh feed and rights review are missing.</td><td><a class="source-link" href="https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf" target="_blank" rel="noopener noreferrer">NBA schedule PDF</a></td></tr>
+              <tr><td><strong>Upcoming slate</strong></td><td>The official 2026–27 schedule PDF is labeled as of 13 Aug 2026 and subject to change.</td><td>The 22 games that tip off inside the three-day window are published as dated schedule observations with row-level source links; none is forecast, priced or picked. A licensed refresh feed and the rights review are still missing.</td><td><a class="source-link" href="https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf" target="_blank" rel="noopener noreferrer">NBA schedule PDF</a></td></tr>
               <tr><td><strong>Live site / service</strong></td><td>GitHub Pages publishes static files and does not run server-side code; GitHub excludes commercial SaaS/online-business hosting.</td><td>This site is informational only. A commercial or live model requires a different hosting decision.</td><td><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site" target="_blank" rel="noopener noreferrer">Pages docs</a><br><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits" target="_blank" rel="noopener noreferrer">Pages limits</a></td></tr>
               <tr><td><strong>Jurisdiction &amp; rewards</strong></td><td>Ksa states a licence is required to offer online gambling in the Netherlands and provides separate advertising guidance.</td><td>Product classification, territories and rewards are not defined; legal review is required.</td><td><a class="source-link" href="https://kansspelautoriteit.nl/remote-gambling-act-force" target="_blank" rel="noopener noreferrer">Ksa licensing guidance</a><br><a class="source-link" href="https://kansspelautoriteit.nl/belangrijkste-regels-voor-kansspelreclame" target="_blank" rel="noopener noreferrer">Ksa advertising rules</a></td></tr>
             </tbody>
@@ -99,13 +100,13 @@
             <li>Select an authorized provider for historical stats, point-in-time injuries, prices and settlement data.</li>
             <li>Pre-register baselines, market definitions, validation thresholds and a chronological holdout.</li>
             <li>Measure joint probabilities and correlations from licensed, paired outcomes; issue no pick while a gate fails.</li>
-            <li>Connect the licensed feed to the existing adapters, run the pipeline in shadow mode, and review the 23 site suggestions before changing the dashboard.</li>
+            <li>Connect the licensed feed to the existing adapters, run the pipeline in shadow mode, and review the registered site suggestions (SG-14 … SG-25 are the newest) before changing the dashboard.</li>
           </ol>
           <p>These are proposed controls, not evidence that a particular betting strategy works.</p>
         </article>
         <article class="panel">
           <h2>Suggestions &amp; decisions</h2>
-          <p>Four gating decisions, twelve decision-queue proposals and twenty-three review-register proposals are collected on a dedicated review page, each with options, trade-offs, effort and a source, so a path can be chosen before anything is built.</p>
+          <p>Four gating decisions, twelve decision-queue proposals, twenty-three review-register proposals and a session register of twelve decision paths (SG-14 … SG-25) are collected on a dedicated review page, each with options, trade-offs, effort and a source, so a path can be chosen before anything is built.</p>
           <div><a class="button button-secondary" href="suggestions.html">Review suggestions</a></div>
         </article>
         <article class="panel">
@@ -122,6 +123,9 @@
             <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/source-verification.md">Source verification log</a>
             <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/verification-log.md">Independent verification log</a>
             <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/suggestions.md">Suggestions register</a>
+            <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/suggestions-634f12d9.md">Session decision paths</a>
+            <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/verification-pass-634f12d9.md">Verification pass log</a>
+            <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/tree/main/data/snapshots">Snapshot provenance</a>
             <a class="source-chip" href="https://github.com/wingbangboozle1-lang/NBA4/tree/main/engine">Reference engine</a>
           </div>
         </article>

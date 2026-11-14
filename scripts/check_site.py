@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import re
+import json
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
@@ -212,10 +213,17 @@ def audit_consistency() -> list[str]:
     tests = 0
     for path in (ROOT / "tests").glob("test_*.py"):
         tests += len(re.findall(r"^\s*def test_", path.read_text(encoding="utf-8"), re.M))
-    checks = (
-        ("README.md", rf"\b{tests} passing unit tests\b"),
-        ("index.html", rf"\b{tests} unit tests\b"),
-    )
+    # README may split the suite by file (e.g. "47 + 43") while the index states a
+    # single total; each stated number must add up to the real count.
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    stated = re.search(r"(\d+(?:\s*\+\s*\d+)*)\s+passing unit tests", readme)
+    if not stated:
+        errors.append("README.md does not state a passing unit-test count")
+    elif sum(int(part) for part in re.findall(r"\d+", stated.group(1))) != tests:
+        errors.append(
+            f"README.md states {stated.group(1)} passing unit tests but the suite has {tests}"
+        )
+    checks = (("index.html", rf"\b{tests} unit tests\b"),)
     for name, pattern in checks:
         if not re.search(pattern, (ROOT / name).read_text(encoding="utf-8")):
             errors.append(f"{name} does not state the current engine unit-test count ({tests})")
@@ -227,6 +235,41 @@ def audit_consistency() -> list[str]:
             repeated = sorted({href for href in hrefs if hrefs.count(href) > 1})
             if repeated:
                 errors.append(f"{name}: primary navigation repeats {repeated}")
+    return errors
+
+
+def audit_snapshots() -> list[str]:
+    """Published snapshot tables must be in sync and their data files must keep provenance."""
+    import importlib.util
+
+    errors: list[str] = []
+    spec = importlib.util.spec_from_file_location(
+        "build_snapshots", ROOT / "scripts" / "build_snapshots.py"
+    )
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    for block_id, (page_name, render) in module.BLOCKS.items():
+        try:
+            stale = module.splice(ROOT / page_name, block_id, render())
+        except SystemExit as exc:  # missing markers
+            errors.append(str(exc))
+            continue
+        if stale is not None:
+            errors.append(
+                f"{page_name}: snapshot table out of date; run python3 scripts/build_snapshots.py"
+            )
+    for path in sorted((ROOT / "data" / "snapshots").glob("*.json")):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            errors.append(f"{path.name}: invalid JSON ({exc})")
+            continue
+        for key in ("source_url", "source_document_header", "fetched_at_utc", "extraction_tool"):
+            if not payload.get(key):
+                errors.append(f"{path.name}: missing provenance field {key}")
+        if not str(payload.get("source_url", "")).startswith("https://"):
+            errors.append(f"{path.name}: source_url is not https")
     return errors
 
 
@@ -259,6 +302,7 @@ def run_engine_tests() -> list[str]:
 def main() -> int:
     all_errors: list[str] = []
     all_errors.extend(audit_page_inventory())
+    all_errors.extend(audit_snapshots())
     all_errors.extend(audit_consistency())
     html_rows = 0
     for name in PAGES:
