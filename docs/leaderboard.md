@@ -29,9 +29,9 @@ Strategy candidates (S1–S6 families from [`docs/strategy-framework.md`](strate
 | Uncertainty display | Game-cluster bootstrap interval shown beside every score |  | Proposed [NIST bootstrap](https://www.itl.nist.gov/div898/handbook/eda/section3/bootplot.htm) |
 | Trials adjustment | Bonferroni-style correction across all entries examined in a season |  | Proposed [NIST glossary](https://www.itl.nist.gov/div898/handbook/glossary.htm) |
 | Ranking rule | Only gate-passing entries are ranked; ties broken by the narrower uncertainty interval, then by earlier preregistration timestamp |  | Proposed [scikit-learn cross-validation](https://scikit-learn.org/stable/modules/cross_validation.html) |
-| Minimum sample |  |  | Blank — power analysis required (Q6) |
-| Confidence level |  |  | Blank — preregister before the holdout (Q6) |
-| Drawdown limit |  |  | Blank — risk policy required (Q11) |
+| Minimum sample |  |  | Blank — power analysis required (Q6) [scikit-learn model evaluation](https://scikit-learn.org/stable/modules/model_evaluation.html) |
+| Confidence level |  |  | Blank — preregister before the holdout (Q6) [NIST bootstrap](https://www.itl.nist.gov/div898/handbook/eda/section3/bootplot.htm) |
+| Drawdown limit |  |  | Blank — risk policy required (Q11) [Ksa safer-gambling guidance](https://kansspelautoriteit.nl/10-tips-gambling-safely) |
 
 ## Rewards (proposed tiers; nothing is offered today)
 

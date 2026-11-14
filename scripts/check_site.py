@@ -13,6 +13,8 @@ PAGES = (
     "slate.html",
     "injuries.html",
     "strategies.html",
+    "leaderboard.html",
+    "suggestions.html",
     "questions.html",
     "sources.html",
     "review.html",

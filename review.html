@@ -18,6 +18,8 @@
       <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
       <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
       <li><a href="strategies.html"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
+      <li><a href="leaderboard.html"><span class="nav-icon" aria-hidden="true">★</span>Leaderboard</a></li>
+      <li><a href="suggestions.html"><span class="nav-icon" aria-hidden="true">✎</span>Suggestions</a></li>
       <li><a href="questions.html"><span class="nav-icon" aria-hidden="true">?</span>Decision questions</a></li>
       <li><a href="sources.html"><span class="nav-icon" aria-hidden="true">↗</span>Sources</a></li>
       <li><a href="review.html" aria-current="page"><span class="nav-icon" aria-hidden="true">⚑</span>Flagged for review</a></li>
@@ -54,9 +56,25 @@
         </div>
       </section>
 
+      <section class="section" aria-labelledby="irreg-title">
+        <div class="section-heading"><div><h2 id="irreg-title">Verification irregularities (2026-11-14 re-verification)</h2><p>Found while independently re-checking every cited source line by line. None changes a blocking conclusion; all are for human review.</p></div><a class="section-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/verification-log.md">Full verification log →</a></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">ID</th><th scope="col">Irregularity</th><th scope="col">What it means</th><th scope="col">Disposition</th><th scope="col">Official source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>I-1</strong></td><td>Injury snapshots roll quickly — the audited 7:30 p.m. ET report was superseded by an 8:00 p.m. ET report minutes later.</td><td>Any future injury input must store report time + observed-at time and treat older snapshots as stale.</td><td><span class="flag flag-blue">Policy note</span><br>No status values are republished on this site.</td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury index</a><br><a class="source-link" href="https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-13_08_00PM.pdf" target="_blank" rel="noopener noreferrer">8:00 p.m. ET report</a></td></tr>
+              <tr><td><strong>I-2</strong></td><td>GitHub Pages build status is dynamic (API showed “building” right after the first merge).</td><td>Deployment success must be re-checked after every merge; configuration itself is verified.</td><td><span class="flag flag-blue">Process note</span><br>Recorded per merge in the coordination board.</td><td><a class="source-link" href="https://api.github.com/repos/wingbangboozle1-lang/NBA4/pages" target="_blank" rel="noopener noreferrer">Pages API</a></td></tr>
+              <tr><td><strong>I-3</strong></td><td>Two official Ksa URL variants for the advertising-rules page were cited; one redirects to the canonical page.</td><td>Both resolve to official Ksa content; citations normalized to the canonical URL.</td><td><span class="flag flag-green">Resolved</span></td><td><a class="source-link" href="https://kansspelautoriteit.nl/belangrijkste-regels-voor-kansspelreclame" target="_blank" rel="noopener noreferrer">Ksa advertising rules</a></td></tr>
+              <tr><td><strong>I-4</strong></td><td>The Brier decomposition caveat was attributed to the model-evaluation guide; the exact wording lives on the calibration guide.</td><td>Source register row ML-02 tightened to quote both pages precisely.</td><td><span class="flag flag-green">Resolved</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/calibration.html" target="_blank" rel="noopener noreferrer">scikit-learn calibration</a><br><a class="source-link" href="https://scikit-learn.org/stable/modules/model_evaluation.html" target="_blank" rel="noopener noreferrer">Model evaluation</a></td></tr>
+              <tr><td><strong>I-5</strong></td><td>The NBA Stats FAQ mixes current policy statements with dated 2013 statistical examples.</td><td>Policy quotes are current and used; the FAQ's numbers are historical examples and are used nowhere.</td><td><span class="flag flag-blue">Documented</span></td><td><a class="source-link" href="https://www.nba.com/stats/help/faq" target="_blank" rel="noopener noreferrer">NBA Stats FAQ</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <section class="section two-column" aria-label="How to resolve flags">
         <article class="panel"><h2>Review sequence</h2><ol><li>Resolve F-01 through F-04 first; they are hard blockers.</li><li>Only then evaluate data feeds and point-in-time completeness.</li><li>Use the preregistered validation plan to decide whether any strategy qualifies.</li><li>Publish a model/pick only if all linked requirements pass; otherwise retain “no pick.”</li></ol></article>
-        <article class="panel"><h2>Related registers</h2><p><a href="questions.html">Decision questions</a> · <a href="sources.html">Official source register</a> · <a href="strategies.html">Strategy gates</a></p><p>Unresolved flags do not block this informational site. They block unverified betting outputs.</p></article>
+        <article class="panel"><h2>Related registers</h2><p><a href="questions.html">Decision questions</a> · <a href="suggestions.html">Suggestions &amp; decisions</a> · <a href="sources.html">Official source register</a> · <a href="strategies.html">Strategy gates</a></p><p>Unresolved flags do not block this informational site. They block unverified betting outputs.</p></article>
       </section>
       <footer class="footer"><p>Flags reflect the evidence snapshot, not a legal opinion.</p><p><a href="index.html">Return to overview →</a></p></footer>
     </main>

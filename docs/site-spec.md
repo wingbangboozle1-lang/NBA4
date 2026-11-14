@@ -10,13 +10,17 @@ A prominent “not associated with the NBA” disclaimer will be included. The p
 
 ## Page categories
 
+Nine categories (the integration pass added Leaderboard and Suggestions and recorded the scope change in [`COORDINATION.md`](COORDINATION.md)):
+
 - **Overview (`index.html`)** — executive summary, data-rights blocker, no-picks state, what is verified vs not, and direct links to the decision register and flagged review.
-- **Upcoming slate (`slate.html`)** — intended maximum-three-day horizon, but no fixtures or lines are copied while the data-rights and live-feed questions are unresolved. A source-linked empty-state explains that no slate/model output is available.
+- **Upcoming slate (`slate.html`)** — intended maximum-three-day horizon, but no fixtures or lines are copied while the data-rights and live-feed questions are unresolved. A source-linked empty-state explains that no slate/model output is available; the tested generator is cross-linked.
 - **Injuries & game flow (`injuries.html`)** — separates official status source, expected availability, rotation minutes, production effect and game-flow scenarios. Only the first is an input fact; other columns remain blank until a validated authorized model exists.
 - **Strategies & validation (`strategies.html`)** — singles, player props, parlays/combinations, injury scenarios and validation gates, each labeled as a hypothesis/not run and linked to its method/context source.
+- **Leaderboard (`leaderboard.html`)** — competition rules, eligibility gates, scoring/anti-luck controls, proposed reward tiers and an empty standings table.
+- **Suggestions (`suggestions.html`)** — decision queue with paths A/B/C, trade-offs, recommendations and Pending decision cells; nothing is implemented before a decision is logged.
 - **Questions (`questions.html`)** — a readable decision register: known fact, unknown, why it matters, suggested discovery, status and official source link.
-- **Sources (`sources.html`)** — primary-source ledger with verified scope, publication/snapshot date and interpretation limits.
-- **Flagged for Review (`review.html`)** — data-licensing, legal/jurisdiction, hosting, data-availability, stale-schedule, validation and reward blockers; each flag contains its official source and a specific next discovery step.
+- **Sources (`sources.html`)** — primary-source ledger with verified scope, publication/snapshot date and interpretation limits; links the independent verification log.
+- **Flagged for Review (`review.html`)** — data-licensing, legal/jurisdiction, hosting, data-availability, stale-schedule, validation and reward blockers plus the 2026-11-14 verification irregularities; each flag contains its official source and a specific next discovery step.
 
 The full written versions remain in [`docs/audit.md`](audit.md), [`docs/strategy-framework.md`](strategy-framework.md), [`docs/validation-plan.md`](validation-plan.md), [`docs/decision-register.md`](decision-register.md), and [`docs/sources.md`](sources.md). They are linked to the repository source view for review, not presented as live feed data.
 
