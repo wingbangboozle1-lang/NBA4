@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Proposed NBA single-bet, player-prop and parlay strategies with empirical validation gates; no models or picks are active.">
+  <title>NBA4 — Strategies &amp; validation</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Site navigation">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N4</span><span class="brand-copy">NBA4<small>RESEARCH DASHBOARD</small></span></a>
+    <p class="nav-label">Workspace</p>
+    <nav class="primary-nav" aria-label="Primary navigation"><ul>
+      <li><a href="index.html"><span class="nav-icon" aria-hidden="true">◆</span>Overview</a></li>
+      <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
+      <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
+      <li><a href="strategies.html" aria-current="page"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
+      <li><a href="questions.html"><span class="nav-icon" aria-hidden="true">?</span>Decision questions</a></li>
+      <li><a href="sources.html"><span class="nav-icon" aria-hidden="true">↗</span>Sources</a></li>
+      <li><a href="review.html"><span class="nav-icon" aria-hidden="true">⚑</span>Flagged for review</a></li>
+    </ul></nav>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-note"><strong>Research-only state</strong><p>All strategy rows are hypotheses. No model has passed a gate.</p></div>
+    <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
+  </aside>
+  <div class="content-shell">
+    <header class="topbar"><div><p class="topbar-title">Strategy lab</p><p class="topbar-meta">Proposed designs · no performance claims</p></div><span class="status-pill">NO PICKS ISSUED</span></header>
+    <main id="main" class="main-content">
+      <header class="page-header"><p class="eyebrow">Singles · props · combinations</p><h1>Strategy hypotheses &amp; validation gates</h1><p>These are model designs to test, not recommendations or established signals. No win rate, expected value, fair line, correlation, or “skill” value is available. A strategy cannot become leaderboard-eligible until it passes every required gate.</p></header>
+
+      <div class="notice notice-danger"><span class="notice-icon" aria-hidden="true">!</span><div><strong>Data rights are a hard stop.</strong><p>NBA Stats states its data are for viewing, not downloading; NBA.com Terms restrict NBA Statistics in gambling, including legal gambling. The glossary is a definition source only, not permission to use stats in a betting model. Obtain written rights or a separately licensed data contract that permits the intended use.</p></div></div>
+
+      <section class="section" aria-labelledby="strategy-title">
+        <div class="section-heading"><div><h2 id="strategy-title">Candidate strategy catalogue</h2><p>Potentially testable after an authorized dataset and market definitions exist.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">ID / market</th><th scope="col">Proposed signal design</th><th scope="col">What to validate</th><th scope="col">Status</th><th scope="col">Official context</th></tr></thead>
+            <tbody>
+              <tr><td><strong>S1 · Single spread / moneyline</strong></td><td>Forecast a distribution of home-minus-away points from time-varying, opponent-adjusted team strength. Keep win probability and fair spread separate.</td><td>Chronological holdout, calibration, comparison to declared baselines and a licensed price benchmark.</td><td><span class="flag">Not trained</span></td><td><a class="source-link" href="https://www.nba.com/stats/help/glossary" target="_blank" rel="noopener noreferrer">NBA Stats glossary</a><br><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms</a></td></tr>
+              <tr><td><strong>S2 · Game total</strong></td><td>Model expected possessions and team scoring per possession, then estimate the total-points distribution rather than only a point estimate.</td><td>Future-only error/interval coverage, probability calibration, market definition and net comparison after actual payout rules.</td><td><span class="flag">Not trained</span></td><td><a class="source-link" href="https://www.nba.com/stats/help/glossary" target="_blank" rel="noopener noreferrer">NBA Stats glossary</a><br><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">Time-series validation</a></td></tr>
+              <tr><td><strong>S3 · Player props</strong></td><td>Model minutes as a distribution, then condition per-minute/possession production on role, lineup, opponent and game context; shrink noisy estimates toward a preregistered baseline.</td><td>Point-in-time inputs, player/market calibration, future holdout, availability uncertainty and settlement rules.</td><td><span class="flag">Not trained</span></td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury report</a><br><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms</a></td></tr>
+              <tr><td><strong>S4 · Same-game parlays / prop combos</strong></td><td>Model the joint distribution conditional on common pace, margin, minutes, role and availability. Do not multiply marginal probabilities unless independence is supported for those exact legs.</td><td>Joint-event calibration, leg dependence and uncertainty, licensed quote/payout, and a separate combo holdout.</td><td><span class="flag">Not trained</span></td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST correlation</a><br><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms</a></td></tr>
+              <tr><td><strong>S5 · Injury / rotation scenarios</strong></td><td>Keep status, availability, minutes and production as separate uncertain steps. Model explicit lineup scenarios; widen or suppress outputs when unresolved.</td><td>Authorized historical report snapshots, lineups and minutes; prospective availability and minute-distribution checks.</td><td><span class="flag">Not run</span></td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury policy</a></td></tr>
+              <tr><td><strong>S6 · Game-flow scenarios</strong></td><td>Estimate distributions for pace, score margin and scenario-dependent minutes; label narrative scenarios only when their definitions and triggers are fixed in advance.</td><td>Time-ordered coverage and calibration, explicit scenario definitions, lineup sensitivity and a future holdout.</td><td><span class="flag">Not run</span></td><td><a class="source-link" href="https://www.nba.com/stats/help/glossary" target="_blank" rel="noopener noreferrer">NBA Stats glossary</a><br><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">Time-series validation</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="correlation-title">
+        <div class="section-heading"><div><h2 id="correlation-title">Correlation values to determine</h2><p>Value cells are intentionally empty. Every estimate needs licensed paired outcomes, a defined sample and uncertainty.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Relationship</th><th scope="col">Planned measure</th><th scope="col">Value</th><th scope="col">Sample / time window</th><th scope="col">Status</th><th scope="col">Method source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Continuous player-stat residual pairs, same game</strong></td><td>Pearson correlation of pregame residuals; game-cluster uncertainty interval.</td><td class="empty-value"></td><td class="empty-value"></td><td><span class="flag">Unverified</span><br>No licensed outcomes.</td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST definition</a></td></tr>
+              <tr><td><strong>Binary threshold legs / two props</strong></td><td>Direct joint probability plus binary association summary and both marginals.</td><td class="empty-value"></td><td class="empty-value"></td><td><span class="flag">Unverified</span><br>No lines or settled legs.</td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST definition</a></td></tr>
+              <tr><td><strong>Game total, spread and player props</strong></td><td>Conditional joint distribution / residual dependence under a preregistered context.</td><td class="empty-value"></td><td class="empty-value"></td><td><span class="flag">Unverified</span><br>No point-in-time predictions.</td><td><a class="source-link" href="https://www.nba.com/stats/help/glossary" target="_blank" rel="noopener noreferrer">NBA metric definitions</a></td></tr>
+              <tr><td><strong>Teammate absence vs minutes / production</strong></td><td>Conditional player-pair effect with lineup/role controls; not a raw causal on/off claim.</td><td class="empty-value"></td><td class="empty-value"></td><td><span class="flag">Unverified</span><br>No licensed minute/lineup history.</td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury report</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="gates-title">
+        <div class="section-heading"><div><h2 id="gates-title">Promotion gates</h2><p>One failed or missing gate means no pick and no reward. Numerical thresholds remain blank until preregistered.</p></div><a class="section-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/validation-plan.md">Full validation plan →</a></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Gate</th><th scope="col">Required check</th><th scope="col">Threshold</th><th scope="col">Current state</th><th scope="col">Official method / authority</th></tr></thead>
+            <tbody>
+              <tr><td><strong>G0 · Rights / jurisdiction</strong></td><td>Written data-use rights, product and jurisdiction review, permitted hosting.</td><td class="empty-value"></td><td><span class="flag flag-red">Blocked</span></td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms</a><br><a class="source-link" href="https://kansspelautoriteit.nl/remote-gambling-act-force" target="_blank" rel="noopener noreferrer">Ksa guidance</a></td></tr>
+              <tr><td><strong>G1 · Point-in-time data</strong></td><td>Stable IDs, source timestamps, version history, quality and corrections audit.</td><td class="empty-value"></td><td><span class="flag">Not run</span></td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA report policy</a><br><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms</a></td></tr>
+              <tr><td><strong>G2 · Market / settlement</strong></td><td>Lock market, line, quote time, payout, fees and push/void rules.</td><td class="empty-value"></td><td><span class="flag">Blocked</span></td><td><a class="source-link" href="https://kansspelautoriteit.nl/remote-gambling-act-force" target="_blank" rel="noopener noreferrer">Ksa context</a></td></tr>
+              <tr><td><strong>G3 · Preregistered baseline</strong></td><td>Freeze hypothesis, features, splits, objective, baselines and tuning budget.</td><td class="empty-value"></td><td><span class="flag">Not run</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">scikit-learn validation</a></td></tr>
+              <tr><td><strong>G4 · Walk-forward holdout</strong></td><td>Chronological future testing; audit feature timestamps for leakage.</td><td class="empty-value"></td><td><span class="flag">Not run</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">scikit-learn validation</a></td></tr>
+              <tr><td><strong>G5 · Calibration / accuracy</strong></td><td>Compare Brier/log loss, reliability, line error and interval coverage with baselines.</td><td class="empty-value"></td><td><span class="flag">Not run</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/model_evaluation.html" target="_blank" rel="noopener noreferrer">Model metrics</a><br><a class="source-link" href="https://scikit-learn.org/stable/modules/calibration.html" target="_blank" rel="noopener noreferrer">Calibration guide</a></td></tr>
+              <tr><td><strong>G6 · Net value</strong></td><td>Compare forecast with licensed, timestamped quotes after payout/fee rules.</td><td class="empty-value"></td><td><span class="flag">Blocked</span></td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms</a></td></tr>
+              <tr><td><strong>G7 · Uncertainty / chance</strong></td><td>Report intervals, game-cluster uncertainty, sensitivity and multiple-test controls.</td><td class="empty-value"></td><td><span class="flag">Not run</span></td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/eda/section3/bootplot.htm" target="_blank" rel="noopener noreferrer">NIST bootstrap</a></td></tr>
+              <tr><td><strong>G8 · Parlay dependence</strong></td><td>Validate joint probabilities and leg dependence; do not assume independence.</td><td class="empty-value"></td><td><span class="flag">Not run</span></td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST correlation</a></td></tr>
+              <tr><td><strong>G9 · Injury / flow</strong></td><td>Validate availability, minutes and production separately on timed records.</td><td class="empty-value"></td><td><span class="flag">Blocked</span></td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury policy</a></td></tr>
+              <tr><td><strong>G10 · Robustness</strong></td><td>Test seasons, segments and perturbations; keep a future holdout untouched.</td><td class="empty-value"></td><td><span class="flag">Not run</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">scikit-learn validation</a></td></tr>
+              <tr><td><strong>G11 · Shadow operations</strong></td><td>Reconcile no-bet forecasts; monitor freshness, drift and data failures.</td><td class="empty-value"></td><td><span class="flag">Not run</span></td><td><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site" target="_blank" rel="noopener noreferrer">GitHub Pages limits</a></td></tr>
+              <tr><td><strong>G12 · Leaderboard / rewards</strong></td><td>Rank only locked versions that pass every gate; declare risk and prize rules.</td><td class="empty-value"></td><td><span class="flag flag-red">Blocked</span></td><td><a class="source-link" href="https://kansspelautoriteit.nl/belangrijkste-regels-voor-kansspelreclame" target="_blank" rel="noopener noreferrer">Ksa advertising rules</a><br><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits" target="_blank" rel="noopener noreferrer">Pages limits</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section two-column" aria-label="Luck and leaderboard notes">
+        <article class="panel"><h2>Reducing luck, not promising to remove it</h2><p>Use frozen predictions, future-only tests, baselines, calibration, uncertainty intervals and robustness checks to reduce hindsight and overfitting. Random game outcomes remain. The Ksa’s safe-gambling guidance makes a general chance warning; it is not a basketball-specific study.</p><p><a href="https://kansspelautoriteit.nl/10-tips-gambling-safely" target="_blank" rel="noopener noreferrer">Ksa consumer guidance ↗</a></p></article>
+        <article class="panel"><h2>Rewards stay disabled</h2><p>No score weights, minimum samples, ROI threshold, drawdown limit, prize, tie policy or payment schedule has been defined. A leader board is not a substitute for a valid holdout or legal review.</p><p><a href="questions.html">Review the open decisions →</a></p></article>
+      </section>
+      <footer class="footer"><p>Every candidate is a hypothesis; no winner or active pick exists.</p><p><a href="review.html">Flagged blockers →</a></p></footer>
+    </main>
+  </div>
+</div>
+</body>
+</html>
