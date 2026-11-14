@@ -4,8 +4,8 @@ Updated: 2026-11-14 (UTC). The starting repository contained only `README.md` an
 
 | Task | Status | Owner / session ID | Exact file scope | Verification / sources / notes |
 | --- | --- | --- | --- | --- |
-| A. Baseline repository, evidence and decision-gap audit | in progress | `arena/c5eef6bb-nba4` | `COORDINATION.md`, `docs/audit.md` | Initial inventory complete; official-source checks and audit write-up in progress. |
-| B. Strategy design, validation gates, correlation and leaderboard specification | unclaimed | — | `docs/strategy-framework.md`, `docs/validation-plan.md` | Do not start until explicitly claimed here. |
+| A. Baseline repository, evidence and decision-gap audit | done | `arena/c5eef6bb-nba4` | `COORDINATION.md`, `docs/audit.md` | Verified the starting one-line README/no application data; checked NBA Stats FAQ, NBA Terms §§1/9, 2026–27 injury policy/PDF and schedule, NBA Stats glossary, GitHub Pages docs/API, and Ksa pages. Detailed snapshot, scope limits, and citations: [`docs/audit.md`](docs/audit.md). |
+| B. Strategy design, validation gates, correlation and leaderboard specification | in progress | `arena/c5eef6bb-nba4` | `docs/strategy-framework.md`, `docs/validation-plan.md` | Claim committed before work. Proposed methods only; no model metrics or correlation values can be computed without licensed point-in-time data. |
 | C. Executive summary, questions, missing-information register and source catalog | unclaimed | — | `docs/decision-register.md`, `docs/sources.md` | Do not start until explicitly claimed here. |
 | D. Static site, source-linked data tables, navigation, review flags and GitHub Pages workflow | unclaimed | — | `site/**`, `.github/workflows/pages.yml`, `README.md` | Shared site data, index and navigation are reserved for final integration after A–C. |
 | E. Final integration, full verification, build/link checks, PR and Pages deployment | unclaimed | — | `COORDINATION.md`, `site/**`, `.github/workflows/pages.yml`, `README.md` | Perform only after all prerequisite tasks are done; record the PR and deploy result here. |
