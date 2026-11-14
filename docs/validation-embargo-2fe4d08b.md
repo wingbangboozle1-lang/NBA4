@@ -38,7 +38,7 @@ The helper still emits only complete test windows. With the same synthetic examp
 - `python3 -m unittest tests.test_engine.ValidationTests -v` — **5 tests passed**, including exact boundary, chronology and negative-embargo assertions.
 - A post-fix synthetic smoke check returned training days `[0, 1, 2]` and test days `[5, 6]` for the two-day embargo example.
 - `python3 -m unittest discover -s tests -t . -v` — **101 tests passed**; synthetic fixtures only.
-- `python3 scripts/check_site.py --with-tests` — **PASS**: 11 pages and 323 HTML rows; Markdown source-link checks and embedded engine tests passed. Its source-link check validates HTTPS/approved hosts but does not fetch URLs.
+- `python3 scripts/check_site.py --with-tests` — **PASS**: 11 pages and 332 HTML rows; Markdown source-link checks and embedded engine tests passed. Its source-link check validates HTTPS/approved hosts but does not fetch URLs.
 - `python3 scripts/build_snapshots.py --check` — **PASS**: both published snapshots unchanged and in sync.
 - `python3 -m engine.cli status` — zero authorized inputs; the expected ledger files are absent, so the engine reports no lines or picks. `python3 -m engine.cli validate` — G4 is not run because there is no dataset or predictions.
 - Synthetic-only pipeline smoke run (`--now 2026-11-14T12:00:00Z`) — 2 fixture events inside the 72-hour horizon, rights not cleared, 0 forecasts, 0 bet picks and 0 no-bet picks. Its output was written under `/tmp`, not committed.
