@@ -100,6 +100,7 @@ class ContractTests(unittest.TestCase):
             line=1.5,
             probability=0.5,
             input_snapshot_hash=snapshot_hash({"a": 1}),
+            sample_size=120,
             provenance=provenance(),
         )
         stale_event = GameEvent(
@@ -195,8 +196,8 @@ class LineOriginationTests(unittest.TestCase):
         self.assertAlmostEqual(p_over, 0.5, delta=0.06)
 
     def test_prop_variance_includes_the_correlation_term(self) -> None:
-        independent = lineorigination.PlayerPropModel(30.0, 5.0, 0.5, 0.1, 0.0)
-        correlated = lineorigination.PlayerPropModel(30.0, 5.0, 0.5, 0.1, 0.5)
+        independent = lineorigination.PlayerPropModel(30.0, 5.0, 0.5, 0.1, 0.0, "synthetic-v1")
+        correlated = lineorigination.PlayerPropModel(30.0, 5.0, 0.5, 0.1, 0.5, "synthetic-v1")
         self.assertGreater(correlated.total_variance, independent.total_variance)
 
 
@@ -458,6 +459,7 @@ class PipelineTests(unittest.TestCase):
                     line=1.5,
                     probability=0.55,
                     input_snapshot_hash=snapshot_hash({"x": 1}),
+                    sample_size=250,
                     provenance=provenance(),
                 )
             ]
@@ -493,6 +495,7 @@ class PipelineTests(unittest.TestCase):
                     line=1.5,
                     probability=0.55,
                     input_snapshot_hash=snapshot_hash({"x": 2}),
+                    sample_size=250,
                     provenance=provenance(),
                 )
             ]
@@ -501,6 +504,44 @@ class PipelineTests(unittest.TestCase):
         pick = report.picks[0]
         self.assertEqual(pick["decision"], "bet")
         self.assertAlmostEqual(pick["edge"], 0.55 * 1.9 - 1.0, places=9)
+
+    def test_below_the_declared_minimum_sample_is_a_no_bet(self) -> None:
+        events = self._events(1)
+        quote = MarketQuote(
+            market_id="q-2",
+            event_id=events[0].event_id,
+            market_type="spread",
+            side="home",
+            line=1.5,
+            price_decimal=1.9,
+            quote_timestamp=NOW - timedelta(minutes=2),
+            provider_id="SYNTHETIC",
+            provenance=provenance(),
+        )
+
+        def strategy(config, slate, injuries):
+            return [
+                Forecast(
+                    forecast_id="f-3",
+                    event_id=slate[0].event_id,
+                    market_type="spread",
+                    side="home",
+                    model_version=config.model_version,
+                    emitted_at=config.now_utc,
+                    line=1.5,
+                    probability=0.55,
+                    input_snapshot_hash=snapshot_hash({"x": 3}),
+                    sample_size=50,
+                    provenance=provenance(),
+                )
+            ]
+
+        report = pipeline.run_pipeline(
+            self._config(minimum_sample_size=100), events, quotes=[quote], strategy=strategy
+        )
+        pick = report.picks[0]
+        self.assertEqual(pick["decision"], "no_bet")
+        self.assertIn("BELOW_MINIMUM_SAMPLE", pick["reason_codes"])
 
     def test_ledger_is_append_only(self) -> None:
         import tempfile

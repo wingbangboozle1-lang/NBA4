@@ -1,10 +1,48 @@
-# Site improvement suggestions (review before implementation)
+# Suggestions register and decision queue
 
-**Status: proposals only. Nothing on this page has been implemented unless its status says so.** The purpose of this register is to let a reviewer choose the path before any code is written. Each row states the suggestion, the decision-making benefit, the effort, what it depends on, and a source link. The **Decision** column is deliberately empty: it is filled in by the reviewer, not by the agent.
+**Status: proposals only. Nothing in this document has been implemented unless its status says so.** This document merges two independent proposal sets that were written in parallel sessions and must not silently overwrite each other: the **decision queue** (four gating decisions plus twelve prioritised proposals from the PR #3 implementation, session `arena/ddc81141-nba4`) and the **review register** (23 proposals with a reviewer Decision column from session `arena/248bb9ab-nba4`). The rendered form is [`suggestions.html`](../suggestions.html), which is the version to review.
 
-Suggested statuses: `Proposed` (awaiting review), `Needs decision` (a dependency must be resolved first), `Accepted` (approved for implementation), `Rejected`, `Deferred`.
+Suggested statuses: `Proposed` (awaiting review), `Needs decision` / `Needs a decision` (a dependency must be resolved first), `Accepted` (approved for implementation), `Blocked` (needs data or permission the project does not have), `Rejected`, `Deferred`.
 
-## A. Decision-making improvements
+## A. The four gating decisions (decision queue)
+
+Nothing else can be built until these are answered. They are reproduced on the site as the “Decision queue”.
+
+| Decision | Path A | Path B | Consequence of choosing | Source |
+| --- | --- | --- | --- | --- |
+| D-1 Data rights | Licence a provider that permits betting use in writing | Stay private and non-commercial, publish no numbers | A unlocks model work and public lines; B keeps the site an evidence shell. NBA Stats directly is not an option either way. | [NBA Terms §9](https://www.nba.com/termsofuse) |
+| D-2 Product type | Informational analytics, no wagers or rewards | Picks/leaderboard with rewards | A is served by the current static host; B is a regulated activity needing classification, age controls and different hosting. | [Ksa: Remote Gambling Act](https://kansspelautoriteit.nl/remote-gambling-act-force) |
+| D-3 First market | One single-bet market (e.g. game total) | Player props or same-game parlays | A needs team-level inputs only; B needs joint distributions and a validated minutes model first. | [NBA Stats glossary](https://www.nba.com/stats/help/glossary) |
+| D-4 Success rule | Calibration-first (proper score plus reliability curve) | Return-first (ROI against a benchmark price) | A can be tested without a price feed; B cannot begin until licensed prices and settlement exist. | [scikit-learn calibration](https://scikit-learn.org/stable/modules/calibration.html) |
+
+**Recommended order:** D-1 → D-2 → D-4 → D-3. Rights and product type are legal preconditions; the success rule must be fixed before any holdout is looked at; the market choice follows from which inputs are actually licensed.
+
+**Why the order matters.** A common failure mode in this kind of project is to build the ranking and reward layer first, because it is the visible part, and to bolt validation on afterwards. That produces a leaderboard of strategies whose apparent skill cannot be distinguished from the sample they were selected on. The ordering above deliberately puts the unglamorous, blocking work first. The second failure mode is treating “no pick” as a defect. On this site a blank cell is a control: it means the evidence chain did not close. Proposals P-10 and S-06/S-10 exist so that a cell can distinguish *not computed* from *computed and excluded*, without ever implying a number that is not supported.
+
+## B. Decision-queue proposals (P-01 … P-12)
+
+These twelve proposals were numbered S-01 … S-12 in the PR #3 implementation. They are re-lettered **P-01 … P-12** here because the review register below uses S-01 … S-23 for a different set; nothing is discarded, and the overlap map at the end shows where the two sets say the same thing.
+
+| ID | Suggestion | Options and trade-off | Effort | Status | Source link |
+| --- | --- | --- | --- | --- | --- |
+| P-01 | Publish a rights decision record for data: which provider, which contract clause, which fields, which territories, which retention | A: licensed provider covering betting use — unblocks everything, costs money and negotiation time. B: private non-commercial research only — cheap, still bars picks and any public numbers. C: no data — the site stays an evidence shell. Mixed A+B is impossible to display safely, because the display itself is the restricted act. | 1 session plus legal review | Needs a decision | [NBA.com Terms §9](https://www.nba.com/termsofuse) · [NBA Stats FAQ](https://www.nba.com/stats/help/faq) |
+| P-02 | Add a data-source matrix page: every required input, its owner, refresh cadence, timestamp field, correction policy and permission status | A: one table per input type (schedule, box score, lineup, injury, price, settlement). B: single flat table — faster to read, harder to maintain. A is recommended, because permissions differ per field and a flat table hides that. | ½ session | Proposed | [NBA injury report policy](https://official.nba.com/nba-injury-report-2026-27-season/) |
+| P-03 | Add an immutable forecast ledger schema, so every future line is stored with model version, input snapshot IDs and issue time before the event | A: append-only JSON/CSV with a hash per record. B: database table with version rows. Both are static-hostable if written at build time; A is simpler and diffable in Git, B needs a backend the current host cannot run. | 1 session (schema only) | Proposed | [scikit-learn: time-series validation](https://scikit-learn.org/stable/modules/cross_validation.html) |
+| P-04 | Turn the validation gates into a pass/fail scorecard with an explicit “first failing gate” column | A: binary pass/fail per gate. B: pass/fail plus a distance-to-threshold. B risks implying partial credit for an unvalidated model, so A is recommended until real data exists. | ½ session | Proposed | [scikit-learn: metrics and scoring](https://scikit-learn.org/stable/modules/model_evaluation.html) |
+| P-05 | Pre-register the leaderboard rules (objective, baselines, holdout, tie-breaks, reward terms) as a dated, versioned document before any model is scored | A: preregister now, reward-free. B: wait for data then preregister — risks rules being fitted to results. A is strongly preferred; the whole point is that rules precede results. | 1 session | Needs a decision | [scikit-learn: proper scoring rules](https://scikit-learn.org/stable/modules/calibration.html) |
+| P-06 | Add a correlation worksheet: leg pair, conditioning set, estimator, sample count, game-clustered interval, shrinkage rule | A: residual Pearson for continuous legs plus joint-frequency for threshold legs. B: one generic coefficient for everything — misleading, because a parlay needs a joint probability, not a linear association. A is recommended. | ½ session (template only) | Proposed | [NIST: correlation definition](https://www.itl.nist.gov/div898/handbook/glossary.htm) · [NIST: bootstrap uncertainty](https://www.itl.nist.gov/div898/handbook/eda/section3/bootplot.htm) |
+| P-07 | Build the injury-to-production chain as four separately validated steps: status, availability, minutes, production | A: four models with separate error reporting. B: one end-to-end model — fewer moving parts, but it hides which step failed and invites treating a status label as an impact estimate. A is recommended. | 2 sessions (design), blocked on data | Blocked | [NBA injury reporting policy](https://official.nba.com/nba-injury-report-2026-27-season/) |
+| P-08 | Keep a decision log page: date, question, options, choice, who decided, and what would reverse it | A: a table on this site. B: an ADR folder in the repository. Both are cheap; A is visible to a non-technical reviewer, B is better for versioning. Doing both with A as a rendered view of B avoids duplicate truth. | ½ session | Proposed | [NBA4 repository](https://github.com/wingbangboozle1-lang/NBA4) |
+| P-09 | Add a staleness banner that flips the whole slate page to “no picks” whenever its newest source timestamp exceeds a declared threshold | A: hard suppression. B: a warning while still showing numbers — rejected, because a stale line that looks current is exactly the failure mode that costs money. | ½ session (logic spec only until data exists) | Proposed | [NBA injury report (continual updates)](https://official.nba.com/nba-injury-report-2026-27-season/) |
+| P-10 | Separate “no edge found” from “no data” everywhere a blank appears | A: three states — not computed, computed and excluded, computed and eligible. B: keep one blank state. A is recommended: the current single blank makes a tested-and-rejected strategy look identical to an untested one. | ½ session | Proposed | [scikit-learn: calibration limits](https://scikit-learn.org/stable/modules/calibration.html) |
+| P-11 | Move commercial or live functionality to permitted hosting if, and only if, the product becomes commercial | A: stay static and informational. B: backend host with secrets and access control. B is required the moment there are accounts, rewards, paid access or live ingestion; the current host cannot serve it. | Depends on scope | Proposed | [GitHub Pages limits](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits) |
+| P-12 | Show a responsible-use and age note beside any future reward or contest content | A: static notice. B: age-gate. B is a compliance decision, not a design one; both belong to legal review for the target jurisdictions. | Minutes (copy), gated by review | Blocked | [Ksa: 10 tips for gambling safely](https://kansspelautoriteit.nl/10-tips-gambling-safely) |
+
+## C. Review register (S-01 … S-23)
+
+**The Decision column is deliberately empty: it is filled in by the reviewer, not by the agent.** Each row states the suggestion, the decision-making benefit, the effort, what it depends on, and a source link.
+
+### C1. Decision-making improvements
 
 | ID | Suggestion | Why it improves decisions | Effort | Depends on | Status | Decision | Source link |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -19,7 +57,7 @@ Suggested statuses: `Proposed` (awaiting review), `Needs decision` (a dependency
 | S-09 | Add a **reliability-diagram page** next to the leaderboard | A proper score alone does not prove calibration; the diagram shows it | Medium | A validated model and a holdout | Needs decision |  | [scikit-learn calibration](https://scikit-learn.org/stable/modules/calibration.html) |
 | S-10 | Add a **filterable "unverified values" index** that lists every blank cell and its reason | Makes the gap between known and unknown auditable in one place | Low | Nothing | Proposed |  | [decision register](https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/decision-register.md) |
 
-## B. Product and compliance improvements
+### C2. Product and compliance improvements
 
 | ID | Suggestion | Why it improves decisions | Effort | Depends on | Status | Decision | Source link |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -30,7 +68,7 @@ Suggested statuses: `Proposed` (awaiting review), `Needs decision` (a dependency
 | S-15 | Move to a **separate application host** if the product ever becomes live, commercial or account-based | GitHub Pages is not permitted for commercial SaaS or transaction-driven sites | Medium | The product decision | Needs decision |  | [GitHub Pages limits](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits) |
 | S-16 | Keep the **data-rights gate as a build-time check**, not a documentation note | Turns the blocking rule into something that fails loudly if it is ever bypassed | Low | Nothing (already implemented; needs to be wired into the publish step) | Proposed |  | [engine contracts](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/contracts.py) |
 
-## C. Engineering and research improvements
+### C3. Engineering and research improvements
 
 | ID | Suggestion | Why it improves decisions | Effort | Depends on | Status | Decision | Source link |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -42,9 +80,32 @@ Suggested statuses: `Proposed` (awaiting review), `Needs decision` (a dependency
 | S-22 | Add **shadow (no-bet) operation** before any promotion, with a reconciliation report | Produces prospective evidence without staking anything | Medium | A licensed dataset and a market specification | Needs decision |  | [validation plan](https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/validation-plan.md) |
 | S-23 | Add **automated link and source checking** to the publish pipeline so a dead source is caught before publication | A broken source link undermines every table that cites it | Low | Network access in the job runner | Proposed |  | [site checker](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/check_site.py) |
 
-## Review notes
+## D. Overlap map between the two registers
 
-1. Rows marked **Needs decision** cannot be implemented before the dependency in the "Depends on" column is closed; implementing them earlier would create a number that cannot be justified.
+The two proposal sets were written independently and overlap on several ideas. The overlaps are listed so the reviewer can accept one wording and reject the duplicate, rather than quietly losing either:
+
+- **P-10 ↔ S-06 / S-10** — distinguishing “no data”, “no edge” and “not computed” wherever a cell is blank.
+- **P-11 ↔ S-15** — moving commercial or live functionality off the static host only if the product becomes commercial.
+- **P-12 ↔ S-13 / S-14** — responsible-use and age/territory notices.
+- **P-04 ↔ S-03** — gate-by-gate status made visible (scorecard vs checklist).
+- **P-06 ↔ S-08** — correlation reporting with sample counts and clustered intervals.
+- **P-03 ↔ S-19** — reproducibility of every issued forecast (ledger schema vs reproducibility bundle).
+- **P-05 ↔ S-21** — pre-registered rules and multiple-testing discipline.
+
+## E. Open questions the suggestions cannot answer
+
+These need input from the project owner; no source can settle them:
+
+1. Is the intent personal research, a public tipster page, or a commercial product with rewards?
+2. Is there a budget for a licensed data feed? Without one, every numerical output stays off by design.
+3. Which jurisdictions would see picks, and would any page link to a bookmaker?
+4. Is a correctly empty dashboard acceptable while validation runs, or is a measurable — even if unprofitable — pipeline needed sooner?
+5. Who is the accountable decision-maker when a suggestion is accepted or rejected?
+
+## F. Review notes and maintenance rule
+
+1. Rows marked **Needs decision** / **Blocked** cannot be implemented before the dependency in the "Depends on" column is closed; implementing them earlier would create a number that cannot be justified.
 2. The **Decision** column is the reviewer's field. Suggested values: `Accept`, `Reject`, `Defer`, or a note. An empty cell means "not yet reviewed".
 3. Suggestions marked **Accepted** are implemented only after the decision is recorded here and in [`COORDINATION.md`](../COORDINATION.md), so the change history stays traceable.
 4. No suggestion may add a number that an official source does not support. Every implemented page keeps the rule that a value without an official source stays blank and flagged - see the [source register](sources.md) and the [site specification](site-spec.md).
+5. Additions to this register follow the same rule as the rest of the repository: a suggestion must state its options and its trade-off, and any factual claim in it must carry an official source link. A suggestion without an alternative is a request, not a suggestion, and should be recorded as one.

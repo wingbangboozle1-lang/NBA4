@@ -208,7 +208,14 @@ class MarketQuote:
 
 @dataclass(frozen=True)
 class Forecast:
-    """An immutable, model-originated forecast record."""
+    """An immutable, model-originated forecast record.
+
+    ``sample_size`` is the number of out-of-sample observations the strategy
+    version had accumulated when this forecast was emitted. It is carried on
+    the record so the pipeline's minimum-sample gate is auditable per pick;
+    it is never a claim that the sample is large enough (that threshold is a
+    declared, preregistered decision — see ``docs/validation-plan.md``).
+    """
 
     forecast_id: str
     event_id: str
@@ -219,12 +226,15 @@ class Forecast:
     line: float | None
     probability: float
     input_snapshot_hash: str
+    sample_size: int
     provenance: Provenance
     notes: str = ""
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.probability <= 1.0:
             raise ContractError("probability must be within [0, 1]")
+        if not isinstance(self.sample_size, int) or isinstance(self.sample_size, bool) or self.sample_size < 0:
+            raise ContractError("sample_size must be a non-negative integer")
         if not self.input_snapshot_hash:
             raise ContractError("input_snapshot_hash is required for reproducibility")
         object.__setattr__(self, "market_type", _coerce_market_type(self.market_type))

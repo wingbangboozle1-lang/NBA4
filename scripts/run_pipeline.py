@@ -37,7 +37,7 @@ from engine.contracts import (  # noqa: E402
     Provenance,
     Status,
 )
-from engine.pipeline import RunConfig, run_pipeline, write_ledger  # noqa: E402
+from engine.pipeline import RunConfig, append_ledger, run_pipeline, write_ledger  # noqa: E402
 
 LEDGER_NAME = "ledger.jsonl"
 REPORT_NAME = "run-report.json"
@@ -156,7 +156,7 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     write_ledger(str(out / REPORT_NAME), report.as_dict())
-    write_ledger(str(out / LEDGER_NAME), report.as_dict())
+    append_ledger(str(out / LEDGER_NAME), report.as_dict())
 
     print(f"run id           : {report.run_id}")
     print(f"horizon          : {report.horizon_start.isoformat()} .. {report.horizon_end.isoformat()}")
@@ -167,6 +167,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"picks (bet)      : {sum(1 for p in report.picks if p['decision'] == 'bet')}")
     print(f"picks (no bet)   : {sum(1 for p in report.picks if p['decision'] == 'no_bet')}")
     print(f"report written   : {out / REPORT_NAME}")
+    print(f"ledger appended  : {out / LEDGER_NAME} (append-only JSON Lines)")
     return 0
 
 

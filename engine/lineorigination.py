@@ -91,20 +91,24 @@ class PlayerPropModel:
     and his per-minute output rate inside a game. A value of 0 means the two
     are treated as independent; the engine does not assume independence - the
     caller must supply the estimated value (or 0.0 explicitly) and record it.
+    Like every field here it has no default: forgetting it is a bug, not an
+    invitation to guess.
     """
 
     expected_minutes: float
     minutes_sd: float
     rate_mean: float
     rate_sd: float
-    minutes_corr_with_rate: float = 0.0
-    model_version: str = ""
+    minutes_corr_with_rate: float
+    model_version: str
 
     def __post_init__(self) -> None:
         if self.minutes_sd < 0 or self.rate_sd < 0:
             raise ValueError("standard deviations cannot be negative")
         if not -1.0 <= self.minutes_corr_with_rate <= 1.0:
             raise ValueError("minutes_corr_with_rate must lie in [-1, 1]")
+        if not self.model_version:
+            raise ValueError("model_version is required")
 
     @property
     def expected_total(self) -> float:

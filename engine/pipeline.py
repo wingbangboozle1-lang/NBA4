@@ -76,6 +76,11 @@ class RunConfig:
     model_version: str = ""
     market_specified: bool = False
     minimum_sample_size: int = 0
+    # Declared, preregistered acceptance threshold: when > 0, a forecast whose
+    # accumulated out-of-sample ``sample_size`` is below it becomes a no-bet
+    # with reason code BELOW_MINIMUM_SAMPLE. 0 means no threshold has been
+    # declared yet; the numeric choice itself stays blank until it is fixed in
+    # the validation plan (docs/validation-plan.md), never derived from results.
 
     def __post_init__(self) -> None:
         if self.horizon_hours <= 0 or self.horizon_hours > HORIZON_HOURS:
@@ -264,6 +269,7 @@ def run_pipeline(
             "side": forecast.side,
             "line": forecast.line,
             "probability": forecast.probability,
+            "sample_size": forecast.sample_size,
             "model_version": forecast.model_version,
             "emitted_at": forecast.emitted_at.isoformat(),
             "input_snapshot_hash": forecast.input_snapshot_hash,
@@ -317,6 +323,8 @@ def _decide(
         reason_codes.append("NO_MARKET_SPEC")
     if not quote_index.get((forecast.event_id, forecast.market_type.value)):
         reason_codes.append("NO_BENCHMARK_QUOTE")
+    if config.minimum_sample_size > 0 and forecast.sample_size < config.minimum_sample_size:
+        reason_codes.append("BELOW_MINIMUM_SAMPLE")
 
     edge: float | None = None
     matching = quote_index.get((forecast.event_id, forecast.market_type.value), [])

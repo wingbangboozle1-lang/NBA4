@@ -13,8 +13,8 @@ Implementation: [`engine/pipeline.py`](../engine/pipeline.py), [`engine/contract
 | 3. Freshness check | Records older than the declared tolerance (default 90 minutes) are rejected | Yes | The run is suppressed with reason `STALE_DATA` | [`engine/pipeline.py`](../engine/pipeline.py) | [source](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py) |
 | 4. Slate selection | Events with a tip-off inside the rolling horizon are selected; the horizon is capped at 72 hours | Yes | Events outside the horizon are never forecast | [`select_slate`](../engine/pipeline.py) | [source](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py) |
 | 5. Forecasting | Each enabled strategy produces immutable forecasts bound to an input snapshot hash | Yes | A strategy that fails is recorded as suppressed | [`engine/contracts.py`](../engine/contracts.py) | [source](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/contracts.py) |
-| 6. Pick decision | Every forecast becomes a `bet` or a `no_bet` with reason codes | Yes | Missing market specification or a missing benchmark quote force `no_bet` | [`_decide`](../engine/pipeline.py) | [source](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py) |
-| 7. Ledger | The run report and every record are appended to an append-only ledger | Yes | A write failure stops the run rather than publishing a partial output | [`append_ledger`](../engine/pipeline.py) | [source](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py) |
+| 6. Pick decision | Every forecast becomes a `bet` or a `no_bet` with reason codes | Yes | Missing market specification, a missing benchmark quote, or an accumulated sample below the declared minimum force `no_bet` | [`_decide`](../engine/pipeline.py) | [source](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py) |
+| 7. Ledger | The run report is written per run and every run record is appended to an append-only JSON Lines ledger | Yes | A write failure stops the run rather than publishing a partial output | [`append_ledger`](../engine/pipeline.py) | [source](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py) |
 | 8. Publication | A separate, explicit step copies approved records into the site data | Yes, but gated | Publication requires the rights and validation gates; the site never shows an unverified value | [`scripts/check_site.py`](../scripts/check_site.py) | [Pages is static hosting](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages) |
 
 ## The three-day horizon, made precise
@@ -36,6 +36,7 @@ Implementation: [`engine/pipeline.py`](../engine/pipeline.py), [`engine/contract
 | `NO_BENCHMARK_QUOTE` | No licensed quote exists for that market | That forecast becomes `no_bet` | [`REASON_CODES`](../engine/pipeline.py) | [source](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py) |
 | `UNRESOLVED_INJURY` | Availability of a relevant player is unresolved | That forecast becomes `no_bet` | [`REASON_CODES`](../engine/pipeline.py) | [source](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py) · [injury policy](https://official.nba.com/nba-injury-report-2026-27-season/) |
 | `GATE_FAILED` | A promotion gate did not pass | That forecast becomes `no_bet` | [`REASON_CODES`](../engine/pipeline.py) | [source](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py) |
+| `BELOW_MINIMUM_SAMPLE` | The strategy version has not accumulated the declared out-of-sample minimum (the numeric threshold itself stays blank until it is preregistered in [`docs/validation-plan.md`](validation-plan.md)) | That forecast becomes `no_bet` | [`REASON_CODES`](../engine/pipeline.py) | [source](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/pipeline.py) |
 
 ## Running it today
 
@@ -55,7 +56,7 @@ Both commands are safe to run on any machine with Python 3.11+. The engine has n
 
 | Verification | Result | Where | Source link |
 | --- | --- | --- | --- |
-| Engine test suite | 46 tests pass | [`tests/test_engine.py`](../tests/test_engine.py) | [test source](https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_engine.py) |
+| Engine test suite | 47 tests pass | [`tests/test_engine.py`](../tests/test_engine.py) | [test source](https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_engine.py) |
 | Example run | 2 synthetic events inside the horizon, 0 forecasts, 0 picks, run suppressed by `RIGHTS_NOT_CLEARED` | [`data/inbox-example`](../data/inbox-example/README.md) | [example folder](https://github.com/wingbangboozle1-lang/NBA4/tree/main/data/inbox-example) |
 
 ## What still has to be decided before this runs on real data

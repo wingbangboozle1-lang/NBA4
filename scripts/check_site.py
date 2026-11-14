@@ -25,6 +25,7 @@ PAGES = (
 OFFICIAL_HOSTS = (
     "nba.com",
     "github.com",
+    "wingbangboozle1-lang.github.io",  # this project's own published site
     "kansspelautoriteit.nl",
     "scikit-learn.org",
     "itl.nist.gov",

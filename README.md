@@ -4,7 +4,7 @@
 
 ## Current status
 
-This repository contains an evidence-first research plan **and a working reference engine** for it: data contracts with a hard rights gate, model-originated fair lines and prices, de-vigging, parlay/prop-combo joint probabilities, correlation estimators with game-cluster bootstrap intervals, validation metrics, a gate-aware leaderboard, and a three-day slate pipeline with an append-only ledger. The engine ships with synthetic fixtures and 46 passing unit tests; it contains **no NBA or market data**, no trained model and no published pick.
+This repository contains an evidence-first research plan **and a working reference engine** for it: data contracts with a hard rights gate, model-originated fair lines and prices, de-vigging, parlay/prop-combo joint probabilities, correlation estimators with game-cluster bootstrap intervals, validation metrics, a gate-aware leaderboard, and a three-day slate pipeline with an append-only ledger. The engine ships with synthetic fixtures and 47 passing unit tests; it contains **no NBA or market data**, no trained model and no published pick.
 
 The blocking issue is still data rights, not code. NBA's Stats FAQ states its statistics are "not available for download for either academic or personal use", and NBA.com's Terms of Use restrict NBA Statistics to "legitimate news reporting or private, non-commercial purposes" and state they "may not be used in connection with any gambling activity (including legal gambling activity)", nor with a "database ... of comprehensive, regularly updated statistics" without the Operator's express prior consent. No NBA statistics, player data, team data, odds or schedule rows have been added, and the engine refuses any record whose permission flag is not set. Obtain written permission or a licensed contract, plus legal review of the product and rewards, before a betting model or public picks are considered.
 
@@ -18,7 +18,7 @@ The blocking issue is still data rights, not code. NBA's Stats FAQ states its st
 - [Strategies and validation gates](https://wingbangboozle1-lang.github.io/NBA4/strategies.html)
 - [Leaderboard and correlation values](https://wingbangboozle1-lang.github.io/NBA4/leaderboard.html)
 - [Decision questions and missing information](https://wingbangboozle1-lang.github.io/NBA4/questions.html)
-- [Suggestions for review](https://wingbangboozle1-lang.github.io/NBA4/suggestions.html)
+- [Suggestions and decision queue](https://wingbangboozle1-lang.github.io/NBA4/suggestions.html)
 - [Verified source register](https://wingbangboozle1-lang.github.io/NBA4/sources.html)
 - [Flagged for Review](https://wingbangboozle1-lang.github.io/NBA4/review.html)
 
@@ -35,7 +35,7 @@ The blocking issue is still data rights, not code. NBA's Stats FAQ states its st
 | [`engine/pipeline.py`](engine/pipeline.py) | Three-day horizon, freshness/rights gates, pick decisions, append-only ledger |
 | [`engine/sources.py`](engine/sources.py) | The verified source registry used by the documents and the site |
 | [`scripts/run_pipeline.py`](scripts/run_pipeline.py) | Command-line entry point for one pipeline cycle |
-| [`tests/test_engine.py`](tests/test_engine.py) | 46 unit tests over synthetic fixtures |
+| [`tests/test_engine.py`](tests/test_engine.py) | 47 unit tests over synthetic fixtures |
 
 ## Research documents
 
@@ -50,6 +50,8 @@ The blocking issue is still data rights, not code. NBA's Stats FAQ states its st
 - [`docs/source-verification.md`](docs/source-verification.md) — per-source verification log and the irregularities that were found.
 - [`docs/sources.md`](docs/sources.md) — official-source register and interpretation limits.
 - [`docs/site-spec.md`](docs/site-spec.md) — dashboard organization and integrity rules.
+- [`docs/verification-log.md`](docs/verification-log.md) — line-by-line re-verification of all 22 cited sources and the corrections made.
+- [`docs/suggestions.md`](docs/suggestions.md) — the suggestions register and the four gating decisions.
 - [`COORDINATION.md`](COORDINATION.md) — task board, verification notes and publication record.
 
 ## Local verification

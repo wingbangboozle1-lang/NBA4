@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Proposed improvements to the NBA4 dashboard, grouped by decision-making value, product and compliance, and engineering — each with a reviewer decision field.">
-  <title>NBA4 — Suggestions for review</title>
+  <meta name="description" content="NBA4 suggestions and decision queue — four gating decisions, twelve decision-queue proposals and twenty-three review-register proposals, each with options, trade-offs, effort and an official source. Nothing is implemented until a path is chosen.">
+  <title>NBA4 — Suggestions and decision queue</title>
   <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
@@ -29,18 +29,72 @@
       </ul>
     </nav>
     <div class="sidebar-spacer"></div>
-    <div class="sidebar-note"><strong>Review queue</strong><p>23 proposals. None implemented without a recorded decision.</p></div>
+    <div class="sidebar-note"><strong>Review queue</strong><p>4 gating decisions, 12 decision-queue proposals, 23 review-register proposals. None implemented without a recorded decision.</p></div>
     <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
   </aside>
   <div class="content-shell">
-    <header class="topbar"><div><p class="topbar-title">Suggestions</p><p class="topbar-meta">Choose the path before implementation · 14 Nov 2026 UTC</p></div><span class="status-pill">AWAITING REVIEW</span></header>
+    <header class="topbar"><div><p class="topbar-title">Suggestions &amp; decision queue</p><p class="topbar-meta">Choose the path before implementation · 14 Nov 2026 UTC</p></div><span class="status-pill">AWAITING REVIEW</span></header>
     <main id="main" class="main-content">
-      <header class="page-header"><p class="eyebrow">Dedicated review section</p><h1>Suggestions for improving this dashboard</h1><p>This page exists so the path can be chosen <em>before</em> anything is built. Every row states the improvement, the decision-making benefit, the effort, what it depends on, and the evidence behind it. The <strong>Decision</strong> column is deliberately empty: it is filled in by the reviewer, not by the agent.</p></header>
+      <header class="page-header"><p class="eyebrow">Dedicated review section</p><h1>Suggestions and decision queue</h1><p>This page exists so the path can be chosen <em>before</em> anything is built. It merges two proposal sets written in parallel sessions and preserves both: the <strong>decision queue</strong> (four gating decisions plus twelve prioritised proposals with options and trade-offs) and the <strong>review register</strong> (23 proposals whose <strong>Decision</strong> column is deliberately empty — it is filled in by the reviewer, not by the agent).</p></header>
 
-      <div class="notice notice-info"><span class="notice-icon" aria-hidden="true">i</span><div><strong>Nothing on this page has been implemented.</strong><p>Rows marked <em>Needs decision</em> cannot be built before their dependency is closed, because doing so would create a number that cannot be justified. Suggested decision values: Accept, Reject, Defer, or a note.</p></div></div>
+      <div class="notice notice-info"><span class="notice-icon" aria-hidden="true">i</span><div><strong>Nothing on this page has been implemented.</strong><p>Pick a path in the decision queue first, then open a request. Rows marked <em>Needs decision</em> / <em>Blocked</em> cannot be built before their dependency is closed. Suggested decision values: Accept, Reject, Defer, or a note. Editing this page is the approved way to change a proposal — do not implement a suggestion that still reads “Needs a decision”.</p></div></div>
+
+      <section class="section" aria-labelledby="why-title">
+        <div class="section-heading"><div><h2 id="why-title">Why these suggestions exist</h2><p>The current dashboard is honest but static: it can tell you a number is missing, not what to do next.</p></div><a class="section-link" href="review.html">See the blockers →</a></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Gap observed</th><th scope="col">Effect on decisions today</th><th scope="col">Addressed by</th><th scope="col">Official source (basis)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>No permitted data</strong></td><td>No line, pick or correlation can be computed, so every strategy question is unanswerable.</td><td>P-01, P-02</td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms of Use §9</a></td></tr>
+              <tr><td><strong>Gates are described, not scored</strong></td><td>You cannot see how close a candidate strategy is to passing, or which gate fails first.</td><td>P-04, P-05</td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/calibration.html" target="_blank" rel="noopener noreferrer">scikit-learn: probability calibration</a></td></tr>
+              <tr><td><strong>Correlation has no measurement plan</strong></td><td>Parlay and combo decisions cannot be justified or rejected with evidence.</td><td>P-06</td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST: correlation</a></td></tr>
+              <tr><td><strong>Injury status is not a minutes estimate</strong></td><td>Rotation and game-flow pages stop at “unknown”, with no way to test a chain.</td><td>P-07</td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA Official injury report</a></td></tr>
+              <tr><td><strong>No decision record</strong></td><td>Rejected ideas get re-litigated; accepted ones cannot be audited later.</td><td>P-08</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4" target="_blank" rel="noopener noreferrer">NBA4 repository history</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="dq-title">
+        <div class="section-heading"><div><h2 id="dq-title">Decision queue — pick a path</h2><p>These are the only decisions that unlock the rest. Until one is chosen, the supported answer to “build the model” is “not yet”. Recommended order: D-1 → D-2 → D-4 → D-3.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Decision</th><th scope="col">Path A</th><th scope="col">Path B</th><th scope="col">What each path unlocks</th><th scope="col">Official source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>D-1 · Data rights</strong></td><td>License a provider that permits betting use in writing.</td><td>Stay private, non-commercial, with no published numbers.</td><td>A: model work and public lines become possible. B: research only; picks stay off. Neither is possible from NBA Stats directly.</td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms §9</a></td></tr>
+              <tr><td><strong>D-2 · Product type</strong></td><td>Informational analytics, no wagers, no rewards.</td><td>Picks/leaderboard with rewards — a regulated activity needing review.</td><td>A: this site is sufficient hosting. B: legal classification, age controls and a different host are prerequisites.</td><td><a class="source-link" href="https://kansspelautoriteit.nl/remote-gambling-act-force" target="_blank" rel="noopener noreferrer">Ksa: licence requirement</a></td></tr>
+              <tr><td><strong>D-3 · First market</strong></td><td>One single-bet market, e.g. game total.</td><td>Player props or same-game parlays first.</td><td>A: fewer inputs, faster honest result. B: joint distributions and minutes models are needed before any number is meaningful.</td><td><a class="source-link" href="https://www.nba.com/stats/help/glossary" target="_blank" rel="noopener noreferrer">NBA Stats glossary (definitions)</a></td></tr>
+              <tr><td><strong>D-4 · Success rule</strong></td><td>Calibration-first: proper score plus reliability curve.</td><td>Return-first: ROI against a benchmark price.</td><td>A is testable without prices. B needs a licensed price and settlement record, so it cannot start first.</td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/calibration.html" target="_blank" rel="noopener noreferrer">scikit-learn: calibration</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="p-title">
+        <div class="section-heading"><div><h2 id="p-title">Decision-queue proposals (P-01 … P-12)</h2><p>Twelve prioritised proposals, each with options and an explicit trade-off. They were numbered S-01 … S-12 in the PR #3 implementation and are re-lettered P-01 … P-12 here because the review register below uses S-01 … S-23 for a different set; nothing is discarded.</p></div><a class="section-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/suggestions.md">Full register →</a></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">ID</th><th scope="col">Suggestion</th><th scope="col">Options and trade-off</th><th scope="col">Effort</th><th scope="col">Status</th><th scope="col">Official source (basis or method)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>P-01</strong></td><td>Publish a rights decision record for data: which provider, which contract clause, which fields, which territories, which retention.</td><td>A: licensed provider covering betting use — unblocks everything, costs money and negotiation time. B: private non-commercial research only — cheap, still bars picks and any public numbers. C: no data — the site stays an evidence shell. Mixed A+B is impossible to display safely, because the display itself is the restricted act.</td><td>1 session plus legal review</td><td><span class="flag">Needs a decision</span></td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms §9</a><br><a class="source-link" href="https://www.nba.com/stats/help/faq" target="_blank" rel="noopener noreferrer">NBA Stats FAQ</a></td></tr>
+              <tr><td><strong>P-02</strong></td><td>Add a data-source matrix page: every required input, its owner, refresh cadence, timestamp field, correction policy and permission status.</td><td>A: one table per input type (schedule, box score, lineup, injury, price, settlement). B: single flat table — faster to read, harder to maintain. A is recommended, because permissions differ per field and a flat table hides that.</td><td>½ session</td><td><span class="flag flag-blue">Proposed</span></td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury report policy</a></td></tr>
+              <tr><td><strong>P-03</strong></td><td>Add an immutable forecast ledger schema, so every future line is stored with model version, input snapshot IDs and issue time before the event.</td><td>A: append-only JSON/CSV with a hash per record. B: database table with version rows. Both are static-hostable if written at build time; A is simpler and diffable in Git, B needs a backend the current host cannot run.</td><td>1 session (schema only)</td><td><span class="flag flag-blue">Proposed</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">scikit-learn: time-series validation</a></td></tr>
+              <tr><td><strong>P-04</strong></td><td>Turn the validation gates into a pass/fail scorecard with an explicit “first failing gate” column.</td><td>A: binary pass/fail per gate. B: pass/fail plus a distance-to-threshold. B risks implying partial credit for an unvalidated model, so A is recommended until real data exists.</td><td>½ session</td><td><span class="flag flag-blue">Proposed</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/model_evaluation.html" target="_blank" rel="noopener noreferrer">scikit-learn: metrics and scoring</a></td></tr>
+              <tr><td><strong>P-05</strong></td><td>Pre-register the leaderboard rules (objective, baselines, holdout, tie-breaks, reward terms) as a dated, versioned document before any model is scored.</td><td>A: preregister now, reward-free. B: wait for data then preregister — risks rules being fitted to results. A is strongly preferred; the whole point is that rules precede results.</td><td>1 session</td><td><span class="flag">Needs a decision</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/calibration.html" target="_blank" rel="noopener noreferrer">scikit-learn: proper scoring rules</a></td></tr>
+              <tr><td><strong>P-06</strong></td><td>Add a correlation worksheet: leg pair, conditioning set, estimator, sample count, game-clustered interval, shrinkage rule.</td><td>A: residual Pearson for continuous legs plus joint-frequency for threshold legs. B: one generic coefficient for everything — misleading, because a parlay needs a joint probability, not a linear association. A is recommended.</td><td>½ session (template only)</td><td><span class="flag flag-blue">Proposed</span></td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST: correlation definition</a><br><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/eda/section3/bootplot.htm" target="_blank" rel="noopener noreferrer">NIST: bootstrap uncertainty</a></td></tr>
+              <tr><td><strong>P-07</strong></td><td>Build the injury-to-production chain as four separately validated steps: status, availability, minutes, production.</td><td>A: four models with separate error reporting. B: one end-to-end model — fewer moving parts, but it hides which step failed and invites treating a status label as an impact estimate. A is recommended.</td><td>2 sessions (design), blocked on data</td><td><span class="flag">Blocked</span></td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury reporting policy</a></td></tr>
+              <tr><td><strong>P-08</strong></td><td>Keep a decision log page: date, question, options, choice, who decided, and what would reverse it.</td><td>A: a table on this site. B: an ADR folder in the repository. Both are cheap; A is visible to a non-technical reviewer, B is better for versioning. Doing both with A as a rendered view of B avoids duplicate truth.</td><td>½ session</td><td><span class="flag flag-blue">Proposed</span></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4" target="_blank" rel="noopener noreferrer">NBA4 repository</a></td></tr>
+              <tr><td><strong>P-09</strong></td><td>Add a staleness banner that flips the whole slate page to “no picks” whenever its newest source timestamp exceeds a declared threshold.</td><td>A: hard suppression. B: a warning while still showing numbers — rejected, because a stale line that looks current is exactly the failure mode that costs money.</td><td>½ session (logic spec only until data exists)</td><td><span class="flag flag-blue">Proposed</span></td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury report (continual updates)</a></td></tr>
+              <tr><td><strong>P-10</strong></td><td>Separate “no edge found” from “no data” everywhere a blank appears.</td><td>A: three states — not computed, computed and excluded, computed and eligible. B: keep one blank state. A is recommended: the current single blank makes a tested-and-rejected strategy look identical to an untested one.</td><td>½ session</td><td><span class="flag flag-blue">Proposed</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/calibration.html" target="_blank" rel="noopener noreferrer">scikit-learn: calibration limits</a></td></tr>
+              <tr><td><strong>P-11</strong></td><td>Move commercial or live functionality to permitted hosting if, and only if, the product becomes commercial.</td><td>A: stay static and informational. B: backend host with secrets and access control. B is required the moment there are accounts, rewards, paid access or live ingestion; the current host cannot serve it.</td><td>Depends on scope</td><td><span class="flag flag-blue">Proposed</span></td><td><a class="source-link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits" target="_blank" rel="noopener noreferrer">GitHub Pages limits</a></td></tr>
+              <tr><td><strong>P-12</strong></td><td>Show a responsible-use and age note beside any future reward or contest content.</td><td>A: static notice. B: age-gate. B is a compliance decision, not a design one; both belong to legal review for the target jurisdictions.</td><td>Minutes (copy), gated by review</td><td><span class="flag">Blocked</span></td><td><a class="source-link" href="https://kansspelautoriteit.nl/10-tips-gambling-safely" target="_blank" rel="noopener noreferrer">Ksa: 10 tips for gambling safely</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
       <section class="section" aria-labelledby="decision-title">
-        <div class="section-heading"><div><h2 id="decision-title">A · Decision-making improvements</h2><p>Changes that make the evidence easier to read and act on.</p></div><a class="section-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/suggestions.md">Full register →</a></div>
+        <div class="section-heading"><div><h2 id="decision-title">A · Decision-making improvements</h2><p>Changes that make the evidence easier to read and act on. The Decision column is the reviewer's field.</p></div><a class="section-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/suggestions.md">Full register →</a></div>
         <div class="table-card table-wrap">
           <table class="data-table">
             <thead><tr><th scope="col">ID</th><th scope="col">Suggestion</th><th scope="col">Why it improves decisions</th><th scope="col">Effort</th><th scope="col">Depends on</th><th scope="col">Status</th><th scope="col">Decision</th><th scope="col">Evidence</th></tr></thead>
@@ -95,11 +149,24 @@
         </div>
       </section>
 
+      <section class="section" aria-labelledby="ask-title">
+        <div class="section-heading"><div><h2 id="ask-title">What we still need from you</h2><p>Facts only the project owner can supply — no source can answer these.</p></div><a class="section-link" href="questions.html">Full question register →</a></div>
+        <div class="panel">
+          <ol>
+            <li><strong>Intended use.</strong> Personal research, a public tipster page, or a commercial product with rewards?</li>
+            <li><strong>Budget for data.</strong> Licensed feeds are the gating cost; “free NBA stats” is not an available route.</li>
+            <li><strong>Jurisdictions.</strong> Which countries would see picks, and would any link to a bookmaker?</li>
+            <li><strong>Risk tolerance for being wrong.</strong> Whether a silent “no pick” is acceptable, or whether you need a measurable pipeline even before it is profitable.</li>
+            <li><strong>Timeline.</strong> Whether a correct empty dashboard now beats an attractive but unvalidated one later.</li>
+          </ol>
+        </div>
+      </section>
+
       <section class="section two-column" aria-label="How to review the suggestions">
         <article class="panel"><h2>How to review</h2><ol><li>Read the row and check the evidence link.</li><li>Record Accept, Reject or Defer in the Decision column (or a note).</li><li>Implement only the accepted rows, in the order agreed.</li><li>Record the decision in the repository's coordination board so the change history stays traceable.</li></ol><p><a href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/suggestions.md" target="_blank" rel="noopener noreferrer">Open the register in the repository ↗</a></p></article>
-        <article class="panel"><h2>One rule for every suggestion</h2><p>No suggestion may add a number that an official source does not support. Any value that cannot be confirmed from an official or authorised source stays blank and is flagged as unverified — that rule applies to the improvements as much as to the pages they would change.</p><p><a href="sources.html">Open the source register →</a></p></article>
+        <article class="panel"><h2>One rule for every suggestion</h2><p>No suggestion may add a number that an official source does not support. Any value that cannot be confirmed from an official or authorised source stays blank and is flagged as unverified — that rule applies to the improvements as much as to the pages they would change. Where the two registers propose the same idea (for example P-10 and S-06/S-10, or P-11 and S-15), the overlap map in the register lets the reviewer accept one wording and reject the duplicate.</p><p><a href="sources.html">Open the source register →</a></p></article>
       </section>
-      <footer class="footer"><p>23 proposals · 0 implemented · awaiting review.</p><p><a href="review.html">See unresolved issues →</a></p></footer>
+      <footer class="footer"><p>4 gating decisions · 12 decision-queue proposals · 23 review-register proposals · 0 implemented · awaiting review.</p><p><a href="review.html">See unresolved issues →</a></p></footer>
     </main>
   </div>
 </div>
