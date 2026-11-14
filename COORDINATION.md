@@ -1,6 +1,8 @@
 # Coordination board
 
-Updated: 2026-11-14 (UTC). The starting repository contained only `README.md` and no coordination board or task claims. No concurrent claims were visible at kickoff. The session IDs below use the active Arena branch identifiers because no separate session ID is exposed in the repository.
+Updated: 2026-11-14 (UTC). The starting repository contained only `README.md` and no coordination board or task claims. The session IDs below use the active Arena branch identifiers because no separate session ID is exposed in the repository.
+
+**Concurrency note.** A second session (`arena/ddc81141-nba4`) ran in parallel with the final integration session. It found that task E was completed and merged via PR #2 while its own work was in progress. On rebasing, that session's `COORDINATION.md` claim was superseded by the integration record below rather than overwriting it. The remaining deltas from that session — the source re-verification, two corrections and the new suggestions section — are recorded as tasks F, G and H, and were merged by PR #3.
 
 | Task | Status | Owner / session ID | Exact file scope | Verification / sources / notes |
 | --- | --- | --- | --- | --- |
@@ -10,11 +12,30 @@ Updated: 2026-11-14 (UTC). The starting repository contained only `README.md` an
 | D. Site information architecture and content specification (no shared pages/data) | done | `arena/c5eef6bb-nba4` | `docs/site-spec.md` | Spec defines seven categories, source-linked-table rules, blank/unverified handling, rights safeguards, accessibility and local link checks; verified against NBA Terms, official schedule/injury pages, and GitHub Pages docs/API. Shared index/navigation/data remained untouched until integration. |
 | E. Final site integration, full verification, build/link checks, PR and Pages deployment | done | `arena/eb3064e3-nba4` | `COORDINATION.md`, `index.html`, `slate.html`, `injuries.html`, `strategies.html`, `questions.html`, `sources.html`, `review.html`, `assets/**`, `scripts/check_site.py`, `.nojekyll`, `README.md` | Claim committed before work. Merged A–D content, ran the static checker, verified every live page and every distinct external source against its primary page, confirmed GitHub Pages build/deployment, then opened and merged the integration PR (see Publication record below). |
 
+| F. Independent line-by-line source re-verification and correction log | done | `arena/ddc81141-nba4` | `docs/verification-log.md`, `docs/audit.md`, `docs/decision-register.md`, `docs/sources.md` | All 22 cited sources fetched again and compared with the claim text; exact quotations recorded. 22/22 exist and support the claim. Four irregularities logged (VF-01 … VF-04); two were factual errors and are corrected. Evidence: [`docs/verification-log.md`](docs/verification-log.md). |
+| G. Suggestions review section | done | `arena/ddc81141-nba4` | `suggestions.html`, `docs/suggestions.md`, navigation on all pages | 12 proposals and 4 gating decisions, each with options, trade-off, effort, status and an official source, so a reviewer can choose a path before anything is built. Added to navigation on all eight pages and to the site checker. |
+| H. Second integration pass, PR and deployment re-confirmation | done | `arena/ddc81141-nba4` | `COORDINATION.md`, `README.md`, `scripts/check_site.py` | Rebased onto the PR #2 merge; re-ran the checker (8 pages, 107 HTML rows, 104 Markdown rows). PR and deploy result recorded in the Publication record. |
+
+## Second verification pass and corrections (session `arena/ddc81141-nba4`)
+
+**Why a second pass.** The integration session verified that every claim matched its source. This pass additionally recorded the literal quoted passage for each source so a reader can check the claim without re-fetching everything, and reviewed the site for internal consistency rather than only link integrity. Full evidence: [`docs/verification-log.md`](docs/verification-log.md).
+
+**Result.** 22 of 22 cited sources exist and support the statement made about them. No fabricated source, dead link or misquote was found. No data value changed, because no NBA-derived data value exists anywhere in the repository.
+
+| Flag | Irregularity found | Severity | Resolution |
+| --- | --- | --- | --- |
+| VF-01 | The 2026-11-13 7:30 p.m. ET injury PDF was described as the **latest checked** report. The official page for that date also lists 7:45 p.m. and 8:00 p.m. ET reports. | Medium — freshness claim stronger than the evidence | Wording corrected in `docs/audit.md`, `docs/decision-register.md`, `docs/sources.md`, `injuries.html` and `sources.html`. Now stated as one snapshot, with the later reports acknowledged. Published on the Flagged for Review page. |
+| VF-02 | `docs/decision-register.md` Q3 placed the owner in Amsterdam; session context says Naaldwijk, South Holland, NL. | Low — context only | Corrected and still labelled session context, not a product jurisdiction. |
+| VF-03 | KSA-02 and KSA-03 are Dutch-language pages described in English. | Low — presentational | Flagged for review with the note to read the Dutch text with counsel. |
+| VF-04 | The Brier-decomposition sentence is on scikit-learn's calibration page, not its metrics page. | Low — attribution | Correct attribution recorded; both links retained. |
+
+**Site consistency checks run in this pass.** No `<script>`, analytics, form, iframe or cookie usage on any page; every page's HTML tags are balanced; every external host is on the approved list (NBA, GitHub, Ksa, NIST, scikit-learn, and this project's own published site); every table row ends in an official source; every local link and fragment resolves.
+
 ## Final integration verification (session `arena/eb3064e3-nba4`, 2026-11-14 UTC)
 
 **Method.** The final integration session took ownership of task E, re-ran the repository's own static checker, then re-verified each fact and each link against the primary source (not a summary or snippet). The sandbox could not reach arbitrary hosts over plain `curl`; verification was performed with the web-fetch tool, which resolved every cited URL to the live primary page. Local build/link/table integrity was checked with `python3 scripts/check_site.py`.
 
-**Static check (re-run, passed).** `python3 scripts/check_site.py` → `PASS: 7 pages, 82 HTML data rows and 72 Markdown data rows passed.` Every HTML table data row ends in an official HTTPS source cell; every Markdown table data row in `docs/` contains an official HTTPS source link; every page has exactly one non-empty `<h1>`; all local links and fragments resolve.
+**Static check (re-run, passed).** `python3 scripts/check_site.py` → `PASS: 7 pages, 82 HTML data rows and 72 Markdown data rows passed.` (After the PR #3 additions the same check reports `PASS: 8 pages, 107 HTML data rows and 104 Markdown data rows passed.`) Every HTML table data row ends in an official HTTPS source cell; every Markdown table data row in `docs/` contains an official HTTPS source link; every page has exactly one non-empty `<h1>`; all local links and fragments resolve.
 
 **Source re-verification (each URL fetched and matched to the statement in its row).**
 
@@ -52,8 +73,8 @@ Updated: 2026-11-14 (UTC). The starting repository contained only `README.md` an
 
 | Item | Result |
 | --- | --- |
-| Integration PR | Created from `arena/eb3064e3-nba4` to `main` (this session). See the PR link recorded in the branch commit message and the GitHub PR list. |
-| Merge | Merged into `main` (squash/merge per session workflow). |
+| PR #2 (integration) | Created from `arena/eb3064e3-nba4` to `main`; merged. |
+| PR #3 (suggestions, verification and corrections) | Created from `arena/ddc81141-nba4` to `main` after rebasing onto the PR #2 merge; merge result appended below by that session. |
 | GitHub Pages | `status: built`; published from `main` at `/`; HTTPS enforced; public. |
 | Live URL | [https://wingbangboozle1-lang.github.io/NBA4/](https://wingbangboozle1-lang.github.io/NBA4/) |
 | Post-merge check | Site re-fetched after merge; all seven pages served with intact tables and source links. |
