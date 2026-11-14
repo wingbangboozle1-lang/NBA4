@@ -1,6 +1,6 @@
 # Validation and leaderboard gates
 
-**Current status:** every empirical gate is **blocked / not run**. There is no legally cleared data source, point-in-time history, market-price/settlement feed, model implementation, or holdout dataset in the repository. Thresholds are intentionally blank rather than invented. This document defines a research procedure; passing it is a future task, not a current result.
+**Current status:** every empirical gate is **blocked / not run**. The gate logic, the scoring metrics, the chronological splitting and the leakage check are implemented and unit-tested in [`engine/leaderboard.py`](../engine/leaderboard.py), [`engine/validation.py`](../engine/validation.py) and [`engine/contracts.py`](../engine/contracts.py); they have never been run on licensed NBA data. There is no legally cleared data source, point-in-time history, market-price/settlement feed, model implementation, or holdout dataset in the repository. Thresholds are intentionally blank rather than invented. This document defines a research procedure; passing it is a future task, not a current result.
 
 ## Hard gates
 
@@ -26,7 +26,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |  |  |  |  |  |  |  |  |  | Not run — no model/data | [NBA.com Terms of Use](https://www.nba.com/termsofuse) · [scikit-learn evaluation](https://scikit-learn.org/stable/modules/model_evaluation.html) |
 
-Blank cells are not zeroes. They mean the value is unknown or cannot be lawfully/officially confirmed from the material currently available. Do not fill them with simulated, guessed, or illustrative NBA numbers.
+The leaderboard implementation that consumes these gates is [`engine/leaderboard.py`](../engine/leaderboard.py); it ranks nothing when a gate is missing or failed. Blank cells are not zeroes. They mean the value is unknown or cannot be lawfully/officially confirmed from the material currently available. Do not fill them with simulated, guessed, or illustrative NBA numbers.
 
 ## Promotion and leaderboard rule
 

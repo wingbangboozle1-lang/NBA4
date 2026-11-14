@@ -1,43 +1,70 @@
 # NBA4 — NBA line research dashboard
 
-**Live site:** [https://wingbangboozle1-lang.github.io/NBA4/](https://wingbangboozle1-lang.github.io/NBA4/) (GitHub Pages is configured from `main` at the repository root; deployment must be rechecked after merge.)
+**Live site:** [https://wingbangboozle1-lang.github.io/NBA4/](https://wingbangboozle1-lang.github.io/NBA4/) (GitHub Pages publishes from `main` at the repository root; the deployment is re-checked after every merge.)
 
 ## Current status
 
-This repository now provides an evidence-first research plan and a static decision dashboard. It does **not** contain a trained model or an authorized point-in-time NBA/market data feed. No NBA game lines, player props, parlay probabilities, injury-minute projections, correlations, ROI, strategy rankings or rewards are generated. Unknown numerical fields are left blank and flagged, not guessed.
+This repository contains an evidence-first research plan **and a working reference engine** for it: data contracts with a hard rights gate, model-originated fair lines and prices, de-vigging, parlay/prop-combo joint probabilities, correlation estimators with game-cluster bootstrap intervals, validation metrics, a gate-aware leaderboard, and a three-day slate pipeline with an append-only ledger. The engine ships with synthetic fixtures and 46 passing unit tests; it contains **no NBA or market data**, no trained model and no published pick.
 
-A material source/rights issue is documented: the NBA Stats FAQ says its statistics are for viewing and not available for download; NBA.com Terms restrict the use of NBA Statistics in gambling, including legal gambling. No NBA Stats scraping, player data, team data, odds or schedule rows have been added. Obtain appropriate written permission/data rights and legal review before a betting model or public picks are considered.
+The blocking issue is still data rights, not code. NBA's Stats FAQ states its statistics are "not available for download for either academic or personal use", and NBA.com's Terms of Use restrict NBA Statistics to "legitimate news reporting or private, non-commercial purposes" and state they "may not be used in connection with any gambling activity (including legal gambling activity)", nor with a "database ... of comprehensive, regularly updated statistics" without the Operator's express prior consent. No NBA statistics, player data, team data, odds or schedule rows have been added, and the engine refuses any record whose permission flag is not set. Obtain written permission or a licensed contract, plus legal review of the product and rewards, before a betting model or public picks are considered.
 
 ## Dashboard sections
 
 - [Overview and executive summary](https://wingbangboozle1-lang.github.io/NBA4/)
 - [Upcoming slate status](https://wingbangboozle1-lang.github.io/NBA4/slate.html)
 - [Injuries, rotation and game flow](https://wingbangboozle1-lang.github.io/NBA4/injuries.html)
+- [Line origination](https://wingbangboozle1-lang.github.io/NBA4/line-origination.html)
+- [Automation and the three-day pipeline](https://wingbangboozle1-lang.github.io/NBA4/automation.html)
 - [Strategies and validation gates](https://wingbangboozle1-lang.github.io/NBA4/strategies.html)
+- [Leaderboard and correlation values](https://wingbangboozle1-lang.github.io/NBA4/leaderboard.html)
 - [Decision questions and missing information](https://wingbangboozle1-lang.github.io/NBA4/questions.html)
+- [Suggestions for review](https://wingbangboozle1-lang.github.io/NBA4/suggestions.html)
 - [Verified source register](https://wingbangboozle1-lang.github.io/NBA4/sources.html)
 - [Flagged for Review](https://wingbangboozle1-lang.github.io/NBA4/review.html)
+
+## Reference engine
+
+| Module | Responsibility |
+| --- | --- |
+| [`engine/contracts.py`](engine/contracts.py) | Data contracts, provenance, the rights gate and the leakage check |
+| [`engine/lineorigination.py`](engine/lineorigination.py) | Fair spread/total/prop lines, fair prices, de-vigging and edge |
+| [`engine/parlay.py`](engine/parlay.py) | Joint probability for parlays and prop combos (Gaussian copula) |
+| [`engine/correlation.py`](engine/correlation.py) | Pearson/Spearman/phi estimators, game-cluster bootstrap interval, shrinkage |
+| [`engine/validation.py`](engine/validation.py) | Brier, log loss, reliability bins, walk-forward splits, coverage, net return |
+| [`engine/leaderboard.py`](engine/leaderboard.py) | Gate evaluation and ranking of eligible, version-locked candidates |
+| [`engine/pipeline.py`](engine/pipeline.py) | Three-day horizon, freshness/rights gates, pick decisions, append-only ledger |
+| [`engine/sources.py`](engine/sources.py) | The verified source registry used by the documents and the site |
+| [`scripts/run_pipeline.py`](scripts/run_pipeline.py) | Command-line entry point for one pipeline cycle |
+| [`tests/test_engine.py`](tests/test_engine.py) | 46 unit tests over synthetic fixtures |
 
 ## Research documents
 
 - [`docs/audit.md`](docs/audit.md) — repository/evidence audit and hard blockers.
-- [`docs/strategy-framework.md`](docs/strategy-framework.md) — proposed singles, props, parlay, injury and game-flow signals; correlation measurement plan.
+- [`docs/strategy-framework.md`](docs/strategy-framework.md) — proposed singles, props, parlay, injury and game-flow signals.
 - [`docs/validation-plan.md`](docs/validation-plan.md) — leakage-free testing, uncertainty and leaderboard gates.
-- [`docs/decision-register.md`](docs/decision-register.md) — executive summary, open questions and discovery suggestions.
+- [`docs/decision-register.md`](docs/decision-register.md) — executive summary, 16 open questions and discovery suggestions.
+- [`docs/line-origination.md`](docs/line-origination.md) — how an originated line is produced and kept separate from the market.
+- [`docs/automation.md`](docs/automation.md) — the daily, no-manual-input runbook for the three-day slate.
+- [`docs/correlation-and-leaderboard.md`](docs/correlation-and-leaderboard.md) — correlation measurement plan and leaderboard design.
+- [`docs/suggestions.md`](docs/suggestions.md) — 23 site-improvement proposals for review before implementation.
+- [`docs/source-verification.md`](docs/source-verification.md) — per-source verification log and the irregularities that were found.
 - [`docs/sources.md`](docs/sources.md) — official-source register and interpretation limits.
 - [`docs/site-spec.md`](docs/site-spec.md) — dashboard organization and integrity rules.
 - [`COORDINATION.md`](COORDINATION.md) — task board, verification notes and publication record.
 
 ## Local verification
 
-Run the static checks from the repository root:
-
 ```sh
-python3 scripts/check_site.py
+python3 scripts/check_site.py --with-tests   # page, link, table and source-link checks + engine tests
+python3 -m unittest discover -s tests -t .    # engine unit tests only
+python3 scripts/run_pipeline.py \
+    --inputs data/inbox-example \
+    --out data/out-example \
+    --now 2026-11-14T12:00:00Z                # synthetic smoke test
 ```
 
-The checker verifies each page’s title/headings and local links/fragments, every HTML table row’s final source cell, and every Markdown table row in `docs/` for an HTTPS source on an approved official-source domain. It does not fetch external sites; each cited source must be reviewed directly. The site uses static HTML/CSS only and no third-party scripts or data collection.
+The checker verifies each page's title and single heading, every local link and fragment, every HTML table row's final source cell, every Markdown table row in `docs/` for an HTTPS source on an approved official-source domain, and that no page on disk is missing from the checked set. It does not fetch external sites; each cited source must be reviewed directly (the review log is in `docs/source-verification.md`). The site uses static HTML/CSS only, with no third-party scripts, cookies or data collection.
 
 ## Scope and disclaimer
 
-The dashboard is informational and independent. It is not affiliated with or endorsed by the NBA, is not a betting service or financial advice, and does not promise that statistical testing can remove luck or guarantee results. If the product becomes a commercial/live picks or rewards service, re-evaluate data rights, jurisdiction, responsible-use requirements and hosting before launch; GitHub Pages is not intended for commercial SaaS or online-business hosting.
+The dashboard is informational and independent. It is not affiliated with or endorsed by the NBA, is not a betting service or financial advice, and does not promise that statistical testing can remove luck or guarantee results. If the product becomes a commercial or live picks/rewards service, re-evaluate data rights, jurisdiction, responsible-use requirements and hosting before launch; GitHub Pages is not intended for commercial SaaS or online-business hosting.

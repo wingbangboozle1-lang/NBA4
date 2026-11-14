@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Gate-aware leaderboard design for NBA4: eligibility rules, correlation measurement plan, scoring policy and the current (empty) standings.">
+  <title>NBA4 — Leaderboard</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Site navigation">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N4</span><span class="brand-copy">NBA4<small>RESEARCH DASHBOARD</small></span></a>
+    <p class="nav-label">Workspace</p>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <ul>
+      <li><a href="index.html"><span class="nav-icon" aria-hidden="true">◆</span>Overview</a></li>
+      <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
+      <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
+      <li><a href="line-origination.html"><span class="nav-icon" aria-hidden="true">≡</span>Line origination</a></li>
+      <li><a href="automation.html"><span class="nav-icon" aria-hidden="true">⟳</span>Automation</a></li>
+      <li><a href="strategies.html"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
+      <li><a href="leaderboard.html" aria-current="page"><span class="nav-icon" aria-hidden="true">▤</span>Leaderboard</a></li>
+      <li><a href="questions.html"><span class="nav-icon" aria-hidden="true">?</span>Decision questions</a></li>
+      <li><a href="suggestions.html"><span class="nav-icon" aria-hidden="true">✦</span>Suggestions</a></li>
+      <li><a href="sources.html"><span class="nav-icon" aria-hidden="true">↗</span>Sources</a></li>
+      <li><a href="review.html"><span class="nav-icon" aria-hidden="true">⚑</span>Flagged for review</a></li>
+      </ul>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-note"><strong>No ranked strategy</strong><p>The board stays empty until a candidate passes every gate.</p></div>
+    <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
+  </aside>
+  <div class="content-shell">
+    <header class="topbar"><div><p class="topbar-title">Leaderboard</p><p class="topbar-meta">Eligibility is a gate · no rewards enabled</p></div><span class="status-pill">NO WINNERS</span></header>
+    <main id="main" class="main-content">
+      <header class="page-header"><p class="eyebrow">Rewards follow evidence, not effort</p><h1>Leaderboard &amp; correlation values</h1><p>The competition model is designed here but not operated: the leaderboard ranks only candidates that pass every pre-registered gate on a frozen strategy version, and the correlation values that combos need are measured on licensed, paired outcomes. Both tables are empty on purpose.</p></header>
+
+      <div class="notice"><span class="notice-icon" aria-hidden="true">!</span><div><strong>An empty board is the correct state today.</strong><p>No strategy has been trained, no gate has run and no reward terms exist. Ranking a candidate that has not been validated would present luck as skill; the Netherlands Gambling Authority's own consumer guidance notes that gambling outcomes are almost always determined by chance rather than insight or practice.</p></div></div>
+
+      <section class="section" aria-labelledby="rules-title">
+        <div class="section-heading"><div><h2 id="rules-title">How the board decides</h2><p>Every rule is implemented in code and unit-tested, so an ineligible candidate cannot slip through by omission.</p></div><a class="section-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/correlation-and-leaderboard.md">Full design →</a></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Element</th><th scope="col">Rule</th><th scope="col">Status</th><th scope="col">Implementation / source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Eligibility</strong></td><td>Every required gate must have passed on a frozen strategy version. A gate the candidate does not report counts as failed.</td><td><span class="flag flag-green">Implemented &amp; tested</span></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/leaderboard.py" target="_blank" rel="noopener noreferrer">engine/leaderboard.py</a></td></tr>
+              <tr><td><strong>Minimum sample</strong></td><td>The policy must supply a minimum sample size; a candidate below it is not ranked.</td><td><span class="flag">Mechanism ready</span><br>The number itself is blank.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/leaderboard.py" target="_blank" rel="noopener noreferrer">engine/leaderboard.py</a></td></tr>
+              <tr><td><strong>Scoring</strong></td><td>A weighted composite over declared metrics; weights come from the policy and are never chosen after looking at the holdout.</td><td><span class="flag">Mechanism ready</span><br>Weights are blank.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/leaderboard.py" target="_blank" rel="noopener noreferrer">engine/leaderboard.py</a></td></tr>
+              <tr><td><strong>Reported context</strong></td><td>Each row carries rank, frozen model version, market, sample size, window, scores, uncertainty context, baseline comparison and the correlation check.</td><td><span class="flag flag-green">Implemented</span></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/leaderboard.py" target="_blank" rel="noopener noreferrer">engine/leaderboard.py</a></td></tr>
+              <tr><td><strong>Calibration discipline</strong></td><td>A proper score is read together with a reliability table: a lower Brier loss alone does not necessarily mean a better calibrated model.</td><td><span class="flag flag-green">Implemented</span></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/validation.py" target="_blank" rel="noopener noreferrer">engine/validation.py</a><br><a class="source-link" href="https://scikit-learn.org/stable/modules/calibration.html" target="_blank" rel="noopener noreferrer">scikit-learn calibration</a></td></tr>
+              <tr><td><strong>Multiple testing</strong></td><td>The number of candidate variants examined is reported; a shortlist chosen after the holdout is a failure.</td><td><span class="flag">Process control</span><br>Not run.</td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">scikit-learn validation</a></td></tr>
+              <tr><td><strong>Rewards</strong></td><td>Amount, funding, eligibility, tie handling, payment schedule and tax treatment.</td><td><span class="flag flag-red">Blocked</span><br>Needs a risk policy and legal review.</td><td><a class="source-link" href="https://kansspelautoriteit.nl/belangrijkste-regels-voor-kansspelreclame" target="_blank" rel="noopener noreferrer">Ksa advertising rules</a><br><a class="source-link" href="https://kansspelautoriteit.nl/10-tips-gambling-safely" target="_blank" rel="noopener noreferrer">Ksa consumer guidance</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="corr-title">
+        <div class="section-heading"><div><h2 id="corr-title">Correlation values to determine</h2><p>Value, interval and sample cells stay blank until licensed paired outcomes exist.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Relationship</th><th scope="col">Estimator</th><th scope="col">Value</th><th scope="col">Interval</th><th scope="col">Sample / window</th><th scope="col">Status</th><th scope="col">Method source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Two player-stat residuals in one game</strong></td><td>Pearson correlation of pregame residuals, game-cluster bootstrap interval.</td><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td><span class="flag">Unverified</span><br>No licensed event records.</td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST definition</a><br><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/correlation.py" target="_blank" rel="noopener noreferrer">engine/correlation.py</a></td></tr>
+              <tr><td><strong>Two binary prop legs for one player</strong></td><td>Direct joint-event probability plus a binary association summary and both marginals.</td><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td><span class="flag">Unverified</span><br>No lines or settled legs.</td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST definition</a><br><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/parlay.py" target="_blank" rel="noopener noreferrer">engine/parlay.py</a></td></tr>
+              <tr><td><strong>Game total and a player prop</strong></td><td>Conditional joint distribution under a preregistered game context.</td><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td><span class="flag">Unverified</span><br>No point-in-time predictions.</td><td><a class="source-link" href="https://www.nba.com/stats/help/glossary" target="_blank" rel="noopener noreferrer">NBA metric definitions</a></td></tr>
+              <tr><td><strong>Teammate minutes after an absence</strong></td><td>Conditional player-pair effect with lineup and role controls; not a raw causal on/off claim.</td><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td><span class="flag">Unverified</span><br>No authorised lineup or minute history.</td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury report</a></td></tr>
+              <tr><td><strong>Both teams' totals in one game</strong></td><td>Residual correlation of the margin model, with the game as the resampling cluster.</td><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td><span class="flag">Unverified</span><br>No model residuals yet.</td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/eda/section3/bootplot.htm" target="_blank" rel="noopener noreferrer">NIST bootstrap</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="standings-title">
+        <div class="section-heading"><div><h2 id="standings-title">Current standings</h2><p>Empty by design until a candidate passes every gate.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Rank</th><th scope="col">Strategy</th><th scope="col">Model version</th><th scope="col">Market</th><th scope="col">Sample</th><th scope="col">Window</th><th scope="col">Calibration</th><th scope="col">Net result</th><th scope="col">Uncertainty</th><th scope="col">Status</th><th scope="col">Source</th></tr></thead>
+            <tbody>
+              <tr><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td class="empty-value"></td><td><span class="flag flag-red">No eligible candidate</span><br>No strategy has passed a gate.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/validation-plan.md" target="_blank" rel="noopener noreferrer">validation plan</a><br><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/leaderboard.py" target="_blank" rel="noopener noreferrer">engine/leaderboard.py</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section two-column" aria-label="Skill versus luck and reward policy">
+        <article class="panel"><h2>Luck versus skill: what can be claimed</h2><ul><li><strong>"Luck-free strategy"</strong> — not supportable; game outcomes remain random.</li><li><strong>"Beats the market"</strong> — not supportable yet; needs a licensed benchmark, a walk-forward test and an untouched holdout.</li><li><strong>"Calibrated"</strong> — not supportable yet; needs a reliability table and a proper score on out-of-sample data.</li><li><strong>"No leakage"</strong> — mechanically checked by the engine for every forecast.</li><li><strong>"Fresh data"</strong> — mechanically checked against the declared tolerance.</li></ul><p><a href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">scikit-learn time-series validation ↗</a> · <a href="https://kansspelautoriteit.nl/10-tips-gambling-safely" target="_blank" rel="noopener noreferrer">Ksa consumer guidance ↗</a></p></article>
+        <article class="panel"><h2>Rewards stay disabled</h2><p>No score weights, minimum samples, ROI threshold, drawdown limit, prize, tie policy or payment schedule has been defined. A leaderboard is not a substitute for a valid holdout, and a rewards scheme needs jurisdiction-specific review before it exists.</p><p><a href="questions.html">Review the open decisions →</a></p></article>
+      </section>
+      <footer class="footer"><p>Nothing is ranked and no reward is offered.</p><p><a href="suggestions.html">Suggest improvements to this board →</a></p></footer>
+    </main>
+  </div>
+</div>
+</body>
+</html>
