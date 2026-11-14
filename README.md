@@ -37,6 +37,21 @@ The blocking issue is still data rights, not code. NBA's Stats FAQ states its st
 | [`scripts/run_pipeline.py`](scripts/run_pipeline.py) | Command-line entry point for one pipeline cycle |
 | [`tests/test_engine.py`](tests/test_engine.py) | 47 unit tests over synthetic fixtures |
 
+A second model-side subsystem from session `arena/2c06c7f9-nba4` lives alongside it (module names disambiguated during the parallel-merge; nothing discarded). Full guide: [`docs/engine.md`](docs/engine.md).
+
+| Module | Responsibility |
+| --- | --- |
+| [`engine/ratings.py`](engine/ratings.py) | Recency-weighted team strength; originated spread/total distributions; win/cover probabilities |
+| [`engine/player_props.py`](engine/player_props.py) | Minutes × shrunk per-minute production prop distributions |
+| [`engine/injuries.py`](engine/injuries.py) | Status → availability scenario → minutes multiplier (separate, unvalidated steps) |
+| [`engine/gameflow.py`](engine/gameflow.py) | Margin-threshold game-flow scenarios and minutes conditioning |
+| [`engine/picks.py`](engine/picks.py) | ≤72-hour pick generator with NO PICK suppression and parlay rules |
+| [`engine/corrstats.py`](engine/corrstats.py) | Pearson/phi/joint-rate estimators with game-cluster bootstrap and shrinkage |
+| [`engine/gates.py`](engine/gates.py) | G0–G12 gate report, Brier/log loss/reliability, walk-forward folds, trials control |
+| [`engine/ledger.py`](engine/ledger.py) · [`engine/schema.py`](engine/schema.py) | Provenance-enforced inputs ledger (rows without official https source + timestamps are rejected) |
+| [`engine/cli.py`](engine/cli.py) | `python3 -m engine.cli status\|validate\|generate\|selftest` |
+| [`tests/test_engine_models.py`](tests/test_engine_models.py) | 43 unit tests over labelled synthetic fixtures (`synthetic.invalid`) |
+
 ## Research documents
 
 - [`docs/audit.md`](docs/audit.md) — repository/evidence audit and hard blockers.
@@ -52,6 +67,10 @@ The blocking issue is still data rights, not code. NBA's Stats FAQ states its st
 - [`docs/site-spec.md`](docs/site-spec.md) — dashboard organization and integrity rules.
 - [`docs/verification-log.md`](docs/verification-log.md) — line-by-line re-verification of all 22 cited sources and the corrections made.
 - [`docs/suggestions.md`](docs/suggestions.md) — the suggestions register and the four gating decisions.
+- [`docs/engine.md`](docs/engine.md) — model-side engine guide: ratings/props/injury/game-flow methods, UNFITTED parameter register, inputs spec.
+- [`docs/leaderboard.md`](docs/leaderboard.md) — leaderboard competition rules, anti-luck scoring and proposed reward tiers (supplementary design record).
+- [`docs/verification-pass-2c06c7f9.md`](docs/verification-pass-2c06c7f9.md) — third independent verification pass (18 sources quote-checked; 5 irregularities I-1…I-5).
+- [`docs/suggestions-2c06c7f9.md`](docs/suggestions-2c06c7f9.md) — supplementary suggestion register (paths A/B/C and decision log) from the same session.
 - [`COORDINATION.md`](COORDINATION.md) — task board, verification notes and publication record.
 
 ## Local verification

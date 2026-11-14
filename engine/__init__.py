@@ -31,3 +31,9 @@ __all__ = [
 ]
 
 __version__ = "0.1.0"
+
+
+# Version constants used by the ratings/props/injuries/gameflow/picks
+# subsystem (documented in docs/engine.md). See also MODEL_VERSION.
+ENGINE_VERSION = "0.1.0"
+MODEL_VERSION = "nba4-hypothesis-model-0.1.0"
