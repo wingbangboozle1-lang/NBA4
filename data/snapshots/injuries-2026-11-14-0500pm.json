@@ -1,0 +1,768 @@
+{
+ "snapshot_id": "injuries-2026-11-14-0500pm",
+ "kind": "official_injury_report_rows",
+ "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-14_05_00PM.pdf",
+ "source_document": "NBA Official Injury Report",
+ "source_document_header": "Injury Report: 11/14/26 05:00 PM",
+ "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+ "secondary_source_url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf",
+ "fetched_at_utc": "2026-11-15T00:22:00Z",
+ "extraction_tool": "fetch_page (PDF text extraction)",
+ "supersession_note": "This is the 05:00 PM ET report on 11/14/2026. It supersedes the 04:30 AM ET report in the same archive folder; both files are kept so consecutive reports can be diffed.",
+ "extraction_notes": [
+  "The Game Date and Game Time cells are lost at a PDF page break for the CHI@MIN and DET@MIA blocks and are taken from the independent official schedule PDF (rows 235 and 233); the published rows cite both documents.",
+  "Two Dallas rows (Lively II, Dereck and Martin, Caleb) lost their Team cell at a page break. The team cell is left blank and the row is flagged unverified; the team is not inferred from the surrounding block.",
+  "A team that has not filed shows an empty player/status pair with the reason NOT YET SUBMITTED. That is a reporting state, not an absence of injuries, and no status may be inferred from it.",
+  "No availability probability, minute estimate or production impact is stored here or derived from these rows."
+ ],
+ "games": [
+  {
+   "matchup": "DEN@NOP",
+   "game_date": "2026-11-14",
+   "tip_et_from_report": "07:00 (ET)",
+   "schedule_row": 231,
+   "cells_source": "report",
+   "rows": [
+    {
+     "team": "Denver Nuggets",
+     "player": "Holmes II, DaRon",
+     "status": "Out",
+     "reason": "G League - On Assignment"
+    },
+    {
+     "team": "Denver Nuggets",
+     "player": "Nembhard, Ryan",
+     "status": "Out",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "Denver Nuggets",
+     "player": "Strawther, Julian",
+     "status": "Out",
+     "reason": "Injury/Illness - Left Knee Sprain"
+    },
+    {
+     "team": "Denver Nuggets",
+     "player": "Whitmore, Cam",
+     "status": "Out",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "New Orleans Pelicans",
+     "player": "Dia, Malik",
+     "status": "Questionable",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "New Orleans Pelicans",
+     "player": "McGowens, Bryce",
+     "status": "Out",
+     "reason": "Injury/Illness - Left Elbow Infection"
+    },
+    {
+     "team": "New Orleans Pelicans",
+     "player": "Missi, Yves",
+     "status": "Probable",
+     "reason": "Injury/Illness - Left Knee Contusion / Bone Bruise"
+    },
+    {
+     "team": "New Orleans Pelicans",
+     "player": "Murphy III, Trey",
+     "status": "Out",
+     "reason": "Injury/Illness - Bilateral Patellar Tendinopathy"
+    },
+    {
+     "team": "New Orleans Pelicans",
+     "player": "Murray, Dejounte",
+     "status": "Out",
+     "reason": "Injury/Illness - Left Ankle Sprain"
+    },
+    {
+     "team": "New Orleans Pelicans",
+     "player": "Pierre Jr., Jaron",
+     "status": "Probable",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "New Orleans Pelicans",
+     "player": "Reese, Julian",
+     "status": "Questionable",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "New Orleans Pelicans",
+     "player": "Watford, Trendon",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Ankle Sprain"
+    }
+   ]
+  },
+  {
+   "matchup": "DAL@CLE",
+   "game_date": "2026-11-14",
+   "tip_et_from_report": "07:30 (ET)",
+   "schedule_row": 232,
+   "cells_source": "report",
+   "rows": [
+    {
+     "team": "Dallas Mavericks",
+     "player": "Biberovic, Tarik",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Heel Bursitis"
+    },
+    {
+     "team": "Dallas Mavericks",
+     "player": "Christie, Max",
+     "status": "Doubtful",
+     "reason": "Injury/Illness - Left Ankle Sprain"
+    },
+    {
+     "team": "Dallas Mavericks",
+     "player": "de Larrea, Sergio",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Knee Sprain"
+    },
+    {
+     "team": "Dallas Mavericks",
+     "player": "Johnson Jr., Morez",
+     "status": "Probable",
+     "reason": "Injury/Illness - Left Shin / Tibia Contusion"
+    },
+    {
+     "team": "__lost__",
+     "player": "Lively II, Dereck",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Foot Surgery",
+     "unverified": true,
+     "flag": "team cell lost at a PDF page break"
+    },
+    {
+     "team": "__lost__",
+     "player": "Martin, Caleb",
+     "status": "Available",
+     "reason": "Injury/Illness - Right Thumb Splint",
+     "unverified": true,
+     "flag": "team cell lost at a PDF page break"
+    },
+    {
+     "team": "Cleveland Cavaliers",
+     "player": "Allen, Jarrett",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Right Knee Injury Management"
+    },
+    {
+     "team": "Cleveland Cavaliers",
+     "player": "Harden, James",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Left Lower Leg/Calf Tightness"
+    },
+    {
+     "team": "Cleveland Cavaliers",
+     "player": "Merrill, Sam",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Elbow Injury Management"
+    },
+    {
+     "team": "Cleveland Cavaliers",
+     "player": "Mitchell, Donovan",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Left Knee Contusion/Injury Management"
+    },
+    {
+     "team": "Cleveland Cavaliers",
+     "player": "Mobley, Evan",
+     "status": "Out",
+     "reason": "Injury/Illness - Left Great Toe Sprain"
+    },
+    {
+     "team": "Cleveland Cavaliers",
+     "player": "Tomlin, Nae'Qwan",
+     "status": "Out",
+     "reason": "Injury/Illness - Low Back Stress Reaction"
+    },
+    {
+     "team": "Cleveland Cavaliers",
+     "player": "Udeh, Jr., Ernest",
+     "status": "Out",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "Cleveland Cavaliers",
+     "player": "Watson, Peyton",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Right Hamstring Injury Management"
+    }
+   ]
+  },
+  {
+   "matchup": "BKN@MEM",
+   "game_date": "2026-11-14",
+   "tip_et_from_report": "08:00 (ET)",
+   "schedule_row": 234,
+   "cells_source": "report",
+   "rows": [
+    {
+     "team": "Brooklyn Nets",
+     "player": "Bilodeau, Tyler",
+     "status": "Out",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "Brooklyn Nets",
+     "player": "Brown Jr., Mikel",
+     "status": "Probable",
+     "reason": "Injury/Illness - Illness"
+    },
+    {
+     "team": "Brooklyn Nets",
+     "player": "Jefferson, Joshua",
+     "status": "Out",
+     "reason": "G League - On Assignment"
+    },
+    {
+     "team": "Brooklyn Nets",
+     "player": "Nelson, Grant",
+     "status": "Out",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "Brooklyn Nets",
+     "player": "Sarah, Ben",
+     "status": "Out",
+     "reason": "G League - On Assignment"
+    },
+    {
+     "team": "Brooklyn Nets",
+     "player": "Traore, Nolan",
+     "status": "Probable",
+     "reason": "Injury/Illness - Right Calf Tightness / Soreness"
+    },
+    {
+     "team": "Memphis Grizzlies",
+     "player": "Edey, Zach",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Left Ankle Injury Management"
+    },
+    {
+     "team": "Memphis Grizzlies",
+     "player": "Grant, Jerami",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Head Injury"
+    },
+    {
+     "team": "Memphis Grizzlies",
+     "player": "Jerome, Ty",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Hip Soreness"
+    },
+    {
+     "team": "Memphis Grizzlies",
+     "player": "Pippen Jr., Scotty",
+     "status": "Out",
+     "reason": "Injury/Illness - Lumbar Disc Herniation"
+    },
+    {
+     "team": "Memphis Grizzlies",
+     "player": "Post, Quinten",
+     "status": "Out",
+     "reason": "Injury/Illness - Concussion Protocol"
+    },
+    {
+     "team": "Memphis Grizzlies",
+     "player": "Saunders, Richie",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Knee Surgery"
+    }
+   ]
+  },
+  {
+   "matchup": "CHI@MIN",
+   "game_date": "2026-11-14",
+   "tip_et_from_report": "08:00 (ET)",
+   "schedule_row": 235,
+   "cells_source": "report",
+   "rows": [
+    {
+     "team": "Chicago Bulls",
+     "player": "Awaka, Tobe",
+     "status": "Out",
+     "reason": "Injury/Illness - Disc Irritation"
+    },
+    {
+     "team": "Chicago Bulls",
+     "player": "Claxton, Nic",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Left Hamstring Injury Management"
+    },
+    {
+     "team": "Chicago Bulls",
+     "player": "Powell, Norman",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Low Back Injury Management"
+    },
+    {
+     "team": "Chicago Bulls",
+     "player": "Sellers, Jaylin",
+     "status": "Out",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "Chicago Bulls",
+     "player": "Smith, Jalen",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Left Finger Sprain"
+    },
+    {
+     "team": "Chicago Bulls",
+     "player": "Swain, Dailyn",
+     "status": "Out",
+     "reason": "G League - On Assignment"
+    },
+    {
+     "team": "Chicago Bulls",
+     "player": "Wilson, Caleb",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Metacarpal Fracture"
+    },
+    {
+     "team": "Minnesota Timberwolves",
+     "player": "Beringer, Joan",
+     "status": "Available",
+     "reason": "Injury/Illness - Face Mask"
+    },
+    {
+     "team": "Minnesota Timberwolves",
+     "player": "DiVincenzo, Donte",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Achilles Tendon Repair / Surgery"
+    },
+    {
+     "team": "Minnesota Timberwolves",
+     "player": "Edwards, Anthony",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Knee Arthroscopy"
+    }
+   ]
+  },
+  {
+   "matchup": "DET@MIA",
+   "game_date": "2026-11-14",
+   "tip_et_from_report": "08:00 (ET)",
+   "schedule_row": 233,
+   "cells_source": "report",
+   "rows": [
+    {
+     "team": "Detroit Pistons",
+     "player": "Duren, Jalen",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Hamstring Strain"
+    },
+    {
+     "team": "Detroit Pistons",
+     "player": "Harkless, Elijah",
+     "status": "Available",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "Detroit Pistons",
+     "player": "Joe, Isaiah",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Hip Contusion"
+    },
+    {
+     "team": "Detroit Pistons",
+     "player": "Jones, Isaac",
+     "status": "Available",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "Detroit Pistons",
+     "player": "Lanier, Chaz",
+     "status": "Out",
+     "reason": "G League - On Assignment"
+    },
+    {
+     "team": "Detroit Pistons",
+     "player": "Okorie, Ebuka",
+     "status": "Out",
+     "reason": "G League - On Assignment"
+    },
+    {
+     "team": "Detroit Pistons",
+     "player": "Onyenso, Ugonna",
+     "status": "Out",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "Miami Heat",
+     "player": "Antetokounmpo, Giannis",
+     "status": "Probable",
+     "reason": "Injury/Illness - Right Wrist Sprain"
+    },
+    {
+     "team": "Miami Heat",
+     "player": "Goldin, Vladislav",
+     "status": "Out",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "Miami Heat",
+     "player": "Larsson, Pelle",
+     "status": "Doubtful",
+     "reason": "Injury/Illness - Illness"
+    },
+    {
+     "team": "Miami Heat",
+     "player": "Thompson, Klay",
+     "status": "Probable",
+     "reason": "Injury/Illness - Left Ankle Sprain"
+    }
+   ]
+  },
+  {
+   "matchup": "IND@PHI",
+   "game_date": "2026-11-15",
+   "tip_et_from_report": "01:00 (ET)",
+   "schedule_row": 236,
+   "cells_source": "report",
+   "rows": [
+    {
+     "team": "Indiana Pacers",
+     "player": "Furphy, Johnny",
+     "status": "Out",
+     "reason": "Injury/Illness - Right ACL Repair / Surgery"
+    },
+    {
+     "team": "Indiana Pacers",
+     "player": "Haliburton, Tyrese",
+     "status": "Out",
+     "reason": "Injury/Illness - Left Hamstring Strain"
+    },
+    {
+     "team": "Indiana Pacers",
+     "player": "McConnell, T.J.",
+     "status": "Probable",
+     "reason": "Injury/Illness - Right Hamstring Strain"
+    },
+    {
+     "team": "Indiana Pacers",
+     "player": "Nesmith, Aaron",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Left Hand Sprain"
+    },
+    {
+     "team": "Indiana Pacers",
+     "player": "Sheppard, Ben",
+     "status": "Out",
+     "reason": "Injury/Illness - Left Meniscus Tear"
+    },
+    {
+     "team": "Philadelphia 76ers",
+     "player": "Barlow, Dominick",
+     "status": "Out",
+     "reason": "Injury/Illness - Low Back Stress Reaction"
+    },
+    {
+     "team": "Philadelphia 76ers",
+     "player": "Bona, Adem",
+     "status": "Out",
+     "reason": "Injury/Illness - Cervical Spine Sprain"
+    },
+    {
+     "team": "Philadelphia 76ers",
+     "player": "Embiid, Joel",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Foot Plantar Fascia Injury Management"
+    },
+    {
+     "team": "Philadelphia 76ers",
+     "player": "Hukporti, Ariel",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Achilles Tendon Rupture / Tear"
+    }
+   ]
+  },
+  {
+   "matchup": "LAL@PHX",
+   "game_date": "2026-11-15",
+   "tip_et_from_report": "04:00 (ET)",
+   "schedule_row": 237,
+   "cells_source": "report",
+   "rows": [
+    {
+     "team": "Los Angeles Lakers",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
+    },
+    {
+     "team": "Phoenix Suns",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
+    }
+   ]
+  },
+  {
+   "matchup": "CHA@LAC",
+   "game_date": "2026-11-15",
+   "tip_et_from_report": "04:30 (ET)",
+   "schedule_row": 238,
+   "cells_source": "report",
+   "rows": [
+    {
+     "team": "Charlotte Hornets",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
+    },
+    {
+     "team": "LA Clippers",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
+    }
+   ]
+  },
+  {
+   "matchup": "SAS@UTA",
+   "game_date": "2026-11-15",
+   "tip_et_from_report": "05:00 (ET)",
+   "schedule_row": 239,
+   "cells_source": "report",
+   "rows": [
+    {
+     "team": "San Antonio Spurs",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
+    },
+    {
+     "team": "Utah Jazz",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
+    }
+   ]
+  },
+  {
+   "matchup": "DAL@BOS",
+   "game_date": "2026-11-15",
+   "tip_et_from_report": "06:00 (ET)",
+   "schedule_row": 240,
+   "cells_source": "report",
+   "rows": [
+    {
+     "team": "Dallas Mavericks",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
+    },
+    {
+     "team": "Boston Celtics",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
+    }
+   ]
+  },
+  {
+   "matchup": "NYK@TOR",
+   "game_date": "2026-11-15",
+   "tip_et_from_report": "06:00 (ET)",
+   "schedule_row": 241,
+   "cells_source": "report",
+   "rows": [
+    {
+     "team": "Toronto Raptors",
+     "player": "Barnes, Scottie",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Left Groin Strain"
+    },
+    {
+     "team": "Toronto Raptors",
+     "player": "Bittle, Nate",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Foot Avulsion Fracture"
+    },
+    {
+     "team": "Toronto Raptors",
+     "player": "Leonard, Kawhi",
+     "status": "Out",
+     "reason": "Injury/Illness - Left Knee Injury Management"
+    },
+    {
+     "team": "Toronto Raptors",
+     "player": "McCullar Jr., Kevin",
+     "status": "Out",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "Toronto Raptors",
+     "player": "Smith, Malachi",
+     "status": "Out",
+     "reason": "G League - Two-Way"
+    }
+   ]
+  },
+  {
+   "matchup": "HOU@WAS",
+   "game_date": "2026-11-15",
+   "tip_et_from_report": "07:00 (ET)",
+   "schedule_row": 242,
+   "cells_source": "report",
+   "rows": [
+    {
+     "team": "Houston Rockets",
+     "player": "Adams, Steven",
+     "status": "Probable",
+     "reason": "Injury/Illness - Right Soleus Strain"
+    },
+    {
+     "team": "Houston Rockets",
+     "player": "Capela, Clint",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Ankle Sprain"
+    },
+    {
+     "team": "Houston Rockets",
+     "player": "Copeland, Quadir",
+     "status": "Out",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "Houston Rockets",
+     "player": "Phillips, Julian",
+     "status": "Out",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "Houston Rockets",
+     "player": "Smart, Marcus",
+     "status": "Out",
+     "reason": "League Suspension"
+    },
+    {
+     "team": "Houston Rockets",
+     "player": "VanVleet, Fred",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Knee Injury Management"
+    },
+    {
+     "team": "Washington Wizards",
+     "player": "Beekman, Reece",
+     "status": "Out",
+     "reason": "Injury/Illness - Right AC Joint Injury"
+    },
+    {
+     "team": "Washington Wizards",
+     "player": "Carrington, Bub",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Chest / Sternum Contusion"
+    },
+    {
+     "team": "Washington Wizards",
+     "player": "Champagnie, Justin",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Foot Surgery"
+    },
+    {
+     "team": "Washington Wizards",
+     "player": "Johnson, Tre",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Low Back Soreness"
+    },
+    {
+     "team": "Washington Wizards",
+     "player": "Okpara, Felix",
+     "status": "Questionable",
+     "reason": "G League - Two-Way"
+    },
+    {
+     "team": "Washington Wizards",
+     "player": "Sarr, Alex",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Illness"
+    },
+    {
+     "team": "Washington Wizards",
+     "player": "Vukcevic, Tristan",
+     "status": "Out",
+     "reason": "Injury/Illness - Left Hip Impingement"
+    },
+    {
+     "team": "Washington Wizards",
+     "player": "Watkins, Jamir",
+     "status": "Out",
+     "reason": "Injury/Illness - Left ACL Repair / Surgery"
+    }
+   ]
+  },
+  {
+   "matchup": "ATL@MIL",
+   "game_date": "2026-11-15",
+   "tip_et_from_report": "08:00 (ET)",
+   "schedule_row": 243,
+   "cells_source": "report",
+   "rows": [
+    {
+     "team": "Atlanta Hawks",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
+    },
+    {
+     "team": "Milwaukee Bucks",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
+    }
+   ]
+  },
+  {
+   "matchup": "OKC@SAC",
+   "game_date": "2026-11-15",
+   "tip_et_from_report": "09:00 (ET)",
+   "schedule_row": 244,
+   "cells_source": "report",
+   "rows": [
+    {
+     "team": "Oklahoma City Thunder",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
+    },
+    {
+     "team": "Sacramento Kings",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
+    }
+   ]
+  }
+ ]
+}

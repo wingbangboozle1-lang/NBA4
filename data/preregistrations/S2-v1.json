@@ -1,0 +1,37 @@
+{
+  "frozen_at_utc": "2026-11-15T00:45:00+00:00",
+  "notes": "Strategy S2 (game total) from docs/strategy-framework.md, frozen before any bet, any licensed input or any model result exists. The thresholds are policy choices, not findings; no performance claim is made or implied by this file.",
+  "settlement_rule": "total",
+  "signal": "Forecast expected possessions from the measured pace and each side's points per possession, then the full distribution of the game total; the total is possessions x points per possession and never an average of two team scoring averages.",
+  "strategy_id": "S2",
+  "thresholds": {
+    "adjusted_alpha": 0.008333333333333333,
+    "alpha": 0.05,
+    "estimator_disagreement_gate": "the two independent estimators must agree within 1.0 margin standard deviations; a larger gap is published as a disagreement and is not turned into a pick",
+    "luck_noise_band_z": 1.0,
+    "luck_rule": "a strategy whose exposure to a team reaches 0.25 of total weight is refused when that team's measured luck z-score is outside +/- 1.0",
+    "minimum_sample_rationale": "frozen policy choice made before any result exists; it is not derived from a completed power analysis, which remains an open task",
+    "minimum_settled_sample": 200,
+    "model_version_locked": true,
+    "publish_rule": "publish only when the strategy's out-of-sample proper score beats the declared baseline and the game-cluster bootstrap 95% lower bound of that improvement is above zero",
+    "trials_adjustment": "bonferroni",
+    "trials_registered": 6
+  },
+  "universe": {
+    "horizon_hours": 72,
+    "league": "NBA",
+    "market_types": [
+      "regular_season",
+      "playoff"
+    ],
+    "markets": [
+      "game_total"
+    ],
+    "seasons": [
+      "2026-27 and later"
+    ],
+    "settlement_uses": "official final score confirmed by two independent official observations",
+    "side_convention": "the side is 'over' or 'under' the stated total"
+  },
+  "version": "1"
+}

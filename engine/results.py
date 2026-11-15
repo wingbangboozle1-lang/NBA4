@@ -53,6 +53,11 @@ SETTLEMENT_RULES: Dict[str, str] = {
         "to the line"
     ),
     "moneyline_home": "the home team wins; there is no push on a moneyline",
+    "parlay_conjunction": (
+        "every leg of the parlay must win for the parlay to win; a pushed leg "
+        "is removed from the parlay and the remaining legs must all win; a void "
+        "leg voids the whole parlay"
+    ),
     "player_points_over": (
         "the player scores more than the line; the bet pushes when the "
         "player's points equal the line"
