@@ -1,0 +1,50 @@
+{
+  "old": {
+    "revision_label": "11/15/26 06:00 AM",
+    "document": "Injury Report: 11/15/26 06:00 AM",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-15_06_00AM.pdf",
+    "retrieved_utc": "2026-11-15T11:43:00Z",
+    "rows": 101,
+    "player_rows": 84,
+    "unaligned_rows": 3
+  },
+  "new": {
+    "revision_label": "11/15/26 06:15 AM",
+    "document": "Injury Report: 11/15/26 06:15 AM",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-15_06_15AM.pdf",
+    "retrieved_utc": "2026-11-15T11:45:00Z",
+    "rows": 101,
+    "player_rows": 84,
+    "unaligned_rows": 3
+  },
+  "alignment": "key(matchup/team/player) with positional tie-break; 100 of 101 old rows and 101 new rows matched",
+  "changes": [
+    {
+      "kind": "PRINTING_VARIANCE",
+      "position": 8,
+      "matchup": "IND@PHI",
+      "team": "Philadelphia 76ers",
+      "player": "Embid, Joel",
+      "old": "Embiid, Joel",
+      "new": "Embid, Joel",
+      "note": "status and reason cells are identical; only the name cell differs in the extracted text, so this is a printing variance and not a status change"
+    }
+  ],
+  "counts": {
+    "old_rows": 101,
+    "new_rows": 101,
+    "status_changes": 0,
+    "reason_changes": 0,
+    "team_changes": 0,
+    "printing_variances": 1,
+    "realigned": 0
+  },
+  "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-15_06_15AM.pdf",
+  "diff_id": "injuries-2026-11-15-0600-to-0615.diff",
+  "kind": "official_injury_report_consecutive_diff",
+  "source_document_header": "Injury Report: 11/15/26 06:15 AM",
+  "fetched_at_utc": "2026-11-15T11:45:00Z",
+  "extraction_tool": "fetch_page (PDF text extraction to markdown tables, chunks 0 and 1 of 2)",
+  "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+  "rule": "A status change requires a matched row whose status cell differs. Rows are matched on the identity cells the row itself prints (matchup, team, player); a one-for-one leftover with identical status and reason is a printing variance, not a status change."
+}

@@ -1,0 +1,205 @@
+{
+  "aggregate_id": "aggregates-2026-11-15",
+  "kind": "derived_from_official_snapshots",
+  "source_url": "https://www.nba.com/standings",
+  "source_document_header": "Page heading as printed: 'Standings'; the table header row is recorded in column_header_as_printed",
+  "fetched_at_utc": "2026-11-15T11:49:00Z",
+  "extraction_tool": "scripts/build_brief_data.py (derived; performs no fetching)",
+  "derived_from": {
+    "results": "https://www.nba.com/games?date=2026-11-14",
+    "standings": "https://www.nba.com/standings",
+    "injuries": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-15_06_15AM.pdf",
+    "slate": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
+  },
+  "derived_at_utc": "2026-11-15T11:55:00Z",
+  "inputs": {
+    "results": "results-2026-11-14.json",
+    "standings": "standings-2026-11-15.json",
+    "injuries": "injuries-2026-11-15-0615am",
+    "slate": "slate-2026-11-15"
+  },
+  "result_feed": {
+    "games": 5,
+    "team_lines_checked": 10,
+    "lines_where_quarter_sum_equals_printed_final": 10,
+    "lines_that_disagree": 0,
+    "settlement_eligible": true,
+    "per_line": [
+      {
+        "game_id": "0022600231",
+        "team": "DEN",
+        "quarters": [
+          29,
+          27,
+          30,
+          30
+        ],
+        "quarter_sum": 116,
+        "printed_final": 116,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600231",
+        "team": "NOP",
+        "quarters": [
+          23,
+          28,
+          31,
+          26
+        ],
+        "quarter_sum": 108,
+        "printed_final": 108,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600232",
+        "team": "DAL",
+        "quarters": [
+          33,
+          20,
+          38,
+          26
+        ],
+        "quarter_sum": 117,
+        "printed_final": 117,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600232",
+        "team": "CLE",
+        "quarters": [
+          33,
+          38,
+          34,
+          22
+        ],
+        "quarter_sum": 127,
+        "printed_final": 127,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600233",
+        "team": "DET",
+        "quarters": [
+          39,
+          21,
+          26,
+          31
+        ],
+        "quarter_sum": 117,
+        "printed_final": 117,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600233",
+        "team": "MIA",
+        "quarters": [
+          37,
+          31,
+          35,
+          34
+        ],
+        "quarter_sum": 137,
+        "printed_final": 137,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600234",
+        "team": "BKN",
+        "quarters": [
+          23,
+          31,
+          30,
+          26
+        ],
+        "quarter_sum": 110,
+        "printed_final": 110,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600234",
+        "team": "MEM",
+        "quarters": [
+          38,
+          33,
+          32,
+          26
+        ],
+        "quarter_sum": 129,
+        "printed_final": 129,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600235",
+        "team": "CHI",
+        "quarters": [
+          29,
+          29,
+          30,
+          29
+        ],
+        "quarter_sum": 117,
+        "printed_final": 117,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600235",
+        "team": "MIN",
+        "quarters": [
+          17,
+          28,
+          35,
+          26
+        ],
+        "quarter_sum": 106,
+        "printed_final": 106,
+        "agrees": true
+      }
+    ],
+    "source_url": "https://www.nba.com/games?date=2026-11-14",
+    "note": "The feed is SETTLED only when every team line's four quarter scores add to the printed final. 2026-11-14 passes 10 of 10, so the day is eligible; the ledger stamps the settlement check at the fetch time of this file."
+  },
+  "home_court": {
+    "definition": "measured home-win rate = league HOME wins / (HOME wins + HOME losses) taken from the standings page; neutral-site records are held out and reported separately.",
+    "home_wins": 99,
+    "home_losses": 88,
+    "home_games": 187,
+    "measured_home_win_rate": 0.5294,
+    "neutral_wins": 1,
+    "neutral_losses": 1,
+    "source_url": "https://www.nba.com/standings",
+    "pinning_rule": "engine/homerate.py refuses to fit home advantage freely: it converts this measured rate to a point value through one published conversion and nothing else."
+  },
+  "standings_consistency": {
+    "league_wins": 188,
+    "league_losses": 188,
+    "wins_equal_losses": true,
+    "note": "Two league games are played at a neutral site, so HOME + ROAD + NEUTRAL games must equal the total games played: checked below.",
+    "home_plus_road_plus_neutral": null
+  },
+  "injury_load": {
+    "revision": "11/15/26 06:15 AM",
+    "revision_document": "Injury Report: 11/15/26 06:15 AM",
+    "revision_utc": "2026-11-15T10:15:00Z",
+    "retrieved_utc": "2026-11-15T11:45:00Z",
+    "rows": 101,
+    "rows_with_a_status": 84,
+    "not_yet_submitted_rows": 17,
+    "unverified_rows_after_page_breaks": 3,
+    "status_counts": {
+      "Out": 62,
+      "Probable": 2,
+      "Questionable": 17,
+      "Available": 2,
+      "NOT YET SUBMITTED": 17,
+      "Doubtful": 1
+    },
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-15_06_15AM.pdf"
+  },
+  "slate": {
+    "games": 22,
+    "window_start_utc": "2026-11-15T11:29:57Z",
+    "window_end_utc": "2026-11-18T11:29:57Z",
+    "source_url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
+  }
+}

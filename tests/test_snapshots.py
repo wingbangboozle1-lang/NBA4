@@ -100,7 +100,9 @@ class CurrentInjurySnapshotTests(unittest.TestCase):
                 self.assertEqual(row["reason"], "NOT YET SUBMITTED")
 
     def test_row_count_and_lost_team_cells_are_empty_and_flagged(self) -> None:
-        self.assertEqual(len(self.rows), 100)
+        # 101 = every player row the 06:15 AM document prints; the count was 100 until the
+        # pass-8 re-read restored the omitted Hukporti row (see the file's extraction notes).
+        self.assertEqual(len(self.rows), 101)
         lost = [row for row in self.rows if row["team"] == "__lost__"]
         self.assertEqual(len(lost), 13)
         for row in lost:
@@ -189,7 +191,7 @@ class RenderedPageTests(unittest.TestCase):
         self.assertEqual(slate_html.count(build_snapshots.SCHEDULE_URL), 22)
 
         injuries_html = build_snapshots.render_injuries()
-        self.assertEqual(injuries_html.count(build_snapshots.REPORT_URL), 100)  # one per report row
+        self.assertEqual(injuries_html.count(build_snapshots.REPORT_URL), 101)  # one per report row
         self.assertEqual(
             injuries_html.count(build_snapshots.SCHEDULE_URL),
             sum(

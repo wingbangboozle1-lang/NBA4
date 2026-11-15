@@ -1,0 +1,273 @@
+{
+  "snapshot_id": "results-2026-11-14",
+  "kind": "official_per_game_results",
+  "source_document": "NBA.com game summary pages (LINESCORES + GAME INFO blocks) and the 2026-11-14 scoreboard",
+  "source_document_header": "Scoreboard page prints the date filter 'Sat, Nov 14' with no other table heading; each game-summary page prints the heading LINESCORES above the quarter table that supplied Q1-Q4",
+  "source_url": "https://www.nba.com/games?date=2026-11-14",
+  "source_index_url": "https://www.nba.com/games?date=2026-11-14",
+  "fetched_at_utc": "2026-11-15T11:47:00Z",
+  "extraction_tool": "fetch_page (HTML to markdown)",
+  "row_format": [
+    "game_id",
+    "date",
+    "tip_et",
+    "arena",
+    "city",
+    "away_abbr",
+    "home_abbr",
+    "away_q",
+    "away_final",
+    "home_q",
+    "home_final",
+    "winner_abbr",
+    "loser_abbr",
+    "source_url"
+  ],
+  "row_format_note": "row_format lists the positional columns of each row in `rows`.",
+  "rows": [
+    [
+      "0022600231",
+      "2026-11-14",
+      "7:00 PM",
+      "Smoothie King Center",
+      "New Orleans, LA",
+      "DEN",
+      "NOP",
+      [
+        29,
+        27,
+        30,
+        30
+      ],
+      116,
+      [
+        23,
+        28,
+        31,
+        26
+      ],
+      108,
+      "DEN",
+      "NOP",
+      "https://www.nba.com/game/den-vs-nop-0022600231"
+    ],
+    [
+      "0022600232",
+      "2026-11-14",
+      "7:30 PM",
+      "Rocket Arena",
+      "Cleveland, OH",
+      "DAL",
+      "CLE",
+      [
+        33,
+        20,
+        38,
+        26
+      ],
+      117,
+      [
+        33,
+        38,
+        34,
+        22
+      ],
+      127,
+      "CLE",
+      "DAL",
+      "https://www.nba.com/game/dal-vs-cle-0022600232"
+    ],
+    [
+      "0022600233",
+      "2026-11-14",
+      "8:00 PM",
+      "Kaseya Center",
+      "Miami, FL",
+      "DET",
+      "MIA",
+      [
+        39,
+        21,
+        26,
+        31
+      ],
+      117,
+      [
+        37,
+        31,
+        35,
+        34
+      ],
+      137,
+      "MIA",
+      "DET",
+      "https://www.nba.com/game/det-vs-mia-0022600233"
+    ],
+    [
+      "0022600234",
+      "2026-11-14",
+      "8:00 PM",
+      "FedExForum",
+      "Memphis, TN",
+      "BKN",
+      "MEM",
+      [
+        23,
+        31,
+        30,
+        26
+      ],
+      110,
+      [
+        38,
+        33,
+        32,
+        26
+      ],
+      129,
+      "MEM",
+      "BKN",
+      "https://www.nba.com/game/bkn-vs-mem-0022600234"
+    ],
+    [
+      "0022600235",
+      "2026-11-14",
+      "8:00 PM",
+      "Target Center",
+      "Minneapolis, MN",
+      "CHI",
+      "MIN",
+      [
+        29,
+        29,
+        30,
+        29
+      ],
+      117,
+      [
+        17,
+        28,
+        35,
+        26
+      ],
+      106,
+      "CHI",
+      "MIN",
+      "https://www.nba.com/game/chi-vs-min-0022600235"
+    ]
+  ],
+  "verification": {
+    "quarter_sum_rule": "For every row the four printed quarter scores were added and compared with the printed Final. 10 of 10 team lines agree, so every row is SETTLEMENT_ELIGIBLE.",
+    "quarter_sum_check": [
+      [
+        "0022600231",
+        "DEN",
+        29,
+        27,
+        30,
+        30,
+        116,
+        true
+      ],
+      [
+        "0022600231",
+        "NOP",
+        23,
+        28,
+        31,
+        26,
+        108,
+        true
+      ],
+      [
+        "0022600232",
+        "DAL",
+        33,
+        20,
+        38,
+        26,
+        117,
+        true
+      ],
+      [
+        "0022600232",
+        "CLE",
+        33,
+        38,
+        34,
+        22,
+        127,
+        true
+      ],
+      [
+        "0022600233",
+        "DET",
+        39,
+        21,
+        26,
+        31,
+        117,
+        true
+      ],
+      [
+        "0022600233",
+        "MIA",
+        37,
+        31,
+        35,
+        34,
+        137,
+        true
+      ],
+      [
+        "0022600234",
+        "BKN",
+        23,
+        31,
+        30,
+        26,
+        110,
+        true
+      ],
+      [
+        "0022600234",
+        "MEM",
+        38,
+        33,
+        32,
+        26,
+        129,
+        true
+      ],
+      [
+        "0022600235",
+        "CHI",
+        29,
+        29,
+        30,
+        29,
+        117,
+        true
+      ],
+      [
+        "0022600235",
+        "MIN",
+        17,
+        28,
+        35,
+        26,
+        106,
+        true
+      ]
+    ],
+    "final_score_cross_check": "Each Final equals the number printed on the 2026-11-14 scoreboard page and, for four of the five games, in the headline of the Associated Press recap printed on the same official page (116-108, 127-117, 137-117, 117-106). CHI 117 at MIN 106 is confirmed by the recap headline 'Bulls ... beat the Timberwolves 117-106'.",
+    "home_away_basis": "The page prints the line-score row order away-then-home and the URL slug uses 'away-vs-home'; this matches the schedule PDF printed order for the same rows (rows 231-235).",
+    "independent_source_agreements": 5,
+    "independent_source_disagreements": 0
+  },
+  "extraction_notes": [
+    "This is one dated observation of a completed game day, not a live feed. The scoreboard and game pages change; the values above are those printed at the fetch time recorded here.",
+    "Officials and attendance were printed on the same pages (e.g. 0022600231: James Capers, Brent Barnaky, CJ Washington; attendance 15,721) and are not republished in the site table.",
+    "No spread, total, probability, price or pick is present in this file. Nothing here is a settlement decision on any project forecast; the ledger settlement step reads this file."
+  ]
+}

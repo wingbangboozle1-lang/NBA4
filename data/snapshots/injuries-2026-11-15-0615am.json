@@ -24,6 +24,7 @@
   },
   "supersession_note": "This is one dated snapshot, not the newest report. The league publishes updated reports on a continual basis (the index lists 11/15 reports every 15 minutes), and any later file supersedes it.",
   "extraction_notes": [
+    "Pass-8 correction (2026-11-15, session arena/4fb7eb2f-nba4): this file carried 100 rows and omitted the fifth Philadelphia 76ers row the 06:15 AM document prints — Hukporti, Ariel | Out | Injury/Illness - Right Achilles Tendon Rupture / Tear — which sits directly after the Embid row in the IND@PHI block. The PDF chunk was re-read and the row is there; it is added in document order, so the file now has 101 rows and matches the independent extraction made from the same document in this session. Nothing else changed.",
     "Game Time in the PDF is a 12-hour clock with no AM/PM marker (e.g. \"01:00 (ET)\"). Meridiems below are inferred only from the independent official schedule PDF (which prints the same games with AM/PM times) and are marked with tip_et_from_schedule.",
     "Rows that continue across a PDF page break lose their Game Date, Game Time and sometimes Team cells. Every game block in this report prints its game cells on at least its first rows, so each game's date/time/matchup comes from the report itself (cells_source \"report\"). Where a player row's team cell was lost at a page break, the team cell is left blank on the site and the row is flagged unverified; no team cell is repaired from another document.",
     "13 player rows lost their team cell at a page break (2 in LAL@PHX, 5 in SAS@UTA, 3 in HOU@WAS, 2 in ATL@MIL, 1 in OKC@SAC). They are stored with team \"__lost__\" and an explanatory flag; the surrounding printed team rows are described in the flag but the team is not asserted.",
@@ -44,15 +45,66 @@
       "schedule_row": 236,
       "cells_source": "report",
       "rows": [
-        {"team": "Indiana Pacers", "player": "Furphy, Johnny", "status": "Out", "reason": "Injury/Illness - Right ACL Repair / Surgery"},
-        {"team": "Indiana Pacers", "player": "Haliburton, Tyrese", "status": "Out", "reason": "Injury/Illness - Left Hamstring Strain"},
-        {"team": "Indiana Pacers", "player": "McConnell, T.J.", "status": "Probable", "reason": "Injury/Illness - Right Hamstring Strain"},
-        {"team": "Indiana Pacers", "player": "Nembhard, Andrew", "status": "Questionable", "reason": "Injury/Illness - Left Hip Soreness / Tightness"},
-        {"team": "Indiana Pacers", "player": "Nesmith, Aaron", "status": "Questionable", "reason": "Injury/Illness - Left Hand Sprain"},
-        {"team": "Indiana Pacers", "player": "Sheppard, Ben", "status": "Out", "reason": "Injury/Illness - Left Meniscus Tear"},
-        {"team": "Philadelphia 76ers", "player": "Barlow, Dominick", "status": "Out", "reason": "Injury/Illness - Low Back Stress Reaction"},
-        {"team": "Philadelphia 76ers", "player": "Bona, Adem", "status": "Out", "reason": "Injury/Illness - Cervical Spine Sprain"},
-        {"team": "Philadelphia 76ers", "player": "Embid, Joel", "status": "Out", "reason": "Injury/Illness - Right Foot Plantar Fascia Injury Management"}
+        {
+          "team": "Indiana Pacers",
+          "player": "Furphy, Johnny",
+          "status": "Out",
+          "reason": "Injury/Illness - Right ACL Repair / Surgery"
+        },
+        {
+          "team": "Indiana Pacers",
+          "player": "Haliburton, Tyrese",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Hamstring Strain"
+        },
+        {
+          "team": "Indiana Pacers",
+          "player": "McConnell, T.J.",
+          "status": "Probable",
+          "reason": "Injury/Illness - Right Hamstring Strain"
+        },
+        {
+          "team": "Indiana Pacers",
+          "player": "Nembhard, Andrew",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Left Hip Soreness / Tightness"
+        },
+        {
+          "team": "Indiana Pacers",
+          "player": "Nesmith, Aaron",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Left Hand Sprain"
+        },
+        {
+          "team": "Indiana Pacers",
+          "player": "Sheppard, Ben",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Meniscus Tear"
+        },
+        {
+          "team": "Philadelphia 76ers",
+          "player": "Barlow, Dominick",
+          "status": "Out",
+          "reason": "Injury/Illness - Low Back Stress Reaction"
+        },
+        {
+          "team": "Philadelphia 76ers",
+          "player": "Bona, Adem",
+          "status": "Out",
+          "reason": "Injury/Illness - Cervical Spine Sprain"
+        },
+        {
+          "team": "Philadelphia 76ers",
+          "player": "Embid, Joel",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Foot Plantar Fascia Injury Management"
+        },
+        {
+          "team": "Philadelphia 76ers",
+          "player": "Hukporti, Ariel",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Achilles Tendon Rupture / Tear"
+        }
       ]
     },
     {
@@ -63,13 +115,52 @@
       "schedule_row": 237,
       "cells_source": "report",
       "rows": [
-        {"team": "Los Angeles Lakers", "player": "Carr, Cameron", "status": "Out", "reason": "Injury/Illness - Illness"},
-        {"team": "Los Angeles Lakers", "player": "Grimes, Quentin", "status": "Available", "reason": "Injury/Illness - Right Finger Splint"},
-        {"team": "Los Angeles Lakers", "player": "James, Bronny", "status": "Questionable", "reason": "Injury/Illness - Illness"},
-        {"team": "Los Angeles Lakers", "player": "Reaves, Austin", "status": "Out", "reason": "Injury/Illness - Left Heel Contusion / Bone Bruise"},
-        {"team": "__lost__", "player": "Sexton, Collin", "status": "Questionable", "reason": "Injury/Illness - Right Orbital Laceration", "unverified": true, "flag": "team cell lost at PDF page break; the row continues the LAL@PHX block between the printed Los Angeles Lakers and Phoenix Suns rows, but the team is not asserted"},
-        {"team": "__lost__", "player": "Thiero, Adou", "status": "Questionable", "reason": "Injury/Illness - Left Ankle Sprain", "unverified": true, "flag": "team cell lost at PDF page break; the row continues the LAL@PHX block between the printed Los Angeles Lakers and Phoenix Suns rows, but the team is not asserted"},
-        {"team": "Phoenix Suns", "player": "Williams, Mark", "status": "Out", "reason": "Injury/Illness - Left Shoulder Surgery"}
+        {
+          "team": "Los Angeles Lakers",
+          "player": "Carr, Cameron",
+          "status": "Out",
+          "reason": "Injury/Illness - Illness"
+        },
+        {
+          "team": "Los Angeles Lakers",
+          "player": "Grimes, Quentin",
+          "status": "Available",
+          "reason": "Injury/Illness - Right Finger Splint"
+        },
+        {
+          "team": "Los Angeles Lakers",
+          "player": "James, Bronny",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Illness"
+        },
+        {
+          "team": "Los Angeles Lakers",
+          "player": "Reaves, Austin",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Heel Contusion / Bone Bruise"
+        },
+        {
+          "team": "__lost__",
+          "player": "Sexton, Collin",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Right Orbital Laceration",
+          "unverified": true,
+          "flag": "team cell lost at PDF page break; the row continues the LAL@PHX block between the printed Los Angeles Lakers and Phoenix Suns rows, but the team is not asserted"
+        },
+        {
+          "team": "__lost__",
+          "player": "Thiero, Adou",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Left Ankle Sprain",
+          "unverified": true,
+          "flag": "team cell lost at PDF page break; the row continues the LAL@PHX block between the printed Los Angeles Lakers and Phoenix Suns rows, but the team is not asserted"
+        },
+        {
+          "team": "Phoenix Suns",
+          "player": "Williams, Mark",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Shoulder Surgery"
+        }
       ]
     },
     {
@@ -80,15 +171,60 @@
       "schedule_row": 238,
       "cells_source": "report",
       "rows": [
-        {"team": "Charlotte Hornets", "player": "Ajayi, Michael", "status": "Out", "reason": "G League - Two-Way"},
-        {"team": "Charlotte Hornets", "player": "Boswell, Kylan", "status": "Out", "reason": "G League - Two-Way"},
-        {"team": "Charlotte Hornets", "player": "Knueppel, Kon", "status": "Out", "reason": "Injury/Illness - Left Hamstring Strain"},
-        {"team": "Charlotte Hornets", "player": "Schroder, Dennis", "status": "Out", "reason": "Injury/Illness - Left Hamstring Strain"},
-        {"team": "Charlotte Hornets", "player": "Steinbach, Hannes", "status": "Out", "reason": "G League - On Assignment"},
-        {"team": "LA Clippers", "player": "Beal, Bradley", "status": "Out", "reason": "Injury/Illness - Right Knee Injury Management"},
-        {"team": "LA Clippers", "player": "Ingram, Brandon", "status": "Out", "reason": "Injury/Illness - Right Heel Surgery"},
-        {"team": "LA Clippers", "player": "Miller, Jordan", "status": "Out", "reason": "Injury/Illness - Left Rotator Cuff Surgery"},
-        {"team": "LA Clippers", "player": "Niederhauser, Yanic Konan", "status": "Out", "reason": "Injury/Illness - Right Lisfranc Surgery"}
+        {
+          "team": "Charlotte Hornets",
+          "player": "Ajayi, Michael",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "Charlotte Hornets",
+          "player": "Boswell, Kylan",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "Charlotte Hornets",
+          "player": "Knueppel, Kon",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Hamstring Strain"
+        },
+        {
+          "team": "Charlotte Hornets",
+          "player": "Schroder, Dennis",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Hamstring Strain"
+        },
+        {
+          "team": "Charlotte Hornets",
+          "player": "Steinbach, Hannes",
+          "status": "Out",
+          "reason": "G League - On Assignment"
+        },
+        {
+          "team": "LA Clippers",
+          "player": "Beal, Bradley",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Knee Injury Management"
+        },
+        {
+          "team": "LA Clippers",
+          "player": "Ingram, Brandon",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Heel Surgery"
+        },
+        {
+          "team": "LA Clippers",
+          "player": "Miller, Jordan",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Rotator Cuff Surgery"
+        },
+        {
+          "team": "LA Clippers",
+          "player": "Niederhauser, Yanic Konan",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Lisfranc Surgery"
+        }
       ]
     },
     {
@@ -99,17 +235,82 @@
       "schedule_row": 239,
       "cells_source": "report",
       "rows": [
-        {"team": "San Antonio Spurs", "player": "Brown, Maliq", "status": "Out", "reason": "G League - Two-Way"},
-        {"team": "San Antonio Spurs", "player": "Gillespie, Ja'Kobi", "status": "Out", "reason": "G League - Two-Way"},
-        {"team": "San Antonio Spurs", "player": "Harris, Tobias", "status": "Out", "reason": "Injury/Illness - Left Calf Strain"},
-        {"team": "San Antonio Spurs", "player": "Quaintance, Jayden", "status": "Out", "reason": "Injury/Illness - Right Knee Surgery"},
-        {"team": "Utah Jazz", "player": "Alexander, Trey", "status": "Out", "reason": "G League - Two-Way"},
-        {"team": "Utah Jazz", "player": "Bufkin, Kobe", "status": "Out", "reason": "G League - Two-Way"},
-        {"team": "__lost__", "player": "Hayes, Jaxson", "status": "Out", "reason": "Injury/Illness - Left Knee Strain", "unverified": true, "flag": "team cell lost at PDF page break; the rows continue the SAS@UTA block after the printed Utah Jazz rows, but the team is not asserted"},
-        {"team": "__lost__", "player": "Ingram, Harrison", "status": "Out", "reason": "G League - Two-Way", "unverified": true, "flag": "team cell lost at PDF page break; the rows continue the SAS@UTA block after the printed Utah Jazz rows, but the team is not asserted"},
-        {"team": "__lost__", "player": "Jackson Jr., Jaren", "status": "Out", "reason": "Injury/Illness - Right MCL Tear", "unverified": true, "flag": "team cell lost at PDF page break; the rows continue the SAS@UTA block after the printed Utah Jazz rows, but the team is not asserted"},
-        {"team": "__lost__", "player": "Markkanen, Lauri", "status": "Out", "reason": "Injury/Illness - Right Hand Fracture", "unverified": true, "flag": "team cell lost at PDF page break; the rows continue the SAS@UTA block after the printed Utah Jazz rows, but the team is not asserted"},
-        {"team": "__lost__", "player": "Nurkic, Jusuf", "status": "Out", "reason": "Injury/Illness - Right 2nd Plantar Plate Tear", "unverified": true, "flag": "team cell lost at PDF page break; the rows continue the SAS@UTA block after the printed Utah Jazz rows, but the team is not asserted"}
+        {
+          "team": "San Antonio Spurs",
+          "player": "Brown, Maliq",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "San Antonio Spurs",
+          "player": "Gillespie, Ja'Kobi",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "San Antonio Spurs",
+          "player": "Harris, Tobias",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Calf Strain"
+        },
+        {
+          "team": "San Antonio Spurs",
+          "player": "Quaintance, Jayden",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Knee Surgery"
+        },
+        {
+          "team": "Utah Jazz",
+          "player": "Alexander, Trey",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "Utah Jazz",
+          "player": "Bufkin, Kobe",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "__lost__",
+          "player": "Hayes, Jaxson",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Knee Strain",
+          "unverified": true,
+          "flag": "team cell lost at PDF page break; the rows continue the SAS@UTA block after the printed Utah Jazz rows, but the team is not asserted"
+        },
+        {
+          "team": "__lost__",
+          "player": "Ingram, Harrison",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "unverified": true,
+          "flag": "team cell lost at PDF page break; the rows continue the SAS@UTA block after the printed Utah Jazz rows, but the team is not asserted"
+        },
+        {
+          "team": "__lost__",
+          "player": "Jackson Jr., Jaren",
+          "status": "Out",
+          "reason": "Injury/Illness - Right MCL Tear",
+          "unverified": true,
+          "flag": "team cell lost at PDF page break; the rows continue the SAS@UTA block after the printed Utah Jazz rows, but the team is not asserted"
+        },
+        {
+          "team": "__lost__",
+          "player": "Markkanen, Lauri",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Hand Fracture",
+          "unverified": true,
+          "flag": "team cell lost at PDF page break; the rows continue the SAS@UTA block after the printed Utah Jazz rows, but the team is not asserted"
+        },
+        {
+          "team": "__lost__",
+          "player": "Nurkic, Jusuf",
+          "status": "Out",
+          "reason": "Injury/Illness - Right 2nd Plantar Plate Tear",
+          "unverified": true,
+          "flag": "team cell lost at PDF page break; the rows continue the SAS@UTA block after the printed Utah Jazz rows, but the team is not asserted"
+        }
       ]
     },
     {
@@ -120,11 +321,38 @@
       "schedule_row": 240,
       "cells_source": "report",
       "rows": [
-        {"team": "Dallas Mavericks", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"},
-        {"team": "Boston Celtics", "player": "Carter, Devin", "status": "Questionable", "reason": "G League - Two-Way"},
-        {"team": "Boston Celtics", "player": "Cenac Jr., Christopher", "status": "Questionable", "reason": "G League - On Assignment"},
-        {"team": "Boston Celtics", "player": "Mitchell, Dillon", "status": "Questionable", "reason": "G League - Two-Way"},
-        {"team": "Boston Celtics", "player": "Williams, Amari", "status": "Questionable", "reason": "G League - Two-Way"}
+        {
+          "team": "Dallas Mavericks",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        },
+        {
+          "team": "Boston Celtics",
+          "player": "Carter, Devin",
+          "status": "Questionable",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "Boston Celtics",
+          "player": "Cenac Jr., Christopher",
+          "status": "Questionable",
+          "reason": "G League - On Assignment"
+        },
+        {
+          "team": "Boston Celtics",
+          "player": "Mitchell, Dillon",
+          "status": "Questionable",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "Boston Celtics",
+          "player": "Williams, Amari",
+          "status": "Questionable",
+          "reason": "G League - Two-Way"
+        }
       ]
     },
     {
@@ -135,11 +363,36 @@
       "schedule_row": 241,
       "cells_source": "report",
       "rows": [
-        {"team": "Toronto Raptors", "player": "Barnes, Scottie", "status": "Questionable", "reason": "Injury/Illness - Left Groin Strain"},
-        {"team": "Toronto Raptors", "player": "Bittle, Nate", "status": "Out", "reason": "Injury/Illness - Right Foot Avulsion Fracture"},
-        {"team": "Toronto Raptors", "player": "Leonard, Kawhi", "status": "Out", "reason": "Injury/Illness - Left Knee Injury Management"},
-        {"team": "Toronto Raptors", "player": "McCullar Jr., Kevin", "status": "Out", "reason": "G League - Two-Way"},
-        {"team": "Toronto Raptors", "player": "Smith, Malachi", "status": "Out", "reason": "G League - Two-Way"}
+        {
+          "team": "Toronto Raptors",
+          "player": "Barnes, Scottie",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Left Groin Strain"
+        },
+        {
+          "team": "Toronto Raptors",
+          "player": "Bittle, Nate",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Foot Avulsion Fracture"
+        },
+        {
+          "team": "Toronto Raptors",
+          "player": "Leonard, Kawhi",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Knee Injury Management"
+        },
+        {
+          "team": "Toronto Raptors",
+          "player": "McCullar Jr., Kevin",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "Toronto Raptors",
+          "player": "Smith, Malachi",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        }
       ]
     },
     {
@@ -150,20 +403,96 @@
       "schedule_row": 242,
       "cells_source": "report",
       "rows": [
-        {"team": "Houston Rockets", "player": "Adams, Steven", "status": "Probable", "reason": "Injury/Illness - Right Soleus Strain"},
-        {"team": "Houston Rockets", "player": "Capela, Clint", "status": "Out", "reason": "Injury/Illness - Right Ankle Sprain"},
-        {"team": "Houston Rockets", "player": "Copeland, Quadir", "status": "Out", "reason": "G League - Two-Way"},
-        {"team": "__lost__", "player": "Phillips, Julian", "status": "Out", "reason": "G League - Two-Way", "unverified": true, "flag": "team cell lost at PDF page break; the rows continue the HOU@WAS block between the printed Houston Rockets and Washington Wizards rows, but the team is not asserted"},
-        {"team": "__lost__", "player": "Smart, Marcus", "status": "Out", "reason": "League Suspension", "unverified": true, "flag": "team cell lost at PDF page break; the rows continue the HOU@WAS block between the printed Houston Rockets and Washington Wizards rows, but the team is not asserted"},
-        {"team": "__lost__", "player": "VanVleet, Fred", "status": "Out", "reason": "Injury/Illness - Right Knee Injury Management", "unverified": true, "flag": "team cell lost at PDF page break; the rows continue the HOU@WAS block between the printed Houston Rockets and Washington Wizards rows, but the team is not asserted"},
-        {"team": "Washington Wizards", "player": "Beekman, Reece", "status": "Out", "reason": "Injury/Illness - Right AC Joint Injury"},
-        {"team": "Washington Wizards", "player": "Carrington, Bub", "status": "Questionable", "reason": "Injury/Illness - Chest / Sternum Contusion"},
-        {"team": "Washington Wizards", "player": "Champagne, Justin", "status": "Out", "reason": "Injury/Illness - Right Foot Surgery"},
-        {"team": "Washington Wizards", "player": "Johnson, Tre", "status": "Questionable", "reason": "Injury/Illness - Low Back Soreness"},
-        {"team": "Washington Wizards", "player": "Okpara, Felix", "status": "Questionable", "reason": "G League - Two-Way"},
-        {"team": "Washington Wizards", "player": "Sarr, Alex", "status": "Questionable", "reason": "Injury/Illness - Illness"},
-        {"team": "Washington Wizards", "player": "Vukcevic, Tristan", "status": "Out", "reason": "Injury/Illness - Left Hip Impingement"},
-        {"team": "Washington Wizards", "player": "Watkins, Jamir", "status": "Out", "reason": "Injury/Illness - Left ACL Repair / Surgery"}
+        {
+          "team": "Houston Rockets",
+          "player": "Adams, Steven",
+          "status": "Probable",
+          "reason": "Injury/Illness - Right Soleus Strain"
+        },
+        {
+          "team": "Houston Rockets",
+          "player": "Capela, Clint",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Ankle Sprain"
+        },
+        {
+          "team": "Houston Rockets",
+          "player": "Copeland, Quadir",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "__lost__",
+          "player": "Phillips, Julian",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "unverified": true,
+          "flag": "team cell lost at PDF page break; the rows continue the HOU@WAS block between the printed Houston Rockets and Washington Wizards rows, but the team is not asserted"
+        },
+        {
+          "team": "__lost__",
+          "player": "Smart, Marcus",
+          "status": "Out",
+          "reason": "League Suspension",
+          "unverified": true,
+          "flag": "team cell lost at PDF page break; the rows continue the HOU@WAS block between the printed Houston Rockets and Washington Wizards rows, but the team is not asserted"
+        },
+        {
+          "team": "__lost__",
+          "player": "VanVleet, Fred",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Knee Injury Management",
+          "unverified": true,
+          "flag": "team cell lost at PDF page break; the rows continue the HOU@WAS block between the printed Houston Rockets and Washington Wizards rows, but the team is not asserted"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Beekman, Reece",
+          "status": "Out",
+          "reason": "Injury/Illness - Right AC Joint Injury"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Carrington, Bub",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Chest / Sternum Contusion"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Champagne, Justin",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Foot Surgery"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Johnson, Tre",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Low Back Soreness"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Okpara, Felix",
+          "status": "Questionable",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Sarr, Alex",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Illness"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Vukcevic, Tristan",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Hip Impingement"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Watkins, Jamir",
+          "status": "Out",
+          "reason": "Injury/Illness - Left ACL Repair / Surgery"
+        }
       ]
     },
     {
@@ -174,18 +503,82 @@
       "schedule_row": 243,
       "cells_source": "report",
       "rows": [
-        {"team": "Atlanta Hawks", "player": "Flemings, Kingston", "status": "Out", "reason": "Injury/Illness - Lumbar Strain"},
-        {"team": "Atlanta Hawks", "player": "Gilbert, Keshon", "status": "Out", "reason": "Injury/Illness - Left Knee Inflammation; Non-Surgical Procedure"},
-        {"team": "Atlanta Hawks", "player": "Gueye, Mouhamed", "status": "Out", "reason": "Injury/Illness - Left Foot Fracture"},
-        {"team": "Atlanta Hawks", "player": "Landale, Jock", "status": "Available", "reason": "Injury/Illness - Face Mask"},
-        {"team": "Atlanta Hawks", "player": "Newell, Asa", "status": "Out", "reason": "Injury/Illness - Left Great Toe Hyperextension"},
-        {"team": "__lost__", "player": "Veesaar, Henri", "status": "Out", "reason": "Injury/Illness - Right ACL Tear", "unverified": true, "flag": "team cell lost at PDF page break; the rows continue the ATL@MIL block between the printed Atlanta Hawks and Milwaukee Bucks rows, but the team is not asserted"},
-        {"team": "__lost__", "player": "Wilson, Jalen", "status": "Doubtful", "reason": "G League - Two-Way", "unverified": true, "flag": "team cell lost at PDF page break; the rows continue the ATL@MIL block between the printed Atlanta Hawks and Milwaukee Bucks rows, but the team is not asserted"},
-        {"team": "Milwaukee Bucks", "player": "Dieng, Ousmane", "status": "Out", "reason": "Injury/Illness - Left Finger Sprain"},
-        {"team": "Milwaukee Bucks", "player": "Jones, Kam", "status": "Out", "reason": "G League - Two-Way"},
-        {"team": "Milwaukee Bucks", "player": "Markovic, Bogoljub", "status": "Out", "reason": "G League - On Assignment"},
-        {"team": "Milwaukee Bucks", "player": "Nance, Pete", "status": "Out", "reason": "G League - Two-Way"},
-        {"team": "Milwaukee Bucks", "player": "Ryan, Cormac", "status": "Out", "reason": "G League - Two-Way"}
+        {
+          "team": "Atlanta Hawks",
+          "player": "Flemings, Kingston",
+          "status": "Out",
+          "reason": "Injury/Illness - Lumbar Strain"
+        },
+        {
+          "team": "Atlanta Hawks",
+          "player": "Gilbert, Keshon",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Knee Inflammation; Non-Surgical Procedure"
+        },
+        {
+          "team": "Atlanta Hawks",
+          "player": "Gueye, Mouhamed",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Foot Fracture"
+        },
+        {
+          "team": "Atlanta Hawks",
+          "player": "Landale, Jock",
+          "status": "Available",
+          "reason": "Injury/Illness - Face Mask"
+        },
+        {
+          "team": "Atlanta Hawks",
+          "player": "Newell, Asa",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Great Toe Hyperextension"
+        },
+        {
+          "team": "__lost__",
+          "player": "Veesaar, Henri",
+          "status": "Out",
+          "reason": "Injury/Illness - Right ACL Tear",
+          "unverified": true,
+          "flag": "team cell lost at PDF page break; the rows continue the ATL@MIL block between the printed Atlanta Hawks and Milwaukee Bucks rows, but the team is not asserted"
+        },
+        {
+          "team": "__lost__",
+          "player": "Wilson, Jalen",
+          "status": "Doubtful",
+          "reason": "G League - Two-Way",
+          "unverified": true,
+          "flag": "team cell lost at PDF page break; the rows continue the ATL@MIL block between the printed Atlanta Hawks and Milwaukee Bucks rows, but the team is not asserted"
+        },
+        {
+          "team": "Milwaukee Bucks",
+          "player": "Dieng, Ousmane",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Finger Sprain"
+        },
+        {
+          "team": "Milwaukee Bucks",
+          "player": "Jones, Kam",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "Milwaukee Bucks",
+          "player": "Markovic, Bogoljub",
+          "status": "Out",
+          "reason": "G League - On Assignment"
+        },
+        {
+          "team": "Milwaukee Bucks",
+          "player": "Nance, Pete",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "Milwaukee Bucks",
+          "player": "Ryan, Cormac",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        }
       ]
     },
     {
@@ -196,18 +589,82 @@
       "schedule_row": 244,
       "cells_source": "report",
       "rows": [
-        {"team": "Oklahoma City Thunder", "player": "Holmgren, Chet", "status": "Out", "reason": "Injury/Illness - Right Knee/ Injury Recovery"},
-        {"team": "Oklahoma City Thunder", "player": "Mitchell, Ajay", "status": "Questionable", "reason": "Injury/Illness - Left Ankle Sprain"},
-        {"team": "Oklahoma City Thunder", "player": "Sorber, Thomas", "status": "Out", "reason": "Injury/Illness - Right Knee Surgery", "unverified": true, "flag": "reason cell spans a PDF page boundary; the two extracted fragments were joined verbatim (\"Injury/Illness - \" + \"Right Knee Surgery\")"},
-        {"team": "Oklahoma City Thunder", "player": "Wallace, Cason", "status": "Out", "reason": "Injury/Illness - Left Shoulder Surgery"},
-        {"team": "Oklahoma City Thunder", "player": "Williams, Jalen", "status": "Out", "reason": "Injury/Illness - Left Ankle Surgery"},
-        {"team": "Oklahoma City Thunder", "player": "Williams, Jaylin", "status": "Out", "reason": "Injury/Illness - Low Back Spasms"},
-        {"team": "Sacramento Kings", "player": "Achiuwa, Precious", "status": "Questionable", "reason": "Injury/Illness - Left Ankle Soreness"},
-        {"team": "Sacramento Kings", "player": "Mogbo, Jonathan", "status": "Out", "reason": "G League - Two-Way"},
-        {"team": "Sacramento Kings", "player": "Murray, Keegan", "status": "Questionable", "reason": "Injury/Illness - Illness"},
-        {"team": "Sacramento Kings", "player": "Pedulla, Sean", "status": "Out", "reason": "G League - Two-Way"},
-        {"team": "Sacramento Kings", "player": "Raynaud, Maxime", "status": "Out", "reason": "Injury/Illness - Right Patella Subluxation"},
-        {"team": "__lost__", "player": "Simmons, Ben", "status": "Out", "reason": "Injury/Illness - Right Achilles Tendon Repair / Surgery", "unverified": true, "flag": "team cell lost at PDF page break; the row continues the OKC@SAC block after the printed Sacramento Kings rows, but the team is not asserted"}
+        {
+          "team": "Oklahoma City Thunder",
+          "player": "Holmgren, Chet",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Knee/ Injury Recovery"
+        },
+        {
+          "team": "Oklahoma City Thunder",
+          "player": "Mitchell, Ajay",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Left Ankle Sprain"
+        },
+        {
+          "team": "Oklahoma City Thunder",
+          "player": "Sorber, Thomas",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Knee Surgery",
+          "unverified": true,
+          "flag": "reason cell spans a PDF page boundary; the two extracted fragments were joined verbatim (\"Injury/Illness - \" + \"Right Knee Surgery\")"
+        },
+        {
+          "team": "Oklahoma City Thunder",
+          "player": "Wallace, Cason",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Shoulder Surgery"
+        },
+        {
+          "team": "Oklahoma City Thunder",
+          "player": "Williams, Jalen",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Ankle Surgery"
+        },
+        {
+          "team": "Oklahoma City Thunder",
+          "player": "Williams, Jaylin",
+          "status": "Out",
+          "reason": "Injury/Illness - Low Back Spasms"
+        },
+        {
+          "team": "Sacramento Kings",
+          "player": "Achiuwa, Precious",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Left Ankle Soreness"
+        },
+        {
+          "team": "Sacramento Kings",
+          "player": "Mogbo, Jonathan",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "Sacramento Kings",
+          "player": "Murray, Keegan",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Illness"
+        },
+        {
+          "team": "Sacramento Kings",
+          "player": "Pedulla, Sean",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "Sacramento Kings",
+          "player": "Raynaud, Maxime",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Patella Subluxation"
+        },
+        {
+          "team": "__lost__",
+          "player": "Simmons, Ben",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Achilles Tendon Repair / Surgery",
+          "unverified": true,
+          "flag": "team cell lost at PDF page break; the row continues the OKC@SAC block after the printed Sacramento Kings rows, but the team is not asserted"
+        }
       ]
     },
     {
@@ -218,8 +675,22 @@
       "schedule_row": 245,
       "cells_source": "report",
       "rows": [
-        {"team": "Orlando Magic", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"},
-        {"team": "Boston Celtics", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"}
+        {
+          "team": "Orlando Magic",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        },
+        {
+          "team": "Boston Celtics",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        }
       ]
     },
     {
@@ -230,8 +701,22 @@
       "schedule_row": 246,
       "cells_source": "report",
       "rows": [
-        {"team": "Chicago Bulls", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"},
-        {"team": "Cleveland Cavaliers", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"}
+        {
+          "team": "Chicago Bulls",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        },
+        {
+          "team": "Cleveland Cavaliers",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        }
       ]
     },
     {
@@ -242,8 +727,22 @@
       "schedule_row": 247,
       "cells_source": "report",
       "rows": [
-        {"team": "Memphis Grizzlies", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"},
-        {"team": "Washington Wizards", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"}
+        {
+          "team": "Memphis Grizzlies",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        }
       ]
     },
     {
@@ -254,8 +753,22 @@
       "schedule_row": 248,
       "cells_source": "report",
       "rows": [
-        {"team": "Philadelphia 76ers", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"},
-        {"team": "Brooklyn Nets", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"}
+        {
+          "team": "Philadelphia 76ers",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        },
+        {
+          "team": "Brooklyn Nets",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        }
       ]
     },
     {
@@ -266,8 +779,22 @@
       "schedule_row": 249,
       "cells_source": "report",
       "rows": [
-        {"team": "Houston Rockets", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"},
-        {"team": "Miami Heat", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"}
+        {
+          "team": "Houston Rockets",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        },
+        {
+          "team": "Miami Heat",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        }
       ]
     },
     {
@@ -278,8 +805,22 @@
       "schedule_row": 250,
       "cells_source": "report",
       "rows": [
-        {"team": "Portland Trail Blazers", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"},
-        {"team": "Minnesota Timberwolves", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"}
+        {
+          "team": "Portland Trail Blazers",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        },
+        {
+          "team": "Minnesota Timberwolves",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        }
       ]
     },
     {
@@ -290,8 +831,22 @@
       "schedule_row": 251,
       "cells_source": "report",
       "rows": [
-        {"team": "Golden State Warriors", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"},
-        {"team": "New Orleans Pelicans", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"}
+        {
+          "team": "Golden State Warriors",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        },
+        {
+          "team": "New Orleans Pelicans",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        }
       ]
     },
     {
@@ -302,16 +857,48 @@
       "schedule_row": 252,
       "cells_source": "report",
       "rows": [
-        {"team": "Phoenix Suns", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"},
-        {"team": "Denver Nuggets", "player": "", "status": "", "reason": "NOT YET SUBMITTED", "unverified": true, "flag": "team has not submitted"}
+        {
+          "team": "Phoenix Suns",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        },
+        {
+          "team": "Denver Nuggets",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "team has not submitted"
+        }
       ]
     }
   ],
   "matchups_not_in_snapshot": [
     {
       "date": "2026-11-17",
-      "matchups": ["NYK@TOR", "POR@MIN", "DET@SAS", "CHA@LAC", "UTA@LAC"],
+      "matchups": [
+        "NYK@TOR",
+        "POR@MIN",
+        "DET@SAS",
+        "CHA@LAC",
+        "UTA@LAC"
+      ],
       "note": "the 06:15 AM report does not list 11/17 games; scheduled deadlines make those reports later. The codes above follow the schedule PDF's printed team order, and the schedule PDF prints no 'at' token on these rows, so away/home order is not asserted."
     }
-  ]
+  ],
+  "row_count": 101,
+  "cross_check": {
+    "independent_extraction": "data/snapshots/injuries-2026-11-15-0615am.cells.json (same document, read 11:45 UTC)",
+    "rows_here": 101,
+    "rows_there": 101,
+    "player_status_reason_agreements": 100,
+    "only_in_this_file_before_the_correction": [],
+    "only_in_the_other_extraction_before_the_correction": [
+      "Hukporti, Ariel | Out | Right Achilles Tendon Rupture / Tear"
+    ],
+    "rule": "two sessions extracted the same PDF; where they disagreed the document was re-read and the document won. The divergence is recorded here rather than quietly reconciled."
+  }
 }

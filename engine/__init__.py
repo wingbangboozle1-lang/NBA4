@@ -14,6 +14,9 @@ Hard rules enforced by this package:
   estimated from an authorised dataset; the engine refuses to invent them.
 * Nothing here talks to the network. Adapters for licensed feeds live outside
   this package and are responsible for populating the contracts.
+* A computation whose required official input is missing raises
+  ``engine.inputs.MissingInput`` or returns a refusal record instead of using a
+  stand-in default. Refusal-by-default modules are listed in ``docs/engine.md``.
 """
 
 from __future__ import annotations
@@ -28,6 +31,37 @@ __all__ = [
     "leaderboard",
     "pipeline",
     "sources",
+    # Task AP (this branch, claimed as AN): brief-gap modules. Each one refuses
+    # to emit a number whose official input is absent (see engine.inputs.MissingInput).
+    "inputs",
+    "resultfeed",
+    "injurystore",
+    "prereg",
+    "seallayer",
+    "dualestimate",
+    "homerate",
+    "luckscore",
+    "travel",
+    "minutesshare",
+    "marketprior",
+    # Task AS (parallel session arena/7dfeb9eb-nba4, PR #53): the same eleven
+    # requirement items, implemented a second time under different names. Listed
+    # here so the overlap is visible from the package itself; see
+    # COORDINATION.md IR-T1 and docs/engine.md for the correspondence.
+    "officialresults",
+    "injurydiff",
+    "preregistration",
+    "ledger",
+    "publishedledger",
+    "estimators",
+    "confidence",
+    "luck",
+    "rest",
+    "venues",
+    "rotations",
+    "markets",
+    "surfaces",
+    "totals",
 ]
 
 __version__ = "0.1.0"
