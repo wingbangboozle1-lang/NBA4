@@ -1,0 +1,28 @@
+{
+  "snapshot_id": "injuries-newest-pointer-2026-11-15",
+  "kind": "official_report_pointer_metadata_only",
+  "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-15_06_15AM.pdf",
+  "source_document_header": "Injury Report: 11/15/26 06:15 AM",
+  "fetched_at_utc": "2026-11-15T11:31:00Z",
+  "extraction_tool": "fetch_page (PDF text extraction); the index was read through fetch_page as well",
+  "purpose": "Records the state of the official injury-report index at the 2026-11-15 refresh check: the 6:15 AM ET report was the newest listed at the check time, and its full row-level transcription is stored in injuries-2026-11-15-0615am.json. It stores no player rows, statuses, minutes, probabilities or picks itself.",
+  "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+  "source_index_title": "NBA Injury Report: 2026-27 Season | NBA Official",
+  "index_listing_checked": "The 11/15 entries of the index, read 2026-11-15T11:31Z (6:31 a.m. ET): entries run every 15 minutes from 12:00 a.m. through 6:15 a.m. ET, which was the last entry listed at the check time.",
+  "newest_report_listed_at_check": {
+    "label": "11/15 06:15 AM ET report",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-15_06_15AM.pdf",
+    "source_document_header": "Injury Report: 11/15/26 06:15 AM",
+    "checked_at_utc": "2026-11-15T11:31:00Z",
+    "rows_transcribed": true,
+    "transcription_pointer": "injuries-2026-11-15-0615am.json"
+  },
+  "superseded_snapshot": {
+    "snapshot_id": "injuries-2026-11-14-0430am",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-14_04_30AM.pdf",
+    "status_on_site": "Kept as a dated historical snapshot. Re-read 2026-11-14 22:09 UTC: all 49 rows matched the PDF text at that time. The 11/14 05:00 PM rows were never transcribed (flag P7-01) and stay untranscribed."
+  },
+  "resolution_note": "Flag P7-01 (newest listed report not transcribed) is resolved for the current report by this cycle's full transcription; the historical 11/14 05:00 PM rows remain untranscribed and stay flagged (P8-07).",
+  "fetch_method": "fetch_page (PDF text extraction), 2026-11-15 11:31-11:34 UTC, the same method as the prior snapshots.",
+  "no_inference": "No availability, minute, production or game-flow value is derived from any report in this repository. Status labels are reported as printed only."
+}
