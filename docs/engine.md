@@ -43,12 +43,13 @@ python3 -m unittest discover -s tests -v
 
 | Module | Method | Official method reference |
 | --- | --- | --- |
-| `engine/ratings.py` | Recency-decayed points-per-possession team strength; predictive margin distribution (mean, sd); fair spread = expected margin; P(win)/P(cover) via normal approximation | [NBA Stats glossary (pace, possessions)](https://www.nba.com/stats/help/glossary) · [scikit-learn time-series evaluation](https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation-of-time-series-data) |
+| `engine/ratings.py` | Recency-decayed points-per-possession team strength; observed possessions × matchup PPP total (no pace imputation); predictive margin distribution; empirical pre-as-of home-win-rate anchor (no free home intercept); P(win)/P(cover) via normal approximation | [NBA Stats glossary (pace, possessions)](https://www.nba.com/stats/help/glossary) · [scikit-learn time-series evaluation](https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation-of-time-series-data) |
 | `engine/player_props.py` | Minutes mean (clamped) × shrunk per-minute rate; empirical-Bayes shrinkage toward a population baseline; prop over/under probability | [NBA Stats glossary (MIN)](https://www.nba.com/stats/help/glossary) · [scikit-learn model evaluation](https://scikit-learn.org/stable/modules/model_evaluation.html) |
 | `engine/injuries.py` | Report status → availability scenario → minutes multiplier, three separate steps; unknown status ⇒ `UNRESOLVED` ⇒ pick suppression | [NBA Official Injury Report policy](https://official.nba.com/nba-injury-report-2026-27-season/) |
 | `engine/gameflow.py` | Margin-threshold scenarios (competitive / moderate / separation) from the predictive distribution; scenario-averaged starter-minutes multiplier | [NBA Stats glossary (pace)](https://www.nba.com/stats/help/glossary) |
 | `engine/corrstats.py` | Pearson correlation of pregame residuals; phi + direct joint rate for binary legs; game-cluster bootstrap intervals; shrink-toward-zero rule | [NIST correlation](https://www.itl.nist.gov/div898/handbook/glossary.htm) · [NIST bootstrap](https://www.itl.nist.gov/div898/handbook/eda/section3/bootplot.htm) |
 | `engine/gates.py` | Brier score, log loss, reliability bins, walk-forward folds, cluster-bootstrap skill comparison, Bonferroni trials adjustment, G0–G12 gate report | [scikit-learn Brier/calibration](https://scikit-learn.org/stable/modules/calibration.html) · [scikit-learn cross-validation](https://scikit-learn.org/stable/modules/cross_validation.html) |
+| `engine/estimators.py` | Independent matchup-PPP and point-differential margin estimates; absolute disagreement is primary, arithmetic mean is secondary; research-only and unvalidated | [scikit-learn model evaluation](https://scikit-learn.org/stable/modules/model_evaluation.html) · [time-series validation](https://scikit-learn.org/stable/modules/cross_validation.html) |
 | `engine/picks.py` | ≤3-day horizon filter (UTC), originated line + probability records, NO PICK suppression, parlay builder | [NBA schedule PDF (dated reference)](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) · [scikit-learn evaluation](https://scikit-learn.org/stable/modules/model_evaluation.html) |
 
 ## Parameter register (all UNFITTED / PROPOSED)
@@ -58,7 +59,7 @@ These constants are engineering defaults so the code runs deterministically. The
 | Parameter | Default | Where | Basis |
 | --- | --- | --- | --- |
 | Recency half-life | 30 days | `engine/ratings.py` | UNFITTED default; to be selected on development data only [scikit-learn cross-validation](https://scikit-learn.org/stable/modules/cross_validation.html) |
-| Home advantage | 0.0 points | `engine/ratings.py` | UNFITTED; deliberately neutral until calibrated [NBA glossary](https://www.nba.com/stats/help/glossary) |
+| Home advantage | Derived from observed pre-as-of home-win rate and UNFITTED margin SD using a normal quantile; no caller-supplied intercept | `engine/ratings.py` | Experimental transform, not a causal or validated NBA estimate; requires unique completed home results; extreme 0/1 rates suppress lines [model evaluation](https://scikit-learn.org/stable/modules/model_evaluation.html) |
 | Predictive margin sd | 12.0 points | `engine/ratings.py` | UNFITTED; replace with residual sd once authorized residuals exist [NIST bootstrap](https://www.itl.nist.gov/div898/handbook/eda/section3/bootplot.htm) |
 | Minimum games per team/prop | 5 | `engine/ratings.py`, `engine/player_props.py` | PROPOSED, UNVALIDATED and not approved for production (IR-08); final minimum must come from a power/precision plan [scikit-learn evaluation](https://scikit-learn.org/stable/modules/model_evaluation.html) |
 | Minimum settled forecasts (G12) |  | `engine/gates.py` | UNSET; only a preregistered power/precision policy may supply it; CLI output reports UNSET by default [scikit-learn evaluation](https://scikit-learn.org/stable/modules/model_evaluation.html) |
@@ -88,7 +89,8 @@ When (and only when) Q1/F-01 data rights are cleared, place JSONL files under `d
 
 ## Verification performed
 
-- `python3 -m unittest tests.test_engine_models` — 43 tests, all passing (`python3 -m unittest discover -s tests -t .` runs all 103) (schema rejection rules, ledger provenance enforcement, future-leak guard, min-sample gates, shrinkage direction, injury resolution, game-flow partition, Pearson/phi known values, bootstrap determinism, Brier/log-loss known values, chronological folds, horizon filter, NO PICK suppression, parlay dependence rule, selftest smoke).
+- `python3 -m unittest tests.test_estimators` — 10 additional synthetic tests pass for empirical home-rate anchoring, future exclusion, duplicate rejection, suppressed extremes, and disagreement-first output.
+- `python3 -m unittest tests.test_engine_models` — 43 tests, all passing (`python3 -m unittest discover -s tests -t .` runs all 113) (schema rejection rules, ledger provenance enforcement, future-leak guard, min-sample gates, shrinkage direction, injury resolution, game-flow partition, Pearson/phi known values, bootstrap determinism, Brier/log-loss known values, chronological folds, horizon filter, NO PICK suppression, parlay dependence rule, selftest smoke).
 - `python3 -m engine.cli status` on the real repository state reports `NO AUTHORIZED INPUTS -> no lines, no picks` — the honest output the site mirrors.
 - Method statements in the module map were quote-checked against their official sources in [`docs/verification-log.md`](verification-log.md) (ML-01…ML-03, STAT-01…STAT-02, NBA-03…NBA-06).
 
