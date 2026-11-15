@@ -178,7 +178,7 @@ look complete, and the new pages print `NO PICK` / `NONE`.
 
 | Check | Command | Result | Script under test |
 | --- | --- | --- | --- |
-| Engine unit tests | `python3 -m unittest discover -s tests -t .` | **OK** — `Ran 165 tests` (47 + 43 + 17 + 10 + 48; the added suite is `tests/test_engine_brief_gaps.py`, 48 tests, on top of the suites main gained in PRs #47 and #49) | [tests/](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
+| Engine unit tests | `python3 -m unittest discover -s tests -t .` | **OK** — `Ran 165 tests` (47 + 43 + 17 + 10 + 48; the count on the merged tree is 297, see §11; the added suite is `tests/test_engine_brief_gaps.py`, 48 tests, on top of the suites main gained in PRs #47 and #49) | [tests/](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
 | Site, table and link check | `python3 scripts/check_site.py --with-tests` | **PASS: 12 pages, 467 HTML data rows and 751 Markdown data rows passed.** | [check_site.py](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/check_site.py) |
 | Snapshot tables in sync | `python3 scripts/build_snapshots.py --check` | in sync; eight blocks across `slate.html`, `injuries.html`, `results.html`, all reporting `unchanged` | [build_snapshots.py](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/build_snapshots.py) |
 | Derived files reproducible | `python3 scripts/build_brief_data.py --check` | `unchanged` for all four derived outputs, exit 0 | [build_brief_data.py](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/build_brief_data.py) |
@@ -199,7 +199,7 @@ file says so instead of inventing one).
 | HTML data rows, all source-linked | 467 (526 before the two duplicate tables this branch had added were removed at merge; 347 before the pass) | printed in the checker's own PASS line | [results.html](https://github.com/wingbangboozle1-lang/NBA4/blob/main/results.html) |
 | Markdown data rows in `docs/` | 730, including this file's own tables (675 before it) | same script, `docs/` scan | [docs/](https://github.com/wingbangboozle1-lang/NBA4/tree/main/docs) |
 | Engine lines | 6,141 before this pass; `engine/` gained 11 modules | `wc -l engine/*.py tests/*.py scripts/*.py` | [engine/](https://github.com/wingbangboozle1-lang/NBA4/tree/main/engine) |
-| Unit tests | 165 | unittest discovery count, printed above | [tests/](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
+| Unit tests | 297 (165 on this branch alone; +132 from the parallel requirements suite in PR #53) | unittest discovery count, printed above | [tests/](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
 | Snapshot files | 9 JSON + 2 `.pipes` intermediates | directory listing | [data/snapshots/](https://github.com/wingbangboozle1-lang/NBA4/tree/main/data/snapshots) |
 
 ## 9. Requirements map for the items this pass touched
@@ -238,3 +238,31 @@ document holds its own tables to the same rule.
 Reproduce: check out `arena/4fb7eb2f-nba4` and run the §7 commands. The sandbox shell has
 no route to `nba.com`, so re-reading a document needs the fetch tool (or a networked
 machine); that limitation is recorded rather than worked around.
+
+
+## 11. Second merge of `main`: the same items, twice (12:24–12:27 UTC)
+
+Before PR #52 could merge, `main` had advanced again to `cb820ae` (PR #53, session
+`arena/7dfeb9eb-nba4`), whose task AS implemented the same enumerated requirement items this branch
+had built as task AP, under different module names, plus `engine/publishedledger.py`,
+`engine/totals.py`, `engine/surfaces.py` and `engine/ledger.py`. `git merge origin/main` reported
+only two content conflicts — `README.md` and `index.html`, both the test-count sentence — because the
+two sessions never wrote the same path. [PR #53](https://github.com/wingbangboozle1-lang/NBA4/pull/53)
+
+| Item | This branch | `main` after PR #53 | Decision |
+| --- | --- | --- | --- |
+| Result feed / quarter sums | [`engine/resultfeed.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/resultfeed.py) | [`engine/officialresults.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/officialresults.py) | both kept; this branch also keeps the data the item needs |
+| Injury revision diff | [`engine/injurystore.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/injurystore.py) | [`engine/injurydiff.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/injurydiff.py) | both kept; `InjuryRow` exists in both modules, which is legal because neither is re-exported at package level |
+| Home-court pin | [`engine/homerate.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/homerate.py) | [`engine/ratings.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/ratings.py) `measured_home_win_rate` + `home_advantage_from_win_rate` | **de-duplicated**: this branch now calls main's conversion, and a test fails if the call is replaced by a local formula |
+| Estimator disagreement | [`engine/dualestimate.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/dualestimate.py) | [`engine/estimators.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/estimators.py) + [`engine/confidence.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/confidence.py) | both kept; this one bands model-vs-market, that one model-vs-model |
+| Luck, rest/travel, minutes, market prior, parlay rho | [`luckscore`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/luckscore.py), [`travel`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/travel.py), [`minutesshare`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/minutesshare.py), [`marketprior`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/marketprior.py), `parlay.rho_from_feed` | [`luck`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/luck.py), [`rest`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/rest.py) + [`venues`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/venues.py), [`rotations`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/rotations.py), [`markets`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/markets.py) | both kept; a later pass should pick one per item and retire the other with its tests |
+| Pick-hash ledger, totals, surface separation | not built here | [`publishedledger`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/publishedledger.py), [`totals`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/totals.py), [`surfaces`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/surfaces.py) | main's work stands, unreviewed by this session and neither endorsed nor corrected |
+| Playoff tie-break chain | [`engine/seallayer.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/seallayer.py) | — | unique to this branch |
+| [`results.html`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/results.html) | built here | [board row AV](https://github.com/wingbangboozle1-lang/NBA4/blob/main/COORDINATION.md) still records it as undelivered by anyone | row AV annotated with the correction; the page and its renderer are on this branch |
+
+**Verification on the merged tree.** `python3 -m unittest discover -s tests -t .` → **`Ran 297 tests ... OK`**
+(47 + 43 + 17 + 10 + 132 + 48, six suites); `python3 scripts/check_site.py --with-tests` →
+**PASS: 12 pages, 470 HTML data rows, 789 Markdown data rows**; `scripts/build_snapshots.py --check` and
+`scripts/build_brief_data.py --check` both report every rendered table in sync. Two page-level defects
+were found while merging and fixed here: a duplicated `id="pass8-title"` anchor (flag AN-08) and
+`engine/__init__.py` describing only one of the two module sets.

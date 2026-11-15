@@ -130,7 +130,11 @@ def joint_probability(
     if len(correlation) != n:
         raise ValueError("correlation matrix size does not match the number of legs")
     factor = cholesky(correlation)
-    thresholds = [normal_quantile(leg.probability) for leg in legs]
+    # A leg hits when its latent normal exceeds the threshold, so the threshold is
+    # the (1 - p) quantile: P(Z >= Phi^-1(1 - p)) = p. Using Phi^-1(p) instead
+    # silently inverts every marginal that is not exactly 0.5 (found 2026-11-15,
+    # flag P8-01; it is invisible on 0.5/0.5 fixtures, which is how it survived).
+    thresholds = [normal_quantile(1.0 - leg.probability) for leg in legs]
     rng = random.Random(seed)
     hits = 0
     for _ in range(draws):

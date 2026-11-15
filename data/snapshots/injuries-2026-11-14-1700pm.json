@@ -1,0 +1,1303 @@
+{
+  "snapshot_id": "injuries-2026-11-14-1700pm",
+  "kind": "official_injury_report_rows",
+  "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-14_05_00PM.pdf",
+  "source_document": "NBA Official Injury Report",
+  "source_document_header": "Injury Report: 11/14/26 05:00 PM",
+  "source_revision_stamp": "2026-11-14T22:00:00+00:00",
+  "source_revision_stamp_note": "UTC equivalent of the revision time printed in the document header (\"11/14/26 05:00 PM\", Eastern daylight time = UTC-4). The report does not state its own zone; ET is the zone the column header names. Retrieval time is recorded separately as fetched_at_utc - the two are never conflated, because a report retrieved hours later is still the same revision of the document.",
+  "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+  "secondary_source_url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf",
+  "fetched_at_utc": "2026-11-15T11:31:00Z",
+  "extraction_tool": "fetch_page (PDF text extraction), both chunks read in full",
+  "supersession_note": "One dated snapshot of the 11/14 05:00 p.m. ET report - the first report to carry the post-deadline status for the 11/14 games and the first listing for the 11/15 games. The 11/15 06:15 a.m. ET snapshot in this directory is a later revision covering the 11/15 games; the two are diffed, never merged, and neither is labelled \"latest\".",
+  "extraction_notes": [
+    "Game Time is printed on a 12-hour clock with no AM/PM marker (e.g. \"07:00 (ET)\"). The meridian for every row is read from the independent official schedule PDF's ET column for the same date and matchup; where both documents print a time for the game, the row links both.",
+    "Columns are lost at PDF page breaks. Each row records exactly which of the seven columns its own printed line carries (cells_lost), and extraction_audit counts the losses. Where Game Date or Game Time is lost but the Matchup survives, the value is repaired from the schedule PDF and both documents are cited. Where the Matchup and Team cells are lost, the row is attributed to the game and club by block position only and flagged unverified.",
+    "NOT YET SUBMITTED is a reporting state on its own row with empty player and status cells. It is never read as 'no injuries'.",
+    "The New York Knicks have no row at all for their 11/15 game at Toronto - the block prints Toronto's five rows only - and the same is true of the 11/15 06:15 a.m. report. Whether that is an exemption or a gap in the published file cannot be determined from these documents, so no New York availability status is inferred (flag P8-05).",
+    "Philadelphia's centre is printed \"Embiid, Joel\" here and \"Embid, Joel\" in the 11/15 06:15 a.m. report; Washington's forward is printed \"Champagnie, Justin\" here and \"Champagne, Justin\" there. Both spellings are stored exactly as printed and surfaced as name drift by the diff, never merged (flag P8-04).",
+    "The reason cell for the Brooklyn forward is split by the page break (\"Injury/Illness - Right Calf Tightness /\" at the foot of one page, \"Soreness\" alone at the top of the next); the two printed fragments are reassembled into one cell and flagged.",
+    "No availability probability, minute estimate, production impact or pick is stored in this file or derived from these rows."
+  ],
+  "matchups_not_in_snapshot": [
+    {
+      "date": "2026-11-16",
+      "matchups": [
+        "ORL@BOS",
+        "CHI@CLE",
+        "MEM@WAS",
+        "PHI@BKN",
+        "HOU@MIA",
+        "POR@MIN",
+        "GSW@NOP",
+        "PHX@DEN"
+      ],
+      "note": "the 11/14 05:00 p.m. report lists only the 11/14 games and the first 11/15 listings; the eight 11/16 games appear in the 11/15 06:15 a.m. report instead"
+    },
+    {
+      "date": "2026-11-17",
+      "matchups": [
+        "NYK@TOR",
+        "POR@MIN",
+        "DET@SAS",
+        "CHA@LAL",
+        "UTA@LAC"
+      ],
+      "note": "five games are scheduled for 11/17; their first report deadline is the morning of 11/17"
+    }
+  ],
+  "games": [
+    {
+      "matchup": "DEN@NOP",
+      "game_date": "2026-11-14",
+      "tip_et_from_report": "07:00 (ET)",
+      "tip_et_from_schedule": "7:00 PM",
+      "schedule_row": 231,
+      "game_attribution": "the Matchup column is printed on every row in this block",
+      "cells_source": "report",
+      "rows": [
+        {
+          "team": "Denver Nuggets",
+          "player": "Holmes II, DaRon",
+          "status": "Out",
+          "reason": "G League - On Assignment"
+        },
+        {
+          "team": "Denver Nuggets",
+          "player": "Nembhard, Ryan",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "Denver Nuggets",
+          "player": "Strawther, Julian",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Knee Sprain"
+        },
+        {
+          "team": "Denver Nuggets",
+          "player": "Whitmore, Cam",
+          "status": "Out",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "New Orleans Pelicans",
+          "player": "Dia, Malik",
+          "status": "Questionable",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "New Orleans Pelicans",
+          "player": "McGowens, Bryce",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Elbow Infection"
+        },
+        {
+          "team": "New Orleans Pelicans",
+          "player": "Missi, Yves",
+          "status": "Probable",
+          "reason": "Injury/Illness - Left Knee Contusion / Bone Bruise"
+        },
+        {
+          "team": "New Orleans Pelicans",
+          "player": "Murphy III, Trey",
+          "status": "Out",
+          "reason": "Injury/Illness - Bilateral Patellar Tendinopathy"
+        },
+        {
+          "team": "New Orleans Pelicans",
+          "player": "Murray, Dejounte",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Ankle Sprain"
+        },
+        {
+          "team": "New Orleans Pelicans",
+          "player": "Pierre Jr., Jaron",
+          "status": "Probable",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "New Orleans Pelicans",
+          "player": "Reese, Julian",
+          "status": "Questionable",
+          "reason": "G League - Two-Way"
+        },
+        {
+          "team": "New Orleans Pelicans",
+          "player": "Watford, Trendon",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Ankle Sprain"
+        }
+      ]
+    },
+    {
+      "matchup": "DAL@CLE",
+      "game_date": "2026-11-14",
+      "tip_et_from_report": "07:30 (ET)",
+      "tip_et_from_schedule": "7:30 PM",
+      "schedule_row": 232,
+      "game_attribution": "at least one row in this block lost its Matchup column, so that row is attributed by block position and flagged unverified",
+      "cells_source": "report",
+      "rows": [
+        {
+          "team": "Dallas Mavericks",
+          "player": "Biberovic, Tarik",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Heel Bursitis"
+        },
+        {
+          "team": "Dallas Mavericks",
+          "player": "Christie, Max",
+          "status": "Doubtful",
+          "reason": "Injury/Illness - Left Ankle Sprain"
+        },
+        {
+          "team": "Dallas Mavericks",
+          "player": "de Larrea, Sergio",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Knee Sprain"
+        },
+        {
+          "team": "Dallas Mavericks",
+          "player": "Johnson Jr., Morez",
+          "status": "Probable",
+          "reason": "Injury/Illness - Left Shin / Tibia Contusion"
+        },
+        {
+          "team": "__lost__",
+          "player": "Lively II, Dereck",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Foot Surgery",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup",
+            "team"
+          ],
+          "unverified": true,
+          "flag": "the Team cell is not printed on this row - the club is read off the block above, which is not the same as the report printing the team; the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "__lost__",
+          "player": "Martin, Caleb",
+          "status": "Available",
+          "reason": "Injury/Illness - Right Thumb Splint",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup",
+            "team"
+          ],
+          "unverified": true,
+          "flag": "the Team cell is not printed on this row - the club is read off the block above, which is not the same as the report printing the team; the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Cleveland Cavaliers",
+          "player": "Allen, Jarrett",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Right Knee Injury Management",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Cleveland Cavaliers",
+          "player": "Harden, James",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Left Lower Leg/Calf Tightness",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Cleveland Cavaliers",
+          "player": "Merrill, Sam",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Elbow Injury Management",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Cleveland Cavaliers",
+          "player": "Mitchell, Donovan",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Left Knee Contusion/Injury Management",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Cleveland Cavaliers",
+          "player": "Mobley, Evan",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Great Toe Sprain",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Cleveland Cavaliers",
+          "player": "Tomlin, Nae'Qwan",
+          "status": "Out",
+          "reason": "Injury/Illness - Low Back Stress Reaction",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Cleveland Cavaliers",
+          "player": "Udeh, Jr., Ernest",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Cleveland Cavaliers",
+          "player": "Watson, Peyton",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Right Hamstring Injury Management",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        }
+      ]
+    },
+    {
+      "matchup": "BKN@MEM",
+      "game_date": "2026-11-14",
+      "tip_et_from_report": "08:00 (ET)",
+      "tip_et_from_schedule": "8:00 PM",
+      "schedule_row": 234,
+      "game_attribution": "at least one row in this block lost its Matchup column, so that row is attributed by block position and flagged unverified",
+      "cells_source": "report",
+      "rows": [
+        {
+          "team": "Brooklyn Nets",
+          "player": "Bilodeau, Tyler",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "cells_lost": [
+            "game_date"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Brooklyn Nets",
+          "player": "Brown Jr., Mikel",
+          "status": "Probable",
+          "reason": "Injury/Illness - Illness",
+          "cells_lost": [
+            "game_date"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Brooklyn Nets",
+          "player": "Jefferson, Joshua",
+          "status": "Out",
+          "reason": "G League - On Assignment",
+          "cells_lost": [
+            "game_date"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Brooklyn Nets",
+          "player": "Nelson, Grant",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "cells_lost": [
+            "game_date"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Brooklyn Nets",
+          "player": "Saraf, Ben",
+          "status": "Out",
+          "reason": "G League - On Assignment",
+          "cells_lost": [
+            "game_date"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Brooklyn Nets",
+          "player": "Traore, Nolan",
+          "status": "Probable",
+          "reason": "Injury/Illness - Right Calf Tightness / Soreness",
+          "cells_lost": [
+            "game_date"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document; this cell continues on the next page (\"Soreness\" alone), so the reason is reassembled from two printed fragments"
+        },
+        {
+          "team": "Memphis Grizzlies",
+          "player": "Edey, Zach",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Left Ankle Injury Management",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Memphis Grizzlies",
+          "player": "Grant, Jerami",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Head Injury",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Memphis Grizzlies",
+          "player": "Jerome, Ty",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Hip Soreness",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Memphis Grizzlies",
+          "player": "Pippen Jr., Scotty",
+          "status": "Out",
+          "reason": "Injury/Illness - Lumbar Disc Herniation",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Memphis Grizzlies",
+          "player": "Post, Quinten",
+          "status": "Out",
+          "reason": "Injury/Illness - Concussion Protocol",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Memphis Grizzlies",
+          "player": "Saunders, Richie",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Knee Surgery",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        }
+      ]
+    },
+    {
+      "matchup": "CHI@MIN",
+      "game_date": "2026-11-14",
+      "tip_et_from_report": "",
+      "tip_et_from_schedule": "8:00 PM",
+      "schedule_row": 235,
+      "game_attribution": "at least one row in this block lost its Matchup column, so that row is attributed by block position and flagged unverified",
+      "cells_source": "report",
+      "rows": [
+        {
+          "team": "Chicago Bulls",
+          "player": "Awaka, Tobe",
+          "status": "Out",
+          "reason": "Injury/Illness - Disc Irritation",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Chicago Bulls",
+          "player": "Claxton, Nic",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Left Hamstring Injury Management",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Chicago Bulls",
+          "player": "Powell, Norman",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Low Back Injury Management",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Chicago Bulls",
+          "player": "Sellers, Jaylin",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Chicago Bulls",
+          "player": "Smith, Jalen",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Left Finger Sprain",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Chicago Bulls",
+          "player": "Swain, Dailyn",
+          "status": "Out",
+          "reason": "G League - On Assignment",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Chicago Bulls",
+          "player": "Wilson, Caleb",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Metacarpal Fracture",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Minnesota Timberwolves",
+          "player": "Beringer, Joan",
+          "status": "Available",
+          "reason": "Injury/Illness - Face Mask",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Minnesota Timberwolves",
+          "player": "DiVincenzo, Donte",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Achilles Tendon Repair / Surgery",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "__lost__",
+          "player": "Edwards, Anthony",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Knee Arthroscopy",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup",
+            "team"
+          ],
+          "unverified": true,
+          "flag": "the Team cell is not printed on this row - the club is read off the block above, which is not the same as the report printing the team; the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        }
+      ]
+    },
+    {
+      "matchup": "DET@MIA",
+      "game_date": "2026-11-14",
+      "tip_et_from_report": "",
+      "tip_et_from_schedule": "8:00 PM",
+      "schedule_row": 233,
+      "game_attribution": "the Matchup column is printed on every row in this block",
+      "cells_source": "report",
+      "rows": [
+        {
+          "team": "Detroit Pistons",
+          "player": "Duren, Jalen",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Hamstring Strain",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Detroit Pistons",
+          "player": "Harkless, Elijah",
+          "status": "Available",
+          "reason": "G League - Two-Way",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Detroit Pistons",
+          "player": "Joe, Isaiah",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Hip Contusion",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Detroit Pistons",
+          "player": "Jones, Isaac",
+          "status": "Available",
+          "reason": "G League - Two-Way",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Detroit Pistons",
+          "player": "Lanier, Chaz",
+          "status": "Out",
+          "reason": "G League - On Assignment",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Detroit Pistons",
+          "player": "Okorie, Ebuka",
+          "status": "Out",
+          "reason": "G League - On Assignment",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Detroit Pistons",
+          "player": "Onyenso, Ugonna",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Miami Heat",
+          "player": "Antetokounmpo, Giannis",
+          "status": "Probable",
+          "reason": "Injury/Illness - Right Wrist Sprain",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Miami Heat",
+          "player": "Goldin, Vladislav",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Miami Heat",
+          "player": "Larsson, Pelle",
+          "status": "Doubtful",
+          "reason": "Injury/Illness - Illness",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Miami Heat",
+          "player": "Thompson, Klay",
+          "status": "Probable",
+          "reason": "Injury/Illness - Left Ankle Sprain",
+          "cells_lost": [
+            "game_date",
+            "game_time"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date and Game Game_time cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        }
+      ]
+    },
+    {
+      "matchup": "IND@PHI",
+      "game_date": "2026-11-15",
+      "tip_et_from_report": "01:00 (ET)",
+      "tip_et_from_schedule": "1:00 PM",
+      "schedule_row": 236,
+      "game_attribution": "at least one row in this block lost its Matchup column, so that row is attributed by block position and flagged unverified",
+      "cells_source": "report",
+      "rows": [
+        {
+          "team": "Indiana Pacers",
+          "player": "Furphy, Johnny",
+          "status": "Out",
+          "reason": "Injury/Illness - Right ACL Repair / Surgery"
+        },
+        {
+          "team": "Indiana Pacers",
+          "player": "Haliburton, Tyrese",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Hamstring Strain"
+        },
+        {
+          "team": "Indiana Pacers",
+          "player": "McConnell, T.J.",
+          "status": "Probable",
+          "reason": "Injury/Illness - Right Hamstring Strain"
+        },
+        {
+          "team": "Indiana Pacers",
+          "player": "Nesmith, Aaron",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Left Hand Sprain"
+        },
+        {
+          "team": "Indiana Pacers",
+          "player": "Sheppard, Ben",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Meniscus Tear"
+        },
+        {
+          "team": "Philadelphia 76ers",
+          "player": "Barlow, Dominick",
+          "status": "Out",
+          "reason": "Injury/Illness - Low Back Stress Reaction"
+        },
+        {
+          "team": "__lost__",
+          "player": "Bona, Adem",
+          "status": "Out",
+          "reason": "Injury/Illness - Cervical Spine Sprain",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup",
+            "team"
+          ],
+          "unverified": true,
+          "flag": "the Team cell is not printed on this row - the club is read off the block above, which is not the same as the report printing the team; the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "__lost__",
+          "player": "Embiid, Joel",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Foot Plantar Fascia Injury Management",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup",
+            "team"
+          ],
+          "unverified": true,
+          "flag": "the Team cell is not printed on this row - the club is read off the block above, which is not the same as the report printing the team; the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "__lost__",
+          "player": "Hukporti, Ariel",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Achilles Tendon Rupture / Tear",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup",
+            "team"
+          ],
+          "unverified": true,
+          "flag": "the Team cell is not printed on this row - the club is read off the block above, which is not the same as the report printing the team; the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        }
+      ]
+    },
+    {
+      "matchup": "LAL@PHX",
+      "game_date": "2026-11-15",
+      "tip_et_from_report": "04:00 (ET)",
+      "tip_et_from_schedule": "4:00 PM",
+      "schedule_row": 237,
+      "game_attribution": "the Matchup column is printed on every row in this block",
+      "cells_source": "report",
+      "rows": [
+        {
+          "team": "Los Angeles Lakers",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "the report prints no players for this club - it has not submitted",
+          "cells_lost": [
+            "game_date"
+          ]
+        },
+        {
+          "team": "Phoenix Suns",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "the report prints no players for this club - it has not submitted",
+          "cells_lost": [
+            "game_date"
+          ]
+        }
+      ]
+    },
+    {
+      "matchup": "CHA@LAC",
+      "game_date": "2026-11-15",
+      "tip_et_from_report": "04:30 (ET)",
+      "tip_et_from_schedule": "4:30 PM",
+      "schedule_row": 238,
+      "game_attribution": "the Matchup column is printed on every row in this block",
+      "cells_source": "report",
+      "rows": [
+        {
+          "team": "Charlotte Hornets",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "the report prints no players for this club - it has not submitted",
+          "cells_lost": [
+            "game_date"
+          ]
+        },
+        {
+          "team": "LA Clippers",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "the report prints no players for this club - it has not submitted",
+          "cells_lost": [
+            "game_date"
+          ]
+        }
+      ]
+    },
+    {
+      "matchup": "SAS@UTA",
+      "game_date": "2026-11-15",
+      "tip_et_from_report": "05:00 (ET)",
+      "tip_et_from_schedule": "5:00 PM",
+      "schedule_row": 239,
+      "game_attribution": "the Matchup column is printed on every row in this block",
+      "cells_source": "report",
+      "rows": [
+        {
+          "team": "San Antonio Spurs",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "the report prints no players for this club - it has not submitted",
+          "cells_lost": [
+            "game_date"
+          ]
+        },
+        {
+          "team": "Utah Jazz",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "the report prints no players for this club - it has not submitted",
+          "cells_lost": [
+            "game_date"
+          ]
+        }
+      ]
+    },
+    {
+      "matchup": "DAL@BOS",
+      "game_date": "2026-11-15",
+      "tip_et_from_report": "06:00 (ET)",
+      "tip_et_from_schedule": "6:00 PM",
+      "schedule_row": 240,
+      "game_attribution": "the Matchup column is printed on every row in this block",
+      "cells_source": "report",
+      "rows": [
+        {
+          "team": "Dallas Mavericks",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "the report prints no players for this club - it has not submitted",
+          "cells_lost": [
+            "game_date"
+          ]
+        },
+        {
+          "team": "Boston Celtics",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "the report prints no players for this club - it has not submitted",
+          "cells_lost": [
+            "game_date"
+          ]
+        }
+      ]
+    },
+    {
+      "matchup": "NYK@TOR",
+      "game_date": "2026-11-15",
+      "tip_et_from_report": "06:00 (ET)",
+      "tip_et_from_schedule": "6:00 PM",
+      "schedule_row": 241,
+      "game_attribution": "the Matchup column is printed on every row in this block",
+      "cells_source": "report",
+      "rows": [
+        {
+          "team": "Toronto Raptors",
+          "player": "Barnes, Scottie",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Left Groin Strain",
+          "cells_lost": [
+            "game_date"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document; the player-name cell is split across the fetch chunk boundary (\"Bar\" at the end of chunk 0, \"rs\" at the start of chunk 1) and is reassembled from the two fragments"
+        },
+        {
+          "team": "Toronto Raptors",
+          "player": "Bittle, Nate",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Foot Avulsion Fracture",
+          "cells_lost": [
+            "game_date"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Toronto Raptors",
+          "player": "Leonard, Kawhi",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Knee Injury Management",
+          "cells_lost": [
+            "game_date"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Toronto Raptors",
+          "player": "McCullar Jr., Kevin",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "cells_lost": [
+            "game_date"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "Toronto Raptors",
+          "player": "Smith, Malachi",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "cells_lost": [
+            "game_date"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        }
+      ]
+    },
+    {
+      "matchup": "HOU@WAS",
+      "game_date": "2026-11-15",
+      "tip_et_from_report": "07:00 (ET)",
+      "tip_et_from_schedule": "7:00 PM",
+      "schedule_row": 242,
+      "game_attribution": "at least one row in this block lost its Matchup column, so that row is attributed by block position and flagged unverified",
+      "cells_source": "report",
+      "rows": [
+        {
+          "team": "Houston Rockets",
+          "player": "Adams, Steven",
+          "status": "Probable",
+          "reason": "Injury/Illness - Right Soleus Strain",
+          "cells_lost": [
+            "game_date"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date cell(s) are lost and are repaired from the official schedule PDF row for the same matchup, which is cited alongside this document"
+        },
+        {
+          "team": "__lost__",
+          "player": "Capela, Clint",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Ankle Sprain",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup",
+            "team"
+          ],
+          "unverified": true,
+          "flag": "the Team cell is not printed on this row - the club is read off the block above, which is not the same as the report printing the team; the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "__lost__",
+          "player": "Copeland, Quadir",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup",
+            "team"
+          ],
+          "unverified": true,
+          "flag": "the Team cell is not printed on this row - the club is read off the block above, which is not the same as the report printing the team; the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "__lost__",
+          "player": "Phillips, Julian",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup",
+            "team"
+          ],
+          "unverified": true,
+          "flag": "the Team cell is not printed on this row - the club is read off the block above, which is not the same as the report printing the team; the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "__lost__",
+          "player": "Smart, Marcus",
+          "status": "Out",
+          "reason": "League Suspension",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup",
+            "team"
+          ],
+          "unverified": true,
+          "flag": "the Team cell is not printed on this row - the club is read off the block above, which is not the same as the report printing the team; the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "__lost__",
+          "player": "VanVleet, Fred",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Knee Injury Management",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup",
+            "team"
+          ],
+          "unverified": true,
+          "flag": "the Team cell is not printed on this row - the club is read off the block above, which is not the same as the report printing the team; the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Beekman, Reece",
+          "status": "Out",
+          "reason": "Injury/Illness - Right AC Joint Injury",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Carrington, Bub",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Chest / Sternum Contusion",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Champagnie, Justin",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Foot Surgery",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Johnson, Tre",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Low Back Soreness",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Okpara, Felix",
+          "status": "Questionable",
+          "reason": "G League - Two-Way",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Sarr, Alex",
+          "status": "Questionable",
+          "reason": "Injury/Illness - Illness",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Vukcevic, Tristan",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Hip Impingement",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        },
+        {
+          "team": "Washington Wizards",
+          "player": "Watkins, Jamir",
+          "status": "Out",
+          "reason": "Injury/Illness - Left ACL Repair / Surgery",
+          "cells_lost": [
+            "game_date",
+            "game_time",
+            "matchup"
+          ],
+          "unverified": true,
+          "flag": "the Game Game_date, Game Game_time, Game Matchup cells are lost, so this row is attributed to the game by block position only"
+        }
+      ]
+    },
+    {
+      "matchup": "ATL@MIL",
+      "game_date": "2026-11-15",
+      "tip_et_from_report": "08:00 (ET)",
+      "tip_et_from_schedule": "8:00 PM",
+      "schedule_row": 243,
+      "game_attribution": "the Matchup column is printed on every row in this block",
+      "cells_source": "report",
+      "rows": [
+        {
+          "team": "Atlanta Hawks",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "the report prints no players for this club - it has not submitted",
+          "cells_lost": [
+            "game_date"
+          ]
+        },
+        {
+          "team": "Milwaukee Bucks",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "the report prints no players for this club - it has not submitted",
+          "cells_lost": [
+            "game_date"
+          ]
+        }
+      ]
+    },
+    {
+      "matchup": "OKC@SAC",
+      "game_date": "2026-11-15",
+      "tip_et_from_report": "09:00 (ET)",
+      "tip_et_from_schedule": "9:00 PM",
+      "schedule_row": 244,
+      "game_attribution": "the Matchup column is printed on every row in this block",
+      "cells_source": "report",
+      "rows": [
+        {
+          "team": "Oklahoma City Thunder",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "the report prints no players for this club - it has not submitted",
+          "cells_lost": [
+            "game_date"
+          ]
+        },
+        {
+          "team": "Sacramento Kings",
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": true,
+          "flag": "the report prints no players for this club - it has not submitted",
+          "cells_lost": [
+            "game_date"
+          ]
+        }
+      ]
+    }
+  ],
+  "extraction_audit": {
+    "games": 14,
+    "rows": 99,
+    "rows_with_lost_cells": 77,
+    "cells_lost_by_column": {
+      "game_date": 77,
+      "game_time": 53,
+      "matchup": 33,
+      "team": 11
+    },
+    "submission_markers": 12,
+    "columns_in_the_table": [
+      "game_date",
+      "game_time",
+      "matchup",
+      "team",
+      "player",
+      "status",
+      "reason"
+    ]
+  }
+}

@@ -31,8 +31,8 @@ __all__ = [
     "leaderboard",
     "pipeline",
     "sources",
-    # task AN: brief-gap modules. Each one refuses to emit a number whose
-    # official input is absent (see engine.inputs.MissingInput).
+    # Task AP (this branch, claimed as AN): brief-gap modules. Each one refuses
+    # to emit a number whose official input is absent (see engine.inputs.MissingInput).
     "inputs",
     "resultfeed",
     "injurystore",
@@ -44,6 +44,24 @@ __all__ = [
     "travel",
     "minutesshare",
     "marketprior",
+    # Task AS (parallel session arena/7dfeb9eb-nba4, PR #53): the same eleven
+    # requirement items, implemented a second time under different names. Listed
+    # here so the overlap is visible from the package itself; see
+    # COORDINATION.md IR-T1 and docs/engine.md for the correspondence.
+    "officialresults",
+    "injurydiff",
+    "preregistration",
+    "ledger",
+    "publishedledger",
+    "estimators",
+    "confidence",
+    "luck",
+    "rest",
+    "venues",
+    "rotations",
+    "markets",
+    "surfaces",
+    "totals",
 ]
 
 __version__ = "0.1.0"
