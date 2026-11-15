@@ -266,3 +266,24 @@ two sessions never wrote the same path. [PR #53](https://github.com/wingbangbooz
 `scripts/build_brief_data.py --check` both report every rendered table in sync. Two page-level defects
 were found while merging and fixed here: a duplicated `id="pass8-title"` anchor (flag AN-08) and
 `engine/__init__.py` describing only one of the two module sets.
+
+## 12. Landing and deployment state (12:29–12:47 UTC)
+
+[PR #52](https://github.com/wingbangboozle1-lang/NBA4/pull/52) merged into `main` as `62f4476`.
+The Pages build for that commit was queued at 12:29:18Z and was still `status: building`,
+`duration: 0`, at 12:47:03Z — 18 minutes, longer than the 10.8 minutes (645,123 ms) the previous
+build took, which is the queue-saturation signature this repository has seen before (empty-commit
+rebuilds in PRs #7, #41 and #43). [GitHub Pages limits](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits)
+
+Nothing in this repository is invalidated by the delay, and the delay was **not** treated as
+publication. As of the last check the live site still serves `cb820ae`:
+[live index.html](https://wingbangboozle1-lang.github.io/NBA4/index.html) reads "249 unit tests"
+and "22 games · 100 rows" — the pre-correction injury count — and
+[live results.html](https://wingbangboozle1-lang.github.io/NBA4/results.html) returns the Pages 404
+page. No empty commit was pushed: the correct build is already in the queue, and the site is close
+to the ten-builds-per-hour soft limit. This landing record, once merged, supersedes that queued
+build, so the thing to confirm is `status: built` for whatever commit `main` points at
+(`gh api repos/wingbangboozle1-lang/NBA4/pages/builds`) followed by a re-read of
+[`/NBA4/results.html`](https://wingbangboozle1-lang.github.io/NBA4/results.html) — that page exists
+only from `62f4476` onward, so a 200 there is the cheapest proof that the corrected 101-row injury
+table, the results layer and the 297-test count are all live at once.
