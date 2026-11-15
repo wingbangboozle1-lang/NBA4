@@ -4,9 +4,12 @@ These files are verbatim, dated extractions of **official NBA publications**, ke
 
 | File | What it holds | Official source | Source document timestamp | Fetched (UTC) |
 | --- | --- | --- | --- | --- |
-| `slate-2026-11-14.json` | Rows 231–252 of the official 2026–27 schedule PDF: the 22 games that tip off inside the requested three-day window from the observation time. | [2026–27 schedule PDF](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) | header: "AS OF AUGUST 13, 2026 \| SUBJECT TO CHANGE" | 2026-11-14T09:46:00Z |
-| `injuries-2026-11-14-0430am.json` | Every row of the 2026-11-14 04:30 AM ET official injury report, including `NOT YET SUBMITTED` teams and cells lost at PDF page breaks. | [Injury report PDF, 2026-11-14 04:30 AM](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-14_04_30AM.pdf) | header: "Injury Report: 11/14/26 04:30 AM" | 2026-11-14T10:20:00Z |
-| `injuries-newest-pointer-2026-11-14.json` | Metadata only: the 11/14 05:00 PM ET report was the newest listed on the official index at 22:09 UTC. Its rows are not transcribed. | [Injury report index](https://official.nba.com/nba-injury-report-2026-27-season/) and [5:00 PM PDF](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-14_05_00PM.pdf) | header: "Injury Report: 11/14/26 05:00 PM" | 2026-11-14T22:09:00Z |
+| `slate-2026-11-15.json` | Rows 236–257 of the official 2026–27 schedule PDF: the 22 games that tip off inside the requested three-day window from the 2026-11-15 observation time (current snapshot, rendered on [Upcoming slate](../slate.html)). | [2026–27 schedule PDF](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) | header: "AS OF AUGUST 13, 2026 \| SUBJECT TO CHANGE" | 2026-11-15T11:39:00Z |
+| `injuries-2026-11-15-0615am.json` | Every row of the 2026-11-15 06:15 AM ET official injury report (101 rows: 9 games on 11/15 including 13 page-break-lost team cells flagged unverified, plus 16 `NOT YET SUBMITTED` rows for 11/16) (current snapshot, rendered on [Injuries & flow](../injuries.html)). | [Injury report PDF, 2026-11-15 06:15 AM](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-15_06_15AM.pdf) | header: "Injury Report: 11/15/26 06:15 AM" | 2026-11-15T11:34:00Z |
+| `injuries-newest-pointer-2026-11-15.json` | Metadata only: the 11/15 06:15 AM ET report was the newest listed on the official index at 11:31 UTC and is fully transcribed in `injuries-2026-11-15-0615am.json`. | [Injury report index](https://official.nba.com/nba-injury-report-2026-27-season/) and [6:15 AM PDF](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-15_06_15AM.pdf) | header: "Injury Report: 11/15/26 06:15 AM" | 2026-11-15T11:31:00Z |
+| `slate-2026-11-14.json` | Historical: rows 231–252 of the official 2026–27 schedule PDF as read on 2026-11-14 (the 22 games of the 11/14 window). | [2026–27 schedule PDF](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) | header: "AS OF AUGUST 13, 2026 \| SUBJECT TO CHANGE" | 2026-11-14T09:46:00Z |
+| `injuries-2026-11-14-0430am.json` | Historical: every row of the 2026-11-14 04:30 AM ET official injury report (49 rows), including `NOT YET SUBMITTED` teams and cells lost at PDF page breaks. | [Injury report PDF, 2026-11-14 04:30 AM](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-14_04_30AM.pdf) | header: "Injury Report: 11/14/26 04:30 AM" | 2026-11-14T10:20:00Z |
+| `injuries-newest-pointer-2026-11-14.json` | Historical metadata: the 11/14 05:00 PM ET report was the newest listed on the official index at 22:09 UTC on 11/14. Its rows are not transcribed. | [Injury report index](https://official.nba.com/nba-injury-report-2026-27-season/) and [5:00 PM PDF](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-14_05_00PM.pdf) | header: "Injury Report: 11/14/26 05:00 PM" | 2026-11-14T22:09:00Z |
 
 ## Rules these files follow
 
@@ -20,8 +23,8 @@ These files are verbatim, dated extractions of **official NBA publications**, ke
 ## Reading and re-checking
 
 ```bash
-python3 -c "import json;d=json.load(open('data/snapshots/slate-2026-11-14.json'));print(len(d['games']),'games')"
-python3 -c "import json;d=json.load(open('data/snapshots/injuries-2026-11-14-0430am.json'));print(sum(len(g['rows']) for g in d['games']),'injury rows')"
+python3 -c "import json;d=json.load(open('data/snapshots/slate-2026-11-15.json'));print(len(d['games']),'games')"
+python3 -c "import json;d=json.load(open('data/snapshots/injuries-2026-11-15-0615am.json'));print(sum(len(g['rows']) for g in d['games']),'injury rows')"
 ```
 
 To re-check a value, open the `source_url`, find the row by game/matchup and player, and compare with the value on [Upcoming slate](../slate.html) or [Injuries & flow](../injuries.html). If the document has moved on (a newer report exists), the older snapshot is stale by definition — see [Flagged for review](../review.html).

@@ -29,8 +29,8 @@ SNAPSHOTS = ROOT / "data" / "snapshots"
 SCHEDULE_URL = (
     "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
 )
-REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-14_04_30AM.pdf"
-REPORT_LABEL = "2026-11-14 04:30 AM ET report"
+REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-15_06_15AM.pdf"
+REPORT_LABEL = "2026-11-15 06:15 AM ET report"
 
 # Engine reason codes (engine/pipeline.py REASON_CODES) applied to every game.
 NO_PICK_REASONS = (
@@ -93,15 +93,21 @@ def load(name: str) -> dict:
 
 
 def render_slate() -> str:
-    data = load("slate-2026-11-14.json")
+    data = load("slate-2026-11-15.json")
     # The schedule PDF text prints no "at" token on rows 215-259, so away/home order
-    # is shown as "at" only when the 04:30 AM injury report independently prints the
-    # same AWAY@HOME code. Every other row shows printed order and is flagged.
-    report_codes = {g["matchup"] for g in load("injuries-2026-11-14-0430am.json")["games"]}
+    # is shown as "at" only when the 06:15 AM injury report independently prints the
+    # same AWAY@HOME code for the same game date. Every other row shows printed order
+    # and is flagged. Matching the code alone is not enough: matchups repeat across
+    # dates (e.g. NYK@TOR and POR@MIN appear in the report on 11/15 and on the slate
+    # again on 11/17), which would falsely corroborate the 11/17 rows.
+    report_codes = {
+        (g.get("game_date") or g.get("game_date_from_schedule", ""), g["matchup"])
+        for g in load("injuries-2026-11-15-0615am.json")["games"]
+    }
     rows: list[str] = []
     for game in data["games"]:
         away, home = game["away"], game["home"]
-        corroborated = f"{ABBR[away]}@{ABBR[home]}" in report_codes
+        corroborated = (game["date"], f"{ABBR[away]}@{ABBR[home]}") in report_codes
         if corroborated:
             matchup = f"{ABBR[away]} @ {ABBR[home]}"
             game_cell = f"<strong>{e(away)}</strong> at <strong>{e(home)}</strong>"
@@ -158,7 +164,7 @@ def game_label(game: dict) -> str:
 
 
 def render_injuries() -> str:
-    data = load("injuries-2026-11-14-0430am.json")
+    data = load("injuries-2026-11-15-0615am.json")
     rows: list[str] = []
     for game in data["games"]:
         from_schedule = game["cells_source"].startswith("schedule")
