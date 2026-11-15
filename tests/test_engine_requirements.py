@@ -23,14 +23,19 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from engine import injurydiff, luck, markets, officialresults, preregistration  # noqa: E402
 from engine import publishedledger, rest, rotations, surfaces, totals, venues  # noqa: E402
-from engine.estimators import (  # noqa: E402
+from engine.confidence import (  # noqa: E402
+    BAND_SPLIT,
     EstimatorOutput,
+    band_gap,
+    band_their_comparison,
     blend,
     disagreement,
-    home_court_points,
+    from_comparison,
+    home_court_pin_audit,
     independence_audit,
     summarise_pair,
 )
+from engine.estimators import EstimatorComparison  # noqa: E402
 
 SRC = "https://synthetic.invalid/fixture"
 T0 = "2026-11-15T00:00:00+00:00"
@@ -572,24 +577,71 @@ class EstimatorTests(unittest.TestCase):
         self.assertEqual(out["pairs"][1]["shared_fields"], "pace")
         self.assertFalse(out["all_independent"])
 
-    def test_home_court_is_pinned_to_a_measured_rate(self):
-        # Phi^-1(0.5) = 0 exactly, so a 50% home rate must give 0.0 points.
-        even = home_court_points(0.5, 12.0, SRC, "2026-27")
-        self.assertAlmostEqual(even.value_points, 0.0, places=9)
-        home = home_court_points(0.60, 12.0, SRC, "2026-27")
-        self.assertGreater(home.value_points, 0.0)
-        self.assertGreater(home.value_points, even.value_points)  # monotone in the rate
-        self.assertIn("0.6000", home.label)
-        self.assertEqual(home.source_url, SRC)
+    def test_pin_audit_accepts_a_value_that_equals_the_measurement(self):
+        from engine.ratings import home_advantage_from_win_rate
 
-    def test_home_court_refuses_assumed_constants(self):
-        for bad in (None, 0.0, 1.0):
-            with self.assertRaises(ValueError):
-                home_court_points(bad, 12.0, SRC, "2026-27")
-        with self.assertRaises(ValueError):
-            home_court_points(0.55, None, SRC, "2026-27")
-        with self.assertRaises(ValueError):
-            home_court_points(0.55, 12.0, "http://insecure", "2026-27")
+        pinned = home_advantage_from_win_rate(0.55, 12.0)
+        audit = home_court_pin_audit(0.55, 1280, 12.0, pinned, SRC)
+        self.assertTrue(audit["pinned"], audit["codes"])
+        self.assertAlmostEqual(audit["expected_points"], pinned, places=12)
+        self.assertEqual(audit["divergence_points"], 0.0)
+        self.assertEqual(audit["codes"], ("PINNED_TO_MEASURED_RATE",))
+        self.assertEqual(audit["mapping_owner"], "engine/ratings.py::home_advantage_from_win_rate")
+        self.assertIn("UNFITTED", audit["limitation"])  # the SD limitation stays visible
+
+    def test_pin_audit_refuses_a_free_coefficient(self):
+        # 2.75 points is the customary assumed value; it does not equal the pin,
+        # so the audit must call it out rather than accept it.
+        audit = home_court_pin_audit(0.55, 1280, 12.0, 2.75, SRC)
+        self.assertFalse(audit["pinned"])
+        self.assertTrue(any("free-fitted" in c for c in audit["codes"]))
+        self.assertGreater(audit["divergence_points"], 0.0)
+
+    def test_pin_audit_refuses_unmeasurable_inputs(self):
+        for rate, games in ((None, 1280), (0.0, 1280), (1.0, 1280), (0.55, 0), (0.55, None)):
+            audit = home_court_pin_audit(rate, games, 12.0, 1.0, SRC)
+            self.assertFalse(audit["pinned"], (rate, games))
+        self.assertFalse(home_court_pin_audit(0.55, 1280, None, 1.0, SRC)["pinned"])
+        self.assertFalse(home_court_pin_audit(0.55, 1280, 12.0, 1.0, "http://insecure")["pinned"])
+
+    def test_band_gap_policy(self):
+        self.assertEqual(band_gap(0.4, (0.5, 2.0)), "AGREEMENT")
+        self.assertEqual(band_gap(1.0, (0.5, 2.0)), "MODEST_GAP")
+        self.assertEqual(band_gap(3.0, (0.5, 2.0)), "MATERIAL_GAP")
+        self.assertEqual(band_gap(0.1, (0.5, 2.0), straddles_zero=True), BAND_SPLIT)
+        self.assertEqual(band_gap(1.0, None), "UNBANDED")           # no policy registered
+        self.assertEqual(band_gap(1.0, (0.0, 2.0)), "UNBANDED")     # degenerate small band
+        self.assertEqual(band_gap(1.0, (2.0, 1.0)), "UNBANDED")     # large must exceed small
+        self.assertEqual(band_gap(None, (0.5, 2.0)), "NOT_COMPARABLE")
+
+    def test_the_estimator_layers_output_bands_without_recomputing_it(self):
+        comparison = EstimatorComparison(
+            home_team="Beta", away_team="Alpha",
+            estimator_a_matchup_ppp=-3.4, estimator_b_point_differential=-1.1,
+            disagreement_points=2.3, blended_margin_secondary=-2.25,
+            measured_home_win_rate=0.552, home_games_used=1234, notes=("note",),
+        )
+        row = band_their_comparison(comparison, bands=(0.5, 2.0))
+        self.assertEqual(row["disagreement_points"], 2.3)
+        self.assertEqual(row["band"], "MATERIAL_GAP")
+        self.assertEqual(row["headline_surface"], "headline")
+        self.assertEqual(row["blend_secondary"], -2.25)
+        self.assertIn("SECONDARY", row["blend_label"])
+        a, b = from_comparison(comparison)
+        self.assertEqual(a.game_id, "Alpha@Beta")
+        self.assertFalse(set(a.inputs_used) & set(b.inputs_used))
+
+    def test_a_blank_estimator_output_stays_blank_in_the_band_row(self):
+        comparison = EstimatorComparison(
+            home_team="Beta", away_team="Alpha", estimator_a_matchup_ppp=None,
+            estimator_b_point_differential=None, disagreement_points=None,
+            blended_margin_secondary=None, measured_home_win_rate=None, home_games_used=0,
+            notes=("insufficient sample",),
+        )
+        row = band_their_comparison(comparison, bands=(0.5, 2.0))
+        self.assertFalse(row["publishable"])
+        self.assertEqual(row["band"], "NOT_COMPARABLE")
+        self.assertIn("data gap", row["note"])
 
     def test_summary_puts_the_gap_first_and_the_blend_underneath(self):
         row = summarise_pair(est(spread=-4.0), est("B", spread=-2.0, inputs=("pace",)), bands=(0.5, 2.0))
