@@ -14,6 +14,9 @@ Hard rules enforced by this package:
   estimated from an authorised dataset; the engine refuses to invent them.
 * Nothing here talks to the network. Adapters for licensed feeds live outside
   this package and are responsible for populating the contracts.
+* A computation whose required official input is missing raises
+  ``engine.inputs.MissingInput`` or returns a refusal record instead of using a
+  stand-in default. Refusal-by-default modules are listed in ``docs/engine.md``.
 """
 
 from __future__ import annotations
@@ -28,6 +31,19 @@ __all__ = [
     "leaderboard",
     "pipeline",
     "sources",
+    # task AN: brief-gap modules. Each one refuses to emit a number whose
+    # official input is absent (see engine.inputs.MissingInput).
+    "inputs",
+    "resultfeed",
+    "injurystore",
+    "prereg",
+    "seallayer",
+    "dualestimate",
+    "homerate",
+    "luckscore",
+    "travel",
+    "minutesshare",
+    "marketprior",
 ]
 
 __version__ = "0.1.0"

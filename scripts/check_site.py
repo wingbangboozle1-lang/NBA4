@@ -15,6 +15,7 @@ PAGES = (
     "index.html",
     "slate.html",
     "injuries.html",
+    "results.html",
     "line-origination.html",
     "automation.html",
     "strategies.html",
@@ -24,7 +25,7 @@ PAGES = (
     "sources.html",
     "review.html",
 )
-# The unified sidebar: every page must carry exactly these 11 links in this
+# The unified sidebar: every page must carry exactly these 12 links in this
 # order, with no duplicates and with aria-current pointing at its own page.
 CANONICAL_NAV = tuple(PAGES)
 OFFICIAL_HOSTS = (

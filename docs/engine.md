@@ -95,3 +95,31 @@ When (and only when) Q1/F-01 data rights are cleared, place JSONL files under `d
 ## What is still required before a real pick
 
 Exactly the same blockers the dashboard lists: Q1 data rights, Q2 a licensed provider, G2 market/settlement definitions, G3 preregistration of the parameter register above, G4–G11 evaluation on authorized data, and the G12 leaderboard/reward policy with legal review. Until then the engine is a tested instrument standing at zero, not a source of picks.
+
+## Task-AN modules: brief-gap machinery that refuses without inputs (2026-11-15)
+
+Twelve modules close the gaps the audit found between the brief and the engine. They
+share one discipline (`engine/inputs.py`): a number is emitted only when the official
+cells it is computed from are present; otherwise the module raises
+`MissingInput` or returns a refusal record with the missing input named. Fixtures in
+`tests/test_engine_brief_gaps.py` (47 tests) are synthetic except where a test reads
+the dated official extractions in `data/snapshots/`.
+
+| Module | What it computes | What it refuses | Official input it needs |
+| --- | --- | --- | --- |
+| [`engine/inputs.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/inputs.py) | `require`, `require_min`, `official_link`, the `[NO INPUT]` sentinel | any row that would publish without an https official link | — |
+| [`engine/resultfeed.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/resultfeed.py) | quarter-sum vs printed-final check per team line; day settlement gate; retrieval lag | settling a day with an unchecked or disagreeing line; inventing a missing quarter or a game-end clock | `data/snapshots/results-<date>.json` (game-summary pages) |
+| [`engine/injurystore.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/injurystore.py) | revision store; consecutive-revision diff (status / reason / team / name-variance) | attributing a page-break row to a team; calling a name-spelling change a status change | the official injury-report PDFs |
+| [`engine/prereg.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/prereg.py) | append-only code-hash registrations; `assert_covers` before a run | overwriting a registration; a run whose code hash or timestamp is not covered | the repository commit it records |
+| [`engine/seallayer.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/seallayer.py) | the L.2.a / L.2.b tie-break walk in printed order | skipping a criterion whose input is absent; ordering by anything not in the rule | the standings page's tie-break procedures |
+| [`engine/dualestimate.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/dualestimate.py) | model-vs-market bands (2/5/10 pt edges), per-variant counts, mean difference | a mean below 10 compared pairs; any pair with no market side | licensed quotes for the market side |
+| [`engine/homerate.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/homerate.py) | measured home-win rate from the standings HOME column; pinned point value (12.0 x Phi⁻¹(rate)) | applying the pin before pre-registration **and** rights gate G0 clear it; any per-arena or altitude term | `data/snapshots/standings-<date>.json` |
+| [`engine/luckscore.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/luckscore.py) | one-possession (2-pt) close-game record over the last 10 games; exact binomial 90% band | a baseline of .500 when no forecast history exists; padding a 4-game team to 10 | completed `TeamGame` lines, possessions when printed |
+| [`engine/travel.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/travel.py) | tip-to-tip rest, back-to-back flag, games-in-nights count | a count from a slate that does not cover the whole window; any penalty value from a disruption notice | schedule extraction + a named official notice |
+| [`engine/minutesshare.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/minutesshare.py) | top-8 minutes share, replacement-minutes share, availability-weighted rotation | a denominator synthesised from player rows; crediting minutes to a player whose row lost its team cell | official box-score MIN lines |
+| [`engine/marketprior.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/marketprior.py) | price to probability, no-vig normalisation, preregistered shrinkage | a prior where G0 has not cleared the quote; a price that is not printed | licensed quotes with `allowed_use` |
+| [`engine/parlay.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/parlay.py) | `resolve_ticket` push/void re-pricing; `rho_from_feed` leg-pair correlation | scoring a push as a win; pricing a ticket with an unsettled leg; a rho from fewer than 20 pairs | settlement states from official results |
+
+`engine/ratings.py` is unchanged: `HOME_ADVANTAGE_POINTS` stays `0.0` and the module
+docstring's "no default parameters" rule still holds — `homerate.for_ratings` is the
+only path that could hand a calibrated value to a line, and it is gated twice.

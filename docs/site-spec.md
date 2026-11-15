@@ -1,6 +1,6 @@
 # Site information architecture and publication specification
 
-**Scope:** static, informational research dashboard. This document is the information-architecture specification; the eleven pages it describes are now built, and the final integration and Pages deployment are recorded in [`COORDINATION.md`](../COORDINATION.md). Publication rules below remain in force for every future change.
+**Scope:** static, informational research dashboard. This document is the information-architecture specification; the eleven pages it describes are now built, plus a twelfth added by task AN (`results.html`: official results with the quarter-score settlement check, standings as printed, and the derived aggregates); and the final integration and Pages deployment are recorded in [`COORDINATION.md`](../COORDINATION.md). Publication rules below remain in force for every future change.
 
 ## User-facing promise
 
