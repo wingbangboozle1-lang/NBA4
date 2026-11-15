@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import json
 import math
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -88,6 +89,11 @@ from engine.seal import (  # noqa: E402
     verify_chain,
     verify_published_hash,
 )
+from engine.geocode import (  # noqa: E402
+    PlusCodeError,
+    decode_cell,
+    decode_short_code,
+)
 from engine.travel import (  # noqa: E402
     Arena,
     compute_load,
@@ -96,7 +102,24 @@ from engine.travel import (  # noqa: E402
 )
 
 BASE = datetime(2026, 11, 1, 0, 0, tzinfo=timezone.utc)
+ROOT = Path(__file__).resolve().parent.parent
 PROV = Provenance("https://synthetic.invalid/fixture", BASE.isoformat(), BASE.isoformat())
+
+
+class UnbasedGame:
+    """A game whose source names both teams but does not assert the venue.
+
+    This mirrors a row of the official schedule-by-date that carries no "at"
+    token and no second-document matchup code: the two teams are known, the
+    tip is known, and which one is at home is not.
+    """
+
+    def __init__(self, game_id, tip_time, teams):
+        self.game_id = game_id
+        self.tip_time = tip_time
+        self.teams = tuple(teams)
+        self.home_team = None
+        self.away_team = None
 
 
 def _team_game(game_id, date, team, opponent, is_home, points, opp_points, possessions=None):
@@ -396,8 +419,9 @@ class TestTravel(unittest.TestCase):
         t0 = datetime(2026, 11, 1, 19, 0, tzinfo=timezone.utc)
         return [
             SlateGame("g1", "g1", (t0).isoformat(), "SYNTH-A", "SYNTH-B", PROV),
-            SlateGame("g2", "g2", (t0 + timedelta(days=1)).isoformat(), "SYNTH-A", "SYNTH-B", PROV),
-            SlateGame("g3", "g3", (t0 + timedelta(days=2)).isoformat(), "SYNTH-A", "SYNTH-B", PROV),
+            SlateGame("g2", "g2", (t0 + timedelta(days=1)).isoformat(), "SYNTH-B", "SYNTH-A", PROV),
+            SlateGame("g3", "g3", (t0 + timedelta(days=2)).isoformat(), "SYNTH-B", "SYNTH-A", PROV),
+            SlateGame("g4", "g4", (t0 + timedelta(days=3)).isoformat(), "SYNTH-A", "SYNTH-B", PROV),
         ]
 
     def test_rest_back_to_back_and_three_in_four(self):
@@ -409,9 +433,11 @@ class TestTravel(unittest.TestCase):
         second = load["g2:SYNTH-A"]
         self.assertAlmostEqual(second.rest_days, 1.0, places=6)
         self.assertFalse(second.is_back_to_back)
-        self.assertEqual(second.games_in_next_four_days, 2)
+        # A plays g2, g3 and g4 inside the four-day window that opens at g2,
+        # and g3 and g4 inside the window that opens at g3.
+        self.assertEqual(second.games_in_next_four_days, 3)
         third = load["g3:SYNTH-A"]
-        self.assertEqual(third.games_in_next_four_days, 1)
+        self.assertEqual(third.games_in_next_four_days, 2)
 
     def test_travel_distance_is_measured_when_coordinates_are_sourced(self):
         arenas = {
@@ -419,8 +445,22 @@ class TestTravel(unittest.TestCase):
             "SYNTH-B": Arena("SYNTH-B", "VB", "D", 40.0, -75.0, "https://synthetic.invalid/b"),
         }
         load = compute_load(self._games(), arenas)
-        self.assertIsNotNone(load["g2:SYNTH-B"].travel_miles)
-        self.assertGreater(load["g2:SYNTH-B"].travel_miles, 0.0)
+        # g1 and g4 are at SYNTH-A's arena, g2 and g3 at SYNTH-B's, so SYNTH-A
+        # makes the 661-mile trip for both g2 and g3.
+        self.assertAlmostEqual(
+            load["g2:SYNTH-A"].travel_miles,
+            haversine_miles(41.5, -87.5, 40.0, -75.0),
+            places=6,
+        )
+        self.assertEqual(load["g2:SYNTH-A"].previous_venue, "SYNTH-A")
+        self.assertTrue(load["g2:SYNTH-A"].venue_confirmed)
+        self.assertAlmostEqual(load["g3:SYNTH-A"].travel_miles, 0.0, places=9)
+        # Coming home after a road game is also a real trip.
+        self.assertAlmostEqual(
+            load["g4:SYNTH-A"].travel_miles,
+            haversine_miles(40.0, -75.0, 41.5, -87.5),
+            places=6,
+        )
 
     def test_travel_is_blank_without_sourced_coordinates(self):
         arenas = {
@@ -430,6 +470,34 @@ class TestTravel(unittest.TestCase):
         load = compute_load(self._games(), arenas)
         self.assertIsNone(load["g2:SYNTH-B"].travel_miles)
         self.assertTrue(load["g2:SYNTH-B"].notes)
+
+    def test_unasserted_venue_basis_still_yields_rest_but_no_travel(self):
+        """Rows with no away/home token keep their date-derived fields.
+
+        The schedule-by-date prints both teams on every line but not always
+        which is at home.  Rest and 3-in-4 depend only on dates and team
+        identity, so they remain computable; travel needs the venue and must
+        stay blank rather than silently borrowing the opponent's arena.
+        """
+        arenas = {
+            "SYNTH-A": Arena("SYNTH-A", "VA", "C", 41.5, -87.5, "https://synthetic.invalid/a"),
+            "SYNTH-B": Arena("SYNTH-B", "VB", "D", 40.0, -75.0, "https://synthetic.invalid/b"),
+        }
+        games = [
+            UnbasedGame("u1", "2026-11-01T19:00:00+00:00", ("SYNTH-A", "SYNTH-B")),
+            UnbasedGame("u2", "2026-11-02T19:00:00+00:00", ("SYNTH-A", "SYNTH-B")),
+            UnbasedGame("u3", "2026-11-03T19:00:00+00:00", ("SYNTH-A", "SYNTH-B")),
+        ]
+        load = compute_load(games, arenas)
+        row = load["u2:SYNTH-A"]
+        self.assertAlmostEqual(row.rest_days, 1.0, places=6)
+        # A 19:00-to-19:00 turnaround is a full day, so it is not a
+        # back-to-back -- the flag follows the same < 1.0 day rule either way.
+        self.assertFalse(row.is_back_to_back)
+        self.assertIsNone(row.travel_miles)
+        self.assertFalse(row.venue_confirmed)
+        self.assertIsNone(row.previous_venue)
+        self.assertTrue(any("away/home basis" in n for n in row.notes))
 
 
 class TestResults(unittest.TestCase):
@@ -696,3 +764,164 @@ class TestInjuryDiff(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestCommittedArenaTable(unittest.TestCase):
+    """The committed venue table must stay inside its own evidence rule."""
+
+    def setUp(self):
+        self.payload = json.loads(
+            (ROOT / "data" / "arenas" / "arenas.json").read_text(encoding="utf-8")
+        )
+        self.rows = {row["team"]: row for row in self.payload["arenas"]}
+
+    def test_every_team_carries_a_coordinate(self):
+        self.assertEqual(len(self.rows), 30)
+        for team, row in self.rows.items():
+            self.assertIsNotNone(row["latitude"], team)
+            self.assertIsNotNone(row["longitude"], team)
+            self.assertTrue(row["verified"], team)
+            self.assertLessEqual(abs(row["latitude"]), 90.0)
+            self.assertLessEqual(abs(row["longitude"]), 180.0)
+
+    def test_every_row_names_two_independent_https_sources(self):
+        for team, row in self.rows.items():
+            self.assertTrue(row["coordinate_source_url"].startswith("https://"), team)
+            self.assertTrue(row["corroboration_source_url"].startswith("https://"), team)
+            self.assertTrue(row["address_source_url"].startswith("https://"), team)
+            self.assertNotEqual(
+                row["coordinate_source_url"], row["corroboration_source_url"], team
+            )
+            self.assertNotEqual(
+                row["coordinate_source_kind"], row["corroboration_source_kind"], team
+            )
+
+    def test_the_two_sources_agree_within_the_declared_tolerance(self):
+        for team, row in self.rows.items():
+            measured = haversine_miles(
+                row["latitude"], row["longitude"],
+                row["corroboration_latitude"], row["corroboration_longitude"],
+            )
+            self.assertAlmostEqual(measured * 1609.344, row["source_gap_m"], places=0)
+            self.assertLessEqual(
+                row["source_gap_m"], row["source_gap_tolerance_m"],
+                f"{team}: sources disagree by {row['source_gap_m']} m",
+            )
+
+    def test_rejected_census_points_are_kept_as_evidence_not_used(self):
+        rejected = {
+            team: row["rejected_source"]["distance_from_accepted_m"]
+            for team, row in self.rows.items()
+            if row.get("rejected_source")
+        }
+        # The two gross Census mismatches must stay documented, and no row may
+        # still sit on a point that was rejected for being off the venue.
+        self.assertGreaterEqual(rejected.get("Philadelphia", 0), 5000)
+        self.assertGreaterEqual(rejected.get("Phoenix", 0), 6000)
+        for team, row in self.rows.items():
+            if row.get("rejected_source"):
+                rej = row["rejected_source"]
+                self.assertNotEqual((row["latitude"], row["longitude"]),
+                                    (rej["latitude"], rej["longitude"]), team)
+
+    def test_committed_table_matches_its_builder(self):
+        script = ROOT / "scripts" / "build_arena_table.py"
+        result = subprocess.run(
+            [sys.executable, str(script), "--check"],
+            capture_output=True, text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+
+class TestCommittedLoadSnapshot(unittest.TestCase):
+    """The committed load snapshot must stay reproducible and internally sane."""
+
+    def setUp(self):
+        self.payload = json.loads(
+            (ROOT / "data" / "snapshots" / "load-2026-11-14.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.rows = self.payload["load"]
+
+    def test_matches_its_builder(self):
+        script = ROOT / "scripts" / "build_load_snapshot.py"
+        result = subprocess.run(
+            [sys.executable, str(script), "--check"],
+            capture_output=True, text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_covers_every_team_and_the_three_day_window(self):
+        self.assertEqual(len({r["team"] for r in self.rows}), 30)
+        self.assertEqual(self.payload["coverage"]["rows"], len(self.rows))
+        self.assertGreater(self.payload["coverage"]["rows_with_travel"], 0)
+
+    def test_travel_is_never_asserted_without_a_confirmed_venue(self):
+        for row in self.rows:
+            if row["travel_miles"] is not None:
+                self.assertTrue(row["venue_confirmed"], row["game_id"])
+                self.assertIsNotNone(row["previous_venue"], row["game_id"])
+                self.assertGreaterEqual(row["travel_miles"], 0.0)
+
+    def test_rest_drives_the_back_to_back_flag(self):
+        for row in self.rows:
+            if row["rest_days"] is None:
+                self.assertIsNone(row["is_back_to_back"])
+                continue
+            self.assertEqual(row["is_back_to_back"], row["rest_days"] < 1.0, row["game_id"])
+
+    def test_three_in_four_matches_its_window_count(self):
+        for row in self.rows:
+            self.assertEqual(
+                row["is_three_in_four"], row["games_in_next_four_days"] >= 3, row["game_id"]
+            )
+
+    def test_a_row_without_a_venue_says_so(self):
+        for row in self.rows:
+            if row["travel_miles"] is None:
+                self.assertTrue(row["notes"], row["game_id"])
+
+
+class TestPlusCodeDecoding(unittest.TestCase):
+    """A venue's published plus code must decode to that venue."""
+
+    def test_decodes_a_full_code_exactly(self):
+        lat_lo, lat_hi, lon_lo, lon_hi = decode_cell("87M2JJVC+99")
+        self.assertAlmostEqual((lat_lo + lat_hi) / 2, 43.643437, places=3)
+        self.assertAlmostEqual((lon_lo + lon_hi) / 2, -79.379063, places=3)
+
+    def test_short_code_recovery_lands_on_the_published_venue(self):
+        # Google's place card for Scotiabank Arena prints "JJVC+99".
+        out = decode_short_code("JJVC+99", 43.6532, -79.3832)
+        self.assertEqual(out["full_code"], "87M2JJVC+99")
+        self.assertLess(
+            haversine_miles(out["latitude"], out["longitude"], 43.6434338, -79.3790777),
+            0.5,
+        )
+
+    def test_recovered_codes_agree_with_independent_arena_positions(self):
+        # Each short code is the one Google prints for that venue; each
+        # reference position is the OSM arena polygon used in the arena table.
+        cases = [
+            ("9W8Q+F4", 42.3601, -71.0589, 42.3662986, -71.0621622),   # TD Garden
+            ("Q224+6J", 40.7128, -74.0060, 40.7505129, -73.9935159),   # MSG
+            ("F8W6+JQ", 41.4993, -81.6944, 41.4966862, -81.6885754),   # Rocket Arena
+            ("QJ96+6R", 37.7749, -122.4194, 37.7679001, -122.3874223), # Chase Center
+            ("WWX9+J5", 29.9511, -90.0715, 29.9490666, -90.0819634),   # Smoothie King
+            ("CHG7+R2", 29.4241, -98.4936, 29.4269205, -98.4375058),   # Frost Bank
+        ]
+        for code, rlat, rlon, true_lat, true_lon in cases:
+            out = decode_short_code(code, rlat, rlon)
+            gap = haversine_miles(out["latitude"], out["longitude"], true_lat, true_lon)
+            self.assertLess(gap, 0.5, f"{code} decoded {gap:.2f} miles from the venue")
+
+    def test_rejects_an_unrecoverable_code(self):
+        # An odd number of missing digits cannot be a short code, and a
+        # character outside the base-20 alphabet is not a plus code at all.
+        with self.assertRaises(PlusCodeError):
+            decode_short_code("JVC+99", 43.6532, -79.3832)
+        with self.assertRaises(PlusCodeError):
+            decode_cell("87M2JJVC+9A")
+        with self.assertRaises(PlusCodeError):
+            decode_short_code("87M2JJVC+99", 43.6532, -79.3832)

@@ -73,6 +73,7 @@ class TeamLoad:
     travel_miles: Optional[float]
     previous_venue: Optional[str]
     notes: Tuple[str, ...] = ()
+    venue_confirmed: Optional[bool] = None
 
 
 def haversine_miles(
@@ -125,6 +126,47 @@ def _tip_dt(tip_time: str) -> datetime:
     return datetime.fromisoformat(tip_time).astimezone(timezone.utc)
 
 
+def _game_teams(game) -> Tuple[str, ...]:
+    """The two teams in a game, whether or not the venue basis is asserted.
+
+    A row of the official schedule-by-date names both teams on every line.
+    On most lines the document also fixes which of them is at home; on some
+    it does not (the PDF prints no venue token, and no second document
+    confirms the order).  Rest, back-to-back and 3-in-4 depend only on the
+    dates and the team identities, so they are still computable for those
+    rows.  Travel does not: it needs the venue, and the venue needs the
+    away/home basis.
+    """
+    teams = getattr(game, "teams", None)
+    if teams:
+        return tuple(t for t in teams if t)
+    out = []
+    home = getattr(game, "home_team", None)
+    away = getattr(game, "away_team", None)
+    if away:
+        out.append(away)
+    if home:
+        out.append(home)
+    return tuple(out)
+
+
+def _venue_team(game, team: str) -> Optional[str]:
+    """The home team whose arena this game is played in, or ``None``.
+
+    ``None`` means the source does not assert which team is at home.  Many
+    games share a team name in both slots' neighbourhood, so guessing here
+    would silently attach a real travel distance to the wrong city.
+    """
+    home = getattr(game, "home_team", None)
+    away = getattr(game, "away_team", None)
+    if not home or not away:
+        return None
+    # Whichever side the queried team is on, the *home* team names the venue.
+    # Returning the queried team here instead would silently turn every road
+    # game into a home game and every trip into a zero-mile one.
+    return home
+
+
 def compute_load(
     games: Sequence,
     arenas: Mapping[str, Arena],
@@ -138,8 +180,8 @@ def compute_load(
     ordered = sorted(games, key=lambda g: _tip_dt(g.tip_time))
     by_team: Dict[str, List] = {}
     for g in ordered:
-        by_team.setdefault(g.home_team, []).append(g)
-        by_team.setdefault(g.away_team, []).append(g)
+        for team_name in _game_teams(g):
+            by_team.setdefault(team_name, []).append(g)
 
     out: Dict[str, TeamLoad] = {}
     for team, team_games in by_team.items():
@@ -153,38 +195,52 @@ def compute_load(
             travel: Optional[float] = None
             previous_venue: Optional[str] = None
 
+            now_venue_team = _venue_team(g, team)
             if idx > 0:
                 prev = team_games[idx - 1]
                 prev_tip = _tip_dt(prev.tip_time)
                 rest = (tip - prev_tip).total_seconds() / 86400.0
                 back_to_back = rest < 1.0
-                # The venue the team last played at: its own arena when it was
-                # home, the opponent's arena when it was on the road.  In both
-                # cases the previous game's home team names that arena.
-                previous_venue = prev.home_team
-                arena_now = arenas.get(g.home_team if team == g.home_team else g.away_team)
-                arena_prev = arenas.get(previous_venue)
-                if (
-                    arena_now
-                    and arena_prev
-                    and arena_now.has_coordinates
-                    and arena_prev.has_coordinates
-                ):
-                    travel = haversine_miles(
-                        arena_prev.latitude, arena_prev.longitude,
-                        arena_now.latitude, arena_now.longitude,
+                # The venue this game is played in, and the venue the previous
+                # one was played in.  Both are named by the home team of the
+                # respective game.
+                prev_venue_team = _venue_team(prev, team)
+                previous_venue = prev_venue_team
+                if now_venue_team is None or prev_venue_team is None:
+                    unknown = [
+                        "this game" if now_venue_team is None else "",
+                        "the previous game" if prev_venue_team is None else "",
+                    ]
+                    notes.append(
+                        "travel distance not measured: the source does not assert the "
+                        "away/home basis for "
+                        + " and ".join(u for u in unknown if u)
+                        + ", so the venue is unknown"
                     )
                 else:
-                    missing = []
-                    if not (arena_now and arena_now.has_coordinates):
-                        missing.append(arena_now.team if arena_now else "the current venue")
-                    if not (arena_prev and arena_prev.has_coordinates):
-                        missing.append(arena_prev.team if arena_prev else previous_venue)
-                    notes.append(
-                        "travel distance not measured: the arena coordinate for "
-                        + " and ".join(missing)
-                        + " is not confirmed by an official source"
-                    )
+                    arena_now = arenas.get(now_venue_team)
+                    arena_prev = arenas.get(prev_venue_team)
+                    if (
+                        arena_now
+                        and arena_prev
+                        and arena_now.has_coordinates
+                        and arena_prev.has_coordinates
+                    ):
+                        travel = haversine_miles(
+                            arena_prev.latitude, arena_prev.longitude,
+                            arena_now.latitude, arena_now.longitude,
+                        )
+                    else:
+                        missing: List[str] = []
+                        if not (arena_now and arena_now.has_coordinates):
+                            missing.append(arena_now.team if arena_now else now_venue_team)
+                        if not (arena_prev and arena_prev.has_coordinates):
+                            missing.append(arena_prev.team if arena_prev else prev_venue_team)
+                        notes.append(
+                            "travel distance not measured: the arena coordinate for "
+                            + " and ".join(str(m) for m in missing)
+                            + " is not confirmed by a sourced, corroborated source"
+                        )
             else:
                 notes.append("first game in the supplied schedule window: no rest or travel value")
 
@@ -207,5 +263,6 @@ def compute_load(
                 travel_miles=travel,
                 previous_venue=previous_venue,
                 notes=tuple(notes),
+                venue_confirmed=now_venue_team is not None,
             )
     return out
