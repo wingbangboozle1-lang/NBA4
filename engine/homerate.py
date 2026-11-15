@@ -14,6 +14,12 @@ path, and it is deliberately narrow:
   ``ratings.margin_forecast`` until the caller asserts that the run is
   pre-registered and that the rights gate cleared the inputs.
 
+Relationship to the parallel work on main: ``ratings.measured_home_win_rate`` measures the
+same statistic from a **ledger sample** of completed games, while :func:`measure_home_win_rate`
+measures it from the **standings page's printed HOME column**. Both feed the one conversion
+``ratings.home_advantage_from_win_rate``, which this module calls rather than re-implementing
+(COORDINATION.md IR-T1).
+
 No arena, altitude, travel or attendance feature is fitted: the inputs those would
 need (per-arena results, official travel notices) are not in the authorized set, so
 :func:`arena_adjustment` returns a refusal rather than a coefficient.
@@ -26,9 +32,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Sequence
 
-from .distributions import normal_quantile
 from .inputs import MissingInput, official_link, require
-from .ratings import MARGIN_SD_DEFAULT
+from .ratings import MARGIN_SD_DEFAULT, home_advantage_from_win_rate
 
 __all__ = ["HomeWinRate", "HomeAdvantagePin", "measure_home_win_rate", "pin_home_advantage", "for_ratings", "arena_adjustment"]
 
@@ -137,13 +142,19 @@ def pin_home_advantage(
     measured, missing = measure_home_win_rate(rows, source_url=source_url)
     rate = measured.rate
     assert rate is not None
-    z = normal_quantile(max(min(rate, 1 - 1e-9), 1e-9))
+    # The conversion is *not* re-implemented here: engine/ratings.py (main, PR #47) owns
+    # home_advantage_from_win_rate, and calling it is what keeps one conversion in the
+    # repo. This module's addition is where the rate comes from - the standings page's
+    # printed HOME column, which is a league-wide observation rather than a ledger
+    # sample - plus the gate that decides whether the value may reach a line.
+    points = home_advantage_from_win_rate(rate, margin_sd)
+    z = points / margin_sd
     return HomeAdvantagePin(
         rate=rate,
         margin_sd_points=margin_sd,
         z=z,
-        points=margin_sd * z,
-        conversion="points = MARGIN_SD_DEFAULT * Phi^-1(measured home-win rate); inverse of ratings.win_probability",
+        points=points,
+        conversion="delegates to ratings.home_advantage_from_win_rate(rate, margin_sd) = margin_sd * Phi^-1(rate)",
         rows_used=len(rows),
         rows_without_home_cell=missing,
         source_url=measured.source_url,

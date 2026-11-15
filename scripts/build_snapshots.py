@@ -29,8 +29,8 @@ SNAPSHOTS = ROOT / "data" / "snapshots"
 SCHEDULE_URL = (
     "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
 )
-REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-14_04_30AM.pdf"
-REPORT_LABEL = "2026-11-14 04:30 AM ET report"
+REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-15_06_15AM.pdf"
+REPORT_LABEL = "2026-11-15 06:15 AM ET report"
 
 # Engine reason codes (engine/pipeline.py REASON_CODES) applied to every game.
 NO_PICK_REASONS = (
@@ -93,15 +93,21 @@ def load(name: str) -> dict:
 
 
 def render_slate() -> str:
-    data = load("slate-2026-11-14.json")
+    data = load("slate-2026-11-15.json")
     # The schedule PDF text prints no "at" token on rows 215-259, so away/home order
-    # is shown as "at" only when the 04:30 AM injury report independently prints the
-    # same AWAY@HOME code. Every other row shows printed order and is flagged.
-    report_codes = {g["matchup"] for g in load("injuries-2026-11-14-0430am.json")["games"]}
+    # is shown as "at" only when the 06:15 AM injury report independently prints the
+    # same AWAY@HOME code for the same game date. Every other row shows printed order
+    # and is flagged. Matching the code alone is not enough: matchups repeat across
+    # dates (e.g. NYK@TOR and POR@MIN appear in the report on 11/15 and on the slate
+    # again on 11/17), which would falsely corroborate the 11/17 rows.
+    report_codes = {
+        (g.get("game_date") or g.get("game_date_from_schedule", ""), g["matchup"])
+        for g in load("injuries-2026-11-15-0615am.json")["games"]
+    }
     rows: list[str] = []
     for game in data["games"]:
         away, home = game["away"], game["home"]
-        corroborated = f"{ABBR[away]}@{ABBR[home]}" in report_codes
+        corroborated = (game["date"], f"{ABBR[away]}@{ABBR[home]}") in report_codes
         if corroborated:
             matchup = f"{ABBR[away]} @ {ABBR[home]}"
             game_cell = f"<strong>{e(away)}</strong> at <strong>{e(home)}</strong>"
@@ -158,7 +164,7 @@ def game_label(game: dict) -> str:
 
 
 def render_injuries() -> str:
-    data = load("injuries-2026-11-14-0430am.json")
+    data = load("injuries-2026-11-15-0615am.json")
     rows: list[str] = []
     for game in data["games"]:
         from_schedule = game["cells_source"].startswith("schedule")
@@ -235,14 +241,14 @@ def splice(page: Path, block_id: str, body: str) -> str | None:
 
 
 # ---------------------------------------------------------------------------
-# Task-AN blocks: the current 72-hour window, the newest injury-report revision
-# and its consecutive-revision diff, and the results / standings / aggregate
-# tables on results.html. Every renderer reads only the dated snapshot file it
-# names, so a published row can be re-derived from that file alone.
+# Task-AN blocks: the consecutive-revision injury diff and the results /
+# standings / aggregate tables on results.html. The current-window slate table
+# and the newest-revision injury table are rendered by the functions above from
+# main (PR #49); nothing here restates them. Every renderer reads only the dated
+# snapshot file it names, so a published row can be re-derived from that file.
 # ---------------------------------------------------------------------------
 
-SLATE_1115 = "slate-2026-11-15.json"
-INJ_0615 = "injuries-2026-11-15-0615am.json"
+INJ_0615 = "injuries-2026-11-15-0615am.cells.json"
 INJ_DIFF = "injuries-2026-11-15-0600-to-0615.diff.json"
 RESULTS_1114 = "results-2026-11-14.json"
 STANDINGS_1115 = "standings-2026-11-15.json"
@@ -251,90 +257,6 @@ AGGREGATES_1115 = "aggregates-2026-11-15.json"
 
 def _row(cells: list[str]) -> str:
     return "              <tr>" + "".join(cells) + "</tr>"
-
-
-def render_slate_current() -> str:
-    data = load(SLATE_1115)
-    rows: list[str] = []
-    for game in data["games"]:
-        away, home = game["away"], game["home"]
-        code = game.get("code")
-        if code:
-            matchup = f"{ABBR[away]} @ {ABBR[home]}"
-            basis = f"injury-report code {code}"
-        else:
-            matchup = f"{ABBR[away]} @ {ABBR[home]}"
-            basis = "games-page slug " + game["games_page_slug"]
-        tips = f'{game["tip_col1"]} local / {game["tip_col2"]} ET'
-        notes = [f'Order basis: {basis}; game id {game["games_page_game_id"]} = 00226002 + schedule row.']
-        if game.get("tip_disagreement"):
-            notes.append(f'<span class="flag flag-red">Tip disagreement</span> {e(game["tip_disagreement"])}')
-        links = [link(SCHEDULE_URL, f'Schedule PDF row {game["row"]}'),
-                 link(game["games_page_url"], "Games page")]
-        if code:
-            links.append(link(data["corroborating_urls"]["injury_report"], "Injury report 06:15 ET"))
-        rows.append(
-            _row(
-                [
-                    f'<td>{e(game["weekday"])} {e(game["date"])}</td>',
-                    f'<td>{e(tips)}</td>',
-                    f'<td><strong>{e(away)}</strong> at <strong>{e(home)}</strong>'
-                    f'<br><span class="muted">{"<br>".join(notes)}</span></td>',
-                    f"<td>{e(matchup)}</td>",
-                    empty(),
-                    empty(),
-                    '<td><span class="flag flag-red">NO PICK</span></td>',
-                    f'<td title="{e(NO_PICK_REASONS[0])}">{e(NO_PICK_REASONS[0].split(":")[0])}'
-                    f'<br>{e(NO_PICK_REASONS[1].split(":")[0])}<br>{e(NO_PICK_REASONS[2].split(":")[0])}</td>',
-                    f'<td>{"<br>".join(links)}</td>',
-                ]
-            )
-        )
-    head = (
-        '<div class="table-card table-wrap">\n          <table class="data-table">\n'
-        "            <thead><tr>"
-        '<th scope="col">Date (as printed)</th><th scope="col">Tip-off: local / ET</th>'
-        '<th scope="col">Game and order basis</th><th scope="col">Matchup</th>'
-        '<th scope="col">Originated line</th><th scope="col">Fair probability</th>'
-        '<th scope="col">Decision</th><th scope="col">Reason code</th>'
-        '<th scope="col">Official source</th></tr></thead>\n            <tbody>\n'
-    )
-    return head + "\n".join(rows) + "\n            </tbody>\n          </table>\n        </div>"
-
-
-def render_injuries_current() -> str:
-    data = load(INJ_0615)
-    rows: list[str] = []
-    for game in data["games"]:
-        for row in game["rows"]:
-            notes: list[str] = []
-            if not row["team_printed"]:
-                notes.append("team cell not printed on this row (page break); left blank, not filled in")
-            if row.get("unverified"):
-                notes.append(row.get("flag") or "row unverified")
-            if row["status"] == "":
-                notes.append("no player/status line printed for this block")
-            cells = [
-                f'<td>{e(game["game_date"])} {e(game["tip_et"])}</td>',
-                f'<td>{e(game["matchup"]) or empty()}</td>' if game["matchup"] else empty(),
-                f"<td>{e(row['team'])}</td>" if row["team"] else empty(),
-                f"<td>{e(row['player'])}</td>",
-                f"<td>{e(row['status'])}</td>" if row["status"] else empty(),
-                f"<td>{e(row['reason'])}</td>" if row["reason"] else empty(),
-                '<td><span class="flag">Unverified</span><br>' + "<br>".join(notes) + "</td>"
-                if notes
-                else "<td>Verbatim from report</td>",
-                f"<td>{link(data['source_url'], data['source_document_header'])}</td>",
-            ]
-            rows.append(_row(cells))
-    head = (
-        '<div class="table-card table-wrap">\n          <table class="data-table">\n'
-        "            <thead><tr>"
-        '<th scope="col">Game (as printed)</th><th scope="col">Matchup</th><th scope="col">Team</th>'
-        '<th scope="col">Player</th><th scope="col">Reported status</th><th scope="col">Reported reason</th>'
-        '<th scope="col">Data note</th><th scope="col">Official source</th></tr></thead>\n            <tbody>\n'
-    )
-    return head + "\n".join(rows) + "\n            </tbody>\n          </table>\n        </div>"
 
 
 def render_injuries_diff() -> str:
@@ -541,8 +463,6 @@ def render_aggregates() -> str:
 
 BLOCKS.update(
     {
-        "slate-current": ("slate.html", render_slate_current),
-        "injuries-current": ("injuries.html", render_injuries_current),
         "injuries-diff": ("injuries.html", render_injuries_diff),
         "results-lines": ("results.html", render_results),
         "standings-table": ("results.html", render_standings),

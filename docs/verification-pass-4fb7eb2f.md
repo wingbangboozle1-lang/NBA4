@@ -1,9 +1,12 @@
 # Verification pass 8 — brief-gap closure: results layer, injury revisions, refusal-by-default engine
 
-Session branch `arena/4fb7eb2f-nba4`, work dated **2026-11-15 UTC**. Board tasks
-**AN** (engine gaps), **AO** (eighth official-source pass), **AP** (surface split,
-partially), **AQ** (integration, PR, Pages). Base commit
-`24d7adf85f85ee4c73f10ea3ddcf4a3379db6650` (`main`, the merge of PR #45).
+Session branch `arena/4fb7eb2f-nba4`, work dated **2026-11-15 UTC**. Board tasks **AP**
+(engine gaps), **AQ** (eighth official-source pass), **AR** (surface split, partially),
+**AS** (integration, PR, Pages) — these four were claimed on this branch at 11:35 UTC as
+AN/AO/AP/AQ, and renumbered after merge because the parallel session's PR #47 and #49 took
+AN and AO in between. The flag ids below keep the AN- prefix they were written with. Base commit `24d7adf85f85ee4c73f10ea3ddcf4a3379db6650` (`main`, the merge of PR #46). Merged
+against `main` at `dfaf997` (PR #51) on this branch before opening PR #52, and §3a records
+what that merge found.
 
 This pass is deliberately narrow: it closes the *data-layer* gaps earlier passes
 identified as blocking, adds the engine modules that consume them, and records every
@@ -80,7 +83,29 @@ pipe-separated cells per row), then converted to snapshot JSONs by
 | rows that lost matchup **and** team cells at a page break | 3 | published blank and flagged; never re-attributed | [repository file](https://github.com/wingbangboozle1-lang/NBA4/blob/main/data/snapshots/raw/injury-2026-11-15T0615am-et.pipes) |
 
 The two revisions differ in **exactly one cell**, which a direct line-by-line comparison
-of the two extractions confirms independently of the module. The report is never
+of the two extractions confirms independently of the module.
+
+## 3a. Cross-session cross-check of the same document — one published row was missing
+
+`main` (PR #49) had published its own extraction of the **same** 06:15 AM document as
+`data/snapshots/injuries-2026-11-15-0615am.json`, with 100 rows. This branch's independent
+extraction of the same PDF has 101. The merge did not pick a winner by precedence: the
+document was re-read, and the `IND@PHI` / Philadelphia 76ers block prints
+
+```
+row 9 : 11/15/2026 ; 01:00 (ET) ; IND@PHI ; Philadelphia 76ers ; Embid, Joel     ; Out ; Injury/Illness - Right Foot Plantar Fascia Injury Management
+row 10: 11/15/2026 ; 01:00 (ET) ; IND@PHI ; Philadelphia 76ers ; Hukporti, Ariel ; Out ; Injury/Illness - Right Achilles Tendon Rupture / Tear
+```
+(cell separators shown as `;` so this document's own tables stay the only pipe tables on the page; the
+extracted document prints one row per line with seven cells, and row 10 is the row that was missing.)
+
+so `Hukporti, Ariel` was **omitted from the published table**, not absent from the report.
+Resolution: the row was restored to main's file in document order (main's schema and keys
+kept, so the published table and its tests move 100 → 101), this branch's own extraction was
+moved to `injuries-2026-11-15-0615am.cells.json` so one file one schema stays true, and
+`scripts/build_brief_data.py` now generates a `cross_check` block from the two files rather
+than asserting agreement: **101 rows in each, 101 matching row for row, nothing one-sided on
+either side** after the correction. Flag **AN-07**. The report is never
 described as "unchanged" (the league says reports update continually), and the name
 difference is never described as a status change.
 
@@ -133,7 +158,7 @@ publication settles it. [Schedule PDF](https://cdn.nba.com/manage/2026/08/2026-2
 
 ## 6. Engine additions
 
-Twelve modules, one shared refusal type (`engine/inputs.py` → `MissingInput`, sentinel
+Eleven new modules plus functions on `engine/parlay.py`, one shared refusal type (`engine/inputs.py` → `MissingInput`, sentinel
 `[NO INPUT]`), and a table of what each computes versus refuses in
 [`docs/engine.md`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/engine.md).
 Coverage: result feed, injury store, pre-registration freeze file, seal layer, dual
@@ -153,8 +178,8 @@ look complete, and the new pages print `NO PICK` / `NONE`.
 
 | Check | Command | Result | Script under test |
 | --- | --- | --- | --- |
-| Engine unit tests | `python3 -m unittest discover -s tests -t .` | **OK** — `Ran 150 tests in 0.196s` (47 + 47 + 43 + 13; the added suite is `tests/test_engine_brief_gaps.py`) | [tests/](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
-| Site, table and link check | `python3 scripts/check_site.py --with-tests` | **PASS: 12 pages, 526 HTML data rows and 730 Markdown data rows passed.** (675 before this document was added; the tables in this file are themselves audited, so the count moves with it.) | [check_site.py](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/check_site.py) |
+| Engine unit tests | `python3 -m unittest discover -s tests -t .` | **OK** — `Ran 165 tests` (47 + 43 + 17 + 10 + 48; the added suite is `tests/test_engine_brief_gaps.py`, 48 tests, on top of the suites main gained in PRs #47 and #49) | [tests/](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
+| Site, table and link check | `python3 scripts/check_site.py --with-tests` | **PASS: 12 pages, 467 HTML data rows and 751 Markdown data rows passed.** | [check_site.py](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/check_site.py) |
 | Snapshot tables in sync | `python3 scripts/build_snapshots.py --check` | in sync; eight blocks across `slate.html`, `injuries.html`, `results.html`, all reporting `unchanged` | [build_snapshots.py](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/build_snapshots.py) |
 | Derived files reproducible | `python3 scripts/build_brief_data.py --check` | `unchanged` for all four derived outputs, exit 0 | [build_brief_data.py](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/build_brief_data.py) |
 | Row-count re-derivation | inline re-count of the `.pipes` files | 101 data rows per revision, every row exactly 7 cells; the document's own header line is metadata, not a row | [raw extractions](https://github.com/wingbangboozle1-lang/NBA4/tree/main/data/snapshots/raw) |
@@ -171,10 +196,10 @@ file says so instead of inventing one).
 | Item | Count | Where the count comes from | Source of record |
 | --- | --- | --- | --- |
 | Site pages | 12 (was 11; `results.html` added) | `PAGES` in the site checker | [check_site.py](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/check_site.py) |
-| HTML data rows, all source-linked | 526 (was 347) | printed in the checker's own PASS line | [results.html](https://github.com/wingbangboozle1-lang/NBA4/blob/main/results.html) |
+| HTML data rows, all source-linked | 467 (526 before the two duplicate tables this branch had added were removed at merge; 347 before the pass) | printed in the checker's own PASS line | [results.html](https://github.com/wingbangboozle1-lang/NBA4/blob/main/results.html) |
 | Markdown data rows in `docs/` | 730, including this file's own tables (675 before it) | same script, `docs/` scan | [docs/](https://github.com/wingbangboozle1-lang/NBA4/tree/main/docs) |
 | Engine lines | 6,141 before this pass; `engine/` gained 11 modules | `wc -l engine/*.py tests/*.py scripts/*.py` | [engine/](https://github.com/wingbangboozle1-lang/NBA4/tree/main/engine) |
-| Unit tests | 150 | unittest discovery count, printed above | [tests/](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
+| Unit tests | 165 | unittest discovery count, printed above | [tests/](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
 | Snapshot files | 9 JSON + 2 `.pipes` intermediates | directory listing | [data/snapshots/](https://github.com/wingbangboozle1-lang/NBA4/tree/main/data/snapshots) |
 
 ## 9. Requirements map for the items this pass touched
@@ -204,6 +229,7 @@ document holds its own tables to the same rule.
 | ID | Item | State | Source of record |
 | --- | --- | --- | --- |
 | AN-02 | Schedule vs games-page tip conflict for two 11/17 games | open; both values printed, neither game modelled | [games page 11/17](https://www.nba.com/games?date=2026-11-17) |
+| AN-07 | Two sessions extracted the same 06:15 AM report; main's published table omitted the `Hukporti, Ariel` row the document prints | **corrected**: row restored in document order, both extractions now agree 101/101, `cross_check` generated into the `.cells.json` file | [06:15 AM PDF](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-15_06_15AM.pdf) |
 | AN-04 | Opponent and advanced team pages are 2-chunk documents; 17 of 30 rows unread | open; no league-wide defensive table published or consumed | [team advanced](https://www.nba.com/stats/teams/advanced) |
 | IR-T4 | Rights gate G0 still blocks any bet surface | open; unchanged by this pass | [Terms of Use](https://www.nba.com/termsofuse) |
 | IR-T1 | `validation.py`/`gates.py` and `correlation.py`/`corrstats.py` duplicates | open, owner decision; no third copy added | [engine/](https://github.com/wingbangboozle1-lang/NBA4/tree/main/engine) |

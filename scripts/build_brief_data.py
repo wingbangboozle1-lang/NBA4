@@ -156,6 +156,39 @@ def to_revision(snapshot: dict, meta: dict):
     )
 
 
+def cross_check(cells: dict, canonical_path: Path) -> dict:
+    """Compare this session's verbatim cell extraction with the file main publishes.
+
+    Two sessions read the same PDF independently. Agreements and one-sided rows are
+    counted from the documents, not asserted, because the point of the comparison is
+    to find an extraction error in either direction.
+    """
+    if not canonical_path.exists():
+        return {"status": "NO COUNTERPART", "note": "no independent extraction of this document in the repo"}
+    other = json.loads(canonical_path.read_text(encoding="utf-8"))
+    def key_rows(payload):
+        out = []
+        for game in payload["games"]:
+            for row in game["rows"]:
+                out.append((row.get("player", ""), row.get("status", ""), row.get("reason", "")))
+        return out
+    from collections import Counter
+
+    mine, theirs = Counter(key_rows(cells)), Counter(key_rows(other))
+    both = mine & theirs  # multiset intersection: a row that appears twice must match twice
+    return {
+        "counterpart_file": canonical_path.name,
+        "counterpart_source_document": other.get("source_document", ""),
+        "rows_in_this_extraction": sum(mine.values()),
+        "rows_in_the_counterpart": sum(theirs.values()),
+        "rows_matching_row_for_row": sum(both.values()),
+        "only_in_this_extraction": sorted(" | ".join(x) for x in (mine - theirs).elements())[:8],
+        "only_in_the_counterpart": sorted(" | ".join(x) for x in (theirs - mine).elements())[:8],
+        "rule": "a one-sided row is reported, never deleted from either file; the document is re-read and "
+                "whichever extraction the document contradicts is corrected",
+    }
+
+
 def rec(s: str) -> tuple[int, int]:
     w, _, l = s.partition("-")
     return int(w), int(l)
@@ -302,10 +335,11 @@ def main(argv: list[str]) -> int:
     results = json.loads((SNAP / "results-2026-11-14.json").read_text(encoding="utf-8"))
     standings = json.loads((SNAP / "standings-2026-11-15.json").read_text(encoding="utf-8"))
     slate = json.loads((SNAP / "slate-2026-11-15.json").read_text(encoding="utf-8"))
+    new["cross_check"] = cross_check(new, SNAP / "injuries-2026-11-15-0615am.json")
     agg = build_aggregates(results, standings, new, slate)
     targets = {
-        SNAP / "injuries-2026-11-15-0600am.json": old,
-        SNAP / "injuries-2026-11-15-0615am.json": new,
+        SNAP / "injuries-2026-11-15-0600am.cells.json": old,
+        SNAP / "injuries-2026-11-15-0615am.cells.json": new,
         SNAP / "injuries-2026-11-15-0600-to-0615.diff.json": diff,
         SNAP / "aggregates-2026-11-15.json": agg,
     }

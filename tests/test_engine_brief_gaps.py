@@ -117,14 +117,14 @@ class InjuryStoreTests(unittest.TestCase):
     @property
     def revisions(self):
         return (
-            load_revision(SNAP / "injuries-2026-11-15-0600am.json"),
-            load_revision(SNAP / "injuries-2026-11-15-0615am.json"),
+            load_revision(SNAP / "injuries-2026-11-15-0600am.cells.json"),
+            load_revision(SNAP / "injuries-2026-11-15-0615am.cells.json"),
         )
 
     def test_row_count_matches_the_printed_file(self):
         old, new = self.revisions
         self.assertEqual(len(old.rows), len(new.rows))
-        self.assertEqual(len(old.rows), json.loads((SNAP / "injuries-2026-11-15-0615am.json").read_text())["row_count"])
+        self.assertEqual(len(old.rows), json.loads((SNAP / "injuries-2026-11-15-0615am.cells.json").read_text())["row_count"])
 
     def test_consecutive_revisions_show_no_status_change(self):
         old, new = self.revisions
@@ -286,13 +286,27 @@ class HomeRateTests(unittest.TestCase):
         pin = load_and_pin(SNAP / "standings-2026-11-15.json")
         self.assertAlmostEqual(win_probability(pin.points), pin.rate, places=4)
 
+    def test_the_conversion_is_delegated_not_reimplemented(self):
+        """IR-T1 guard: homerate must call ratings' conversion, not duplicate it."""
+        import inspect
+
+        from engine import homerate, ratings
+
+        source = inspect.getsource(homerate.pin_home_advantage)
+        self.assertIn("home_advantage_from_win_rate", source)
+        self.assertNotIn("normal_quantile", source)
+        self.assertTrue(hasattr(ratings, "home_advantage_from_win_rate"))
+
     def test_gate_blocks_an_unregistered_calibration(self):
         pin = load_and_pin(SNAP / "standings-2026-11-15.json")
         with self.assertRaises(MissingInput):
             for_ratings(pin, pre_registered=False, rights_cleared=True)
         with self.assertRaises(MissingInput):
             for_ratings(pin, pre_registered=True, rights_cleared=False)
-        self.assertEqual(for_ratings(pin, pre_registered=True, rights_cleared=True), 0.8855)
+        from engine.ratings import home_advantage_from_win_rate
+
+        expected = round(home_advantage_from_win_rate(pin.rate, 12.0), 4)
+        self.assertEqual(for_ratings(pin, pre_registered=True, rights_cleared=True), expected)
 
     def test_arena_feature_is_refused_not_fitted(self):
         out = arena_adjustment("Madison Square Garden")
