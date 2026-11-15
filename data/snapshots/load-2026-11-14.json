@@ -1,0 +1,2219 @@
+{
+  "snapshot_id": "load-2026-11-14",
+  "kind": "rest_back_to_back_three_in_four_and_travel",
+  "as_of_utc": "2026-11-14T23:59:00Z",
+  "slate_date": "2026-11-14",
+  "source_url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf",
+  "source_document_header": "2026-27 NBA REGULAR SEASON SCHEDULE AS OF AUGUST 13, 2026 | SUBJECT TO CHANGE",
+  "fetched_at_utc": "2026-11-15T00:30:00Z",
+  "extraction_tool": "python3 scripts/build_load_snapshot.py -- computed by engine.travel.compute_load from the official schedule rows and the sourced arena table",
+  "source_schedule_snapshot": "data/snapshots/schedule-load-2026-11-14.json",
+  "source_schedule_url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf",
+  "source_matchup_basis_snapshot": "data/snapshots/matchup-basis-2026-11-10-to-13.json",
+  "source_matchup_basis_urls": [
+    "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-10_05_00PM.pdf",
+    "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-11_05_00PM.pdf",
+    "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-12_05_00PM.pdf",
+    "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-13_05_00PM.pdf"
+  ],
+  "source_arena_table": "data/arenas/arenas.json",
+  "source_arena_table_as_of_utc": "2026-11-15T03:40:00Z",
+  "method": {
+    "rest_days": "elapsed time between the tip of the team's previous game in the window and this one, in days; blank for a team's first game in the window",
+    "is_back_to_back": "rest_days < 1.0",
+    "games_in_next_four_days": "games by the same team with tips in [this tip, this tip + 4 days]",
+    "is_three_in_four": "games_in_next_four_days >= 3",
+    "travel_miles": "great-circle distance from the venue of the team's previous game to the venue of this one; blank when either venue is not asserted by the source",
+    "away_home_basis": "asserted only where the schedule PDF prints an 'at' token, or where an official 05:00 PM injury report prints a matchup code (AWAY@HOME) for the same game. The printed order is never used to infer the basis."
+  },
+  "coverage": {
+    "rows": 116,
+    "teams": 30,
+    "rows_with_rest": 86,
+    "rows_with_travel": 24,
+    "rows_without_asserted_venue": 34,
+    "back_to_back_rows": 8,
+    "three_in_four_rows": 36,
+    "schedule_rows_without_basis": [
+      {
+        "row": 215,
+        "date": "11/10/26",
+        "teams": [
+          "Orlando",
+          "Sacramento"
+        ]
+      },
+      {
+        "row": 216,
+        "date": "11/10/26",
+        "teams": [
+          "Oklahoma City",
+          "Portland"
+        ]
+      },
+      {
+        "row": 245,
+        "date": "11/16/26",
+        "teams": [
+          "Orlando",
+          "Boston"
+        ]
+      },
+      {
+        "row": 246,
+        "date": "11/16/26",
+        "teams": [
+          "Chicago",
+          "Cleveland"
+        ]
+      },
+      {
+        "row": 247,
+        "date": "11/16/26",
+        "teams": [
+          "Memphis",
+          "Washington"
+        ]
+      },
+      {
+        "row": 248,
+        "date": "11/16/26",
+        "teams": [
+          "Philadelphia",
+          "Brooklyn"
+        ]
+      },
+      {
+        "row": 249,
+        "date": "11/16/26",
+        "teams": [
+          "Houston",
+          "Miami"
+        ]
+      },
+      {
+        "row": 250,
+        "date": "11/16/26",
+        "teams": [
+          "Portland",
+          "Minnesota"
+        ]
+      },
+      {
+        "row": 251,
+        "date": "11/16/26",
+        "teams": [
+          "Golden State",
+          "New Orleans"
+        ]
+      },
+      {
+        "row": 252,
+        "date": "11/16/26",
+        "teams": [
+          "Phoenix",
+          "Denver"
+        ]
+      },
+      {
+        "row": 253,
+        "date": "11/17/26",
+        "teams": [
+          "New York",
+          "Toronto"
+        ]
+      },
+      {
+        "row": 254,
+        "date": "11/17/26",
+        "teams": [
+          "Portland",
+          "Minnesota"
+        ]
+      },
+      {
+        "row": 255,
+        "date": "11/17/26",
+        "teams": [
+          "Detroit",
+          "San Antonio"
+        ]
+      },
+      {
+        "row": 256,
+        "date": "11/17/26",
+        "teams": [
+          "Charlotte",
+          "LA Lakers"
+        ]
+      },
+      {
+        "row": 257,
+        "date": "11/17/26",
+        "teams": [
+          "Utah",
+          "LA Clippers"
+        ]
+      },
+      {
+        "row": 258,
+        "date": "11/18/26",
+        "teams": [
+          "Memphis",
+          "Cleveland"
+        ]
+      },
+      {
+        "row": 259,
+        "date": "11/18/26",
+        "teams": [
+          "Houston",
+          "Indiana"
+        ]
+      }
+    ],
+    "travel_note": "A row still has no travel value when the schedule row printed no venue, no official injury report had yet asserted one, or the team's previous game falls outside the look-back window. Those cases are named per row in 'notes'."
+  },
+  "load": [
+    {
+      "team": "Milwaukee",
+      "game_id": "nba-2026-11-10-r211",
+      "tip_time": "2026-11-10T19:30:00-05:00",
+      "opponent": "New York",
+      "venue_team": "New York",
+      "venue_confirmed": true,
+      "away_home_basis": "printed_at",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "New York",
+      "game_id": "nba-2026-11-10-r211",
+      "tip_time": "2026-11-10T19:30:00-05:00",
+      "opponent": "Milwaukee",
+      "venue_team": "New York",
+      "venue_confirmed": true,
+      "away_home_basis": "printed_at",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Boston",
+      "game_id": "nba-2026-11-10-r212",
+      "tip_time": "2026-11-10T20:00:00-05:00",
+      "opponent": "Philadelphia",
+      "venue_team": "Philadelphia",
+      "venue_confirmed": true,
+      "away_home_basis": "printed_at",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Philadelphia",
+      "game_id": "nba-2026-11-10-r212",
+      "tip_time": "2026-11-10T20:00:00-05:00",
+      "opponent": "Boston",
+      "venue_team": "Philadelphia",
+      "venue_confirmed": true,
+      "away_home_basis": "printed_at",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "LA Clippers",
+      "game_id": "nba-2026-11-10-r213",
+      "tip_time": "2026-11-10T21:00:00-05:00",
+      "opponent": "Phoenix",
+      "venue_team": "Phoenix",
+      "venue_confirmed": true,
+      "away_home_basis": "printed_at",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Miami",
+      "game_id": "nba-2026-11-10-r214",
+      "tip_time": "2026-11-10T21:00:00-05:00",
+      "opponent": "Utah",
+      "venue_team": "Utah",
+      "venue_confirmed": true,
+      "away_home_basis": "printed_at",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Phoenix",
+      "game_id": "nba-2026-11-10-r213",
+      "tip_time": "2026-11-10T21:00:00-05:00",
+      "opponent": "LA Clippers",
+      "venue_team": "Phoenix",
+      "venue_confirmed": true,
+      "away_home_basis": "printed_at",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Utah",
+      "game_id": "nba-2026-11-10-r214",
+      "tip_time": "2026-11-10T21:00:00-05:00",
+      "opponent": "Miami",
+      "venue_team": "Utah",
+      "venue_confirmed": true,
+      "away_home_basis": "printed_at",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Orlando",
+      "game_id": "nba-2026-11-10-r215",
+      "tip_time": "2026-11-10T22:00:00-05:00",
+      "opponent": "Sacramento",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Sacramento",
+      "game_id": "nba-2026-11-10-r215",
+      "tip_time": "2026-11-10T22:00:00-05:00",
+      "opponent": "Orlando",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Oklahoma City",
+      "game_id": "nba-2026-11-10-r216",
+      "tip_time": "2026-11-10T23:00:00-05:00",
+      "opponent": "Portland",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Portland",
+      "game_id": "nba-2026-11-10-r216",
+      "tip_time": "2026-11-10T23:00:00-05:00",
+      "opponent": "Oklahoma City",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Boston",
+      "game_id": "nba-2026-11-11-r219",
+      "tip_time": "2026-11-11T19:00:00-05:00",
+      "opponent": "Toronto",
+      "venue_team": "Toronto",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 0.9583,
+      "is_back_to_back": true,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Philadelphia",
+      "travel_miles": 337.3,
+      "notes": []
+    },
+    {
+      "team": "Cleveland",
+      "game_id": "nba-2026-11-11-r218",
+      "tip_time": "2026-11-11T19:00:00-05:00",
+      "opponent": "New York",
+      "venue_team": "New York",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Indiana",
+      "game_id": "nba-2026-11-11-r217",
+      "tip_time": "2026-11-11T19:00:00-05:00",
+      "opponent": "Washington",
+      "venue_team": "Indiana",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "New York",
+      "game_id": "nba-2026-11-11-r218",
+      "tip_time": "2026-11-11T19:00:00-05:00",
+      "opponent": "Cleveland",
+      "venue_team": "New York",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 0.9792,
+      "is_back_to_back": true,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "New York",
+      "travel_miles": 0.0,
+      "notes": []
+    },
+    {
+      "team": "Toronto",
+      "game_id": "nba-2026-11-11-r219",
+      "tip_time": "2026-11-11T19:00:00-05:00",
+      "opponent": "Boston",
+      "venue_team": "Toronto",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Washington",
+      "game_id": "nba-2026-11-11-r217",
+      "tip_time": "2026-11-11T19:00:00-05:00",
+      "opponent": "Indiana",
+      "venue_team": "Indiana",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Brooklyn",
+      "game_id": "nba-2026-11-11-r223",
+      "tip_time": "2026-11-11T20:00:00-05:00",
+      "opponent": "New Orleans",
+      "venue_team": "New Orleans",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Chicago",
+      "game_id": "nba-2026-11-11-r220",
+      "tip_time": "2026-11-11T20:00:00-05:00",
+      "opponent": "San Antonio",
+      "venue_team": "Chicago",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Denver",
+      "game_id": "nba-2026-11-11-r221",
+      "tip_time": "2026-11-11T20:00:00-05:00",
+      "opponent": "Memphis",
+      "venue_team": "Memphis",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "LA Lakers",
+      "game_id": "nba-2026-11-11-r222",
+      "tip_time": "2026-11-11T20:00:00-05:00",
+      "opponent": "Milwaukee",
+      "venue_team": "Milwaukee",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Memphis",
+      "game_id": "nba-2026-11-11-r221",
+      "tip_time": "2026-11-11T20:00:00-05:00",
+      "opponent": "Denver",
+      "venue_team": "Memphis",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Milwaukee",
+      "game_id": "nba-2026-11-11-r222",
+      "tip_time": "2026-11-11T20:00:00-05:00",
+      "opponent": "LA Lakers",
+      "venue_team": "Milwaukee",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.0208,
+      "is_back_to_back": false,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "New York",
+      "travel_miles": 732.5,
+      "notes": []
+    },
+    {
+      "team": "New Orleans",
+      "game_id": "nba-2026-11-11-r223",
+      "tip_time": "2026-11-11T20:00:00-05:00",
+      "opponent": "Brooklyn",
+      "venue_team": "New Orleans",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "San Antonio",
+      "game_id": "nba-2026-11-11-r220",
+      "tip_time": "2026-11-11T20:00:00-05:00",
+      "opponent": "Chicago",
+      "venue_team": "Chicago",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Orlando",
+      "game_id": "nba-2026-11-11-r224",
+      "tip_time": "2026-11-11T21:00:00-05:00",
+      "opponent": "Utah",
+      "venue_team": "Utah",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 0.9583,
+      "is_back_to_back": true,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for the previous game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Utah",
+      "game_id": "nba-2026-11-11-r224",
+      "tip_time": "2026-11-11T21:00:00-05:00",
+      "opponent": "Orlando",
+      "venue_team": "Utah",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.0,
+      "is_back_to_back": false,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "Utah",
+      "travel_miles": 0.0,
+      "notes": []
+    },
+    {
+      "team": "Golden State",
+      "game_id": "nba-2026-11-11-r225",
+      "tip_time": "2026-11-11T21:30:00-05:00",
+      "opponent": "Houston",
+      "venue_team": "Houston",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Houston",
+      "game_id": "nba-2026-11-11-r225",
+      "tip_time": "2026-11-11T21:30:00-05:00",
+      "opponent": "Golden State",
+      "venue_team": "Houston",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Oklahoma City",
+      "game_id": "nba-2026-11-11-r226",
+      "tip_time": "2026-11-11T22:00:00-05:00",
+      "opponent": "Portland",
+      "venue_team": "Portland",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 0.9583,
+      "is_back_to_back": true,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for the previous game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Portland",
+      "game_id": "nba-2026-11-11-r226",
+      "tip_time": "2026-11-11T22:00:00-05:00",
+      "opponent": "Oklahoma City",
+      "venue_team": "Portland",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 0.9583,
+      "is_back_to_back": true,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for the previous game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Detroit",
+      "game_id": "nba-2026-11-12-r228",
+      "tip_time": "2026-11-12T19:00:00-05:00",
+      "opponent": "Washington",
+      "venue_team": "Washington",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Philadelphia",
+      "game_id": "nba-2026-11-12-r227",
+      "tip_time": "2026-11-12T19:00:00-05:00",
+      "opponent": "Toronto",
+      "venue_team": "Philadelphia",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.9583,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Philadelphia",
+      "travel_miles": 0.0,
+      "notes": []
+    },
+    {
+      "team": "Toronto",
+      "game_id": "nba-2026-11-12-r227",
+      "tip_time": "2026-11-12T19:00:00-05:00",
+      "opponent": "Philadelphia",
+      "venue_team": "Philadelphia",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Toronto",
+      "travel_miles": 337.3,
+      "notes": []
+    },
+    {
+      "team": "Washington",
+      "game_id": "nba-2026-11-12-r228",
+      "tip_time": "2026-11-12T19:00:00-05:00",
+      "opponent": "Detroit",
+      "venue_team": "Washington",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.0,
+      "is_back_to_back": false,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "Indiana",
+      "travel_miles": 491.6,
+      "notes": []
+    },
+    {
+      "team": "Dallas",
+      "game_id": "nba-2026-11-12-r229",
+      "tip_time": "2026-11-12T20:00:00-05:00",
+      "opponent": "Minnesota",
+      "venue_team": "Minnesota",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Minnesota",
+      "game_id": "nba-2026-11-12-r229",
+      "tip_time": "2026-11-12T20:00:00-05:00",
+      "opponent": "Dallas",
+      "venue_team": "Minnesota",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Charlotte",
+      "game_id": "nba-2026-11-12-r230",
+      "tip_time": "2026-11-12T21:00:00-05:00",
+      "opponent": "Phoenix",
+      "venue_team": "Phoenix",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Phoenix",
+      "game_id": "nba-2026-11-12-r230",
+      "tip_time": "2026-11-12T21:00:00-05:00",
+      "opponent": "Charlotte",
+      "venue_team": "Phoenix",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.0,
+      "is_back_to_back": false,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "Phoenix",
+      "travel_miles": 0.0,
+      "notes": []
+    },
+    {
+      "team": "Indiana",
+      "game_id": "nba-2026-11-13-r34",
+      "tip_time": "2026-11-13T19:00:00-05:00",
+      "opponent": "New York",
+      "venue_team": "Indiana",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Indiana",
+      "travel_miles": 0.0,
+      "notes": []
+    },
+    {
+      "team": "Milwaukee",
+      "game_id": "nba-2026-11-13-r35",
+      "tip_time": "2026-11-13T19:00:00-05:00",
+      "opponent": "Orlando",
+      "venue_team": "Orlando",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.9583,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Milwaukee",
+      "travel_miles": 1066.2,
+      "notes": []
+    },
+    {
+      "team": "New York",
+      "game_id": "nba-2026-11-13-r34",
+      "tip_time": "2026-11-13T19:00:00-05:00",
+      "opponent": "Indiana",
+      "venue_team": "Indiana",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "New York",
+      "travel_miles": 644.4,
+      "notes": []
+    },
+    {
+      "team": "Orlando",
+      "game_id": "nba-2026-11-13-r35",
+      "tip_time": "2026-11-13T19:00:00-05:00",
+      "opponent": "Milwaukee",
+      "venue_team": "Orlando",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.9167,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Utah",
+      "travel_miles": 1916.0,
+      "notes": []
+    },
+    {
+      "team": "Atlanta",
+      "game_id": "nba-2026-11-13-r37",
+      "tip_time": "2026-11-13T20:00:00-05:00",
+      "opponent": "Chicago",
+      "venue_team": "Chicago",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": null,
+      "is_back_to_back": null,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "first game in the supplied schedule window: no rest or travel value"
+      ]
+    },
+    {
+      "team": "Chicago",
+      "game_id": "nba-2026-11-13-r37",
+      "tip_time": "2026-11-13T20:00:00-05:00",
+      "opponent": "Atlanta",
+      "venue_team": "Chicago",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.0,
+      "is_back_to_back": false,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "Chicago",
+      "travel_miles": 0.0,
+      "notes": []
+    },
+    {
+      "team": "Cleveland",
+      "game_id": "nba-2026-11-13-r36",
+      "tip_time": "2026-11-13T20:00:00-05:00",
+      "opponent": "Miami",
+      "venue_team": "Miami",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.0417,
+      "is_back_to_back": false,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "New York",
+      "travel_miles": 1093.6,
+      "notes": []
+    },
+    {
+      "team": "Memphis",
+      "game_id": "nba-2026-11-13-r38",
+      "tip_time": "2026-11-13T20:00:00-05:00",
+      "opponent": "New Orleans",
+      "venue_team": "New Orleans",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.0,
+      "is_back_to_back": false,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "Memphis",
+      "travel_miles": 358.5,
+      "notes": []
+    },
+    {
+      "team": "Miami",
+      "game_id": "nba-2026-11-13-r36",
+      "tip_time": "2026-11-13T20:00:00-05:00",
+      "opponent": "Cleveland",
+      "venue_team": "Miami",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.9583,
+      "is_back_to_back": false,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "Utah",
+      "travel_miles": 2087.5,
+      "notes": []
+    },
+    {
+      "team": "New Orleans",
+      "game_id": "nba-2026-11-13-r38",
+      "tip_time": "2026-11-13T20:00:00-05:00",
+      "opponent": "Memphis",
+      "venue_team": "New Orleans",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.0,
+      "is_back_to_back": false,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "New Orleans",
+      "travel_miles": 0.0,
+      "notes": []
+    },
+    {
+      "team": "Houston",
+      "game_id": "nba-2026-11-13-r39",
+      "tip_time": "2026-11-13T20:30:00-05:00",
+      "opponent": "Utah",
+      "venue_team": "Houston",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.9583,
+      "is_back_to_back": false,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "Houston",
+      "travel_miles": 0.0,
+      "notes": []
+    },
+    {
+      "team": "Utah",
+      "game_id": "nba-2026-11-13-r39",
+      "tip_time": "2026-11-13T20:30:00-05:00",
+      "opponent": "Houston",
+      "venue_team": "Houston",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.9792,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Utah",
+      "travel_miles": 1200.6,
+      "notes": []
+    },
+    {
+      "team": "Golden State",
+      "game_id": "nba-2026-11-13-r40",
+      "tip_time": "2026-11-13T21:30:00-05:00",
+      "opponent": "San Antonio",
+      "venue_team": "San Antonio",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Houston",
+      "travel_miles": 186.1,
+      "notes": []
+    },
+    {
+      "team": "San Antonio",
+      "game_id": "nba-2026-11-13-r40",
+      "tip_time": "2026-11-13T21:30:00-05:00",
+      "opponent": "Golden State",
+      "venue_team": "San Antonio",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.0625,
+      "is_back_to_back": false,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "Chicago",
+      "travel_miles": 1049.6,
+      "notes": []
+    },
+    {
+      "team": "Portland",
+      "game_id": "nba-2026-11-13-r41",
+      "tip_time": "2026-11-13T22:00:00-05:00",
+      "opponent": "Sacramento",
+      "venue_team": "Sacramento",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.0,
+      "is_back_to_back": false,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "Portland",
+      "travel_miles": 484.0,
+      "notes": []
+    },
+    {
+      "team": "Sacramento",
+      "game_id": "nba-2026-11-13-r41",
+      "tip_time": "2026-11-13T22:00:00-05:00",
+      "opponent": "Portland",
+      "venue_team": "Sacramento",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 3.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for the previous game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "LA Clippers",
+      "game_id": "nba-2026-11-13-r42",
+      "tip_time": "2026-11-13T22:30:00-05:00",
+      "opponent": "Oklahoma City",
+      "venue_team": "LA Clippers",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 3.0625,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Phoenix",
+      "travel_miles": 362.1,
+      "notes": []
+    },
+    {
+      "team": "Oklahoma City",
+      "game_id": "nba-2026-11-13-r42",
+      "tip_time": "2026-11-13T22:30:00-05:00",
+      "opponent": "LA Clippers",
+      "venue_team": "LA Clippers",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.0208,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Portland",
+      "travel_miles": 832.6,
+      "notes": []
+    },
+    {
+      "team": "Denver",
+      "game_id": "nba-2026-11-14-r231",
+      "tip_time": "2026-11-14T19:00:00-05:00",
+      "opponent": "New Orleans",
+      "venue_team": "NOP",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.9583,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Memphis",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for NOP is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "New Orleans",
+      "game_id": "nba-2026-11-14-r231",
+      "tip_time": "2026-11-14T19:00:00-05:00",
+      "opponent": "Denver",
+      "venue_team": "NOP",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 0.9583,
+      "is_back_to_back": true,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "New Orleans",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for NOP is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Cleveland",
+      "game_id": "nba-2026-11-14-r232",
+      "tip_time": "2026-11-14T19:30:00-05:00",
+      "opponent": "Dallas",
+      "venue_team": "CLE",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 0.9792,
+      "is_back_to_back": true,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "Miami",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for CLE is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Dallas",
+      "game_id": "nba-2026-11-14-r232",
+      "tip_time": "2026-11-14T19:30:00-05:00",
+      "opponent": "Cleveland",
+      "venue_team": "CLE",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.9792,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Minnesota",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for CLE is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Brooklyn",
+      "game_id": "nba-2026-11-14-r234",
+      "tip_time": "2026-11-14T20:00:00-05:00",
+      "opponent": "Memphis",
+      "venue_team": "MEM",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 3.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "New Orleans",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for MEM is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Chicago",
+      "game_id": "nba-2026-11-14-r235",
+      "tip_time": "2026-11-14T20:00:00-05:00",
+      "opponent": "Minnesota",
+      "venue_team": "MIN",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Chicago",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for MIN is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Detroit",
+      "game_id": "nba-2026-11-14-r233",
+      "tip_time": "2026-11-14T20:00:00-05:00",
+      "opponent": "Miami",
+      "venue_team": "MIA",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.0417,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Washington",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for MIA is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Memphis",
+      "game_id": "nba-2026-11-14-r234",
+      "tip_time": "2026-11-14T20:00:00-05:00",
+      "opponent": "Brooklyn",
+      "venue_team": "MEM",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.0,
+      "is_back_to_back": false,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "New Orleans",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for MEM is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Miami",
+      "game_id": "nba-2026-11-14-r233",
+      "tip_time": "2026-11-14T20:00:00-05:00",
+      "opponent": "Detroit",
+      "venue_team": "MIA",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Miami",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for MIA is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Minnesota",
+      "game_id": "nba-2026-11-14-r235",
+      "tip_time": "2026-11-14T20:00:00-05:00",
+      "opponent": "Chicago",
+      "venue_team": "MIN",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.0,
+      "is_back_to_back": false,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "Minnesota",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for MIN is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Indiana",
+      "game_id": "nba-2026-11-15-r236",
+      "tip_time": "2026-11-15T13:00:00-05:00",
+      "opponent": "Philadelphia",
+      "venue_team": "PHI",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.75,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Indiana",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for PHI is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Philadelphia",
+      "game_id": "nba-2026-11-15-r236",
+      "tip_time": "2026-11-15T13:00:00-05:00",
+      "opponent": "Indiana",
+      "venue_team": "PHI",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.75,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Philadelphia",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for PHI is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "LA Lakers",
+      "game_id": "nba-2026-11-15-r237",
+      "tip_time": "2026-11-15T16:00:00-05:00",
+      "opponent": "Phoenix",
+      "venue_team": "PHX",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 3.8333,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Milwaukee",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for PHX is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Phoenix",
+      "game_id": "nba-2026-11-15-r237",
+      "tip_time": "2026-11-15T16:00:00-05:00",
+      "opponent": "LA Lakers",
+      "venue_team": "PHX",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.7917,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Phoenix",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for PHX is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Charlotte",
+      "game_id": "nba-2026-11-15-r238",
+      "tip_time": "2026-11-15T16:30:00-05:00",
+      "opponent": "LA Clippers",
+      "venue_team": "LAC",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.8125,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Phoenix",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for LAC is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "LA Clippers",
+      "game_id": "nba-2026-11-15-r238",
+      "tip_time": "2026-11-15T16:30:00-05:00",
+      "opponent": "Charlotte",
+      "venue_team": "LAC",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.75,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "LA Clippers",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for LAC is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "San Antonio",
+      "game_id": "nba-2026-11-15-r239",
+      "tip_time": "2026-11-15T17:00:00-05:00",
+      "opponent": "Utah",
+      "venue_team": "UTA",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.8125,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "San Antonio",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for UTA is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Utah",
+      "game_id": "nba-2026-11-15-r239",
+      "tip_time": "2026-11-15T17:00:00-05:00",
+      "opponent": "San Antonio",
+      "venue_team": "UTA",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.8542,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Houston",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for UTA is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Boston",
+      "game_id": "nba-2026-11-15-r240",
+      "tip_time": "2026-11-15T18:00:00-05:00",
+      "opponent": "Dallas",
+      "venue_team": "BOS",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 3.9583,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Toronto",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for BOS is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Dallas",
+      "game_id": "nba-2026-11-15-r240",
+      "tip_time": "2026-11-15T18:00:00-05:00",
+      "opponent": "Boston",
+      "venue_team": "BOS",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 0.9375,
+      "is_back_to_back": true,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "CLE",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for BOS and CLE is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "New York",
+      "game_id": "nba-2026-11-15-r241",
+      "tip_time": "2026-11-15T18:00:00-05:00",
+      "opponent": "Toronto",
+      "venue_team": "TOR",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.9583,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Indiana",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for TOR is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Toronto",
+      "game_id": "nba-2026-11-15-r241",
+      "tip_time": "2026-11-15T18:00:00-05:00",
+      "opponent": "New York",
+      "venue_team": "TOR",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.9583,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Philadelphia",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for TOR is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Houston",
+      "game_id": "nba-2026-11-15-r242",
+      "tip_time": "2026-11-15T19:00:00-05:00",
+      "opponent": "Washington",
+      "venue_team": "WAS",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.9375,
+      "is_back_to_back": false,
+      "is_three_in_four": true,
+      "games_in_next_four_days": 3,
+      "previous_venue": "Houston",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for WAS is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Washington",
+      "game_id": "nba-2026-11-15-r242",
+      "tip_time": "2026-11-15T19:00:00-05:00",
+      "opponent": "Houston",
+      "venue_team": "WAS",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 3.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Washington",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for WAS is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Atlanta",
+      "game_id": "nba-2026-11-15-r243",
+      "tip_time": "2026-11-15T20:00:00-05:00",
+      "opponent": "Milwaukee",
+      "venue_team": "MIL",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "Chicago",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for MIL is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Milwaukee",
+      "game_id": "nba-2026-11-15-r243",
+      "tip_time": "2026-11-15T20:00:00-05:00",
+      "opponent": "Atlanta",
+      "venue_team": "MIL",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 2.0417,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "Orlando",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for MIL is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Oklahoma City",
+      "game_id": "nba-2026-11-15-r244",
+      "tip_time": "2026-11-15T21:00:00-05:00",
+      "opponent": "Sacramento",
+      "venue_team": "SAC",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.9375,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "LA Clippers",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for SAC is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Sacramento",
+      "game_id": "nba-2026-11-15-r244",
+      "tip_time": "2026-11-15T21:00:00-05:00",
+      "opponent": "Oklahoma City",
+      "venue_team": "SAC",
+      "venue_confirmed": true,
+      "away_home_basis": "injury_report_matchup",
+      "rest_days": 1.9583,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "Sacramento",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the arena coordinate for SAC is not confirmed by a sourced, corroborated source"
+      ]
+    },
+    {
+      "team": "Boston",
+      "game_id": "nba-2026-11-16-r245",
+      "tip_time": "2026-11-16T19:00:00-05:00",
+      "opponent": "Orlando",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 1.0417,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "BOS",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Chicago",
+      "game_id": "nba-2026-11-16-r246",
+      "tip_time": "2026-11-16T19:00:00-05:00",
+      "opponent": "Cleveland",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 1.9583,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "MIN",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Cleveland",
+      "game_id": "nba-2026-11-16-r246",
+      "tip_time": "2026-11-16T19:00:00-05:00",
+      "opponent": "Chicago",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 1.9792,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "CLE",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Memphis",
+      "game_id": "nba-2026-11-16-r247",
+      "tip_time": "2026-11-16T19:00:00-05:00",
+      "opponent": "Washington",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 1.9583,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "MEM",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Orlando",
+      "game_id": "nba-2026-11-16-r245",
+      "tip_time": "2026-11-16T19:00:00-05:00",
+      "opponent": "Boston",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 3.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "Orlando",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Washington",
+      "game_id": "nba-2026-11-16-r247",
+      "tip_time": "2026-11-16T19:00:00-05:00",
+      "opponent": "Memphis",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 1.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "WAS",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Brooklyn",
+      "game_id": "nba-2026-11-16-r248",
+      "tip_time": "2026-11-16T19:30:00-05:00",
+      "opponent": "Philadelphia",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 1.9792,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "MEM",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Houston",
+      "game_id": "nba-2026-11-16-r249",
+      "tip_time": "2026-11-16T19:30:00-05:00",
+      "opponent": "Miami",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 1.0208,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "WAS",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Miami",
+      "game_id": "nba-2026-11-16-r249",
+      "tip_time": "2026-11-16T19:30:00-05:00",
+      "opponent": "Houston",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 1.9792,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "MIA",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Philadelphia",
+      "game_id": "nba-2026-11-16-r248",
+      "tip_time": "2026-11-16T19:30:00-05:00",
+      "opponent": "Brooklyn",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 1.2708,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "PHI",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Golden State",
+      "game_id": "nba-2026-11-16-r251",
+      "tip_time": "2026-11-16T20:00:00-05:00",
+      "opponent": "New Orleans",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 2.9375,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "San Antonio",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Minnesota",
+      "game_id": "nba-2026-11-16-r250",
+      "tip_time": "2026-11-16T20:00:00-05:00",
+      "opponent": "Portland",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 2.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "MIN",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "New Orleans",
+      "game_id": "nba-2026-11-16-r251",
+      "tip_time": "2026-11-16T20:00:00-05:00",
+      "opponent": "Golden State",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 2.0417,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "NOP",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Portland",
+      "game_id": "nba-2026-11-16-r250",
+      "tip_time": "2026-11-16T20:00:00-05:00",
+      "opponent": "Minnesota",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 2.9167,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 2,
+      "previous_venue": "Sacramento",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Denver",
+      "game_id": "nba-2026-11-16-r252",
+      "tip_time": "2026-11-16T21:00:00-05:00",
+      "opponent": "Phoenix",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 2.0833,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "NOP",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Phoenix",
+      "game_id": "nba-2026-11-16-r252",
+      "tip_time": "2026-11-16T21:00:00-05:00",
+      "opponent": "Denver",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 1.2083,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "PHX",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "New York",
+      "game_id": "nba-2026-11-17-r253",
+      "tip_time": "2026-11-17T19:30:00-05:00",
+      "opponent": "Toronto",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 2.0625,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "TOR",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Toronto",
+      "game_id": "nba-2026-11-17-r253",
+      "tip_time": "2026-11-17T19:30:00-05:00",
+      "opponent": "New York",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 2.0625,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "TOR",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Detroit",
+      "game_id": "nba-2026-11-17-r255",
+      "tip_time": "2026-11-17T20:00:00-05:00",
+      "opponent": "San Antonio",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 3.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "MIA",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Minnesota",
+      "game_id": "nba-2026-11-17-r254",
+      "tip_time": "2026-11-17T20:00:00-05:00",
+      "opponent": "Portland",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 1.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game and the previous game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Portland",
+      "game_id": "nba-2026-11-17-r254",
+      "tip_time": "2026-11-17T20:00:00-05:00",
+      "opponent": "Minnesota",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 1.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game and the previous game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "San Antonio",
+      "game_id": "nba-2026-11-17-r255",
+      "tip_time": "2026-11-17T20:00:00-05:00",
+      "opponent": "Detroit",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 2.125,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "UTA",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Charlotte",
+      "game_id": "nba-2026-11-17-r256",
+      "tip_time": "2026-11-17T22:00:00-05:00",
+      "opponent": "LA Lakers",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 2.2292,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "LAC",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "LA Lakers",
+      "game_id": "nba-2026-11-17-r256",
+      "tip_time": "2026-11-17T22:00:00-05:00",
+      "opponent": "Charlotte",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 2.25,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "PHX",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "LA Clippers",
+      "game_id": "nba-2026-11-17-r257",
+      "tip_time": "2026-11-17T23:00:00-05:00",
+      "opponent": "Utah",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 2.2708,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "LAC",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Utah",
+      "game_id": "nba-2026-11-17-r257",
+      "tip_time": "2026-11-17T23:00:00-05:00",
+      "opponent": "LA Clippers",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 2.25,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "UTA",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Cleveland",
+      "game_id": "nba-2026-11-18-r258",
+      "tip_time": "2026-11-18T19:00:00-05:00",
+      "opponent": "Memphis",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 2.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game and the previous game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Memphis",
+      "game_id": "nba-2026-11-18-r258",
+      "tip_time": "2026-11-18T19:00:00-05:00",
+      "opponent": "Cleveland",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 2.0,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game and the previous game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Houston",
+      "game_id": "nba-2026-11-18-r259",
+      "tip_time": "2026-11-18T20:00:00-05:00",
+      "opponent": "Indiana",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 2.0208,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": null,
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game and the previous game, so the venue is unknown"
+      ]
+    },
+    {
+      "team": "Indiana",
+      "game_id": "nba-2026-11-18-r259",
+      "tip_time": "2026-11-18T20:00:00-05:00",
+      "opponent": "Houston",
+      "venue_team": null,
+      "venue_confirmed": false,
+      "away_home_basis": "printed_order_unconfirmed",
+      "rest_days": 3.2917,
+      "is_back_to_back": false,
+      "is_three_in_four": false,
+      "games_in_next_four_days": 1,
+      "previous_venue": "PHI",
+      "travel_miles": null,
+      "notes": [
+        "travel distance not measured: the source does not assert the away/home basis for this game, so the venue is unknown"
+      ]
+    }
+  ]
+}
