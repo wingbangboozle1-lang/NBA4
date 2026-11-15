@@ -4,7 +4,17 @@ Method (hypothesis S1/S2 in docs/strategy-framework.md):
   * recency-weighted points-per-possession for and against each team,
   * opponent-independent team strength multiplied through league average,
   * a predictive margin distribution (mean +/- sd), from which the
-    model-originated fair spread is derived as the mean margin.
+  model-originated fair spread is derived as the mean margin.
+
+Two properties the project brief requires are enforced here:
+
+* **Home-court advantage is pinned, not fitted.**  The home edge is derived
+  from the *measured home-win rate* (see
+  :func:`engine.estimators.implied_home_advantage_points`) and is applied
+  exactly once: it neutralises the home games in the historical PPP ratings
+  and is then restored for the forecast.  It is never a free parameter.
+* **The total is possessions x points-per-possession.**  It is not an
+  average of two team scoring averages.
 
 All constants below are UNFITTED engineering defaults documented in
 docs/engine.md. They are NOT estimates about the NBA. With no authorized
@@ -18,12 +28,13 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
+from .estimators import home_win_rate_from_rows, implied_home_advantage_points
 from .schema import TeamGame
 
 # --- UNFITTED defaults (see docs/engine.md "Parameter register") -------------
 HALF_LIFE_DAYS = 30.0          # recency decay half-life
 DEFAULT_POSSESSIONS = 100.0    # neutral per-game possessions if feed lacks pace
-HOME_ADVANTAGE_POINTS = 0.0    # unfitted; must be calibrated on authorized data
+HOME_ADVANTAGE_POINTS = 0.0    # unfitted; superseded by the pinned constant
 MARGIN_SD_DEFAULT = 12.0       # unfitted predictive sd when residuals unavailable
 MIN_GAMES_FOR_LINE = 5         # PROPOSED minimum per team before any line
 # ---------------------------------------------------------------------------
@@ -47,7 +58,7 @@ class MarginForecast:
     expected_total: Optional[float]
     home_strength: TeamStrength
     away_strength: TeamStrength
-    notes: Tuple[str, ...]
+    notes: Tuple[str, ...] = ()
 
     @property
     def originated_spread(self) -> Optional[float]:
@@ -68,6 +79,7 @@ def _weight(game_date: str, as_of: datetime) -> float:
 def team_strength(
     games: Sequence[TeamGame], team: str, as_of: datetime
 ) -> TeamStrength:
+    """Recency-weighted points per possession for and against a team."""
     w_sum = 0.0
     off_num = 0.0
     def_num = 0.0
@@ -103,42 +115,159 @@ def league_average_ppp(games: Sequence[TeamGame], as_of: datetime) -> Optional[f
     return num / den if den > 0 else None
 
 
+def measured_pace(games: Sequence[TeamGame], as_of: datetime) -> Optional[float]:
+    """Weighted mean possessions per game from the authorised rows.
+
+    The total is modelled as this pace multiplied by points per possession,
+    so the pace has to be measured rather than assumed.
+    """
+    num = 0.0
+    den = 0.0
+    for g in games:
+        if datetime.fromisoformat(g.game_date).astimezone(timezone.utc) > as_of:
+            continue
+        poss = g.possessions if g.possessions and g.possessions > 0 else None
+        if poss is None:
+            continue
+        w = _weight(g.game_date, as_of)
+        num += w * poss
+        den += w
+    return num / den if den > 0 else None
+
+
+def pinned_home_advantage(
+    games: Sequence[TeamGame],
+    as_of: datetime,
+    margin_sd: float = MARGIN_SD_DEFAULT,
+) -> Tuple[Optional[float], Optional[float], Optional[float], Tuple[str, ...]]:
+    """The home-court constant, pinned to the measured home-win rate.
+
+    Returns ``(value, low, high, notes)``.  ``value`` is ``None`` when the
+    rate could not be measured, in which case no line is produced at all -
+    the constant is never assumed.
+    """
+    rate, n_home = home_win_rate_from_rows(games, as_of=as_of)
+    if rate is None:
+        return None, None, None, (
+            "no home game is available in the authorised rows, so the "
+            "home-court advantage cannot be pinned to a measured home-win rate",
+        )
+    return implied_home_advantage_points(rate, margin_sd, n_home_games=n_home)
+
+
+def neutral_ppp_strength(
+    games: Sequence[TeamGame],
+    team: str,
+    as_of: datetime,
+    home_advantage_points: float,
+) -> Tuple[Optional[float], Optional[float], int]:
+    """Home-neutral points per possession for and against a team.
+
+    Home games are adjusted by the pinned home-court constant so that the
+    rating is a *neutral-court* strength; the constant is added back once,
+    for the forecast, and therefore is not double counted.
+    """
+    w_sum = 0.0
+    off_num = 0.0
+    def_num = 0.0
+    count = 0
+    for g in games:
+        if g.team != team:
+            continue
+        if datetime.fromisoformat(g.game_date).astimezone(timezone.utc) > as_of:
+            continue
+        poss = g.possessions if g.possessions and g.possessions > 0 else DEFAULT_POSSESSIONS
+        w = _weight(g.game_date, as_of)
+        adj = home_advantage_points if g.is_home else 0.0
+        w_sum += w
+        off_num += w * ((g.points - adj) / poss)
+        def_num += w * ((g.opp_points - adj) / poss)
+        count += 1
+    if w_sum <= 0:
+        return None, None, 0
+    return off_num / w_sum, def_num / w_sum, count
+
+
 def margin_forecast(
     games: Sequence[TeamGame],
     home_team: str,
     away_team: str,
     as_of: datetime,
-    home_advantage: float = HOME_ADVANTAGE_POINTS,
+    home_advantage: Optional[float] = None,
+    margin_sd: float = MARGIN_SD_DEFAULT,
 ) -> MarginForecast:
+    """Originate a spread and a total for one matchup.
+
+    ``home_advantage=None`` (the default) means the constant is **pinned to
+    the measured home-win rate** of the supplied authorised rows.  Supplying
+    a number overrides it, and the forecast then records that the caller
+    supplied the constant rather than the measurement.
+    """
     notes: List[str] = []
+    rate, n_home = home_win_rate_from_rows(games, as_of=as_of)
+    if home_advantage is None:
+        hca, hca_low, hca_high, hca_notes = implied_home_advantage_points(
+            rate, margin_sd, n_home_games=n_home
+        )
+        notes.extend(hca_notes)
+        if hca is None:
+            notes.append(
+                "no line is originated: the home-court constant could not be "
+                "pinned to a measured home-win rate"
+            )
+            return MarginForecast(
+                home_team, away_team, None, margin_sd, None,
+                TeamStrength(home_team, None, None, 0, 0.0),
+                TeamStrength(away_team, None, None, 0, 0.0),
+                tuple(notes),
+            )
+        notes.append(
+            f"the pinned home-court constant is {hca:.2f} points "
+            f"(measured home-win rate {rate:.4f} over {n_home} home game(s))"
+        )
+    else:
+        hca = home_advantage
+        notes.append(
+            "the home-court constant was supplied by the caller; it is not the "
+            "measured home-win-rate constant"
+        )
+
     home = team_strength(games, home_team, as_of)
     away = team_strength(games, away_team, as_of)
     league = league_average_ppp(games, as_of)
+    h_off, h_def, h_games = neutral_ppp_strength(games, home_team, as_of, hca)
+    a_off, a_def, a_games = neutral_ppp_strength(games, away_team, as_of, hca)
     if (
         league is None
-        or home.off_ppp is None
-        or away.off_ppp is None
-        or home.games_used < MIN_GAMES_FOR_LINE
-        or away.games_used < MIN_GAMES_FOR_LINE
+        or h_off is None
+        or a_off is None
+        or h_games < MIN_GAMES_FOR_LINE
+        or a_games < MIN_GAMES_FOR_LINE
     ):
         notes.append(
             "insufficient authorized games for one or both teams "
-            f"({home.team}: {home.games_used}, {away.team}: {away.games_used}); "
+            f"({home_team}: {h_games}, {away_team}: {a_games}); "
             "no line originated"
         )
         return MarginForecast(
-            home_team, away_team, None, MARGIN_SD_DEFAULT, None, home, away, tuple(notes)
+            home_team, away_team, None, margin_sd, None, home, away, tuple(notes)
         )
-    # Expected points scored = possessions * (own offense x opponent defense / league)
-    poss = DEFAULT_POSSESSIONS
-    home_pts = poss * (home.off_ppp * away.def_ppp / league)
-    away_pts = poss * (away.off_ppp * home.def_ppp / league)
-    margin = home_pts - away_pts + home_advantage
+
+    poss = measured_pace(games, as_of) or DEFAULT_POSSESSIONS
+    # Expected points = possessions x points per possession.
+    home_pts = poss * (h_off * a_def / league)
+    away_pts = poss * (a_off * h_def / league)
+    margin = home_pts - away_pts + hca
     total = home_pts + away_pts
-    # Residual spread: use default until calibrated residuals are stored.
-    notes.append("margin sd uses UNFITTED default; calibrate on authorized residuals")
+    notes.append(
+        f"the total is {poss:.2f} possessions x points per possession, not an "
+        "average of the two teams' scoring averages"
+    )
+    notes.append(
+        "margin sd uses UNFITTED default; calibrate on authorized residuals"
+    )
     return MarginForecast(
-        home_team, away_team, margin, MARGIN_SD_DEFAULT, total, home, away, tuple(notes)
+        home_team, away_team, margin, margin_sd, total, home, away, tuple(notes)
     )
 
 
