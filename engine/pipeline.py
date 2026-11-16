@@ -46,6 +46,7 @@ __all__ = [
     "select_slate",
     "stale_records",
     "run_pipeline",
+    "refresh_gate",
     "write_ledger",
     "append_ledger",
 ]
@@ -367,6 +368,30 @@ def write_ledger(path: str, payload: object) -> str:
         handle.write(data)
     os.replace(tmp, path)
     return hashlib.sha256(data.encode("utf-8")).hexdigest()
+
+
+def refresh_gate(decision: "object") -> tuple[bool, tuple[str, ...]]:
+    """Apply a :class:`engine.refresh.RefreshDecision` to a rebuild.
+
+    The scheduled job refreshes first and rebuilds second. This hook is the
+    seam between the two: it returns ``(may_rebuild, blocking_reasons)`` from
+    the decision :func:`engine.refresh.refresh_decision` produced, so the
+    pipeline refuses to rebuild a slate whose official feeds did not all clear
+    their freshness and provenance gates.
+
+    The decision object is duck-typed (``may_rebuild`` plus
+    ``blocking_reasons``) so that :mod:`engine.pipeline` does not import the
+    refresh module at start-up and the two stay independently testable.
+    """
+    may_rebuild = bool(getattr(decision, "may_rebuild", False))
+    reasons = tuple(str(reason) for reason in getattr(decision, "blocking_reasons", ()) or ())
+    if may_rebuild and reasons:
+        # A decision that both permits and blocks is inconsistent; refuse.
+        return False, reasons + (
+            "REFRESH_DECISION_INCONSISTENT: the decision permits a rebuild and lists blocking "
+            "reasons at the same time",
+        )
+    return may_rebuild, reasons
 
 
 def append_ledger(path: str, payload: object) -> str:
