@@ -110,12 +110,17 @@ class TotalProjection:
     sources: Tuple[str, ...] = ()
 
     def as_row(self) -> Dict[str, object]:
+        def _num(value: float, digits: int) -> Optional[float]:
+            # NaN means "input missing" in this schema; it must serialise as null,
+            # never as the non-standard NaN token.
+            return None if math.isnan(value) else round(value, digits)
+
         return {
             "game_id": self.game_id,
-            "possessions": round(self.possessions, 3),
-            "ppp_home": round(self.ppp_home, 5),
-            "ppp_away": round(self.ppp_away, 5),
-            "model_total": round(self.model_total, 3),
+            "possessions": _num(self.possessions, 3),
+            "ppp_home": _num(self.ppp_home, 5),
+            "ppp_away": _num(self.ppp_away, 5),
+            "model_total": _num(self.model_total, 3),
             "naive_total": None if self.naive_total is None else round(self.naive_total, 3),
             "naive_minus_model": (
                 None if self.naive_minus_model is None else round(self.naive_minus_model, 3)

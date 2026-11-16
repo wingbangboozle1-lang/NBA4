@@ -72,6 +72,20 @@ ABBR = {
     "Portland": "POR",
 }
 
+TEAM_ABBR = {
+    "Atlanta Hawks": "ATL", "Boston Celtics": "BOS", "Brooklyn Nets": "BKN",
+    "Charlotte Hornets": "CHA", "Chicago Bulls": "CHI", "Cleveland Cavaliers": "CLE",
+    "Dallas Mavericks": "DAL", "Denver Nuggets": "DEN", "Detroit Pistons": "DET",
+    "Golden State Warriors": "GSW", "Houston Rockets": "HOU", "Indiana Pacers": "IND",
+    "LA Clippers": "LAC", "Los Angeles Clippers": "LAC", "Los Angeles Lakers": "LAL",
+    "Memphis Grizzlies": "MEM", "Miami Heat": "MIA", "Milwaukee Bucks": "MIL",
+    "Minnesota Timberwolves": "MIN", "New Orleans Pelicans": "NOP", "New York Knicks": "NYK",
+    "Oklahoma City Thunder": "OKC", "Orlando Magic": "ORL", "Philadelphia 76ers": "PHI",
+    "Phoenix Suns": "PHX", "Portland Trail Blazers": "POR", "Sacramento Kings": "SAC",
+    "San Antonio Spurs": "SAS", "Toronto Raptors": "TOR", "Utah Jazz": "UTA",
+    "Washington Wizards": "WAS",
+}
+
 
 def e(value: str) -> str:
     return html.escape(value, quote=True)
@@ -104,6 +118,21 @@ def render_slate() -> str:
         (g.get("game_date") or g.get("game_date_from_schedule", ""), g["matchup"])
         for g in load("injuries-2026-11-16-1000am.json")["games"]
     }
+    # Rotation availability per game: counts of rows whose printed status cell is
+    # exactly "Out", per team, from the same dated report. Arithmetic on printed
+    # cells only; NOT YET SUBMITTED rows are excluded because that is a reporting
+    # state, not a status.
+    availability: dict[str, str] = {}
+    for g in load("injuries-2026-11-16-1000am.json")["games"]:
+        per_team: dict[str, int] = {}
+        for r in g["rows"]:
+            if r.get("status") == "Out" and r.get("team") and r["team"] != "__lost__":
+                per_team[r["team"]] = per_team.get(r["team"], 0) + 1
+        lost = sum(1 for r in g["rows"] if r.get("team") == "__lost__")
+        parts = [f"{TEAM_ABBR.get(t, t)} {n} Out" for t, n in per_team.items()]
+        if lost:
+            parts.append(f"{lost} rows team cell lost")
+        availability[g["game_date"] + g["matchup"]] = "; ".join(parts) if parts else "0 rows printing Out"
     rows: list[str] = []
     for game in data["games"]:
         away, home = game["away"], game["home"]
@@ -119,25 +148,34 @@ def render_slate() -> str:
             game_cell = (
                 f"<strong>{e(away)}</strong> / <strong>{e(home)}</strong>"
                 '<br><span class="muted">Printed order only: this schedule row prints no "at" '
-                "and no injury-report matchup code confirms it. Flagged unverified.</span>"
+                "and no independent source confirms it. Flagged unverified.</span>"
             )
         tips = f'{game["tip_et_col1"]} / {game["tip_et_col2"]}'
-        note = game.get("note", "")
+        tips_extra = ""
+        if game.get("games_page_tip_et") and game.get("tip_disagreement"):
+            tips_extra = f'<br><span class="muted">games page: {e(game["games_page_tip_et"])}</span>'
+        note = game.get("tip_disagreement") or game.get("note", "")
         reason_html = "<br>".join(e(r.split(":")[0]) for r in NO_PICK_REASONS)
         reason_titles = " · ".join(e(r) for r in NO_PICK_REASONS)
+        sources = [
+            link(SCHEDULE_URL, "Schedule PDF row " + str(game["row"])),
+            link(game["games_page_url"], "Games page " + game["games_page_game_id"]),
+            link(REPORT_URL, "Availability: " + REPORT_LABEL),
+        ]
         rows.append(
             "              <tr>"
             f'<td>{e(game["weekday"])} {e(game["date"])}</td>'
-            f"<td>{e(tips)}</td>"
+            f"<td>{e(tips)}{tips_extra}</td>"
             f"<td>{game_cell}"
             + (f'<br><span class="muted">{e(note)}</span>' if note else "")
             + "</td>"
             f"<td>{e(matchup)}</td>"
+            f'<td>{e(availability.get(game["date"] + (game.get("code") or ""), "no report rows"))}</td>'
             + empty()  # originated line
             + empty()  # fair probability
             + '<td><span class="flag flag-red">NO PICK</span></td>'
             + f'<td title="{reason_titles}">{reason_html}</td>'
-            + f"<td>{link(SCHEDULE_URL, 'Schedule PDF row ' + str(game['row']))}</td>"
+            + f"<td>{'<br>'.join(sources)}</td>"
             "</tr>"
         )
     return (
@@ -148,6 +186,7 @@ def render_slate() -> str:
         '<th scope="col">Tip-off: home-venue local / ET (PDF header LOCAL | ET)</th>'
         '<th scope="col">Game</th>'
         '<th scope="col">Matchup</th>'
+        f'<th scope="col">Rotation availability ({e(REPORT_LABEL)})</th>'
         '<th scope="col">Originated line</th>'
         '<th scope="col">Fair probability</th>'
         '<th scope="col">Decision</th>'
@@ -171,6 +210,7 @@ def render_injuries() -> str:
     rows: list[str] = []
     for game in data["games"]:
         from_schedule = game["cells_source"].startswith("schedule")
+        context_cells = game["cells_source"] == "report-context"
         for row in game["rows"]:
             team = row["team"]
             player = row["player"]
@@ -178,8 +218,10 @@ def render_injuries() -> str:
             reason = row["reason"]
             notes: list[str] = []
             sources = [link(REPORT_URL, REPORT_LABEL)]
-            if from_schedule:
-                notes.append("game date/time repaired from the schedule PDF; both sources cited")
+            if from_schedule or context_cells:
+                notes.append(
+                    "game date/time from page-break block context; schedule PDF row cited as corroboration"
+                )
                 sources.append(link(SCHEDULE_URL, f'Schedule PDF row {game["schedule_row"]}'))
             if row.get("unverified"):
                 notes.append(row.get("flag", "unverified"))
@@ -256,6 +298,7 @@ INJ_DIFF = "injuries-2026-11-16-0945-to-1000.diff.json"
 RESULTS_1115 = "results-2026-11-15.json"
 STANDINGS_1116 = "standings-2026-11-16.json"
 AGGREGATES_1116 = "aggregates-2026-11-16.json"
+TEAM_STATS_1116 = "team-stats-2026-11-16.json"
 
 
 def _row(cells: list[str]) -> str:
@@ -269,12 +312,14 @@ def render_injuries_diff() -> str:
     new_time = " ".join(data["new"]["revision_label"].split()[-2:])
     rows: list[str] = []
     for change in data["changes"]:
+        old_val = change.get("old") or change.get("old_status", "")
+        new_val = change.get("new") or change.get("new_status", "")
         cells = [
             f"<td>{e(change['kind'])}</td>",
             f'<td>{e(str(change.get("matchup", change.get("key", ""))))}</td>',
             f"<td>{e(str(change.get('player', '')))}</td>" if change.get("player") else empty(),
-            f"<td>{e(str(change.get('old', '')))}</td>" if change.get("old") else empty(),
-            f"<td>{e(str(change.get('new', '')))}</td>" if change.get("new") else empty(),
+            f"<td>{e(str(old_val))}</td>" if old_val else empty(),
+            f"<td>{e(str(new_val))}</td>" if new_val else empty(),
             f'<td>{e(change["note"])}</td>' if change.get("note") else empty(),
             f"<td>{link(data['source_url'], e(data['new']['revision_label']) + ' revision')}<br>"
             f"{link(data['old']['source_url'], e(data['old']['revision_label']) + ' revision')}</td>",
@@ -662,6 +707,49 @@ def render_availability_summary() -> str:
         "</tr></thead><tbody>"
     )
     return head + "\n".join(out) + "\n</tbody></table></div>"
+def render_team_stats() -> str:
+    data = load(TEAM_STATS_1116)
+    adv = {r["team"]: r for r in data["advanced_rows"]}
+    opp = {r["team"]: r for r in data["opponent_rows"]}
+    src = data["sources"]
+    rows: list[str] = []
+    for team, a in adv.items():
+        o = opp[team]
+        cells = [
+            f"<td><strong>{e(team)}</strong></td>",
+            f"<td>{a['gp']}</td>",
+            f"<td>{a['w']}-{a['l']}</td>",
+            f"<td>{e(a['off_rtg'])}</td>",
+            f"<td>{e(a['def_rtg'])}</td>",
+            f"<td>{e(a['net_rtg'])}</td>",
+            f"<td>{e(a['pace'])}</td>",
+            f"<td>{a['poss']}</td>",
+            f"<td>{e(a['efg_pct'])}</td>",
+            f"<td>{e(a['ts_pct'])}</td>",
+            f"<td>{e(a['tov_pct'])}</td>",
+            f"<td>{e(o['opp_fg_pct'])}</td>",
+            f"<td>{e(o['opp_3p_pct'])}</td>",
+            f"<td>{e(o['opp_reb'])}</td>",
+            f"<td>{e(o['opp_ast'])}</td>",
+            f"<td>{e(o['opp_pts'])}</td>",
+            f"<td>{e(o['plus_minus'])}</td>",
+            f"<td>{link(src['advanced'], 'Advanced')}<br>{link(src['opponent'], 'Opponent')}<br>"
+            f"{link(src['traditional'], 'Traditional (re-read, not transcribed)')}</td>",
+        ]
+        rows.append(_row(cells))
+    head = (
+        '<div class="table-card table-wrap">\n          <table class="data-table">\n'
+        "            <thead><tr>"
+        '<th scope="col">Team</th><th scope="col">GP</th><th scope="col">W-L</th>'
+        '<th scope="col">OffRtg</th><th scope="col">DefRtg</th><th scope="col">NetRtg</th>'
+        '<th scope="col">PACE</th><th scope="col">POSS</th><th scope="col">eFG%</th>'
+        '<th scope="col">TS%</th><th scope="col">TOV%</th>'
+        '<th scope="col">Opp FG%</th><th scope="col">Opp 3P%</th><th scope="col">Opp REB</th>'
+        '<th scope="col">Opp AST</th><th scope="col">Opp PTS</th><th scope="col">+/-</th>'
+        '<th scope="col">Official sources</th>'
+        "</tr></thead>\n            <tbody>\n"
+    )
+    return head + "\n".join(rows) + "\n            </tbody>\n          </table>\n        </div>"
 
 
 BLOCKS.update(
@@ -672,6 +760,7 @@ BLOCKS.update(
         "results-lines": ("results.html", render_results),
         "standings-table": ("results.html", render_standings),
         "aggregates-table": ("results.html", render_aggregates),
+        "team-stats-table": ("team-stats.html", render_team_stats),
     }
 )
 

@@ -1237,5 +1237,54 @@ class SurfaceTests(unittest.TestCase):
         self.assertTrue(all(v in surfaces.SURFACES for v in surfaces.FIELD_SURFACES.values()))
 
 
+class ReviewFixRegressionTests(unittest.TestCase):
+    """Regression tests for the two defects the 2026-11-16 line-by-line review
+    (docs/engine-modules-7ce5c0cc.md) found in PR #53 modules and fixed here."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ledger = publishedledger.PublishedLedger(Path(self._tmp.name))
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_publish_after_the_days_seal_is_refused(self):
+        self.ledger.publish({"pick_id": "P1", "game_date": "2026-11-15", "line": 220.5},
+                            "P1", "2026-11-15T23:00:00+00:00", T0, [SRC])
+        self.ledger.seal_day("2026-11-15", "2026-11-15T22:00:00+00:00")
+        with self.assertRaises(publishedledger.LedgerError) as ctx:
+            self.ledger.publish({"pick_id": "P2", "game_date": "2026-11-15", "line": 221.5},
+                                "P2", "2026-11-15T23:00:00+00:00", T0, [SRC])
+        self.assertIn("already sealed", str(ctx.exception))
+        # the same pick on a different, unsealed day still publishes
+        self.ledger.publish({"pick_id": "P3", "game_date": "2026-11-16", "line": 210.5},
+                            "P3", "2026-11-16T23:00:00+00:00", T0, [SRC])
+
+    def test_settle_refuses_a_pick_that_does_not_verify_against_the_seal(self):
+        self.ledger.publish({"pick_id": "P1", "game_date": "2026-11-15", "line": 220.5},
+                            "P1", "2026-11-15T23:00:00+00:00", T0, [SRC])
+        self.ledger.seal_day("2026-11-15", "2026-11-15T22:00:00+00:00")
+        seals_path = Path(self._tmp.name) / "seals.json"
+        seals = json.loads(seals_path.read_text(encoding="utf-8"))
+        seals["2026-11-15"]["root"] = "0" * 64  # tamper the sealed root
+        seals_path.write_text(json.dumps(seals), encoding="utf-8")
+        verdict = {"verified": True, "code": "AGREE", "detail": "two agreeing officials"}
+        with self.assertRaises(publishedledger.LedgerError) as ctx:
+            self.ledger.settle("P1", "2026-11-16T05:00:00+00:00", [{"source": "a"}, {"source": "b"}],
+                               {"result": "win"}, verdict)
+        self.assertIn("does not verify against its day's seal", str(ctx.exception))
+
+    def test_missing_total_inputs_serialise_as_null_not_nan(self):
+        row = totals.project_total("g1", None, 1.1, None, scoring_averages=(110.0, 108.0)).as_row()
+        self.assertIsNone(row["possessions"])
+        self.assertIsNone(row["ppp_home"])
+        self.assertIsNone(row["ppp_away"])
+        self.assertIsNone(row["model_total"])
+        self.assertEqual(row["naive_total"], 218.0)
+        self.assertIn("INPUTS_MISSING", row["status"])
+        # strict JSON: no NaN token may appear
+        self.assertNotIn("NaN", json.dumps(row))
+
+
 if __name__ == "__main__":
     unittest.main()

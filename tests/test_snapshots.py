@@ -34,6 +34,7 @@ CURRENT_INJURY_FILE = "injuries-2026-11-16-1000am.json"
 PREVIOUS_INJURY_FILE = "injuries-2026-11-15-0615am.json"
 HISTORICAL_INJURY_FILE = "injuries-2026-11-14-0430am.json"
 CURRENT_SLATE_FILE = "slate-2026-11-16.json"
+GAMELOGS = "player-gamelogs-2026-11-14_to_2026-11-15.json"
 
 VALID_STATUSES = {"Out", "Available", "Probable", "Questionable", "Doubtful"}
 
@@ -88,8 +89,9 @@ class SlateSnapshotTests(unittest.TestCase):
         self.assertEqual(disagreeing, {256, 257, 266, 267})
         matches = 0
         for game in data["games"]:
+            # verified live on the games pages: row 245 -> 0022600245, row 269 -> 0022600269
             self.assertEqual(
-                game["games_page_game_id"], "00226002" + str(game["row"]), game["row"]
+                game["games_page_game_id"], "00226002" + str(game["row"] - 200), game["row"]
             )
             self.assertTrue(game["games_page_url"].startswith("https://www.nba.com/game/"))
             if game["tip_disagreement"]:
@@ -387,7 +389,7 @@ class RenderedPageTests(unittest.TestCase):
             sum(
                 1
                 for game in load(CURRENT_INJURY_FILE)["games"]
-                if game["cells_source"].startswith("schedule")
+                if game["cells_source"].startswith("schedule") or game["cells_source"] == "report-context"
                 for _ in game["rows"]
             ),
         )
@@ -421,6 +423,72 @@ class AwayHomeBasisTests(unittest.TestCase):
         data = load(CURRENT_SLATE_FILE)
         at_rows = {g["row"] for g in data["games"] if g.get("at_token_printed")}
         self.assertEqual(at_rows, set(range(260, 270)))
+
+
+class GameLogTests(unittest.TestCase):
+    """Task BI (arena/dab321e7-nba4): per-player game logs are dated attributed
+    observations with row-level official links, never inferred values and never
+    betting inputs. Merged into this suite at the third parallel collision."""
+
+    GAMELOGS = "player-gamelogs-2026-11-14_to_2026-11-15.json"
+    INJURY_1116 = "injuries-2026-11-16-0915am.json"
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location(
+            "build_gamelogs", ROOT / "scripts" / "build_gamelogs.py"
+        )
+        cls.build_gamelogs = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.build_gamelogs)
+        cls.data = json.loads((SNAPSHOTS / cls.GAMELOGS).read_text(encoding="utf-8"))
+
+    def test_every_report_player_is_covered_exactly_once(self) -> None:
+        injury_rows = {
+            (game["matchup"], row["player"])
+            for game in load(self.INJURY_1116)["games"]
+            for row in game["rows"]
+            if row["player"]
+        }
+        covered = [(p["report_block"], p["report_name"]) for p in self.data["players"]]
+        self.assertEqual(len(covered), len(set(covered)))
+        self.assertEqual(set(covered), injury_rows)
+
+    def test_mirrored_report_cells_match_the_file_of_record(self) -> None:
+        self.assertIsNone(self.build_gamelogs.verify_against_injury_report(self.data))
+
+    def test_every_game_row_carries_a_source_and_printed_values(self) -> None:
+        for p in self.data["players"]:
+            for g in p["games"]:
+                self.assertTrue(g["source_url"].startswith("https://"), g["source_url"])
+                self.assertIn("gamebook", g["source_label"])
+                if g["designation"] == "played":
+                    for key in ("min_printed", "pts_printed", "reb_printed", "ast_printed", "line_printed"):
+                        self.assertTrue(g[key], f"{p['report_name']}: {key} must be the printed cell")
+                else:
+                    self.assertTrue(g["designation_printed"], p["report_name"])
+                    for key in ("min_printed", "pts_printed", "reb_printed", "ast_printed"):
+                        self.assertIsNone(g[key], f"{p['report_name']}: no stat line may be invented")
+
+    def test_gap_players_have_no_invented_games(self) -> None:
+        gaps = [p for p in self.data["players"] if p.get("gap")]
+        self.assertEqual(len(gaps), 14)  # ORL + GSW + POR, idle both window days
+        for p in gaps:
+            self.assertEqual(p["games"], [])
+
+    def test_no_model_output_is_stored(self) -> None:
+        forbidden = ("probability", "minutes_model", "impact", "pick", "projection")
+        for p in self.data["players"]:
+            for key in p:
+                self.assertNotIn(key, forbidden, key)
+
+    def test_rendered_block_is_in_sync(self) -> None:
+        page = ROOT / "results.html"
+        self.assertIsNone(
+            build_snapshots.splice(page, "player-gamelogs", self.build_gamelogs.render_gamelogs()),
+            "results.html is out of date; run python3 scripts/build_gamelogs.py",
+        )
 
 
 if __name__ == "__main__":

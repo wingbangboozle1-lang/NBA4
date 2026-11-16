@@ -3,7 +3,8 @@
 
 Inputs (written by hand from the documents read with the web-fetch tool in this
 session; the provenance header of each file records the document, its own
-timestamp and the fetch time):
+timestamp and the fetch time). The current pair is set in PAIR below; pass
+``--pair OLD_PIPES NEW_PIPES`` to build an older pair:
 
   data/snapshots/raw/injury-2026-11-16T0945am-et.pipes
   data/snapshots/raw/injury-2026-11-16T1000am-et.pipes
@@ -93,12 +94,18 @@ def build_injury_snapshot(parsed_rows: list[dict], meta: dict, snapshot_id: str)
                         "player": r["player"],
                         "status": r["status"],
                         "reason": r["reason"],
-                        "unverified": not r["aligned"],
+                        "unverified": (not r["aligned"]) or bool(r["player"]) and (not r["status"] or not r["reason"]),
                         "flag": (
-                            ""
-                            if r["aligned"]
-                            else "matchup/team cells not printed on this row (PDF page break); "
+                            "matchup/team cells not printed on this row (PDF page break); "
                             "no value was inferred"
+                            if not r["aligned"]
+                            else (
+                                "the document prints no %s cell on this row (one status-or-reason "
+                                "cell per row in this block); the cell stays blank and is not inferred"
+                                % " or ".join(k for k in ("status", "reason") if not r[k])
+                                if r["player"] and (not r["status"] or not r["reason"])
+                                else ""
+                            )
                         ),
                     }
                     for r in game_rows
@@ -195,19 +202,28 @@ def rec(s: str) -> tuple[int, int]:
     return int(w), int(l)
 
 
-def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict) -> dict:
-    # --- 1. Result feed integrity: quarter scores must add to the printed final.
+def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict,
+                     agg_id: str = "aggregates-2026-11-15",
+                     derived_at: str = "2026-11-15T11:55:00Z",
+                     input_names: dict | None = None) -> dict:
+    # --- 1. Result integrity: the printed period scores must add to the printed
+    # final. Rows carry quarters 1-4 and, for overtime games, the printed OT
+    # period scores; the check sums every printed period and never reconstructs one.
     lines, bad = [], 0
     for row in results["rows"]:
-        (game_id, date, tip, arena, city, away, home, aq, af, hq, hf, win, lose, url) = row
-        for abbr, qs, final in ((away, aq, af), (home, hq, hf)):
-            s = sum(qs)
+        (game_id, date, tip, arena, city, away, home, aq, af, hq, hf, win, lose, url) = row[:14]
+        aot = row[14] if len(row) > 14 else []
+        hot = row[15] if len(row) > 15 else []
+        for abbr, qs, ot, final in ((away, aq, aot, af), (home, hq, hot, hf)):
+            s = sum(qs) + sum(ot)
             lines.append(
                 {
                     "game_id": game_id,
                     "team": abbr,
                     "quarters": qs,
-                    "quarter_sum": s,
+                    "ot_periods": ot,
+                    "quarter_sum": sum(qs),
+                    "printed_periods_sum": s,
                     "printed_final": final,
                     "agrees": s == final,
                 }
@@ -314,6 +330,22 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
 
 def write(path: Path, payload) -> None:
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+# The pair of consecutive reports and the observation files the current build uses.
+PAIR = {
+    "old_pipes": "injury-2026-11-16T0900am-et.pipes",
+    "new_pipes": "injury-2026-11-16T0915am-et.pipes",
+    "old_id": "injuries-2026-11-16-0900am",
+    "new_id": "injuries-2026-11-16-0915am",
+    "diff_id": "injuries-2026-11-16-0900-to-0915.diff",
+    "file_of_record": "injuries-2026-11-16-0915am.json",
+    "results": "results-2026-11-15.json",
+    "standings": "standings-2026-11-16.json",
+    "slate": "slate-2026-11-16.json",
+    "aggregates_id": "aggregates-2026-11-16",
+    "derived_at_utc": "2026-11-16T15:10:00Z",
+}
 
 
 def main(argv: list[str]) -> int:

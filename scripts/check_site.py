@@ -15,20 +15,21 @@ PAGES = (
     "index.html",
     "slate.html",
     "injuries.html",
-    "availability.html",
     "results.html",
-    "line-origination.html",
+    "team-stats.html",
     "model.html",
+    "availability.html",
+    "ledger.html",
+    "line-origination.html",
     "automation.html",
     "strategies.html",
     "leaderboard.html",
-    "ledger.html",
     "questions.html",
     "suggestions.html",
     "sources.html",
     "review.html",
 )
-# The unified sidebar: every page must carry exactly these 15 links in this
+# The unified sidebar: every page must carry exactly these 16 links in this
 # order, with no duplicates and with aria-current pointing at its own page.
 CANONICAL_NAV = tuple(PAGES)
 OFFICIAL_HOSTS = (
@@ -346,6 +347,32 @@ def audit_page_inventory() -> list[str]:
     return errors
 
 
+def audit_team_stats() -> list[str]:
+    """The team-stats snapshot must carry one row per NBA team on both official
+    pages, with RANK columns dropped and GP/W/L agreeing between the two reads."""
+    errors: list[str] = []
+    path = ROOT / "data" / "snapshots" / "team-stats-2026-11-16.json"
+    if not path.is_file():
+        return [f"missing team-stats snapshot: {path.name}"]
+    data = json.loads(path.read_text(encoding="utf-8"))
+    for section in ("advanced_rows", "opponent_rows"):
+        rows = data.get(section, [])
+        teams = [r.get("team") for r in rows]
+        if len(rows) != 30 or len(set(teams)) != 30:
+            errors.append(f"team-stats {section}: expected 30 unique team rows, found {len(rows)} rows / {len(set(teams))} unique")
+        for r in rows:
+            rank_keys = [k for k in r if k.lower().startswith("rank")]
+            if rank_keys:
+                errors.append(f"team-stats {section} {r.get('team')}: RANK column(s) present: {rank_keys}")
+    adv = {r["team"]: (r["gp"], r["w"], r["l"]) for r in data.get("advanced_rows", [])}
+    opp = {r["team"]: (r["gp"], r["w"], r["l"]) for r in data.get("opponent_rows", [])}
+    if adv and opp:
+        for team in sorted(set(adv) | set(opp)):
+            if adv.get(team) != opp.get(team):
+                errors.append(f"team-stats: GP/W/L disagree between pages for {team}: advanced={adv.get(team)} opponent={opp.get(team)}")
+    return errors
+
+
 def run_engine_tests() -> list[str]:
     """Run the engine unit tests so a broken engine cannot be published."""
     import subprocess
@@ -366,6 +393,7 @@ def main() -> int:
     all_errors: list[str] = []
     all_errors.extend(audit_page_inventory())
     all_errors.extend(audit_snapshots())
+    all_errors.extend(audit_team_stats())
     all_errors.extend(audit_consistency())
     all_errors.extend(audit_surfaces())
     html_rows = 0

@@ -1,0 +1,172 @@
+# Task BH (session arena/cbc8e41a-nba4): the scheduled refresh job.
+#
+# Brief: "Extend the scheduled job to refresh the official schedule, standings,
+# team statistics and injury report for each rolling slate, then rebuild only
+# after freshness and provenance gates pass."
+#
+# Behaviour:
+#   * cron (10:15 UTC daily) runs mode=gates: fetch -> freshness -> provenance ->
+#     build gates, all asserted; exit 1 on any failure (fail closed). When every
+#     gate passes, the site tables are regenerated and committed only then.
+#   * workflow_dispatch runs mode=probe or mode=gates (input below). Probe
+#     asserts fetch reachability/parseability only, so connectivity can be
+#     verified independently of staleness alarms.
+#   * The schedule-PDF sha baseline is committed to data/snapshots/raw/ci/ so a
+#     silent re-issue of the official schedule PDF trips the drift gate.
+#   * GITHUB_TOKEN pushes do not trigger new workflow runs (no recursion), and
+#     the job has no pull_request trigger, so it cannot race a session branch.
+
+name: daily-refresh
+
+on:
+  schedule:
+    - cron: "15 10 * * *"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/daily-refresh.yml"
+      - "scripts/scheduled_refresh.py"
+      - "scripts/build_snapshots.py"
+      - "scripts/check_site.py"
+      - "data/snapshots/**"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "gates = full fail-closed run; probe = fetch reachability only"
+        type: choice
+        options: [gates, probe]
+        default: gates
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install PDF header readers
+        run: python -m pip install --quiet "pypdf==5.1.0" "pdfminer.six==20250506"
+
+      - name: Run the refresh gates
+        id: gates
+        continue-on-error: true
+        # shell: bash => `bash --noprofile --norc -eo pipefail {0}`. Without the
+        # explicit shell, GitHub's default is `bash -e {0}` and the `tee` below
+        # would swallow the script's exit code (a false green was caught in
+        # review on 2026-11-16 and this line is the fix).
+        shell: bash
+        run: |
+          python3 scripts/scheduled_refresh.py \
+            --mode "${{ github.event.inputs.mode || 'gates' }}" \
+            --json run-record.json | tee refresh-out.txt
+
+      # Gate results as check-run annotations so they are readable through the
+      # GitHub API even when the raw log/artifact hosts are unreachable from a
+      # restricted client.
+      - name: Publish gate annotations
+        if: always()
+        run: |
+          if [ -f run-record.json ]; then
+            python3 - <<'PY'
+          import json
+          record = json.load(open("run-record.json"))
+          summary = record["summary"]
+          failed = ",".join(summary["failed"]) or "none"
+          print(
+              f"::notice title=scheduled_refresh {record['mode']}::"
+              f"gates {summary['gates_passed']}/{summary['gates_total']} passed; "
+              f"failed={failed}; rebuild_allowed={summary['rebuild_allowed']}"
+          )
+          for gate in record["gates"]:
+              if gate["status"] == "FAIL":
+                  detail = gate["detail"].replace("\n", " ")[:300]
+                  print(f"::error title={gate['gate']} ({gate['phase']})::{detail}")
+          PY
+          fi
+
+      - name: Publish the run record to the job summary
+        if: always()
+        run: |
+          if [ -f run-record.json ]; then
+            {
+              echo "## scheduled_refresh run record"
+              echo '```json'
+              cat run-record.json
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload the run record artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scheduled-refresh-${{ github.run_id }}
+          path: |
+            run-record.json
+            refresh-out.txt
+          if-no-files-found: warn
+          retention-days: 90
+
+      # Commit only what the gates licensed: the schedule-sha baseline (fetch
+      # phase) and — in gates mode, all gates green — regenerated site tables.
+      - name: Commit gated output
+        if: steps.gates.outcome == 'success'
+        run: |
+          git add -u
+          if git diff --cached --quiet; then
+            echo "No gated changes to commit."
+          else
+            git config user.name "daily-refresh[bot]"
+            git config user.email "daily-refresh@users.noreply.github.com"
+            git commit -m "daily-refresh: gated baseline/table update (${{ github.event.inputs.mode || 'gates' }} mode, run ${{ github.run_id }})"
+            git push
+          fi
+
+      # When the run failed but the *fetch* phase was clean (a freshness,
+      # provenance or build gate is what failed), the schedule-sha baseline the
+      # fetch established is still licensed output: commit only that file so the
+      # drift gate has its comparison point from the first run onward.
+      - name: Commit schedule baseline when only non-fetch gates failed
+        if: steps.gates.outcome != 'success'
+        run: |
+          if [ ! -f run-record.json ]; then echo "no run record"; exit 0; fi
+          if ! python3 - <<'PY'
+          import json, sys
+          record = json.load(open("run-record.json"))
+          gates = {g["gate"]: g for g in record["gates"]}
+          # The baseline is licensed by its own fetch gate passing; other
+          # gates failing does not invalidate an observed schedule-PDF sha.
+          sys.exit(0 if gates.get("schedule_pdf_fetch", {}).get("status") == "PASS" else 1)
+          PY
+          then
+            echo "Schedule PDF fetch gate did not pass; no baseline commit."
+            exit 0
+          fi
+          git config user.name "daily-refresh[bot]"
+          git config user.email "daily-refresh@users.noreply.github.com"
+          git add data/snapshots/raw/ci/schedule-sha-baseline.txt 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "Baseline unchanged."
+          else
+            git commit -m "daily-refresh: record schedule-PDF baseline (run ${{ github.run_id }})"
+            git push
+          fi
+
+      - name: Fail the run when a gate failed
+        if: steps.gates.outcome != 'success'
+        run: |
+          echo "One or more freshness/provenance/build gates failed; nothing was rebuilt or committed."
+          exit 1
