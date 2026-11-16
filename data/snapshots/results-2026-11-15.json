@@ -1,0 +1,465 @@
+{
+  "snapshot_id": "results-2026-11-15",
+  "kind": "official_finals_observation",
+  "source_document": "NBA game summary pages for 2026-11-15",
+  "source_document_header": "Game Summary (LINESCORES + GAME INFO) as printed on each official NBA game page",
+  "source_url": "https://www.nba.com/games?date=2026-11-15",
+  "source_index_url": "https://www.nba.com/games",
+  "fetched_at_utc": "2026-11-16T15:00:00Z",
+  "extraction_tool": "fetch_page (web page extraction; one game page per game, LINESCORES + GAME INFO)",
+  "row_format": [
+    "game_id",
+    "date",
+    "tip_et",
+    "arena",
+    "city",
+    "away",
+    "home",
+    "away_q",
+    "away_final",
+    "home_q",
+    "home_final",
+    "winner",
+    "loser",
+    "source_url"
+  ],
+  "row_format_note": "away_q/home_q hold every period score the page printed: four quarters, and the overtime period for games that went to OT (0022600241 carries a fifth period per team). The tip is the Eastern-time value the game page prints; arena and city are the GAME INFO values.",
+  "rows": [
+    [
+      "0022600236",
+      "2026-11-15",
+      "1:00 PM",
+      "Xfinity Mobile Arena",
+      "Philadelphia, PA",
+      "IND",
+      "PHI",
+      [
+        35,
+        22,
+        30,
+        37
+      ],
+      124,
+      [
+        29,
+        29,
+        39,
+        34
+      ],
+      131,
+      "PHI",
+      "IND",
+      "https://www.nba.com/game/ind-vs-phi-0022600236"
+    ],
+    [
+      "0022600237",
+      "2026-11-15",
+      "4:00 PM",
+      "Mortgage Matchup Center",
+      "Phoenix, AZ",
+      "LAL",
+      "PHX",
+      [
+        33,
+        31,
+        40,
+        27
+      ],
+      131,
+      [
+        24,
+        30,
+        26,
+        43
+      ],
+      123,
+      "LAL",
+      "PHX",
+      "https://www.nba.com/game/lal-vs-phx-0022600237"
+    ],
+    [
+      "0022600238",
+      "2026-11-15",
+      "4:30 PM",
+      "Intuit Dome",
+      "Inglewood, CA",
+      "CHA",
+      "LAC",
+      [
+        21,
+        31,
+        31,
+        22
+      ],
+      105,
+      [
+        22,
+        29,
+        33,
+        29
+      ],
+      113,
+      "LAC",
+      "CHA",
+      "https://www.nba.com/game/cha-vs-lac-0022600238"
+    ],
+    [
+      "0022600239",
+      "2026-11-15",
+      "5:00 PM",
+      "Delta Center",
+      "Salt Lake City, UT",
+      "SAS",
+      "UTA",
+      [
+        31,
+        27,
+        23,
+        29
+      ],
+      110,
+      [
+        33,
+        22,
+        26,
+        21
+      ],
+      102,
+      "SAS",
+      "UTA",
+      "https://www.nba.com/game/sas-vs-uta-0022600239"
+    ],
+    [
+      "0022600240",
+      "2026-11-15",
+      "6:00 PM",
+      "TD Garden",
+      "Boston, MA",
+      "DAL",
+      "BOS",
+      [
+        9,
+        28,
+        34,
+        23
+      ],
+      94,
+      [
+        42,
+        25,
+        37,
+        27
+      ],
+      131,
+      "BOS",
+      "DAL",
+      "https://www.nba.com/game/dal-vs-bos-0022600240"
+    ],
+    [
+      "0022600241",
+      "2026-11-15",
+      "6:00 PM",
+      "Scotiabank Arena",
+      "Toronto, ON",
+      "NYK",
+      "TOR",
+      [
+        23,
+        24,
+        20,
+        28,
+        17
+      ],
+      112,
+      [
+        17,
+        26,
+        31,
+        21,
+        13
+      ],
+      108,
+      "NYK",
+      "TOR",
+      "https://www.nba.com/game/nyk-vs-tor-0022600241"
+    ],
+    [
+      "0022600242",
+      "2026-11-15",
+      "7:00 PM",
+      "Capital One Arena",
+      "Washington, DC",
+      "HOU",
+      "WAS",
+      [
+        36,
+        37,
+        46,
+        28
+      ],
+      147,
+      [
+        31,
+        23,
+        34,
+        31
+      ],
+      119,
+      "HOU",
+      "WAS",
+      "https://www.nba.com/game/hou-vs-was-0022600242"
+    ],
+    [
+      "0022600243",
+      "2026-11-15",
+      "8:00 PM",
+      "Fiserv Forum",
+      "Milwaukee, WI",
+      "ATL",
+      "MIL",
+      [
+        18,
+        37,
+        32,
+        26
+      ],
+      113,
+      [
+        37,
+        16,
+        27,
+        26
+      ],
+      106,
+      "ATL",
+      "MIL",
+      "https://www.nba.com/game/atl-vs-mil-0022600243"
+    ],
+    [
+      "0022600244",
+      "2026-11-15",
+      "9:00 PM",
+      "Golden 1 Center",
+      "Sacramento, CA",
+      "OKC",
+      "SAC",
+      [
+        32,
+        30,
+        32,
+        31
+      ],
+      125,
+      [
+        24,
+        26,
+        30,
+        23
+      ],
+      103,
+      "OKC",
+      "SAC",
+      "https://www.nba.com/game/okc-vs-sac-0022600244"
+    ]
+  ],
+  "verification": {
+    "quarter_sum_rule": "For every row the printed period scores (four quarters, plus any overtime periods) were added and compared with the printed Final. 18 of 18 team lines agree, so every row is SETTLEMENT_ELIGIBLE.",
+    "quarter_sum_check": [
+      [
+        "0022600236",
+        "IND",
+        35,
+        22,
+        30,
+        37,
+        124,
+        true
+      ],
+      [
+        "0022600236",
+        "PHI",
+        29,
+        29,
+        39,
+        34,
+        131,
+        true
+      ],
+      [
+        "0022600237",
+        "LAL",
+        33,
+        31,
+        40,
+        27,
+        131,
+        true
+      ],
+      [
+        "0022600237",
+        "PHX",
+        24,
+        30,
+        26,
+        43,
+        123,
+        true
+      ],
+      [
+        "0022600238",
+        "CHA",
+        21,
+        31,
+        31,
+        22,
+        105,
+        true
+      ],
+      [
+        "0022600238",
+        "LAC",
+        22,
+        29,
+        33,
+        29,
+        113,
+        true
+      ],
+      [
+        "0022600239",
+        "SAS",
+        31,
+        27,
+        23,
+        29,
+        110,
+        true
+      ],
+      [
+        "0022600239",
+        "UTA",
+        33,
+        22,
+        26,
+        21,
+        102,
+        true
+      ],
+      [
+        "0022600240",
+        "DAL",
+        9,
+        28,
+        34,
+        23,
+        94,
+        true
+      ],
+      [
+        "0022600240",
+        "BOS",
+        42,
+        25,
+        37,
+        27,
+        131,
+        true
+      ],
+      [
+        "0022600241",
+        "NYK",
+        23,
+        24,
+        20,
+        28,
+        17,
+        112,
+        true
+      ],
+      [
+        "0022600241",
+        "TOR",
+        17,
+        26,
+        31,
+        21,
+        13,
+        108,
+        true
+      ],
+      [
+        "0022600242",
+        "HOU",
+        36,
+        37,
+        46,
+        28,
+        147,
+        true
+      ],
+      [
+        "0022600242",
+        "WAS",
+        31,
+        23,
+        34,
+        31,
+        119,
+        true
+      ],
+      [
+        "0022600243",
+        "ATL",
+        18,
+        37,
+        32,
+        26,
+        113,
+        true
+      ],
+      [
+        "0022600243",
+        "MIL",
+        37,
+        16,
+        27,
+        26,
+        106,
+        true
+      ],
+      [
+        "0022600244",
+        "OKC",
+        32,
+        30,
+        32,
+        31,
+        125,
+        true
+      ],
+      [
+        "0022600244",
+        "SAC",
+        24,
+        26,
+        30,
+        23,
+        103,
+        true
+      ]
+    ],
+    "settlement_eligible": true,
+    "games": 9,
+    "team_lines_checked": 18,
+    "lines_that_disagree": 0,
+    "overtime_games": [
+      "0022600241"
+    ]
+  },
+  "extraction_notes": [
+    "Official observation of the printed final, quarter by quarter, retrieved after the last game of the day had ended. This is not a live feed and carries no game-end clock; no end time is invented.",
+    "0022600241 (New York at Toronto) was printed Final/OT: the page's LINESCORES table carries an OT1 column (New York 17, Toronto 13) in addition to the four quarters, and the four-quarter sums (95 and 95) do not equal the printed finals (112 and 108) until the overtime period is added. The overtime periods are recorded as printed; no quarter is reconstructed.",
+    "Every team line's printed periods add to the printed final, so all nine games are settlement-eligible under the rule stated in verification.quarter_sum_rule.",
+    "No pick, probability, odds or model output is present in this file."
+  ]
+}

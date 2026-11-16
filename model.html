@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Status of every NBA4 model component: implemented, tested, not run — no line, probability or pick is published while rights gate G0 stays blocked.">
+  <title>NBA4 — Model status</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Site navigation">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N4</span><span class="brand-copy">NBA4<small>RESEARCH DASHBOARD</small></span></a>
+    <p class="nav-label">Workspace</p>
+    <nav class="primary-nav" aria-label="Primary navigation">
+            <ul>
+      <li><a href="index.html"><span class="nav-icon" aria-hidden="true">◆</span>Overview</a></li>
+      <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
+      <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
+      <li><a href="availability.html"><span class="nav-icon" aria-hidden="true">◐</span>Availability &amp; rest</a></li>
+      <li><a href="results.html"><span class="nav-icon" aria-hidden="true">≣</span>Results &amp; standings</a></li>
+      <li><a href="line-origination.html"><span class="nav-icon" aria-hidden="true">≡</span>Line origination</a></li>
+      <li><a href="model.html" aria-current="page"><span class="nav-icon" aria-hidden="true">◉</span>Model status</a></li>
+      <li><a href="automation.html"><span class="nav-icon" aria-hidden="true">⟳</span>Automation</a></li>
+      <li><a href="strategies.html"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
+      <li><a href="leaderboard.html"><span class="nav-icon" aria-hidden="true">▤</span>Leaderboard</a></li>
+      <li><a href="ledger.html"><span class="nav-icon" aria-hidden="true">⌗</span>Pre-registration ledger</a></li>
+      <li><a href="questions.html"><span class="nav-icon" aria-hidden="true">?</span>Decision questions</a></li>
+      <li><a href="suggestions.html"><span class="nav-icon" aria-hidden="true">✦</span>Suggestions</a></li>
+      <li><a href="sources.html"><span class="nav-icon" aria-hidden="true">↗</span>Sources</a></li>
+      <li><a href="review.html"><span class="nav-icon" aria-hidden="true">⚑</span>Flagged for review</a></li>
+      </ul>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-note"><strong>No model values</strong><p>Every component below is implemented and tested; none is run on NBA data.</p></div>
+    <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
+  </aside>
+  <div class="content-shell">
+    <header class="topbar"><div><p class="topbar-title">Model status</p><p class="topbar-meta">Implemented &amp; tested · not run · no model values published</p></div><span class="status-pill">NO PICKS ISSUED</span></header>
+    <main id="main" class="main-content">
+      <header class="page-header"><p class="eyebrow">Two estimators, one disagreement signal, zero published numbers</p><h1>Model &amp; estimator status</h1><p>Every component the brief asks for exists in <code>engine/</code> with unit tests on synthetic fixtures. None of them has been run on NBA-derived inputs: rights gate G0 blocks forecasting use of NBA Statistics, and no authorized team-strength, market or rotation dataset exists in this repository. This page is the honest inventory — what is built, where it lives, and what stays deliberately blank.</p></header>
+
+      <div class="notice notice-danger"><span class="notice-icon" aria-hidden="true">!</span><div><strong>G0 is a hard stop, not a delay.</strong><p>NBA.com Terms of Use &sect;9 restrict NBA Statistics in connection with gambling activity, and this project's line-origination scope falls inside that restriction until an owner decision (D-01 / IR-T4) or a written rights grant clears it. Until then no spread, total, probability, edge or pick is computed for publication — refusals are recorded instead of values.</p></div></div>
+
+      <section class="section" aria-labelledby="components-title">
+        <div class="section-heading"><div><h2 id="components-title">Component inventory</h2><p>State is one of: computed from official observations (published on the data pages), implemented &amp; tested (engine only, synthetic fixtures), or implemented and empty (needs an authorized source).</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Component</th><th scope="col">What it does</th><th scope="col">State</th><th scope="col">Source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Two independent estimators</strong></td><td>Matchup-PPP and point-differential margin estimators, kept independent so their disagreement can be the headline confidence signal rather than one model's self-report.</td><td><span class="flag">Implemented &amp; tested</span><br>Not run: no authorized team-strength inputs.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/dualestimate.py" target="_blank" rel="noopener noreferrer">engine/dualestimate.py</a><br><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation-of-time-series-data" target="_blank" rel="noopener noreferrer">time-series validation</a></td></tr>
+              <tr><td><strong>Disagreement as confidence</strong></td><td>Reports absolute estimator disagreement first and the mean line beneath it, with units, sample counts and a preregistered baseline required before any use.</td><td><span class="flag">Implemented &amp; tested</span><br>No two-estimator run exists.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/confidence.py" target="_blank" rel="noopener noreferrer">engine/confidence.py</a><br><a class="source-link" href="https://scikit-learn.org/stable/modules/model_evaluation.html" target="_blank" rel="noopener noreferrer">model evaluation</a></td></tr>
+              <tr><td><strong>Home-court pin</strong></td><td>Converts the measured pre-as-of home-win rate through one published normal approximation; refuses a freely fitted coefficient.</td><td><span class="flag flag-green">Computed</span><br>Rate 0.5204 (102-94) &rarr; +0.614 pts proposed; ratings constant stays 0.0.</td><td><a class="source-link" href="https://www.nba.com/standings" target="_blank" rel="noopener noreferrer">NBA standings</a><br><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/homerate.py" target="_blank" rel="noopener noreferrer">engine/homerate.py</a></td></tr>
+              <tr><td><strong>Luck z-scores &amp; noise band</strong></td><td>Per-team luck z-scores with a noise-band veto so an outlier stretch cannot be read as skill.</td><td><span class="flag">Implemented &amp; tested</span><br>Not run: needs a season of authorized results.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/luck.py" target="_blank" rel="noopener noreferrer">engine/luck.py</a></td></tr>
+              <tr><td><strong>Rest / B2B / 3-in-4</strong></td><td>Whole-day rest, back-to-back and 3-in-4 computed from official schedule dates with coverage stated per row.</td><td><span class="flag flag-green">Computed</span><br>Published for the current window on the availability page.</td><td><a class="source-link" href="https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf" target="_blank" rel="noopener noreferrer">schedule PDF</a><br><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/rest.py" target="_blank" rel="noopener noreferrer">engine/rest.py</a></td></tr>
+              <tr><td><strong>Travel from arena coordinates</strong></td><td>Distance between registered arenas on the team's previous leg, kept separate from rest so one unverifiable leg never cancels a verifiable rest row.</td><td><span class="flag">Implemented &amp; tested</span><br>No leg published this cycle.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/venues.py" target="_blank" rel="noopener noreferrer">engine/venues.py</a></td></tr>
+              <tr><td><strong>Top-8 minutes redistribution</strong></td><td>Explicit redistribution of minutes beyond the top eight rotation slots, stated rather than assumed.</td><td><span class="flag">Implemented &amp; tested</span><br>Not run: no authorized rotation history.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/minutesshare.py" target="_blank" rel="noopener noreferrer">engine/minutesshare.py</a></td></tr>
+              <tr><td><strong>Market-anchored prior</strong></td><td>Prior weighted by measured out-of-sample log-loss against a licensed price benchmark; the weight is measured, not chosen.</td><td><span class="flag">Implemented &amp; tested</span><br>No licensed market data.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/marketprior.py" target="_blank" rel="noopener noreferrer">engine/marketprior.py</a><br><a class="source-link" href="https://scikit-learn.org/stable/modules/model_evaluation.html" target="_blank" rel="noopener noreferrer">log-loss reference</a></td></tr>
+              <tr><td><strong>Totals as possessions &times; PPP</strong></td><td>Expected total built from projected possessions and points per possession, so a pace shift and an efficiency shift stay separable.</td><td><span class="flag">Implemented &amp; tested</span><br>Not run.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/totals.py" target="_blank" rel="noopener noreferrer">engine/totals.py</a><br><a class="source-link" href="https://www.nba.com/stats/help/glossary" target="_blank" rel="noopener noreferrer">NBA metric definitions</a></td></tr>
+              <tr><td><strong>Parlays priced with measured &rho;</strong></td><td>Joint price from leg marginals plus the measured correlation, with the naive independence product shown beside it as a labelled comparison.</td><td><span class="flag">Implemented &amp; tested</span><br>No licensed paired outcomes to measure &rho; on.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/parlay.py" target="_blank" rel="noopener noreferrer">engine/parlay.py</a><br><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST correlation</a></td></tr>
+              <tr><td><strong>Rotation-availability column</strong></td><td>Keeps reported availability as a column beside any rotation view, never folded into a minutes projection.</td><td><span class="flag">Implemented, empty</span><br>Populates only from the official report; no minutes model exists.</td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-27-season/" target="_blank" rel="noopener noreferrer">NBA injury report</a><br><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/rotations.py" target="_blank" rel="noopener noreferrer">engine/rotations.py</a></td></tr>
+              <tr><td><strong>Settlement from verified finals</strong></td><td>A day settles only when every team line's printed periods add to the printed final; overtime is a printed period, not a reconstruction.</td><td><span class="flag flag-green">Computed</span><br>2026-11-15: 18 of 18 lines agree, day eligible.</td><td><a class="source-link" href="https://www.nba.com/games" target="_blank" rel="noopener noreferrer">NBA games</a><br><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/resultfeed.py" target="_blank" rel="noopener noreferrer">engine/resultfeed.py</a></td></tr>
+              <tr><td><strong>Pre-registration &amp; ledger</strong></td><td>Freezes a strategy version before any pick and appends each pick's hash to a tamper-evident ledger.</td><td><span class="flag">Implemented &amp; tested</span><br>Zero frozen versions, zero sealed picks.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/preregistration.py" target="_blank" rel="noopener noreferrer">engine/preregistration.py</a><br><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/publishedledger.py" target="_blank" rel="noopener noreferrer">engine/publishedledger.py</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="absent-title">
+        <div class="section-heading"><div><h2 id="absent-title">What is deliberately absent</h2><p>These cells stay blank by rule. They are not pending; they are refused while G0 stands.</p></div></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Output</th><th scope="col">Why it is blank</th><th scope="col">State</th><th scope="col">Authority</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Originated spread / total / price</strong></td><td>Computing a line from NBA Statistics for publication is the exact use &sect;9 restricts; no owner decision (D-01 / IR-T4) has cleared it.</td><td><span class="flag flag-red">Refused</span></td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms &sect;9</a></td></tr>
+              <tr><td><strong>Win probability / edge</strong></td><td>Same gate; probabilities are also unsafe without an authorized point-in-time team-strength dataset (G1).</td><td><span class="flag flag-red">Refused</span></td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms &sect;9</a></td></tr>
+              <tr><td><strong>Pick, parlay or prop combo</strong></td><td>No pick exists to seal; the ledger records refusals, not placeholders.</td><td><span class="flag flag-red">Refused</span></td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms &sect;9</a></td></tr>
+              <tr><td><strong>Per-team luck z / noise-band verdict</strong></td><td>Not a rights refusal but a data refusal: the repository holds one day of finals, not a season, and a z-score off nine games would be noise presented as signal.</td><td><span class="flag">Not computed</span></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/luck.py" target="_blank" rel="noopener noreferrer">engine/luck.py</a></td></tr>
+              <tr><td><strong>Correlation &rho; for parlays</strong></td><td>Measuring &rho; needs licensed paired outcomes with a declared sample; the value cell stays empty like the correlation tables on the strategies page.</td><td><span class="flag">Not computed</span></td><td><a class="source-link" href="https://www.itl.nist.gov/div898/handbook/glossary.htm" target="_blank" rel="noopener noreferrer">NIST correlation</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section two-column" aria-label="How to read this page">
+        <article class="panel"><h2>“Implemented &amp; tested” means synthetic</h2><p>Each engine module ships unit tests that run on fabricated fixtures (marked <code>synthetic.invalid</code> in the fixtures). Passing tests prove the mechanics — refusals fire, formulas invert, coverage gaps surface — not any claim about NBA teams. The suite currently counts 318 unit tests across seven files.</p><p><a href="https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests" target="_blank" rel="noopener noreferrer">Test suite ↗</a></p></article>
+        <article class="panel"><h2>The path to a number</h2><p>A value appears on this site only after: G0 rights clearance, a point-in-time dataset (G1), pre-registration of the strategy version, and the validation gates on the strategies page — in that order. Until then the data pages publish observations (schedules, reports, finals, standings) and this page publishes refusals.</p><p><a href="strategies.html">Promotion gates →</a> · <a href="ledger.html">Pre-registration ledger →</a></p></article>
+      </section>
+      <footer class="footer"><p>Implemented is not published. No model value appears on this site.</p><p><a href="review.html">Flagged blockers →</a> · <a href="sources.html">Source register →</a></p></footer>
+    </main>
+  </div>
+</div>
+</body>
+</html>
