@@ -403,3 +403,23 @@ is owned by `arena/cbc8e41a-nba4`, so it is not edited here. A follow-up could
 call `engine.refresh.decision_from_run_record(record, allowed_use=..., report_tz=...)`
 after its fetch phase to get per-feed tolerances alongside its own four-phase
 gates. Until then both gates run and neither is wired to the other.
+
+### Conflict resolved during the BI integration rebase (2026-11-16T15:55Z)
+
+Rebasing this session's two commits onto `origin/main` (which by then contained
+`arena/cbc8e41a-nba4`'s PR #59 and a later commit) conflicted on exactly two
+files: **README.md** and **index.html**, both on the single line that states the
+engine unit-test count. Both sessions legitimately update that line —
+`scripts/check_site.py` fails the build when it drifts — so any two sessions
+landing tests in the same window will collide there.
+
+**Resolved without discarding either side.** Neither count was right on its own
+(HEAD said 324, this branch said 450): the correct number is what the merged tree
+actually runs, so the rebase was completed and the count was then **remeasured**,
+not negotiated. `python3 -m unittest discover -s tests -t .` → **451 OK**, and
+the per-suite breakdown was recomputed (132 + 57 + 48 + 47 + 43 + 38 + 32 + 27 +
+17 + 10, ten suites) rather than carried over from either branch. Both files now
+state 451 and `check_site.py --with-tests` passes.
+
+Recommendation for later sessions: the count line is a hotspot. Land it last, or
+recompute it after the rebase instead of carrying a number across one.
