@@ -62,6 +62,13 @@ __all__ = [
     "markets",
     "surfaces",
     "totals",
+    # Task BF/BG (session arena/cc82e369-nba4, 2026-11-16): the scheduled-job
+    # refresh gate and the two brief items that had no module - per-player game
+    # logs and the three official team-stat pages. New modules, no existing
+    # module was modified to make room for them.
+    "refresh",
+    "playerlogs",
+    "teamstats",
 ]
 
 __version__ = "0.1.0"
