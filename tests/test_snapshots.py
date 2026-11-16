@@ -186,18 +186,19 @@ class RenderedPageTests(unittest.TestCase):
 
     def test_every_rendered_row_cites_an_official_document(self) -> None:
         slate_html = build_snapshots.render_slate()
-        self.assertEqual(slate_html.count("<tr>"), 23)  # header + 22 games
-        self.assertEqual(slate_html.count("NO PICK"), 22)
-        self.assertEqual(slate_html.count(build_snapshots.SCHEDULE_URL), 22)
+        self.assertEqual(slate_html.count("<tr>"), 26)  # header + 25 games (rows 245-269)
+        self.assertEqual(slate_html.count("NO PICK"), 25)
+        self.assertEqual(slate_html.count(build_snapshots.SCHEDULE_URL), 25)
+        self.assertEqual(slate_html.count(build_snapshots.REPORT_URL), 25)  # availability column cites the report per row
 
         injuries_html = build_snapshots.render_injuries()
-        self.assertEqual(injuries_html.count(build_snapshots.REPORT_URL), 101)  # one per report row
+        self.assertEqual(injuries_html.count(build_snapshots.REPORT_URL), 72)  # one per report row
         self.assertEqual(
             injuries_html.count(build_snapshots.SCHEDULE_URL),
             sum(
                 1
-                for game in load(CURRENT_INJURY_FILE)["games"]
-                if game["cells_source"].startswith("schedule")
+                for game in load("injuries-2026-11-16-0915am.json")["games"]
+                if game["cells_source"].startswith("schedule") or game["cells_source"] == "report-context"
                 for _ in game["rows"]
             ),
         )
@@ -221,9 +222,13 @@ class AwayHomeBasisTests(unittest.TestCase):
 
     def test_rendered_slate_marks_uncorroborated_order(self) -> None:
         html = build_snapshots.render_slate()
-        self.assertEqual(html.count("</strong> at <strong>"), 17)
-        self.assertEqual(html.count("(order unverified)"), 5)
-        self.assertEqual(html.count('prints no "at"'), 5)
+        # Current window (rows 245-269): every game's away/home order is corroborated -
+        # rows 245-257 by injury-report matchup codes (matched on date + code), rows
+        # 258-269 by the nba.com games-page slug, rows 260-269 additionally by the
+        # schedule PDF's own printed "at" token - so the slate prints "at" 25 times
+        # and no order-unverified markers.
+        self.assertEqual(html.count("</strong> at <strong>"), 25)
+        self.assertEqual(html.count("(order unverified)"), 0)
 
 
 if __name__ == "__main__":
