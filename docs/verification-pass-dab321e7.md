@@ -81,3 +81,27 @@ re-lettered claim so this refresh can be logged, not skipped.
 11. **Pipes-file defect (tooling, repaired).** 17 rows per raw pipes file carried a duplicated
     leading blank cell (8 cells) that would abort `parse_report`; both files repaired to exactly 7
     cells per row before any build ran, and the validation now runs before every build.
+
+---
+
+## Task BI — per-player game-log capture (`b50e8fc`)
+
+For every one of the 57 players on the 2026-11-16 09:15 AM ET injury report, one dated,
+attributed observation row per game in the window 2026-11-14 – 2026-11-15, captured verbatim
+from the official gamebooks (chunk 0 of each prints both teams' full-game box score and the
+inactive lists). Rows are evidence with row-level official links, **not betting inputs** (G0;
+D-01/IR-T4 stand). Snapshot: [`data/snapshots/player-gamelogs-2026-11-14_to_2026-11-15.json`](../data/snapshots/player-gamelogs-2026-11-14_to_2026-11-15.json);
+renderer/verifier: [`scripts/build_gamelogs.py`](../scripts/build_gamelogs.py) (refuses to
+render if any mirrored report cell disagrees with the injury file of record; 57/57 verified).
+
+| # | Capture | What was found | Source |
+| --- | --- | --- | --- |
+| 1 | 5 gamebooks of 2026-11-14 (CHI@MIN, DAL@CLE, BKN@MEM, DET@MIA, DEN@NOP) | 43 game rows: 8 played lines (MIN/PTS/REB/AST as printed strings), 29 inactive-list entries, 4 `DNP - Coach's Decision`, 2 `DND` designations. Every row cites its own gamebook URL | [Gamebooks 20261114](https://statsdmz.nba.com/pdfs/20261114/20261114_BKNMEM_book.pdf) (each row's source cell links its own book) |
+| 2 | The 7 injury-report rows whose team cell was lost at a PDF page break (5 in the MEM@WAS block, 2 in GSW@NOP) | All 7 players appear in the 11/14 gamebooks under a printed team header (Grizzlies ×5, Pelicans ×2). The injury snapshot keeps their team cells blank and flagged; only the game-log rows carry the gamebook attribution, flagged per row | [BKN@MEM gamebook](https://statsdmz.nba.com/pdfs/20261114/20261114_BKNMEM_book.pdf) · [DEN@NOP gamebook](https://statsdmz.nba.com/pdfs/20261114/20261114_DENNOP_book.pdf) |
+| 3 | Name spellings across the two document families | One variance: the DAL@CLE gamebook inactive list prints `Mobely` where the report prints `Mobley, Evan` (flag SP-01). Both kept as printed; no harmonisation | [DAL@CLE gamebook](https://statsdmz.nba.com/pdfs/20261114/20261114_DALCLE_book.pdf) |
+| 4 | The 14 report players on ORL, GSW and POR | All three teams were idle on both window days; no game exists in the window and the previous games (2026-11-13) are outside this cycle's captures. Recorded as a window gap per player — not filled, not inferred | [2026-27 schedule by date](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) |
+| 5 | Mirrored report cells (status/reason/team-lost) | A first draft of the snapshot carried 26 wrong mirrored values; the build-time mirror check against the injury file of record caught them and they were rebuilt from the file, now 57/57. The check is permanent in `build_gamelogs.py` and pinned by 6 new tests (304 total) | [Injury Report 11/16 09:15 AM](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_09_15AM.pdf) |
+
+Irregularities added: **SP-01** (`Mobely`/`Mobley` spelling variance), window gap for ORL/GSW/POR
+players (no game 11/14–15; 11/13 books not captured this cycle), and the note that only the
+gamebook — never the report — attributes the 7 team-lost rows.
