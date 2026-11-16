@@ -420,7 +420,9 @@ def write_team_stats():
             "columns are not served with values in this extraction and are not transcribed. The traditional "
             "page (nba.com/stats/teams/traditional) was re-checked on 2026-11-16: the extraction serves only "
             "its filter controls (its data rows render client-side and were not returned), so its wide "
-            "column set is NOT transcribed and no row count is claimed for it - flagged P9-06. The decision-"
+            "column set is NOT transcribed here and no row count is claimed from this session's fetch - flagged "
+            "P9-06 (a parallel session's chunked read reports 30 of 30 traditional rows verified across five "
+            "chunks, docs/team-stats-recheck-cbc8e41a.md; publication of those rows stays an owner decision). The decision-"
             "relevant columns are carried on the advanced and opponent rows instead (POSS, OffRtg, DefRtg, "
             "PACE from advanced; per-game opponent scoring from opponent)."),
         "cross_checks": {

@@ -118,7 +118,7 @@ prov_rows = [
     ]),
     row([
         "<td><strong>Traditional</strong></td>",
-        '<td><span class="flag">NOT TRANSCRIBED</span> &mdash; re-checked 2026-11-16 14:52 UTC; the extraction served only filter controls (rows render client-side), so no row count is claimed (flag P9-06)</td>',
+        '<td><span class="flag">NOT TRANSCRIBED HERE</span> &mdash; this session&rsquo;s fetch (14:52 UTC) served only filter controls; a parallel pass read all five chunks and verified 30 of 30 rows (docs/team-stats-recheck-cbc8e41a.md). Full-table publication stays an owner decision (flag P9-06: read gap closed, publication question open)</td>',
         "<td>2026-11-16 14:52 UTC</td>",
         "<td>&mdash;</td>",
         f'<td><a href="{TRAD}">nba.com/stats/teams/traditional</a></td>',
@@ -129,7 +129,7 @@ prov_html = table(
     prov_rows,
 )
 
-team_stats_body = f'''      <header class="page-header"><p class="eyebrow">AN-04 close-out &middot; 2026-27 regular season &middot; per-game mode</p><h1>Team stats from the three official NBA.com team-stat pages</h1><p>The scheduled re-read of the advanced, opponent and traditional team-stat pages ran on 2026-11-16. Two of the three pages served their 30 team rows in full and are transcribed below with per-row source links; the traditional page is re-checked but <strong>not</strong> transcribed (flag P9-06). These rows are <strong>catalogued observations only</strong>: <code>model_inputs_status: REFUSED</code> &mdash; rights gate G0 and the D-01/IR-T4 decision block any use of NBA statistics as model inputs on this run, so no line, probability or pick is produced from them.</p></header>
+team_stats_body = f'''      <header class="page-header"><p class="eyebrow">AN-04 close-out &middot; 2026-27 regular season &middot; per-game mode</p><h1>Team stats from the three official NBA.com team-stat pages</h1><p>The scheduled re-read of the advanced, opponent and traditional team-stat pages ran on 2026-11-16. Two of the three pages served their 30 team rows in full and are transcribed below with per-row source links; the traditional page is <strong>not</strong> transcribed here: this session&rsquo;s fetch served only filter controls, and a parallel pass read and verified its 30 rows while keeping full-table publication an owner decision (flag P9-06: read gap closed, publication question open). These rows are <strong>catalogued observations only</strong>: <code>model_inputs_status: REFUSED</code> &mdash; rights gate G0 and the D-01/IR-T4 decision block any use of NBA statistics as model inputs on this run, so no line, probability or pick is produced from them.</p></header>
 
       <section class="panel">
         <h2>Provenance of this read</h2>

@@ -59,12 +59,15 @@ rows = "\n".join([
          'Quarter cells published blank + flagged (NOT CHECKED), never reconstructed. Settlement of the '
          'day is BLOCKED by this gap and by D-01/IR-T4 (Q24).',
          f'<a class="source-link" href="{G15}" target="_blank" rel="noopener noreferrer">Games page 11/15</a>'),
-    frow("P9-06", FLAG + "Medium</span><br>Traditional team-stat page not transcribed",
-         'The re-read of nba.com/stats/teams/traditional on 2026-11-16 served only its filter controls to '
-         'the extraction (rows render client-side). No row count is claimed for it.',
-         'The page is cited as re-checked; the decision-relevant columns are carried from the advanced and '
-         'opponent pages (30 rows each, RANK columns dropped). team-stats.html states the gap in its '
-         'provenance table.',
+    frow("P9-06", FLAG + "Medium</span><br>Traditional team-stat page: read gap closed by a parallel pass",
+         'This session&rsquo;s fetch of nba.com/stats/teams/traditional served only filter controls '
+         '(chunk 0; the rows arrive in later chunks), so no row count was claimed here. The parallel '
+         'session&rsquo;s re-check (docs/team-stats-recheck-cbc8e41a.md) read all five chunks and '
+         'verified 30 of 30 rows plus the printed 28-column + RANK schema with six machine checks.',
+         'Read gap CLOSED by that evidence (P9-06). What remains is an owner decision, not a read gap: '
+         'whether the traditional rows are transcribed onto the site at all (the parallel pass kept '
+         'full-table publication as an owner decision; this page carries the advanced/opponent rows). '
+         'The team-stats provenance table states exactly this.',
          f'<a class="source-link" href="{TRAD}" target="_blank" rel="noopener noreferrer">Traditional page</a>'),
     frow("P9-07", FLAG + "Low</span><br>Superseded snapshot label (closed)",
          'The 11/15 06:15 AM snapshot&rsquo;s matchups_not_in_snapshot list calls the 11/16 LAL game '
