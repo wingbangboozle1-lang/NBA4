@@ -1,0 +1,296 @@
+{
+  "snapshot_id": "results-2026-11-15",
+  "kind": "official_per_game_results",
+  "source_document": "NBA.com game summary pages (LINESCORES + GAME INFO blocks) and the 2026-11-15 scoreboard",
+  "source_document_header": "Each game-summary page prints the heading LINESCORES above the quarter table that supplied the quarter scores; the 2026-11-15 scoreboard prints each game's FINAL score with the team records",
+  "source_url": "https://www.nba.com/games?date=2026-11-15",
+  "source_index_url": "https://www.nba.com/games?date=2026-11-15",
+  "fetched_at_utc": "2026-11-16T14:40:00Z",
+  "extraction_tool": "fetch_page (HTML to markdown)",
+  "row_format": [
+    "game_id",
+    "date",
+    "tip_et",
+    "arena",
+    "city",
+    "away_abbr",
+    "home_abbr",
+    "away_q",
+    "away_final",
+    "home_q",
+    "home_final",
+    "winner_abbr",
+    "loser_abbr",
+    "source_url",
+    "away_ot1",
+    "home_ot1"
+  ],
+  "row_format_note": "row_format lists the positional columns of each row in `rows`. away_q and home_q hold the four regulation quarters exactly as the game page printed them; away_ot1/home_ot1 hold the printed overtime period, or null when the document prints no OT column. The quarter lists are not truncated to four when an overtime period is printed.",
+  "scoreboard_cross_check": {
+    "rule": "the scoreboard on https://www.nba.com/games?date=2026-11-15 prints one FINAL score per game; each game's printed final must equal the final on its own game-summary page",
+    "games_checked": 9,
+    "games_where_scoreboard_final_equals_game_page_final": 9
+  },
+  "settlement_check": {
+    "rule": "the sum of every printed period (four quarters plus any printed overtime) must equal the printed final for both teams",
+    "team_lines": 18,
+    "lines_that_agree": 18,
+    "lines_that_disagree": 0
+  },
+  "rows": [
+    [
+      "0022600236",
+      "2026-11-15",
+      "1:00 PM",
+      "Xfinity Mobile Arena",
+      "Philadelphia, PA",
+      "IND",
+      "PHI",
+      [
+        35,
+        22,
+        30,
+        37
+      ],
+      124,
+      [
+        29,
+        29,
+        39,
+        34
+      ],
+      131,
+      "PHI",
+      "IND",
+      "https://www.nba.com/game/ind-vs-phi-0022600236",
+      null,
+      null
+    ],
+    [
+      "0022600237",
+      "2026-11-15",
+      "4:00 PM",
+      "Mortgage Matchup Center",
+      "Phoenix, AZ",
+      "LAL",
+      "PHX",
+      [
+        33,
+        31,
+        40,
+        27
+      ],
+      131,
+      [
+        24,
+        30,
+        26,
+        43
+      ],
+      123,
+      "LAL",
+      "PHX",
+      "https://www.nba.com/game/lal-vs-phx-0022600237",
+      null,
+      null
+    ],
+    [
+      "0022600238",
+      "2026-11-15",
+      "4:30 PM",
+      "Intuit Dome",
+      "Inglewood, CA",
+      "CHA",
+      "LAC",
+      [
+        21,
+        31,
+        31,
+        22
+      ],
+      105,
+      [
+        22,
+        29,
+        33,
+        29
+      ],
+      113,
+      "LAC",
+      "CHA",
+      "https://www.nba.com/game/cha-vs-lac-0022600238",
+      null,
+      null
+    ],
+    [
+      "0022600239",
+      "2026-11-15",
+      "5:00 PM",
+      "Delta Center",
+      "Salt Lake City, UT",
+      "SAS",
+      "UTA",
+      [
+        31,
+        27,
+        23,
+        29
+      ],
+      110,
+      [
+        33,
+        22,
+        26,
+        21
+      ],
+      102,
+      "SAS",
+      "UTA",
+      "https://www.nba.com/game/sas-vs-uta-0022600239",
+      null,
+      null
+    ],
+    [
+      "0022600240",
+      "2026-11-15",
+      "6:00 PM",
+      "TD Garden",
+      "Boston, MA",
+      "DAL",
+      "BOS",
+      [
+        9,
+        28,
+        34,
+        23
+      ],
+      94,
+      [
+        42,
+        25,
+        37,
+        27
+      ],
+      131,
+      "BOS",
+      "DAL",
+      "https://www.nba.com/game/dal-vs-bos-0022600240",
+      null,
+      null
+    ],
+    [
+      "0022600241",
+      "2026-11-15",
+      "6:00 PM",
+      "Scotiabank Arena",
+      "Toronto, ON",
+      "NYK",
+      "TOR",
+      [
+        23,
+        24,
+        20,
+        28,
+        17
+      ],
+      112,
+      [
+        17,
+        26,
+        31,
+        21,
+        13
+      ],
+      108,
+      "NYK",
+      "TOR",
+      "https://www.nba.com/game/nyk-vs-tor-0022600241",
+      17,
+      13
+    ],
+    [
+      "0022600242",
+      "2026-11-15",
+      "7:00 PM",
+      "Capital One Arena",
+      "Washington, DC",
+      "HOU",
+      "WAS",
+      [
+        36,
+        37,
+        46,
+        28
+      ],
+      147,
+      [
+        31,
+        23,
+        34,
+        31
+      ],
+      119,
+      "HOU",
+      "WAS",
+      "https://www.nba.com/game/hou-vs-was-0022600242",
+      null,
+      null
+    ],
+    [
+      "0022600243",
+      "2026-11-15",
+      "8:00 PM",
+      "Fiserv Forum",
+      "Milwaukee, WI",
+      "ATL",
+      "MIL",
+      [
+        18,
+        37,
+        32,
+        26
+      ],
+      113,
+      [
+        37,
+        16,
+        27,
+        26
+      ],
+      106,
+      "ATL",
+      "MIL",
+      "https://www.nba.com/game/atl-vs-mil-0022600243",
+      null,
+      null
+    ],
+    [
+      "0022600244",
+      "2026-11-15",
+      "9:00 PM",
+      "Golden 1 Center",
+      "Sacramento, CA",
+      "OKC",
+      "SAC",
+      [
+        32,
+        30,
+        32,
+        31
+      ],
+      125,
+      [
+        24,
+        26,
+        30,
+        23
+      ],
+      103,
+      "OKC",
+      "SAC",
+      "https://www.nba.com/game/okc-vs-sac-0022600244",
+      null,
+      null
+    ]
+  ]
+}

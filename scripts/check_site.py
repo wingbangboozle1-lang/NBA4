@@ -6,6 +6,7 @@ from __future__ import annotations
 import re
 import json
 import sys
+from html import unescape as html_unescape
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -15,19 +16,42 @@ PAGES = (
     "index.html",
     "slate.html",
     "injuries.html",
+    "availability.html",
+    "model.html",
     "results.html",
     "line-origination.html",
-    "automation.html",
     "strategies.html",
     "leaderboard.html",
+    "ledger.html",
+    "automation.html",
     "questions.html",
     "suggestions.html",
     "sources.html",
     "review.html",
 )
-# The unified sidebar: every page must carry exactly these 12 links in this
-# order, with no duplicates and with aria-current pointing at its own page.
-CANONICAL_NAV = tuple(PAGES)
+# The unified sidebar: every page must carry exactly these links in this order,
+# with no duplicates and with aria-current pointing at its own page. The list is
+# grouped on the page into "Projection (publish-safe)", "Bet (gated)" and
+# "Method & governance"; NAV_GROUPS records the split so a page that moves a link
+# between groups fails the check instead of silently changing the surface claim.
+NAV_GROUPS = (
+    ("Projection (publish-safe)", ("index.html", "slate.html", "injuries.html", "availability.html", "model.html", "results.html")),
+    ("Bet (gated)", ("line-origination.html", "strategies.html", "leaderboard.html", "ledger.html")),
+    ("Method & governance", ("automation.html", "questions.html", "suggestions.html", "sources.html", "review.html")),
+)
+CANONICAL_NAV = tuple(href for _, group in NAV_GROUPS for href in group)
+assert CANONICAL_NAV == tuple(PAGES), "the grouped navigation and the page list must agree"
+# Pages whose every value cell must stay on the projection surface: a bet-gated
+# heading with a numeric value under it fails the build.
+PROJECTION_ONLY_PAGES = ("model.html", "availability.html", "slate.html")
+BET_GATED_HEADINGS = (
+    "Originated line",
+    "Fair probability",
+    "Edge vs market",
+    "Closing line",
+    "Fair price",
+    "Recommended bet",
+)
 OFFICIAL_HOSTS = (
     "nba.com",
     "github.com",
@@ -173,6 +197,42 @@ def audit_nesting(path: Path) -> list[str]:
     return problems
 
 
+def audit_projection_surface(text: str) -> list[str]:
+    """A bet-gated *column heading* may not carry a numeric cell on a projection page.
+
+    The rule is column-based and mechanical: find every <th> whose text names a
+    bet-surface quantity, take its column index, and fail if any row in that table
+    puts a bare number in that column. ``GATED``, ``[NO INPUT]``, ``[EMPTY]``, an
+    em dash or an empty cell is the accepted state. Prose is never matched, so a
+    sentence that merely mentions a price cannot trip the check.
+    """
+    problems: list[str] = []
+    for table in re.findall(r"<table\b.*?</table>", text, re.S | re.I):
+        headings = [
+            html_unescape(re.sub(r"<[^>]+>", " ", cell)).strip()
+            for cell in re.findall(r"<th\b[^>]*>(.*?)</th>", table, re.S | re.I)
+        ]
+        gated_columns = {
+            index: heading
+            for index, heading in enumerate(headings)
+            if any(bad.lower() in heading.lower() for bad in BET_GATED_HEADINGS)
+        }
+        if not gated_columns:
+            continue
+        for match in re.finditer(r"<tr\b[^>]*>(.*?)</tr>", table, re.S | re.I):
+            cells = re.findall(r"<td\b[^>]*>(.*?)</td>", match.group(1), re.S | re.I)
+            for index, heading in gated_columns.items():
+                if index >= len(cells):
+                    continue
+                plain = html_unescape(re.sub(r"<[^>]+>", " ", cells[index])).strip()
+                if plain and re.fullmatch(r"[+-]?\d+(?:[.,]\d+)?%?", plain):
+                    problems.append(
+                        f"the bet-gated column {heading!r} carries a numeric value {plain!r}; "
+                        "move it behind gate G0 or replace it with a gated stub"
+                    )
+    return problems
+
+
 def audit_page(name: str) -> tuple[list[str], int]:
     errors: list[str] = []
     path = ROOT / name
@@ -200,6 +260,21 @@ def audit_page(name: str) -> tuple[list[str], int]:
         errors.append(
             f"{name}: expected exactly one sidebar aria-current=\"page\" on its own link, found {parser.nav_current!r}"
         )
+    text = path.read_text(encoding="utf-8")
+    found_groups = [
+        (html_unescape(label), tuple(re.findall(r'href="([^"]+)"', items)))
+        for label, items in re.findall(
+            r'<p class="nav-group">(.*?)</p>\s*<ul>(.*?)</ul>', text, re.S
+        )
+    ]
+    if found_groups != [(label, hrefs) for label, hrefs in NAV_GROUPS]:
+        errors.append(
+            f"{name}: sidebar groups must be {[(l, list(h)) for l, h in NAV_GROUPS]!r}; "
+            f"found {[(l, list(h)) for l, h in found_groups]!r}"
+        )
+    if name in PROJECTION_ONLY_PAGES:
+        for problem in audit_projection_surface(text):
+            errors.append(f"{name}: {problem}")
 
     for href in parser.links:
         parsed_href = urlsplit(href)

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The seal-and-settlement ledger: how a published pick is hashed before tip and verified after settlement, and why no entry can be sealed in this repository today.">
+  <title>NBA4 — Seal &amp; settlement ledger</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Site navigation">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N4</span><span class="brand-copy">NBA4<small>RESEARCH DASHBOARD</small></span></a>
+    <p class="nav-label">Workspace</p>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <p class="nav-group">Projection (publish-safe)</p>
+      <ul>
+      <li><a href="index.html"><span class="nav-icon" aria-hidden="true">◆</span>Overview</a></li>
+      <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
+      <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
+      <li><a href="availability.html"><span class="nav-icon" aria-hidden="true">◐</span>Rotation availability</a></li>
+      <li><a href="model.html"><span class="nav-icon" aria-hidden="true">◈</span>Model &amp; projections</a></li>
+      <li><a href="results.html"><span class="nav-icon" aria-hidden="true">≣</span>Results &amp; standings</a></li>
+      </ul>
+      <p class="nav-group">Bet (gated)</p>
+      <ul>
+      <li><a href="line-origination.html"><span class="nav-icon" aria-hidden="true">≡</span>Line origination</a></li>
+      <li><a href="strategies.html"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
+      <li><a href="leaderboard.html"><span class="nav-icon" aria-hidden="true">▤</span>Leaderboard</a></li>
+      <li><a href="ledger.html" aria-current="page"><span class="nav-icon" aria-hidden="true">⛓</span>Seal &amp; settlement ledger</a></li>
+      </ul>
+      <p class="nav-group">Method &amp; governance</p>
+      <ul>
+      <li><a href="automation.html"><span class="nav-icon" aria-hidden="true">⟳</span>Automation</a></li>
+      <li><a href="questions.html"><span class="nav-icon" aria-hidden="true">?</span>Decision questions</a></li>
+      <li><a href="suggestions.html"><span class="nav-icon" aria-hidden="true">✦</span>Suggestions</a></li>
+      <li><a href="sources.html"><span class="nav-icon" aria-hidden="true">↗</span>Sources</a></li>
+      <li><a href="review.html"><span class="nav-icon" aria-hidden="true">⚑</span>Flagged for review</a></li>
+      </ul>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-note"><strong>No sealed entry</strong><p>An empty ledger is the honest state: no pick has been published, so nothing can be sealed.</p></div>
+    <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
+  </aside>
+  <div class="content-shell">
+    <header class="topbar"><div><p class="topbar-title">Ledger desk</p><p class="topbar-meta">Bet surface &middot; gate G0_RIGHTS_AND_VALIDATION closed &middot; checked 16 Nov 2026</p></div><span class="status-pill">NO SEALED ENTRY</span></header>
+    <main id="main" class="main-content">
+      <header class="page-header"><p class="eyebrow">Bet surface &middot; gated</p><h1>Seal before tip, verify after settlement</h1><p>The brief asks for a tamper-evident ledger: hash each published pick, publish the hash before tip-off, and verify it after settlement. The mechanism is implemented and tested in <code>engine/publishedledger.py</code>. It is <strong>empty by construction</strong> here, because publishing a pick at all is blocked &mdash; and a ledger with no entries is the only truthful rendering of that state.</p></header>
+
+      <div class="notice notice-danger"><span class="notice-icon" aria-hidden="true">!</span><div><strong>Why every row below reads [EMPTY].</strong><p>Sealing requires a pick. Publishing a pick requires the rights gate (NBA Terms of Use &sect;9(ii) bars use of NBA Statistics in connection with gambling) and a validated, pre-registered strategy. Neither is cleared, so no pick is published, no hash is computed from a real pick, and no settlement is stamped. The table is not &ldquo;pending&rdquo;; it is a specification of what would be sealed and what blocks it.</p></div></div>
+
+      <section class="section" aria-labelledby="ledger-title">
+        <div class="section-heading"><div><h2 id="ledger-title">What the ledger would hold, field by field</h2><p>Each row names the artefact, what exactly gets hashed, the implementation that would do it, and the current state with the blocking reason.</p></div><span class="flag">Bet surface &middot; all gated</span></div>
+        <!-- BEGIN SNAPSHOT:ledger-table -->
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Ledger field</th><th scope="col">What would be sealed</th><th scope="col">Implementation</th><th scope="col">State today</th><th scope="col">Official source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Pick published</strong></td><td>hash of the pick payload, published before tip-off</td><td><code>engine/publishedledger.py publish()</code></td><td><span class="flag flag-red">[EMPTY]</span> no pick exists, so there is nothing to hash</td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms of Use section 9</a></td></tr>
+              <tr><td><strong>Settlement</strong></td><td>hash of the official final, sealed after the game day ends</td><td><code>engine/publishedledger.py settle()</code></td><td><span class="flag flag-red">[EMPTY]</span> scores are verified (18/18 team lines) but rights gate G0 blocks a published pick, so there is no sealed entry</td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms of Use section 9</a></td></tr>
+              <tr><td><strong>Pre-registration</strong></td><td>strategy signal, thresholds, universe and settlement rule frozen before the first bet</td><td><code>engine/preregistration.py</code></td><td><span class="flag flag-red">[EMPTY]</span> no strategy has been pre-registered, so no freeze file exists</td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms of Use section 9</a></td></tr>
+              <tr><td><strong>Verification</strong></td><td>a reader recomputes the hash from the published payload and compares</td><td><code>engine/publishedledger.py verify_chain()</code></td><td><span class="flag flag-red">[EMPTY]</span> available today for the snapshot files: each carries its source URL, document header and fetch time</td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms of Use section 9</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- END SNAPSHOT:ledger-table -->
+        <p class="surface-note">The two official finals used by the settlement half of this ledger <em>are</em> verified independently of a pick: 18 of 18 team lines on the 2026-11-15 slate have printed periods that add to the printed final (see <a href="results.html">Results &amp; standings</a>). That is a statement about the results feed, not about a wager.</p>
+      </section>
+
+      <section class="section two-column" aria-label="How the mechanism works and what it proves">
+        <article class="panel">
+          <h2>How the seal is built</h2>
+          <ol>
+            <li><strong>Per-pick hash.</strong> The pick payload is canonicalised (sorted keys, no whitespace) and hashed with SHA-256.</li>
+            <li><strong>Append-only chain.</strong> Each entry carries <code>prev_hash</code> and its own <code>entry_hash = sha256(prev_hash &#8214; payload)</code>; editing, deleting or reordering an earlier entry breaks every later hash.</li>
+            <li><strong>Seal at or before the earliest tip.</strong> The pick hashes are the leaves of a binary Merkle tree; the root is written as a SEAL entry, and an inclusion proof shows a published pick was inside the sealed set.</li>
+            <li><strong>Settle from verified finals.</strong> A SETTLE entry stores the settlement stamp, the hash of the official final-score observation and the outcome. Settlement is refused unless two official observations agree.</li>
+          </ol>
+        </article>
+        <article class="panel">
+          <h2>What it proves &mdash; and what it does not</h2>
+          <p><strong>Proves:</strong> integrity (nothing was edited after publication) and timing (the pick existed before the tip).</p>
+          <p><strong>Does not prove:</strong> that the forecast was good, or that the hash existed at a time this repository does not control. A truly external timestamp &mdash; a third-party transparency log or a notary &mdash; is a separate owner decision and stays an open question on <a href="questions.html">Decision questions</a>.</p>
+          <p><strong>Also does not prove:</strong> that the settlement source is the one a bookmaker used. That needs a market specification, which is a registered missing input (Q5).</p>
+        </article>
+      </section>
+      <footer class="footer"><p>No pick, price, stake or settlement is published. Table generated by <code>python3 scripts/build_snapshots.py</code>.</p><p><a href="strategies.html">See the promotion gates →</a></p></footer>
+    </main>
+  </div>
+</div>
+</body>
+</html>

@@ -179,6 +179,9 @@
   },
   "injury_load": {
     "revision": "11/15/26 06:15 AM",
+    "not_yet_submitted_markers_total": 17,
+    "not_yet_submitted_in_reason_cell": 17,
+    "not_yet_submitted_in_player_cell": 0,
     "revision_document": "Injury Report: 11/15/26 06:15 AM",
     "revision_utc": "2026-11-15T10:15:00Z",
     "retrieved_utc": "2026-11-15T11:45:00Z",

@@ -107,6 +107,16 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 }
 .primary-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
 .primary-nav a[aria-current="page"] { color: #fff; background: #24425f; box-shadow: inset 3px 0 0 #57c5b5; }
+.primary-nav .nav-group {
+  margin: 0.75rem 0.7rem 0.3rem;
+  color: #8fa8c1;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.primary-nav .nav-group:first-of-type { margin-top: 0.15rem; }
+.primary-nav ul + p.nav-group { margin-top: 0.85rem; }
 .nav-icon { display: inline-grid; width: 20px; place-items: center; color: #91cfc7; font-size: 0.95rem; }
 .sidebar-spacer { flex: 1; }
 .sidebar-note {
@@ -339,3 +349,8 @@ pre.code-block code { padding: 0; background: none; color: inherit; font-size: 0
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
 }
+
+/* Surface split legend (model.html and availability.html) */
+.surface-badge { display: inline-block; padding: 0.1rem 0.38rem; border-radius: 999px; border: 1px solid #c8d6e5; background: #eef4fa; color: #2c4f72; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.surface-badge.bet { border-color: #edc7c1; background: #fbeae7; color: #8c3730; }
+.surface-note { margin: 0.55rem 0 0; color: #53677c; font-size: 0.78rem; }

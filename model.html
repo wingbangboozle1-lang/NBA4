@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="NBA4 model and projection surface: the two independent estimators, their disagreement as the headline, the measured home-court pin, the possessions x PPP total, and every bet-surface field gated.">
+  <title>NBA4 — Model &amp; projections</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Site navigation">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N4</span><span class="brand-copy">NBA4<small>RESEARCH DASHBOARD</small></span></a>
+    <p class="nav-label">Workspace</p>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <p class="nav-group">Projection (publish-safe)</p>
+      <ul>
+      <li><a href="index.html"><span class="nav-icon" aria-hidden="true">◆</span>Overview</a></li>
+      <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
+      <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
+      <li><a href="availability.html"><span class="nav-icon" aria-hidden="true">◐</span>Rotation availability</a></li>
+      <li><a href="model.html" aria-current="page"><span class="nav-icon" aria-hidden="true">◈</span>Model &amp; projections</a></li>
+      <li><a href="results.html"><span class="nav-icon" aria-hidden="true">≣</span>Results &amp; standings</a></li>
+      </ul>
+      <p class="nav-group">Bet (gated)</p>
+      <ul>
+      <li><a href="line-origination.html"><span class="nav-icon" aria-hidden="true">≡</span>Line origination</a></li>
+      <li><a href="strategies.html"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
+      <li><a href="leaderboard.html"><span class="nav-icon" aria-hidden="true">▤</span>Leaderboard</a></li>
+      <li><a href="ledger.html"><span class="nav-icon" aria-hidden="true">⛓</span>Seal &amp; settlement ledger</a></li>
+      </ul>
+      <p class="nav-group">Method &amp; governance</p>
+      <ul>
+      <li><a href="automation.html"><span class="nav-icon" aria-hidden="true">⟳</span>Automation</a></li>
+      <li><a href="questions.html"><span class="nav-icon" aria-hidden="true">?</span>Decision questions</a></li>
+      <li><a href="suggestions.html"><span class="nav-icon" aria-hidden="true">✦</span>Suggestions</a></li>
+      <li><a href="sources.html"><span class="nav-icon" aria-hidden="true">↗</span>Sources</a></li>
+      <li><a href="review.html"><span class="nav-icon" aria-hidden="true">⚑</span>Flagged for review</a></li>
+      </ul>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-note"><strong>Projection surface</strong><p>Method, formulas and refusals are published. No point estimate is applied to a game.</p></div>
+    <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
+  </aside>
+  <div class="content-shell">
+    <header class="topbar"><div><p class="topbar-title">Model desk</p><p class="topbar-meta">Projection surface &middot; method and gates as of 16 Nov 2026 &middot; no value applied</p></div><span class="status-pill">NO MODEL OUTPUT</span></header>
+    <main id="main" class="main-content">
+      <header class="page-header"><p class="eyebrow">Two estimators &middot; disagreement first</p><h1>The model surface, and every place it refuses</h1><p>The brief asks for two independent estimators with their disagreement as the headline confidence signal, home-court advantage pinned to the <em>measured</em> home-win rate, a total modelled as possessions &times; points-per-possession, luck as a z-score with a noise band, and a market-anchored prior blended by out-of-sample log loss. All of that is implemented and unit-tested in <code>engine/</code>. None of it is fed NBA data here, because the input right is not cleared &mdash; so this page publishes the <strong>specification, the published inputs, and the refusals</strong>, not a forecast.</p></header>
+
+      <div class="notice notice-danger"><span class="notice-icon" aria-hidden="true">!</span><div><strong>Read this before the tables.</strong><p>A model value on a page invites a reader to treat it as a prediction. Every row below therefore states either (a) a formula with its source, (b) a count taken from an official document, or (c) an explicit refusal with a code. Where a number would require a licensed input, the cell says <span class="surface-badge bet">gated</span> rather than showing a number.</p></div></div>
+
+      <section class="section" aria-labelledby="split-title">
+        <div class="section-heading"><div><h2 id="split-title">The two surfaces, and why they never mix</h2><p>The split is enforced per <em>field</em>, not per page, by <code>engine/surfaces.py</code>: an undeclared field raises, and a rendered row that carries the other surface&rsquo;s value fails the build check.</p></div><span class="flag">engine/surfaces.py</span></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Surface</th><th scope="col">What belongs on it</th><th scope="col">Declared fields</th><th scope="col">Publication rule</th><th scope="col">Official source</th></tr></thead>
+            <tbody>
+              <tr><td><span class="surface-badge">Projection</span></td><td>A documented method, an official observation, or a derived count over printed schedule cells. No price, no stake, no edge.</td><td>34 fields, including <code>estimator_disagreement</code>, <code>home_court_advantage_basis</code>, <code>luck_zscore</code>, <code>model_total_possessions_x_ppp</code>, <code>injury_report_revision_time</code></td><td>Publishable today, with the source and the refusal beside it.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/surfaces.py" target="_blank" rel="noopener noreferrer">engine/surfaces.py</a></td></tr>
+              <tr><td><span class="surface-badge bet">Bet</span></td><td>Anything a reader could act on as a wager: an edge against a price, a price or payout, a staked pick, a parlay quote, a settlement, a reward.</td><td>17 fields, including <code>benchmark_price</code>, <code>edge_vs_market</code>, <code>fair_price</code>, <code>stake</code>, <code>parlay_quote</code>, <code>pick_selection</code>, <code>clv</code></td><td>Renders only when gate <code>G0_RIGHTS_AND_VALIDATION</code> is cleared; otherwise a stub carrying the reason codes. Today: <strong>0 of 17 rendered</strong>.</td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms of Use §9(ii)</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="estimators-title">
+        <div class="section-heading"><div><h2 id="estimators-title">The two estimators, and the disagreement as the headline</h2><p>Estimator A and estimator B consume the same authorised ledger but estimate team strength differently. The published headline is |A &minus; B|; the average is a footnote and is never called a confidence probability.</p></div><span class="flag">engine/estimators.py &middot; engine/confidence.py</span></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Element</th><th scope="col">Definition</th><th scope="col">Status today</th><th scope="col">Implementation</th><th scope="col">Official source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Estimator A &mdash; matchup PPP</strong></td><td>Expected home margin from each side&rsquo;s points-per-possession against the opponent&rsquo;s defensive rate, with possessions supplied by the caller.</td><td><span class="flag">[NO INPUT]</span> needs an authorised game ledger; the repo holds none.</td><td><code>ratings.margin_forecast</code></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/estimators.py" target="_blank" rel="noopener noreferrer">engine/estimators.py</a></td></tr>
+              <tr><td><strong>Estimator B &mdash; point-differential baseline</strong></td><td>Half the difference in historical team point-differential means, plus the pinned home-court points. Deliberately simple; to be tested, not trusted.</td><td><span class="flag">[NO INPUT]</span> same ledger requirement, plus the measured home-win rate for the pin.</td><td><code>estimators.compare_estimators</code></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/estimators.py" target="_blank" rel="noopener noreferrer">engine/estimators.py</a></td></tr>
+              <tr><td><strong>Headline</strong></td><td>The absolute gap between the two margins, banded against a <em>registered</em> band. An unregistered band reads <code>UNBANDED</code>, never <code>AGREEMENT</code>.</td><td><span class="flag">[GATED]</span> no band is registered, so no band label is published.</td><td><code>confidence.disagreement</code>, <code>confidence.band_gap</code></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/confidence.py" target="_blank" rel="noopener noreferrer">engine/confidence.py</a></td></tr>
+              <tr><td><strong>Independence audit</strong></td><td>The gap understates uncertainty if both estimators read the same input field; the audit reports every shared field and downgrades the signal when any is shared.</td><td>Implemented; the current pair shares no field at the interface, and the audit is mechanical rather than asserted.</td><td><code>confidence.independence_audit</code></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/confidence.py" target="_blank" rel="noopener noreferrer">engine/confidence.py</a></td></tr>
+              <tr><td><strong>Blend (footnote only)</strong></td><td>The arithmetic mean of the two margins. <code>headline_allowed</code> is permanently False by construction.</td><td><span class="flag">[GATED]</span> no values to average.</td><td><code>confidence.blend</code></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/confidence.py" target="_blank" rel="noopener noreferrer">engine/confidence.py</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="pins-title">
+        <div class="section-heading"><div><h2 id="pins-title">The pinned and derived quantities, with today&rsquo;s official inputs</h2><p>These rows are the only places on the page where a number appears, and every one of them is either arithmetic on a printed cell of the 2026-11-16 documents or a stated constant.</p></div><span class="flag">Official observation &middot; not model output</span></div>
+        <div class="table-card table-wrap">
+          <table class="data-table">
+            <thead><tr><th scope="col">Quantity</th><th scope="col">Value and derivation</th><th scope="col">Applied?</th><th scope="col">Refusal / code</th><th scope="col">Official source</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Measured home-win rate</strong></td><td><strong>0.5204</strong> = 102 HOME wins &divide; 196 decided HOME games in the standings page&rsquo;s HOME column. Neutral-site games are held out (2 team lines).</td><td>No &mdash; the pin is computed, not handed to a line.</td><td><code>engine/homerate.py</code> refuses until the run is pre-registered and G0 cleared.</td><td><a class="source-link" href="https://www.nba.com/standings" target="_blank" rel="noopener noreferrer">NBA.com standings</a><br><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/data/snapshots/standings-2026-11-16.json" target="_blank" rel="noopener noreferrer">snapshot provenance</a></td></tr>
+              <tr><td><strong>Home-court points</strong></td><td><strong>+0.614</strong> = 12.0 &times; &Phi;<sup>-1</sup>(0.5204) = 12.0 &times; 0.05117, where 12.0 is the repo&rsquo;s unfitted margin SD and the inverse is the exact inversion of <code>ratings.win_probability</code>.</td><td>No &mdash; <code>HOME_ADVANTAGE_POINTS</code> stays 0.0.</td><td>Labelled <em>derived, unvalidated</em>. Yesterday&rsquo;s rate (0.5294) gave +0.885; the drift is one day of a young season.</td><td><a class="source-link" href="https://www.nba.com/standings" target="_blank" rel="noopener noreferrer">NBA.com standings</a></td></tr>
+              <tr><td><strong>Total, possessions &times; PPP</strong></td><td>Total = possessions &times; (ppp<sub>home</sub> + ppp<sub>away</sub>), with possessions and both PPPs supplied by the caller. The naive total (sum of scoring averages) is kept beside it so the difference is visible.</td><td>No &mdash; no authorised possessions or PPP feed.</td><td><code>[NO INPUT]</code>; <code>engine/totals.py</code> has no default pace or efficiency.</td><td><a class="source-link" href="https://www.nba.com/stats/help/glossary" target="_blank" rel="noopener noreferrer">NBA Stats glossary</a></td></tr>
+              <tr><td><strong>Team ratings, as printed</strong></td><td>All 30 teams&rsquo; OffRtg, DefRtg, NetRtg and PACE were read from the three official team-stat pages on 2026-11-16 and stored with provenance. They are <em>not</em> consumed by any model.</td><td>No &mdash; rights gate G0.</td><td><code>data/snapshots/team-stats-2026-11-16.json</code> records 30 rows and the two consistency rules that were checked.</td><td><a class="source-link" href="https://www.nba.com/stats/teams/advanced" target="_blank" rel="noopener noreferrer">Teams Advanced</a><br><a class="source-link" href="https://www.nba.com/stats/teams/traditional" target="_blank" rel="noopener noreferrer">Teams Traditional</a></td></tr>
+              <tr><td><strong>Luck z-score</strong></td><td>z = (observed wins &minus; model-expected wins) &divide; &radic;expected variance, per team.</td><td>No &mdash; no forecast history exists to form an expectation.</td><td><code>[NO BASELINE]</code>; <code>engine/luck.py</code> refuses rather than assuming .500, and the band must be registered.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/luck.py" target="_blank" rel="noopener noreferrer">engine/luck.py</a></td></tr>
+              <tr><td><strong>Market-anchored prior</strong></td><td>blend = w<sub>model</sub> &times; model + w<sub>close</sub> &times; closing, with the weights measured by out-of-sample log loss.</td><td>No &mdash; no licensed closing prices, so no weights.</td><td><code>[GATED]</code>; <code>engine/markets.py</code> returns the unanchored model line with a code rather than a guessed weight.</td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA Terms of Use §9(ii)</a></td></tr>
+              <tr><td><strong>Parlay price</strong></td><td>Joint probability through a Gaussian copula with a measured &rho;, printed beside the naive product.</td><td>No &mdash; &rho; is unmeasured.</td><td><code>[NO INPUT]</code>; <code>engine/parlay.py</code> never prices a combo unless the matrix is supplied.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/parlay.py" target="_blank" rel="noopener noreferrer">engine/parlay.py</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section two-column" aria-label="What the model would produce and what blocks it">
+        <article class="panel">
+          <h2>What one game row would carry, once the gates clear</h2>
+          <ol>
+            <li>Estimator A margin, estimator B margin and the absolute gap as the headline.</li>
+            <li>The registered band label, or <code>UNBANDED</code>.</li>
+            <li>Total as possessions &times; PPP, with the naive total printed beside it.</li>
+            <li>Rest, back-to-back and 3-in-4 from the official schedule.</li>
+            <li>Injury revision time and retrieval time, and the rotation availability counts.</li>
+            <li>Home-court points from the measured rate, flagged <em>derived</em>.</li>
+          </ol>
+          <p>And never: a price, a stake, an edge or a pick. Those are on the <a href="line-origination.html">bet surface</a>, behind the gate.</p>
+        </article>
+        <article class="panel">
+          <h2>What blocks it, in order</h2>
+          <ul>
+            <li><strong>G0 rights.</strong> NBA Terms &sect;9(ii) bars use of NBA Statistics in connection with gambling, including legal gambling.</li>
+            <li><strong>Authorised ledger.</strong> No historical game, possession or lineup feed is contracted.</li>
+            <li><strong>Pre-registration.</strong> No strategy file is frozen, so no threshold or band exists.</li>
+            <li><strong>Out-of-sample validation.</strong> Nothing has been scored on a held-out window.</li>
+          </ul>
+          <p><a href="review.html">All flags &rarr;</a> &middot; <a href="questions.html">Decision register &rarr;</a></p>
+        </article>
+      </section>
+      <footer class="footer"><p>Method and refusals only. No forecast, price, stake or pick is published.</p><p><a href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/engine.md" target="_blank" rel="noopener noreferrer">Engine documentation ↗</a></p></footer>
+    </main>
+  </div>
+</div>
+</body>
+</html>
