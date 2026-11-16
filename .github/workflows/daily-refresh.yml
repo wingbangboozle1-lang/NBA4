@@ -63,10 +63,39 @@ jobs:
       - name: Run the refresh gates
         id: gates
         continue-on-error: true
+        # shell: bash => `bash --noprofile --norc -eo pipefail {0}`. Without the
+        # explicit shell, GitHub's default is `bash -e {0}` and the `tee` below
+        # would swallow the script's exit code (a false green was caught in
+        # review on 2026-11-16 and this line is the fix).
+        shell: bash
         run: |
           python3 scripts/scheduled_refresh.py \
             --mode "${{ github.event.inputs.mode || 'gates' }}" \
             --json run-record.json | tee refresh-out.txt
+
+      # Gate results as check-run annotations so they are readable through the
+      # GitHub API even when the raw log/artifact hosts are unreachable from a
+      # restricted client.
+      - name: Publish gate annotations
+        if: always()
+        run: |
+          if [ -f run-record.json ]; then
+            python3 - <<'PY'
+          import json
+          record = json.load(open("run-record.json"))
+          summary = record["summary"]
+          failed = ",".join(summary["failed"]) or "none"
+          print(
+              f"::notice title=scheduled_refresh {record['mode']}::"
+              f"gates {summary['gates_passed']}/{summary['gates_total']} passed; "
+              f"failed={failed}; rebuild_allowed={summary['rebuild_allowed']}"
+          )
+          for gate in record["gates"]:
+              if gate["status"] == "FAIL":
+                  detail = gate["detail"].replace("\n", " ")[:300]
+                  print(f"::error title={gate['gate']} ({gate['phase']})::{detail}")
+          PY
+          fi
 
       - name: Publish the run record to the job summary
         if: always()
