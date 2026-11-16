@@ -1,0 +1,1339 @@
+{
+ "schema": "player-gamelogs-1",
+ "snapshot_id": "player-gamelogs-2026-11-14_to_2026-11-15",
+ "kind": "per-player game log capture (dated attributed observations)",
+ "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_09_15AM.pdf",
+ "source_document_header": "Injury Report: 11/16/26 09:15 AM (roster anchor) + five official NBA gamebooks of 2026-11-14 (CHI@MIN, DAL@CLE, BKN@MEM, DET@MIA, DEN@NOP) - each game-log row cites its own gamebook in source_url/source_label",
+ "fetched_at_utc": "2026-11-16T14:41:00Z",
+ "extraction_tool": "manual verbatim transcription from gamebook PDF chunk text; verified by scripts/build_gamelogs.py (mirror check against the injury file of record)",
+ "observation_window": {
+  "from_date": "2026-11-14",
+  "to_date": "2026-11-15"
+ },
+ "generated_at_utc": "2026-11-16T15:55:00Z",
+ "purpose": "One dated, attributed observation row per player per game in the window, captured verbatim from the official gamebooks (played lines or the printed inactive/DNP/DND designation), for at least the players listed on the newest injury report. These rows are evidence observations with row-level official links, NOT betting inputs: no projection, availability probability, minutes model or pick is derived from them (rights gate G0 and stances D-01/IR-T4 stand).",
+ "injury_report": {
+  "file": "injuries-2026-11-16-0915am.json",
+  "revision_label": "Injury Report: 11/16/26 09:15 AM ET",
+  "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_09_15AM.pdf",
+  "players_listed": 57
+ },
+ "games_read": [
+  {
+   "date": "2026-11-14",
+   "matchup": "CHI@MIN",
+   "game_id": "0022600235",
+   "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_CHIMIN_book.pdf",
+   "source_label": "Official NBA gamebook, CHI@MIN 2026-11-14 (box score + inactive list)"
+  },
+  {
+   "date": "2026-11-14",
+   "matchup": "DAL@CLE",
+   "game_id": "0022600232",
+   "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DALCLE_book.pdf",
+   "source_label": "Official NBA gamebook, DAL@CLE 2026-11-14 (box score + inactive list)"
+  },
+  {
+   "date": "2026-11-14",
+   "matchup": "BKN@MEM",
+   "game_id": "0022600234",
+   "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_BKNMEM_book.pdf",
+   "source_label": "Official NBA gamebook, BKN@MEM 2026-11-14 (box score + inactive list)"
+  },
+  {
+   "date": "2026-11-14",
+   "matchup": "DET@MIA",
+   "game_id": "0022600233",
+   "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DETMIA_book.pdf",
+   "source_label": "Official NBA gamebook, DET@MIA 2026-11-14 (box score + inactive list)"
+  },
+  {
+   "date": "2026-11-14",
+   "matchup": "DEN@NOP",
+   "game_id": "0022600231",
+   "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DENNOP_book.pdf",
+   "source_label": "Official NBA gamebook, DEN@NOP 2026-11-14 (box score + inactive list)"
+  }
+ ],
+ "games_read_note": "chunk 0 of each gamebook prints both teams' full-game box score and the inactive lists; every captured value comes from that chunk read on 2026-11-16. No 2026-11-15 book is needed: none of the report's player rows belongs to a team that played on 11/15 (Philadelphia's PHI@BKN rows are NOT YET SUBMITTED team rows, not player rows).",
+ "players": [
+  {
+   "report_name": "Awaka, Tobe",
+   "report_team_cell": "Chicago Bulls",
+   "report_team": "Chicago Bulls",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Disc Irritation",
+   "report_block": "CHI@CLE",
+   "report_row": 46,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600235",
+     "team_printed_in_book": "Chicago Bulls",
+     "opponent": "Minnesota Timberwolves",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_CHIMIN_book.pdf",
+     "source_label": "Official NBA gamebook, CHI@MIN 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Bulls - Awaka (Injury/Illness - Disc Irritation)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Robinson, Orlando",
+   "report_team_cell": "Chicago Bulls",
+   "report_team": "Chicago Bulls",
+   "report_status": "Out",
+   "report_reason": "G League - On Assignment",
+   "report_block": "CHI@CLE",
+   "report_row": 47,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600235",
+     "team_printed_in_book": "Chicago Bulls",
+     "opponent": "Minnesota Timberwolves",
+     "designation": "dnp",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_CHIMIN_book.pdf",
+     "source_label": "Official NBA gamebook, CHI@MIN 2026-11-14 (box score + inactive list)",
+     "designation_printed": "00 Orlando Robinson - DNP - Coach's Decision",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Sellers, Jaylin",
+   "report_team_cell": "Chicago Bulls",
+   "report_team": "Chicago Bulls",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "CHI@CLE",
+   "report_row": 48,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600235",
+     "team_printed_in_book": "Chicago Bulls",
+     "opponent": "Minnesota Timberwolves",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_CHIMIN_book.pdf",
+     "source_label": "Official NBA gamebook, CHI@MIN 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Bulls - Sellers (G League - Two-Way)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Smith, Jalen",
+   "report_team_cell": "Chicago Bulls",
+   "report_team": "Chicago Bulls",
+   "report_status": "Questionable",
+   "report_reason": "Injury/Illness - Left Finger Sprain",
+   "report_block": "CHI@CLE",
+   "report_row": 49,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600235",
+     "team_printed_in_book": "Chicago Bulls",
+     "opponent": "Minnesota Timberwolves",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_CHIMIN_book.pdf",
+     "source_label": "Official NBA gamebook, CHI@MIN 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Bulls - Smith (Injury/Illness - Left Finger Sprain)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Wilson, Caleb",
+   "report_team_cell": "Chicago Bulls",
+   "report_team": "Chicago Bulls",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Metacarpal Fracture",
+   "report_block": "CHI@CLE",
+   "report_row": 50,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600235",
+     "team_printed_in_book": "Chicago Bulls",
+     "opponent": "Minnesota Timberwolves",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_CHIMIN_book.pdf",
+     "source_label": "Official NBA gamebook, CHI@MIN 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Bulls - Wilson (Injury/Illness - Right Metacarpal Fracture)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Diop, Khalifa",
+   "report_team_cell": "Cleveland Cavaliers",
+   "report_team": "Cleveland Cavaliers",
+   "report_status": "Out",
+   "report_reason": "G League - On Assignment",
+   "report_block": "CHI@CLE",
+   "report_row": 2,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600232",
+     "team_printed_in_book": "Cleveland Cavaliers",
+     "opponent": "Dallas Mavericks",
+     "designation": "dnp",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DALCLE_book.pdf",
+     "source_label": "Official NBA gamebook, DAL@CLE 2026-11-14 (box score + inactive list)",
+     "designation_printed": "18 Khalifa Diop - DNP - Coach's Decision",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Merrill, Sam",
+   "report_team_cell": "Cleveland Cavaliers",
+   "report_team": "Cleveland Cavaliers",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Elbow Injury Management",
+   "report_block": "CHI@CLE",
+   "report_row": 3,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600232",
+     "team_printed_in_book": "Cleveland Cavaliers",
+     "opponent": "Dallas Mavericks",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DALCLE_book.pdf",
+     "source_label": "Official NBA gamebook, DAL@CLE 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Cavaliers - Merrill (Injury/Illness - Right Hamstring Injury Management)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Mobley, Evan",
+   "report_team_cell": "Cleveland Cavaliers",
+   "report_team": "Cleveland Cavaliers",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Great Toe Sprain",
+   "report_block": "CHI@CLE",
+   "report_row": 4,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600232",
+     "team_printed_in_book": "Cleveland Cavaliers",
+     "opponent": "Dallas Mavericks",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DALCLE_book.pdf",
+     "source_label": "Official NBA gamebook, DAL@CLE 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Cavaliers - Mobely",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "attribution_note": "the gamebook inactive list prints the name as 'Mobely'; the report prints 'Mobley, Evan' - both spellings kept as printed (flag SP-01)"
+    }
+   ]
+  },
+  {
+   "report_name": "Tomlin, Nae'Qwan",
+   "report_team_cell": "Cleveland Cavaliers",
+   "report_team": "Cleveland Cavaliers",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Low Back Stress Reaction",
+   "report_block": "CHI@CLE",
+   "report_row": 5,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600232",
+     "team_printed_in_book": "Cleveland Cavaliers",
+     "opponent": "Dallas Mavericks",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DALCLE_book.pdf",
+     "source_label": "Official NBA gamebook, DAL@CLE 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Cavaliers - Tomlin",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Tyson, Jaylon",
+   "report_team_cell": "Cleveland Cavaliers",
+   "report_team": "Cleveland Cavaliers",
+   "report_status": "Questionable",
+   "report_reason": "Injury/Illness - Right Ankle Injury Management",
+   "report_block": "CHI@CLE",
+   "report_row": 6,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600232",
+     "team_printed_in_book": "Cleveland Cavaliers",
+     "opponent": "Dallas Mavericks",
+     "designation": "played",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DALCLE_book.pdf",
+     "source_label": "Official NBA gamebook, DAL@CLE 2026-11-14 (box score + inactive list)",
+     "min_printed": "33:37",
+     "pts_printed": "18",
+     "reb_printed": "4",
+     "ast_printed": "4",
+     "line_printed": "20 Jaylon Tyson | F | 33:37 | 5-13 FG | 3-7 3P | 5-5 FT | 0 OR | 4 DR | 4 TOT | 4 A | 18 PTS"
+    }
+   ]
+  },
+  {
+   "report_name": "Udeh, Jr., Ernest",
+   "report_team_cell": "Cleveland Cavaliers",
+   "report_team": "Cleveland Cavaliers",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "CHI@CLE",
+   "report_row": 7,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600232",
+     "team_printed_in_book": "Cleveland Cavaliers",
+     "opponent": "Dallas Mavericks",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DALCLE_book.pdf",
+     "source_label": "Official NBA gamebook, DAL@CLE 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Cavaliers - Udeh Jr.",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Watson, Peyton",
+   "report_team_cell": "Cleveland Cavaliers",
+   "report_team": "Cleveland Cavaliers",
+   "report_status": "Questionable",
+   "report_reason": "Injury/Illness - Right Abdominal Soreness",
+   "report_block": "CHI@CLE",
+   "report_row": 8,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600232",
+     "team_printed_in_book": "Cleveland Cavaliers",
+     "opponent": "Dallas Mavericks",
+     "designation": "dnd",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DALCLE_book.pdf",
+     "source_label": "Official NBA gamebook, DAL@CLE 2026-11-14 (box score + inactive list)",
+     "designation_printed": "8 Peyton Watson | DND -- Right Hamstring Management",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Edey, Zach",
+   "report_team_cell": "Memphis Grizzlies",
+   "report_team": "Memphis Grizzlies",
+   "report_status": "Questionable",
+   "report_reason": "Injury/Illness - Left Ankle Injury Management",
+   "report_block": "MEM@WAS",
+   "report_row": 16,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600234",
+     "team_printed_in_book": "Memphis Grizzlies",
+     "opponent": "Brooklyn Nets",
+     "designation": "dnd",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_BKNMEM_book.pdf",
+     "source_label": "Official NBA gamebook, BKN@MEM 2026-11-14 (box score + inactive list)",
+     "designation_printed": "14 Zach Edey | DND - Injury/Illness - Left Ankle Injury Management",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Jackson, GG",
+   "report_team_cell": "Memphis Grizzlies",
+   "report_team": "Memphis Grizzlies",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Foot Injury",
+   "report_block": "MEM@WAS",
+   "report_row": 17,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600234",
+     "team_printed_in_book": "Memphis Grizzlies",
+     "opponent": "Brooklyn Nets",
+     "designation": "played",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_BKNMEM_book.pdf",
+     "source_label": "Official NBA gamebook, BKN@MEM 2026-11-14 (box score + inactive list)",
+     "min_printed": "02:52",
+     "pts_printed": "3",
+     "reb_printed": "0",
+     "ast_printed": "0",
+     "line_printed": "45 GG Jackson | 02:52 | 1-1 FG | 1-1 3P | 0-0 FT | 0 OR | 0 DR | 0 TOT | 0 A | 3 PTS"
+    }
+   ]
+  },
+  {
+   "report_name": "Jerome, Ty",
+   "report_team_cell": "__lost__",
+   "report_team": null,
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Hip Soreness",
+   "report_block": "MEM@WAS",
+   "report_row": 18,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600234",
+     "team_printed_in_book": "Memphis Grizzlies",
+     "opponent": "Brooklyn Nets",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_BKNMEM_book.pdf",
+     "source_label": "Official NBA gamebook, BKN@MEM 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Grizzlies - Jerome (Injury/Illness - Right Hip Soreness)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "attribution_note": "the injury report row lost its team cell at a PDF page break and stays blank there; this game-log row's team comes from the gamebook's own team header, which prints the player"
+    }
+   ],
+   "report_team_flag": "matchup/team cells not printed on this row (PDF page break); no value was inferred",
+   "report_row_flag": "team cell lost at PDF page break; the row continues the MEM@WAS block between printed team rows, but the team is not asserted"
+  },
+  {
+   "report_name": "Pippen Jr., Scotty",
+   "report_team_cell": "__lost__",
+   "report_team": null,
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Lumbar Disc Herniation",
+   "report_block": "MEM@WAS",
+   "report_row": 19,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600234",
+     "team_printed_in_book": "Memphis Grizzlies",
+     "opponent": "Brooklyn Nets",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_BKNMEM_book.pdf",
+     "source_label": "Official NBA gamebook, BKN@MEM 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Grizzlies - Pippen Jr. (Injury/Illness - Lumbar Disc Herniation)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "attribution_note": "the injury report row lost its team cell at a PDF page break and stays blank there; this game-log row's team comes from the gamebook's own team header, which prints the player"
+    }
+   ],
+   "report_team_flag": "matchup/team cells not printed on this row (PDF page break); no value was inferred",
+   "report_row_flag": "team cell lost at PDF page break; the row continues the MEM@WAS block between printed team rows, but the team is not asserted"
+  },
+  {
+   "report_name": "Post, Quinten",
+   "report_team_cell": "__lost__",
+   "report_team": null,
+   "report_status": "Questionable",
+   "report_reason": "Injury/Illness - Concussion Protocol",
+   "report_block": "MEM@WAS",
+   "report_row": 20,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600234",
+     "team_printed_in_book": "Memphis Grizzlies",
+     "opponent": "Brooklyn Nets",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_BKNMEM_book.pdf",
+     "source_label": "Official NBA gamebook, BKN@MEM 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Grizzlies - Post (Injury/Illness - Concussion Protocol)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "attribution_note": "the injury report row lost its team cell at a PDF page break and stays blank there; this game-log row's team comes from the gamebook's own team header, which prints the player"
+    }
+   ],
+   "report_team_flag": "matchup/team cells not printed on this row (PDF page break); no value was inferred",
+   "report_row_flag": "team cell lost at PDF page break; the row continues the MEM@WAS block between printed team rows, but the team is not asserted"
+  },
+  {
+   "report_name": "Saunders, Richie",
+   "report_team_cell": "__lost__",
+   "report_team": null,
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Knee Surgery",
+   "report_block": "MEM@WAS",
+   "report_row": 21,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600234",
+     "team_printed_in_book": "Memphis Grizzlies",
+     "opponent": "Brooklyn Nets",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_BKNMEM_book.pdf",
+     "source_label": "Official NBA gamebook, BKN@MEM 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Grizzlies - Saunders (Injury/Illness - Right Knee Surgery)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "attribution_note": "the injury report row lost its team cell at a PDF page break and stays blank there; this game-log row's team comes from the gamebook's own team header, which prints the player"
+    }
+   ],
+   "report_team_flag": "matchup/team cells not printed on this row (PDF page break); no value was inferred",
+   "report_row_flag": "team cell lost at PDF page break; the row continues the MEM@WAS block between printed team rows, but the team is not asserted"
+  },
+  {
+   "report_name": "Stewart, Isaiah",
+   "report_team_cell": "__lost__",
+   "report_team": null,
+   "report_status": "Questionable",
+   "report_reason": "Injury/Illness - Illness",
+   "report_block": "MEM@WAS",
+   "report_row": 22,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600234",
+     "team_printed_in_book": "Memphis Grizzlies",
+     "opponent": "Brooklyn Nets",
+     "designation": "played",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_BKNMEM_book.pdf",
+     "source_label": "Official NBA gamebook, BKN@MEM 2026-11-14 (box score + inactive list)",
+     "min_printed": "15:09",
+     "pts_printed": "11",
+     "reb_printed": "3",
+     "ast_printed": "3",
+     "line_printed": "28 Isaiah Stewart | C | 15:09 | 5-11 FG | 0-4 3P | 1-2 FT | 0 OR | 3 DR | 3 TOT | 3 A | 11 PTS",
+     "attribution_note": "the injury report row lost its team cell at a PDF page break and stays blank there; this game-log row's team comes from the gamebook's own team header, which prints the player"
+    }
+   ],
+   "report_team_flag": "matchup/team cells not printed on this row (PDF page break); no value was inferred",
+   "report_row_flag": "team cell lost at PDF page break; the row continues the MEM@WAS block between printed team rows, but the team is not asserted"
+  },
+  {
+   "report_name": "Goldin, Vladislav",
+   "report_team_cell": "Miami Heat",
+   "report_team": "Miami Heat",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "HOU@MIA",
+   "report_row": 28,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600233",
+     "team_printed_in_book": "Miami Heat",
+     "opponent": "Detroit Pistons",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DETMIA_book.pdf",
+     "source_label": "Official NBA gamebook, DET@MIA 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Heat - Goldin (G League - Two-Way)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Larsson, Pelle",
+   "report_team_cell": "Miami Heat",
+   "report_team": "Miami Heat",
+   "report_status": "Questionable",
+   "report_reason": "Injury/Illness - Illness",
+   "report_block": "HOU@MIA",
+   "report_row": 29,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600233",
+     "team_printed_in_book": "Miami Heat",
+     "opponent": "Detroit Pistons",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DETMIA_book.pdf",
+     "source_label": "Official NBA gamebook, DET@MIA 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Heat - Larsson (Injury/Illness - Illness )",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Thompson, Klay",
+   "report_team_cell": "Miami Heat",
+   "report_team": "Miami Heat",
+   "report_status": "Available",
+   "report_reason": "Injury/Illness - Left Ankle Sprain",
+   "report_block": "HOU@MIA",
+   "report_row": 30,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600233",
+     "team_printed_in_book": "Miami Heat",
+     "opponent": "Detroit Pistons",
+     "designation": "played",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DETMIA_book.pdf",
+     "source_label": "Official NBA gamebook, DET@MIA 2026-11-14 (box score + inactive list)",
+     "min_printed": "20:13",
+     "pts_printed": "26",
+     "reb_printed": "1",
+     "ast_printed": "4",
+     "line_printed": "11 Klay Thompson | F | 20:13 | 10-17 FG | 6-11 3P | 0-0 FT | 0 OR | 1 DR | 1 TOT | 4 A | 26 PTS"
+    }
+   ]
+  },
+  {
+   "report_name": "Bilodeau, Tyler",
+   "report_team_cell": "Brooklyn Nets",
+   "report_team": "Brooklyn Nets",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "PHI@BKN",
+   "report_row": 41,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600234",
+     "team_printed_in_book": "Brooklyn Nets",
+     "opponent": "Memphis Grizzlies",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_BKNMEM_book.pdf",
+     "source_label": "Official NBA gamebook, BKN@MEM 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Nets - Bilodeau (G League - Two-Way)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Jefferson, Joshua",
+   "report_team_cell": "Brooklyn Nets",
+   "report_team": "Brooklyn Nets",
+   "report_status": "Out",
+   "report_reason": "G League - On Assignment",
+   "report_block": "PHI@BKN",
+   "report_row": 42,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600234",
+     "team_printed_in_book": "Brooklyn Nets",
+     "opponent": "Memphis Grizzlies",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_BKNMEM_book.pdf",
+     "source_label": "Official NBA gamebook, BKN@MEM 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Nets - Jefferson (G League - On Assignment)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Nelson, Grant",
+   "report_team_cell": "Brooklyn Nets",
+   "report_team": "Brooklyn Nets",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "PHI@BKN",
+   "report_row": 43,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600234",
+     "team_printed_in_book": "Brooklyn Nets",
+     "opponent": "Memphis Grizzlies",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_BKNMEM_book.pdf",
+     "source_label": "Official NBA gamebook, BKN@MEM 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Nets - Nelson (G League - Two-Way)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Powell, Drake",
+   "report_team_cell": "Brooklyn Nets",
+   "report_team": "Brooklyn Nets",
+   "report_status": "Out",
+   "report_reason": "G League - On Assignment",
+   "report_block": "PHI@BKN",
+   "report_row": 44,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600234",
+     "team_printed_in_book": "Brooklyn Nets",
+     "opponent": "Memphis Grizzlies",
+     "designation": "played",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_BKNMEM_book.pdf",
+     "source_label": "Official NBA gamebook, BKN@MEM 2026-11-14 (box score + inactive list)",
+     "min_printed": "01:46",
+     "pts_printed": "0",
+     "reb_printed": "0",
+     "ast_printed": "0",
+     "line_printed": "4 Drake Powell | 01:46 | 1-1 FG | 0-0 3P | 0-0 FT | 0 OR | 0 DR | 0 TOT | 0 A | 0 PTS"
+    }
+   ]
+  },
+  {
+   "report_name": "Saraf, Ben",
+   "report_team_cell": "Brooklyn Nets",
+   "report_team": "Brooklyn Nets",
+   "report_status": "Out",
+   "report_reason": "G League - On Assignment",
+   "report_block": "PHI@BKN",
+   "report_row": 45,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600234",
+     "team_printed_in_book": "Brooklyn Nets",
+     "opponent": "Memphis Grizzlies",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_BKNMEM_book.pdf",
+     "source_label": "Official NBA gamebook, BKN@MEM 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Nets - Saraf (G League - On Assignment)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Dia, Malik",
+   "report_team_cell": "New Orleans Pelicans",
+   "report_team": "New Orleans Pelicans",
+   "report_status": "Questionable",
+   "report_reason": "G League - Two-Way",
+   "report_block": "GSW@NOP",
+   "report_row": 51,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600231",
+     "team_printed_in_book": "New Orleans Pelicans",
+     "opponent": "Denver Nuggets",
+     "designation": "dnp",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DENNOP_book.pdf",
+     "source_label": "Official NBA gamebook, DEN@NOP 2026-11-14 (box score + inactive list)",
+     "designation_printed": "8 Malik Dia | DNP - Coach's Decision",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Mathurin, Bennedict",
+   "report_team_cell": "New Orleans Pelicans",
+   "report_team": "New Orleans Pelicans",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Plantar Fasciitis",
+   "report_block": "GSW@NOP",
+   "report_row": 52,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600231",
+     "team_printed_in_book": "New Orleans Pelicans",
+     "opponent": "Denver Nuggets",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DENNOP_book.pdf",
+     "source_label": "Official NBA gamebook, DEN@NOP 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Pelicans - Mathurin (Injury/Illness - Left Plantar Fasciitis)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "McGowens, Bryce",
+   "report_team_cell": "New Orleans Pelicans",
+   "report_team": "New Orleans Pelicans",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Elbow Infection",
+   "report_block": "GSW@NOP",
+   "report_row": 53,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600231",
+     "team_printed_in_book": "New Orleans Pelicans",
+     "opponent": "Denver Nuggets",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DENNOP_book.pdf",
+     "source_label": "Official NBA gamebook, DEN@NOP 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Pelicans - McGowens (Injury/Illness - Left Elbow Infection)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Murphy III, Trey",
+   "report_team_cell": "New Orleans Pelicans",
+   "report_team": "New Orleans Pelicans",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Bilateral Patellar Tendinopathy",
+   "report_block": "GSW@NOP",
+   "report_row": 54,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600231",
+     "team_printed_in_book": "New Orleans Pelicans",
+     "opponent": "Denver Nuggets",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DENNOP_book.pdf",
+     "source_label": "Official NBA gamebook, DEN@NOP 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Pelicans - Murphy III (Injury/Illness - Bilateral Patellar Tendinopathy)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Murray, Dejounte",
+   "report_team_cell": "New Orleans Pelicans",
+   "report_team": "New Orleans Pelicans",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Ankle Sprain",
+   "report_block": "GSW@NOP",
+   "report_row": 55,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600231",
+     "team_printed_in_book": "New Orleans Pelicans",
+     "opponent": "Denver Nuggets",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DENNOP_book.pdf",
+     "source_label": "Official NBA gamebook, DEN@NOP 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Pelicans - Murray (Injury/Illness - Left Ankle Sprain)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Pierre Jr., Jaron",
+   "report_team_cell": "New Orleans Pelicans",
+   "report_team": "New Orleans Pelicans",
+   "report_status": "Questionable",
+   "report_reason": "G League - Two-Way",
+   "report_block": "GSW@NOP",
+   "report_row": 56,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600231",
+     "team_printed_in_book": "New Orleans Pelicans",
+     "opponent": "Denver Nuggets",
+     "designation": "played",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DENNOP_book.pdf",
+     "source_label": "Official NBA gamebook, DEN@NOP 2026-11-14 (box score + inactive list)",
+     "min_printed": "23:18",
+     "pts_printed": "13",
+     "reb_printed": "2",
+     "ast_printed": "0",
+     "line_printed": "10 Jaron Pierre Jr. | 23:18 | 5-11 FG | 2-5 3P | 1-2 FT | 1 OR | 1 DR | 2 TOT | 0 A | 13 PTS"
+    }
+   ]
+  },
+  {
+   "report_name": "Reese, Julian",
+   "report_team_cell": "__lost__",
+   "report_team": null,
+   "report_status": "Questionable",
+   "report_reason": "G League - Two-Way",
+   "report_block": "GSW@NOP",
+   "report_row": 61,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600231",
+     "team_printed_in_book": "New Orleans Pelicans",
+     "opponent": "Denver Nuggets",
+     "designation": "dnp",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DENNOP_book.pdf",
+     "source_label": "Official NBA gamebook, DEN@NOP 2026-11-14 (box score + inactive list)",
+     "designation_printed": "13 Julian Reese | DNP - Coach's Decision",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "attribution_note": "the injury report row lost its team cell at a PDF page break and stays blank there; this game-log row's team comes from the gamebook's own team header, which prints the player"
+    }
+   ],
+   "report_team_flag": "matchup/team cells not printed on this row (PDF page break); no value was inferred",
+   "report_row_flag": "team cell lost at PDF page break; the row continues the GSW@NOP block between printed team rows, but the team is not asserted"
+  },
+  {
+   "report_name": "Watford, Trendon",
+   "report_team_cell": "__lost__",
+   "report_team": null,
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Ankle Sprain",
+   "report_block": "GSW@NOP",
+   "report_row": 62,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600231",
+     "team_printed_in_book": "New Orleans Pelicans",
+     "opponent": "Denver Nuggets",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DENNOP_book.pdf",
+     "source_label": "Official NBA gamebook, DEN@NOP 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Pelicans - Watford (Injury/Illness - Right Ankle Sprain)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "attribution_note": "the injury report row lost its team cell at a PDF page break and stays blank there; this game-log row's team comes from the gamebook's own team header, which prints the player"
+    }
+   ],
+   "report_team_flag": "matchup/team cells not printed on this row (PDF page break); no value was inferred",
+   "report_row_flag": "team cell lost at PDF page break; the row continues the GSW@NOP block between printed team rows, but the team is not asserted"
+  },
+  {
+   "report_name": "Holmes II, DaRon",
+   "report_team_cell": "Denver Nuggets",
+   "report_team": "Denver Nuggets",
+   "report_status": "Out",
+   "report_reason": "G League - On Assignment",
+   "report_block": "PHX@DEN",
+   "report_row": 65,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600231",
+     "team_printed_in_book": "Denver Nuggets",
+     "opponent": "New Orleans Pelicans",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DENNOP_book.pdf",
+     "source_label": "Official NBA gamebook, DEN@NOP 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Nuggets - Holmes II (G League - On Assignment)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Nembhard, Ryan",
+   "report_team_cell": "Denver Nuggets",
+   "report_team": "Denver Nuggets",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "PHX@DEN",
+   "report_row": 66,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600231",
+     "team_printed_in_book": "Denver Nuggets",
+     "opponent": "New Orleans Pelicans",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DENNOP_book.pdf",
+     "source_label": "Official NBA gamebook, DEN@NOP 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Nuggets - Nembhard (G League - Two-Way)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Strawther, Julian",
+   "report_team_cell": "Denver Nuggets",
+   "report_team": "Denver Nuggets",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Knee Sprain",
+   "report_block": "PHX@DEN",
+   "report_row": 67,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600231",
+     "team_printed_in_book": "Denver Nuggets",
+     "opponent": "New Orleans Pelicans",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DENNOP_book.pdf",
+     "source_label": "Official NBA gamebook, DEN@NOP 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Nuggets - Strawther (Injury/Illness - Left Knee Sprain)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Whitmore, Cam",
+   "report_team_cell": "Denver Nuggets",
+   "report_team": "Denver Nuggets",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "PHX@DEN",
+   "report_row": 68,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600231",
+     "team_printed_in_book": "Denver Nuggets",
+     "opponent": "New Orleans Pelicans",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DENNOP_book.pdf",
+     "source_label": "Official NBA gamebook, DEN@NOP 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Nuggets - Whitmore (G League - Two-Way)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Beringer, Joan",
+   "report_team_cell": "Minnesota Timberwolves",
+   "report_team": "Minnesota Timberwolves",
+   "report_status": "Available",
+   "report_reason": "Injury/Illness - Face Mask",
+   "report_block": "POR@MIN",
+   "report_row": 57,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600235",
+     "team_printed_in_book": "Minnesota Timberwolves",
+     "opponent": "Chicago Bulls",
+     "designation": "played",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_CHIMIN_book.pdf",
+     "source_label": "Official NBA gamebook, CHI@MIN 2026-11-14 (box score + inactive list)",
+     "min_printed": "12:39",
+     "pts_printed": "2",
+     "reb_printed": "5",
+     "ast_printed": "0",
+     "line_printed": "19 Joan Beringer | 12:39 | 1-1 FG | 0-0 3P | 0-2 FT | 1 OR | 4 DR | 5 TOT | 0 A | 2 PTS"
+    }
+   ]
+  },
+  {
+   "report_name": "Clark, Jaylen",
+   "report_team_cell": "Minnesota Timberwolves",
+   "report_team": "Minnesota Timberwolves",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Hamstring Strain",
+   "report_block": "POR@MIN",
+   "report_row": 58,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600235",
+     "team_printed_in_book": "Minnesota Timberwolves",
+     "opponent": "Chicago Bulls",
+     "designation": "played",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_CHIMIN_book.pdf",
+     "source_label": "Official NBA gamebook, CHI@MIN 2026-11-14 (box score + inactive list)",
+     "min_printed": "03:21",
+     "pts_printed": "0",
+     "reb_printed": "0",
+     "ast_printed": "0",
+     "line_printed": "7 Jaylen Clark | 03:21 | 0-1 FG | 0-1 3P | 0-0 FT | 0 OR | 0 DR | 0 TOT | 0 A | 0 PTS"
+    }
+   ]
+  },
+  {
+   "report_name": "DiVincenzo, Donte",
+   "report_team_cell": "Minnesota Timberwolves",
+   "report_team": "Minnesota Timberwolves",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Achilles Tendon Repair / Surgery",
+   "report_block": "POR@MIN",
+   "report_row": 59,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600235",
+     "team_printed_in_book": "Minnesota Timberwolves",
+     "opponent": "Chicago Bulls",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_CHIMIN_book.pdf",
+     "source_label": "Official NBA gamebook, CHI@MIN 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Timberwolves - DiVincenzo (Injury/Illness - Right Achilles Tendon Repair / Surgery)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Edwards, Anthony",
+   "report_team_cell": "Minnesota Timberwolves",
+   "report_team": "Minnesota Timberwolves",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Knee Arthroscopy",
+   "report_block": "POR@MIN",
+   "report_row": 60,
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600235",
+     "team_printed_in_book": "Minnesota Timberwolves",
+     "opponent": "Chicago Bulls",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_CHIMIN_book.pdf",
+     "source_label": "Official NBA gamebook, CHI@MIN 2026-11-14 (box score + inactive list)",
+     "designation_printed": "Inactive: Timberwolves - Edwards (Injury/Illness - Right Knee Arthroscopy)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null
+    }
+   ]
+  },
+  {
+   "report_name": "Banchero, Paolo",
+   "report_team_cell": "Orlando Magic",
+   "report_team": "Orlando Magic",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right High Ankle Sprain",
+   "report_block": "ORL@BOS",
+   "report_row": 45,
+   "games": [],
+   "gap": "team idle on both 2026-11-14 and 2026-11-15; no game in the observation window. The previous games (2026-11-13) are outside this cycle's gamebook captures - recorded as a window gap, not filled."
+  },
+  {
+   "report_name": "Isaac, Jonathan",
+   "report_team_cell": "Orlando Magic",
+   "report_team": "Orlando Magic",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Knee Injury Management",
+   "report_block": "ORL@BOS",
+   "report_row": 46,
+   "games": [],
+   "gap": "team idle on both 2026-11-14 and 2026-11-15; no game in the observation window. The previous games (2026-11-13) are outside this cycle's gamebook captures - recorded as a window gap, not filled."
+  },
+  {
+   "report_name": "Nelson, Izaiyah",
+   "report_team_cell": "Orlando Magic",
+   "report_team": "Orlando Magic",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Ankle Injury Recovery",
+   "report_block": "ORL@BOS",
+   "report_row": 47,
+   "games": [],
+   "gap": "team idle on both 2026-11-14 and 2026-11-15; no game in the observation window. The previous games (2026-11-13) are outside this cycle's gamebook captures - recorded as a window gap, not filled."
+  },
+  {
+   "report_name": "Penda, Noah",
+   "report_team_cell": "Orlando Magic",
+   "report_team": "Orlando Magic",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Partially Torn Hamstring",
+   "report_block": "ORL@BOS",
+   "report_row": 48,
+   "games": [],
+   "gap": "team idle on both 2026-11-14 and 2026-11-15; no game in the observation window. The previous games (2026-11-13) are outside this cycle's gamebook captures - recorded as a window gap, not filled."
+  },
+  {
+   "report_name": "Butler III, Jimmy",
+   "report_team_cell": "Golden State Warriors",
+   "report_team": "Golden State Warriors",
+   "report_status": "",
+   "report_reason": "Injury/Illness - Right ACL Repair / Surgery",
+   "report_block": "GSW@NOP",
+   "report_row": 63,
+   "games": [],
+   "gap": "team idle on both 2026-11-14 and 2026-11-15; no game in the observation window. The previous games (2026-11-13) are outside this cycle's gamebook captures - recorded as a window gap, not filled.",
+   "report_row_flag": "the document prints no status cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
+  },
+  {
+   "report_name": "Curry, Stephen",
+   "report_team_cell": "Golden State Warriors",
+   "report_team": "Golden State Warriors",
+   "report_status": "Out",
+   "report_reason": "",
+   "report_block": "GSW@NOP",
+   "report_row": 64,
+   "games": [],
+   "gap": "team idle on both 2026-11-14 and 2026-11-15; no game in the observation window. The previous games (2026-11-13) are outside this cycle's gamebook captures - recorded as a window gap, not filled.",
+   "report_row_flag": "the document prints no reason cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
+  },
+  {
+   "report_name": "Moody, Moses",
+   "report_team_cell": "Golden State Warriors",
+   "report_team": "Golden State Warriors",
+   "report_status": "Out",
+   "report_reason": "",
+   "report_block": "GSW@NOP",
+   "report_row": 65,
+   "games": [],
+   "gap": "team idle on both 2026-11-14 and 2026-11-15; no game in the observation window. The previous games (2026-11-13) are outside this cycle's gamebook captures - recorded as a window gap, not filled.",
+   "report_row_flag": "the document prints no reason cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
+  },
+  {
+   "report_name": "Porzingis, Kristaps",
+   "report_team_cell": "Golden State Warriors",
+   "report_team": "Golden State Warriors",
+   "report_status": "Out",
+   "report_reason": "",
+   "report_block": "GSW@NOP",
+   "report_row": 66,
+   "games": [],
+   "gap": "team idle on both 2026-11-14 and 2026-11-15; no game in the observation window. The previous games (2026-11-13) are outside this cycle's gamebook captures - recorded as a window gap, not filled.",
+   "report_row_flag": "the document prints no reason cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
+  },
+  {
+   "report_name": "Santos, Gui",
+   "report_team_cell": "Golden State Warriors",
+   "report_team": "Golden State Warriors",
+   "report_status": "Questionable",
+   "report_reason": "",
+   "report_block": "GSW@NOP",
+   "report_row": 67,
+   "games": [],
+   "gap": "team idle on both 2026-11-14 and 2026-11-15; no game in the observation window. The previous games (2026-11-13) are outside this cycle's gamebook captures - recorded as a window gap, not filled.",
+   "report_row_flag": "the document prints no reason cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
+  },
+  {
+   "report_name": "Williams, Brandon",
+   "report_team_cell": "Golden State Warriors",
+   "report_team": "Golden State Warriors",
+   "report_status": "Out",
+   "report_reason": "",
+   "report_block": "GSW@NOP",
+   "report_row": 68,
+   "games": [],
+   "gap": "team idle on both 2026-11-14 and 2026-11-15; no game in the observation window. The previous games (2026-11-13) are outside this cycle's gamebook captures - recorded as a window gap, not filled.",
+   "report_row_flag": "the document prints no reason cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
+  },
+  {
+   "report_name": "Krejci, Vit",
+   "report_team_cell": "Portland Trail Blazers",
+   "report_team": "Portland Trail Blazers",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Ankle Fracture",
+   "report_block": "POR@MIN",
+   "report_row": 51,
+   "games": [],
+   "gap": "team idle on both 2026-11-14 and 2026-11-15; no game in the observation window. The previous games (2026-11-13) are outside this cycle's gamebook captures - recorded as a window gap, not filled."
+  },
+  {
+   "report_name": "Morant, Ja",
+   "report_team_cell": "Portland Trail Blazers",
+   "report_team": "Portland Trail Blazers",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Hamstring Strain",
+   "report_block": "POR@MIN",
+   "report_row": 52,
+   "games": [],
+   "gap": "team idle on both 2026-11-14 and 2026-11-15; no game in the observation window. The previous games (2026-11-13) are outside this cycle's gamebook captures - recorded as a window gap, not filled."
+  },
+  {
+   "report_name": "Sharpe, Shaedon",
+   "report_team_cell": "Portland Trail Blazers",
+   "report_team": "Portland Trail Blazers",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Knee Surgery",
+   "report_block": "POR@MIN",
+   "report_row": 53,
+   "games": [],
+   "gap": "team idle on both 2026-11-14 and 2026-11-15; no game in the observation window. The previous games (2026-11-13) are outside this cycle's gamebook captures - recorded as a window gap, not filled."
+  },
+  {
+   "report_name": "Youngblood, Chris",
+   "report_team_cell": "Portland Trail Blazers",
+   "report_team": "Portland Trail Blazers",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Heel Contusion / Bone Bruise",
+   "report_block": "POR@MIN",
+   "report_row": 54,
+   "games": [],
+   "gap": "team idle on both 2026-11-14 and 2026-11-15; no game in the observation window. The previous games (2026-11-13) are outside this cycle's gamebook captures - recorded as a window gap, not filled."
+  }
+ ],
+ "counts": {
+  "players": 57,
+  "game_rows": 43,
+  "played": 8,
+  "inactive": 29,
+  "dnp": 4,
+  "dnd": 2,
+  "window_gap_players": 14,
+  "games_read": 5,
+  "players_with_a_game_in_window": 43
+ },
+ "refusals": [],
+ "extraction_notes": [
+  "report_status/report_reason are mirrored from data/snapshots/injuries-2026-11-16-0915am.json by (report_block, report_name) join at build time and were re-verified against it row for row (57/57); they are the report's printed cells, not this file's observations.",
+  "Verbatim rule: a player with a game in the window appears either with a printed stat line (MIN/PTS/REB/AST as printed strings; REB is the printed TOT column, AST the printed A column) or with the printed designation (Inactive list entry, DNP - Coach's Decision, DND -- ...). No value was computed or inferred.",
+  "Every row cites its own gamebook URL in source_url; game_id values are the ones recorded in data/snapshots/results-2026-11-14.json from the official game pages.",
+  "Name matching between the report's 'Last, First' print and the gamebook's 'First Last' print is by exact name tokens; suffixes (Jr., II, III) are kept as printed on both sides. One spelling variance surfaced: the gamebook inactive list prints 'Mobely' where the report prints 'Mobley, Evan' (flag SP-01); both spellings are kept as printed.",
+  "The 7 injury-report rows whose team cell was lost at a page break keep a blank team in the injury snapshot; here their game-log rows carry the team from the gamebook's own team header (attribution_note on each row). This does not repair the injury row.",
+  "Golden State block rows: Butler III prints a reason and no status; Curry/Moody/Porzingis/Santos/Williams print a status and no reason (one status-or-reason cell per row). The missing cells stay blank on both the report side and here.",
+  "The report prints 'Reese, Julian' and 'Watford, Trendon' among the GSW@NOP lost rows; the DEN@NOP gamebook prints 'Julian Reese' (DNP - Coach's Decision) and 'Watford' on the Pelicans inactive list with the same Right Ankle Sprain reason as the report row. Both rows are attributed to the Pelicans from the gamebook, not from the report."
+ ]
+}

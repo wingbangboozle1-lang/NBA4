@@ -26,6 +26,7 @@ These files are verbatim, dated extractions of **official NBA publications**, ke
 5. **Snapshots supersede.** A newer report invalidates an older one; each file keeps its own timestamp and is never relabelled "latest".
 6. **Derived files are generated, never hand-edited.** A file whose `kind` starts with `derived_` comes from `scripts/build_brief_data.py`; re-run that script instead of editing the JSON, and never edit the `.pipes` intermediate to make a number appear.
 7. **No model output.** No originated line, probability, price, pick, minute estimate or production impact is stored here. Those stay blank and flagged until the rights and validation gates pass.
+8. **Per-player game logs are observations, not inputs.** `player-gamelogs-*.json` files hold one dated, attributed row per injury-report player per game, captured verbatim from the official gamebooks (printed box line or printed designation). Mirrored injury-report cells must match the injury file of record (enforced by `scripts/build_gamelogs.py`); a lost team cell stays lost in the injury file even when the gamebook attributes the player. These rows feed no model, minutes estimate or pick (G0/D-01/IR-T4 stand).
 
 ## Reading and re-checking
 
