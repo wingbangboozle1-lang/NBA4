@@ -153,8 +153,9 @@ def render_slate() -> str:
                 "and no independent source confirms it. Flagged unverified.</span>"
             )
         tips = f'{game["tip_et_col1"]} / {game["tip_et_col2"]}'
+        tips_extra = ""
         if game.get("games_page_tip_et") and game.get("tip_disagreement"):
-            tips += f'<br><span class="muted">games page: {e(game["games_page_tip_et"])}</span>'
+            tips_extra = f'<br><span class="muted">games page: {e(game["games_page_tip_et"])}</span>'
         note = game.get("tip_disagreement") or game.get("note", "")
         reason_html = "<br>".join(e(r.split(":")[0]) for r in NO_PICK_REASONS)
         reason_titles = " · ".join(e(r) for r in NO_PICK_REASONS)
@@ -166,7 +167,7 @@ def render_slate() -> str:
         rows.append(
             "              <tr>"
             f'<td>{e(game["weekday"])} {e(game["date"])}</td>'
-            f"<td>{e(tips)}</td>"
+            f"<td>{e(tips)}{tips_extra}</td>"
             f"<td>{game_cell}"
             + (f'<br><span class="muted">{e(note)}</span>' if note else "")
             + "</td>"
