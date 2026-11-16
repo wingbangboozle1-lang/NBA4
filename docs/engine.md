@@ -123,7 +123,7 @@ this branch never built, and no page for them.
 ## Verification performed
 
 - `python3 -m unittest tests.test_estimators` — 10 additional synthetic tests pass for empirical home-rate anchoring, future exclusion, duplicate rejection, suppressed extremes, and disagreement-first output.
-- `python3 -m unittest tests.test_engine_models` — 43 tests, all passing (`python3 -m unittest discover -s tests -t .` runs all 300 across six suites: 47 in tests/test_engine.py, 43 in tests/test_engine_models.py, 17 in tests/test_snapshots.py, 10 in tests/test_estimators.py, 135 in tests/test_engine_requirements.py and 48 in tests/test_engine_brief_gaps.py) (schema rejection rules, ledger provenance enforcement, future-leak guard, min-sample gates, shrinkage direction, injury resolution, game-flow partition, Pearson/phi known values, bootstrap determinism, Brier/log-loss known values, chronological folds, horizon filter, NO PICK suppression, parlay dependence rule, selftest smoke).
+- `python3 -m unittest tests.test_engine_models` — 43 tests, all passing (`python3 -m unittest discover -s tests -t .` runs all 327 across seven suites: 47 in tests/test_engine.py, 43 in tests/test_engine_models.py, 17 in tests/test_snapshots.py, 10 in tests/test_estimators.py, 135 in tests/test_engine_requirements.py, 48 in tests/test_engine_brief_gaps.py and 27 in tests/test_scheduled_refresh.py) (schema rejection rules, ledger provenance enforcement, future-leak guard, min-sample gates, shrinkage direction, injury resolution, game-flow partition, Pearson/phi known values, bootstrap determinism, Brier/log-loss known values, chronological folds, horizon filter, NO PICK suppression, parlay dependence rule, selftest smoke).
 - `python3 -m engine.cli status` on the real repository state reports `NO AUTHORIZED INPUTS -> no lines, no picks` — the honest output the site mirrors.
 - Method statements in the module map were quote-checked against their official sources in [`docs/verification-log.md`](verification-log.md) (ML-01…ML-03, STAT-01…STAT-02, NBA-03…NBA-06).
 
@@ -164,7 +164,7 @@ only path that could hand a calibrated value to a line, and it is gated twice.
 The repository keeps **one flat public API** — `engine.<module>` for every
 module, `engine.__all__` listing both brief-gap implementation sets — and does
 not split into `engine/v1` / `engine/v2`, retire either side, or move names.
-Both sets are tested (300 tests, six suites), the two-set provenance is the
+Both sets are tested (327 tests, seven suites after the parallel scheduled-refresh suite merged), the two-set provenance is the
 board's own record (IR-T1), and the one formula that neared duplication
 (home-advantage points) is resolved by delegation
 (`homerate.for_ratings` → `ratings.home_advantage_from_win_rate`, with a

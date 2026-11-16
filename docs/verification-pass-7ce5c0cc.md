@@ -5,8 +5,10 @@ This log records every fetch of this pass, what was decided from it, and every
 correction made during the pass. Snapshot writers
 (`scripts/_gen_7ce5c0cc.py`, `scripts/_gen_7ce5c0cc_b.py`,
 `scripts/_gen_7ce5c0cc_c.py`, `scripts/_gen_7ce5c0cc_site.py`) name this file as
-their provenance record. Post-refresh count: **300 unit tests OK**, site check
-PASS (16 pages, 503 HTML data rows, 797 Markdown data rows).
+their provenance record. Post-refresh count on this branch: **300 unit tests OK**
+(47+43+17+10+135+48); after the parallel session's scheduled-refresh suite merged
+into the integration branch the total is **327 across seven suites**, site check
+PASS (16 pages, 517 HTML data rows, 831 Markdown data rows).
 
 ## 1. Fetches performed (2026-11-16, UTC times as recorded)
 
@@ -38,7 +40,7 @@ PASS (16 pages, 503 HTML data rows, 797 Markdown data rows).
 | 09:00 → 09:15 injury diff | 72→72 rows; 0 status/reason/team changes; 1 printing variance (Mathurin) | `scripts/_gen_7ce5c0cc.py` | [09:15 PDF](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_09_15AM.pdf) |
 | 11/15 results: 9 finals, winner = larger printed final | 9/9 | `scripts/_gen_7ce5c0cc_b.py` | [Games 11/15](https://www.nba.com/games?date=2026-11-15) |
 | Home-win rate from HOME splits | 102-94 = 0.5204 → +0.614 pts (PROPOSED, NOT APPLIED) | `scripts/_gen_7ce5c0cc_c.py` (NormalDist inverse) | [Standings](https://www.nba.com/standings) |
-| Engine suite after review fixes | 300 tests OK (47+43+17+10+135+48) | `python3 -m unittest discover -s tests -t .` | [Repo tests](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
+| Engine suite after review fixes | 300 tests OK on the branch (47+43+17+10+135+48); 327 across seven suites after the parallel scheduled-refresh suite merged | `python3 -m unittest discover -s tests -t .` | [Repo tests](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
 
 ## 3. Corrections made during the pass (transparently, before publication)
 

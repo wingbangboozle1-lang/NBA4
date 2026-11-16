@@ -135,8 +135,9 @@ into `engine/v1` / `engine/v2`, retire either side, or move names.
 
 Rationale, each point checkable in the tree:
 
-1. Both sets are tested and green (300 tests across six suites); a namespace
-   split would break imports in 300 tests, `engine/cli.py`, `engine/selftest.py`
+1. Both sets are tested and green (300 tests across six suites at review time;
+   327 across seven after the parallel scheduled-refresh suite merged); a namespace
+   split would break imports in every suite, `engine/cli.py`, `engine/selftest.py`
    and the docs for zero functional gain.
 2. The two sets are the record of two sessions' readings of the brief (IR-T1 on
    review.html); deleting either would erase provenance the board exists to keep.
