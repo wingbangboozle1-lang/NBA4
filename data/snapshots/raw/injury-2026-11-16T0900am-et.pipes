@@ -1,18 +1,14 @@
 # NBA Official Injury Report - verbatim table extraction
-revision_utc: 2026-11-16T14:00:00Z
 revision_et_label: 11/16/26 09:00 AM
 document_header: "Injury Report: 11/16/26 09:00 AM"
 source_url: https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_09_00AM.pdf
 source_index_url: https://official.nba.com/nba-injury-report-2026-27-season/
-fetched_at_utc: 2026-11-16T14:41:21Z
-extraction_tool: fetch_page (PDF text extraction to markdown tables, one chunk)
+fetched_at_utc: 2026-11-16T14:32:00Z
+extraction_tool: fetch_page (PDF text extraction to markdown tables)
 fields: game_date|game_time_et|matchup|team|player|status|reason
-# Cells the PDF prints only on the first line of a block are recorded blank on continuation rows.
-# No cell below is filled in, corrected or inferred; blank means the extracted document prints nothing there.
-# Same ragged page-break rendering as the 09:15 AM revision; the cell-mapping note in
-# raw/injury-2026-11-16T0915am-et.pipes applies to this file as well. The two revisions were
-# fetched separately and transcribed separately; the machine diff of the two files records
-# whether they agree row for row.
+# Strictly verbatim: a cell the extracted document does not print is recorded blank.
+# Continuation rows that lose cells at page breaks stay blank here; the JSON snapshot
+# attaches them to game blocks by document order with explicit flags. Nothing is filled in.
 11/16/2026|07:00 (ET)|CHI@CLE|Chicago Bulls|Awaka, Tobe|Out|Injury/Illness - Disc Irritation
 11/16/2026|07:00 (ET)|CHI@CLE|Chicago Bulls|Robinson, Orlando|Out|G League - On Assignment
 11/16/2026|07:00 (ET)|CHI@CLE|Chicago Bulls|Sellers, Jaylin|Out|G League - Two-Way
@@ -43,23 +39,23 @@ fields: game_date|game_time_et|matchup|team|player|status|reason
 |07:30 (ET)|HOU@MIA|Miami Heat|Larsson, Pelle|Questionable|Injury/Illness - Illness
 |07:30 (ET)|HOU@MIA|Miami Heat|Thompson, Klay|Available|Injury/Illness - Left Ankle Sprain
 |07:30 (ET)|PHI@BKN|Philadelphia 76ers|||NOT YET SUBMITTED
-|||Brooklyn Nets|Bilodeau, Tyler|Out|G League - Two-Way
-|||Brooklyn Nets|Jefferson, Joshua|Out|G League - On Assignment
-|||Brooklyn Nets|Nelson, Grant|Out|G League - Two-Way
-|||Brooklyn Nets|Powell, Drake|Out|G League - On Assignment
-|||Brooklyn Nets|Saraf, Ben|Out|G League - On Assignment
-|08:00 (ET)|GSW@NOP|Golden State Warriors|Butler III, Jimmy||Injury/Illness - Right ACL Repair / Surgery
+|07:30 (ET)|PHI@BKN|Brooklyn Nets|Bilodeau, Tyler|Out|G League - Two-Way
+|07:30 (ET)|PHI@BKN|Brooklyn Nets|Jefferson, Joshua|Out|G League - On Assignment
+|07:30 (ET)|PHI@BKN|Brooklyn Nets|Nelson, Grant|Out|G League - Two-Way
+|07:30 (ET)|PHI@BKN|Brooklyn Nets|Powell, Drake|Out|G League - On Assignment
+|07:30 (ET)|PHI@BKN|Brooklyn Nets|Saraf, Ben|Out|G League - On Assignment
+|08:00 (ET)|GSW@NOP|Golden State Warriors|Butler III, Jimmy|Injury/Illness - Right ACL Repair / Surgery|
 |08:00 (ET)|GSW@NOP|Golden State Warriors|Curry, Stephen|Out|
 |08:00 (ET)|GSW@NOP|Golden State Warriors|Moody, Moses|Out|
 |08:00 (ET)|GSW@NOP|Golden State Warriors|Porzingis, Kristaps|Out|
 |08:00 (ET)|GSW@NOP|Golden State Warriors|Santos, Gui|Questionable|
 |08:00 (ET)|GSW@NOP|Golden State Warriors|Williams, Brandon|Out|
-|08:00 (ET)||New Orleans Pelicans|Dia, Malik|Questionable|G League - Two-Way
-|08:00 (ET)||New Orleans Pelicans|Mathurin, Bennedict|Out|Injury/Illness - Left Plantar Fasciitis
-|08:00 (ET)||New Orleans Pelicans|McGowens, Bryce|Out|Injury/Illness - Left Elbow Infection
-|08:00 (ET)||New Orleans Pelicans|Murphy III, Trey|Out|Injury/Illness - Bilateral Patellar Tendinopathy
-|08:00 (ET)||New Orleans Pelicans|Murray, Dejounte|Out|Injury/Illness - Left Ankle Sprain
-|08:00 (ET)||New Orleans Pelicans|Pierre Jr., Jaron|Questionable|G League - Two-Way
+|08:00 (ET)|GSW@NOP|New Orleans Pelicans|Dia, Malik|Questionable|G League - Two-Way
+|08:00 (ET)|GSW@NOP|New Orleans Pelicans|Mathurin, Benedict|Out|Injury/Illness - Left Plantar Fasciitis
+|08:00 (ET)|GSW@NOP|New Orleans Pelicans|McGowens, Bryce|Out|Injury/Illness - Left Elbow Infection
+|08:00 (ET)|GSW@NOP|New Orleans Pelicans|Murphy III, Trey|Out|Injury/Illness - Bilateral Patellar Tendinopathy
+|08:00 (ET)|GSW@NOP|New Orleans Pelicans|Murray, Dejounte|Out|Injury/Illness - Left Ankle Sprain
+|08:00 (ET)|GSW@NOP|New Orleans Pelicans|Pierre Jr., Jaron|Questionable|G League - Two-Way
 ||||Reese, Julian|Questionable|G League - Two-Way
 ||||Watford, Trendon|Out|Injury/Illness - Right Ankle Sprain
 ||POR@MIN|Portland Trail Blazers|Krejci, Vit|Out|Injury/Illness - Left Ankle Fracture

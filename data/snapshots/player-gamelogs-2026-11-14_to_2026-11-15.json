@@ -1202,13 +1202,14 @@
    "report_name": "Butler III, Jimmy",
    "report_team_cell": "Golden State Warriors",
    "report_team": "Golden State Warriors",
-   "report_status": "",
-   "report_reason": "Injury/Illness - Right ACL Repair / Surgery",
+   "report_status": "Injury/Illness - Right ACL Repair / Surgery",
+   "report_reason": "",
    "report_block": "GSW@NOP",
    "report_row": 63,
    "games": [],
    "gap": "team idle on both 2026-11-14 and 2026-11-15; no game in the observation window. The previous games (2026-11-13) are outside this cycle's gamebook captures - recorded as a window gap, not filled.",
-   "report_row_flag": "the document prints no status cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
+   "report_row_flag": "the document prints no status cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred",
+   "report_reading_note": "the report prints one status-or-reason cell on this row; the canonical injuries file reads it as the status cell, an earlier independent read held it for the reason cell (variance logged in the collision record)"
   },
   {
    "report_name": "Curry, Stephen",
@@ -1334,6 +1335,7 @@
   "Name matching between the report's 'Last, First' print and the gamebook's 'First Last' print is by exact name tokens; suffixes (Jr., II, III) are kept as printed on both sides. One spelling variance surfaced: the gamebook inactive list prints 'Mobely' where the report prints 'Mobley, Evan' (flag SP-01); both spellings are kept as printed.",
   "The 7 injury-report rows whose team cell was lost at a page break keep a blank team in the injury snapshot; here their game-log rows carry the team from the gamebook's own team header (attribution_note on each row). This does not repair the injury row.",
   "Golden State block rows: Butler III prints a reason and no status; Curry/Moody/Porzingis/Santos/Williams print a status and no reason (one status-or-reason cell per row). The missing cells stay blank on both the report side and here.",
-  "The report prints 'Reese, Julian' and 'Watford, Trendon' among the GSW@NOP lost rows; the DEN@NOP gamebook prints 'Julian Reese' (DNP - Coach's Decision) and 'Watford' on the Pelicans inactive list with the same Right Ankle Sprain reason as the report row. Both rows are attributed to the Pelicans from the gamebook, not from the report."
+  "The report prints 'Reese, Julian' and 'Watford, Trendon' among the GSW@NOP lost rows; the DEN@NOP gamebook prints 'Julian Reese' (DNP - Coach's Decision) and 'Watford' on the Pelicans inactive list with the same Right Ankle Sprain reason as the report row. Both rows are attributed to the Pelicans from the gamebook, not from the report.",
+  "Reconciliation: report_status/report_reason mirrors re-pointed at the canonical injuries-2026-11-16-0915am.json reading (Butler III row); the reading variance is logged, not merged."
  ]
 }

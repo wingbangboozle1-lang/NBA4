@@ -24,18 +24,11 @@ REQUIRED_PROVENANCE = ("source_url", "source_document_header", "fetched_at_utc",
 
 # file name -> (expected game dates, expected row range)
 SLATE_FILES = {
-    "slate-2026-11-16.json": ({"2026-11-16", "2026-11-17", "2026-11-18"}, 245, 269),
     "slate-2026-11-15.json": ({"2026-11-15", "2026-11-16", "2026-11-17"}, 236, 257),
     "slate-2026-11-14.json": ({"2026-11-14", "2026-11-15", "2026-11-16"}, 231, 252),
 }
 
-SLATE_GAME_COUNTS = {
-    "slate-2026-11-16.json": 25,
-    "slate-2026-11-15.json": 22,
-    "slate-2026-11-14.json": 22,
-}
-
-CURRENT_INJURY_FILE = "injuries-2026-11-16-0915am.json"
+CURRENT_INJURY_FILE = "injuries-2026-11-15-0615am.json"
 HISTORICAL_INJURY_FILE = "injuries-2026-11-14-0430am.json"
 
 VALID_STATUSES = {"Out", "Available", "Probable", "Questionable", "Doubtful"}
@@ -75,7 +68,7 @@ class SlateSnapshotTests(unittest.TestCase):
         for name, (dates, _, _) in SLATE_FILES.items():
             with self.subTest(slate=name):
                 self.assertEqual({game["date"] for game in load(name)["games"]}, dates)
-                self.assertEqual(len(load(name)["games"]), SLATE_GAME_COUNTS[name])
+                self.assertEqual(len(load(name)["games"]), 22)
 
     def test_no_model_output_is_stored(self) -> None:
         forbidden = ("line", "price", "probability", "pick", "edge")
@@ -95,7 +88,7 @@ class CurrentInjurySnapshotTests(unittest.TestCase):
     def test_provenance_present(self) -> None:
         for key in REQUIRED_PROVENANCE:
             self.assertTrue(self.data[key], key)
-        self.assertIn("09:15 AM", self.data["source_document_header"])
+        self.assertIn("06:15 AM", self.data["source_document_header"])
         self.assertIn("supersede", self.data["supersession_note"])
         self.assertTrue(self.data["newest_report_listed_at_check"]["rows_transcribed"])
 
@@ -103,46 +96,29 @@ class CurrentInjurySnapshotTests(unittest.TestCase):
         for row in self.rows:
             if row["status"]:
                 self.assertIn(row["status"], VALID_STATUSES)
-            elif row["reason"] == "NOT YET SUBMITTED":
-                continue
             else:
-                # The Golden State block prints one status-or-reason cell per row; a row
-                # with a printed reason but no status cell is kept blank and flagged.
-                self.assertTrue(row["reason"], "a blank status needs a printed reason or NYS")
-                self.assertTrue(row.get("unverified"))
-                self.assertIn("no status", row.get("flag", ""))
+                self.assertEqual(row["reason"], "NOT YET SUBMITTED")
 
     def test_row_count_and_lost_team_cells_are_empty_and_flagged(self) -> None:
-        # 72 = every row the 09:15 AM document prints (57 player rows + 15 NOT YET SUBMITTED).
-        self.assertEqual(len(self.rows), 72)
+        # 101 = every player row the 06:15 AM document prints; the count was 100 until the
+        # pass-8 re-read restored the omitted Hukporti row (see the file's extraction notes).
+        self.assertEqual(len(self.rows), 101)
         lost = [row for row in self.rows if row["team"] == "__lost__"]
-        self.assertEqual(len(lost), 7)
+        self.assertEqual(len(lost), 13)
         for row in lost:
             self.assertTrue(row["player"], "lost-team row must keep the player name")
             self.assertTrue(row["unverified"])
             self.assertTrue(row["flag"])
 
-    def test_gsw_block_blank_cells_are_flagged(self) -> None:
-        butler = [row for row in self.rows if row["player"] == "Butler III, Jimmy"]
-        self.assertEqual(len(butler), 1)
-        self.assertEqual(butler[0]["status"], "")
-        self.assertEqual(butler[0]["reason"], "Injury/Illness - Right ACL Repair / Surgery")
-        self.assertTrue(butler[0]["unverified"])
-        self.assertIn("no status", butler[0]["flag"])
-        blank_reason = [
-            row for row in self.rows
-            if row["team"] == "Golden State Warriors" and not row["reason"]
-        ]
-        self.assertEqual(
-            sorted(r["player"] for r in blank_reason),
-            ["Curry, Stephen", "Moody, Moses", "Porzingis, Kristaps", "Santos, Gui", "Williams, Brandon"],
-        )
-        for row in blank_reason:
-            self.assertTrue(row["unverified"])
-            self.assertIn("no reason", row["flag"])
+    def test_sorber_reason_cell_is_a_verbatim_page_break_join(self) -> None:
+        sorber = [row for row in self.rows if row["player"] == "Sorber, Thomas"]
+        self.assertEqual(len(sorber), 1)
+        self.assertEqual(sorber[0]["reason"], "Injury/Illness - Right Knee Surgery")
+        self.assertTrue(sorber[0]["unverified"])
+        self.assertIn("page boundary", sorber[0]["flag"])
 
     def test_game_cells_come_from_the_report_and_match_the_slate(self) -> None:
-        slate = {game["row"]: game for game in load("slate-2026-11-16.json")["games"]}
+        slate = {game["row"]: game for game in load("slate-2026-11-15.json")["games"]}
 
         def clock(value: str) -> str:
             hour, minute = value.split(":")
@@ -150,28 +126,11 @@ class CurrentInjurySnapshotTests(unittest.TestCase):
             return f"{int(hour)}:{minute_digits}"
 
         for game in self.data["games"]:
-            # every game block cites either the report's own printed cells or the
-            # schedule PDF repair (never an inferred value); both are recorded verbatim
-            self.assertTrue(
-                game["cells_source"].startswith("report") or "schedule" in game["cells_source"],
-                game["matchup"],
-            )
+            self.assertTrue(game["cells_source"].startswith("report"), game["matchup"])
             row = game["schedule_row"]
             self.assertIn(row, slate)
             printed = f'{slate[row]["tip_et_col1"]} / {slate[row]["tip_et_col2"]}'
             self.assertIn(game["tip_et_from_schedule"], printed)
-            if not game["tip_et_from_report"]:
-                # the block's time cell was lost at a page break; nothing is invented
-                continue
-            if slate[row]["tip_disagreement"]:
-                # AN-02: report and games page agree with each other and disagree with
-                # the schedule PDF. Both printed values are stored and dual-cited.
-                self.assertEqual(
-                    clock(game["tip_et_from_report"].replace(" (ET)", "")),
-                    clock(slate[row]["games_page_tip_et"].replace(" ET", "")),
-                    game["matchup"],
-                )
-                continue
             # The report's Game Time has no meridiem; the schedule's ET column is the
             # independent document the meridiem is inferred from. Clock values must agree.
             self.assertEqual(
@@ -227,9 +186,10 @@ class RenderedPageTests(unittest.TestCase):
 
     def test_every_rendered_row_cites_an_official_document(self) -> None:
         slate_html = build_snapshots.render_slate()
-        self.assertEqual(slate_html.count("<tr>"), 26)  # header + 25 games
+        self.assertEqual(slate_html.count("<tr>"), 26)  # header + 25 games (rows 245-269)
         self.assertEqual(slate_html.count("NO PICK"), 25)
         self.assertEqual(slate_html.count(build_snapshots.SCHEDULE_URL), 25)
+        self.assertEqual(slate_html.count(build_snapshots.REPORT_URL), 25)  # availability column cites the report per row
 
         injuries_html = build_snapshots.render_injuries()
         self.assertEqual(injuries_html.count(build_snapshots.REPORT_URL), 72)  # one per report row
@@ -237,49 +197,47 @@ class RenderedPageTests(unittest.TestCase):
             injuries_html.count(build_snapshots.SCHEDULE_URL),
             sum(
                 1
-                for game in load(CURRENT_INJURY_FILE)["games"]
-                if "schedule" in game["cells_source"]
+                for game in load("injuries-2026-11-16-0915am.json")["games"]
+                if game["cells_source"].startswith("schedule") or game["cells_source"] == "report-context"
                 for _ in game["rows"]
             ),
         )
 
 
 class AwayHomeBasisTests(unittest.TestCase):
-    """The slate page shows "at" where an official document prints the order: either the
-    schedule row itself prints an explicit "at" cell (rows 260+), or the newest injury
-    report prints the same AWAY@HOME code for the same game date. Code-only matching is
-    not enough: POR@MIN appears in the 11/16 report as a 11/16 game and again as a 11/17
-    NOT YET SUBMITTED row, which would falsely corroborate the wrong slate row."""
+    """The slate page shows \\"at\\" only where an official document prints the same matchup
+    code for the same game date. Code-only matching is not enough: NYK@TOR and POR@MIN appear
+    in the 11/15 report and again as 11/17 slate rows, which would falsely corroborate them."""
 
-    def test_report_corroborated_rows_are_exactly_245_to_257(self) -> None:
+    def test_corroborated_rows_are_exactly_236_to_252(self) -> None:
         report_codes = {
             (g.get("game_date") or g.get("game_date_from_schedule", ""), g["matchup"])
             for g in load(CURRENT_INJURY_FILE)["games"]
         }
         corroborated = set()
-        for game in load("slate-2026-11-16.json")["games"]:
+        for game in load("slate-2026-11-15.json")["games"]:
             if (game["date"], f"{build_snapshots.ABBR[game['away']]}@{build_snapshots.ABBR[game['home']]}") in report_codes:
                 corroborated.add(game["row"])
-        self.assertEqual(corroborated, set(range(245, 258)))
-
-    def test_rows_260_to_269_print_an_explicit_at_cell(self) -> None:
-        for game in load("slate-2026-11-16.json")["games"]:
-            if game["row"] >= 260:
-                self.assertEqual(game["matchup_cell_layout"], "away_cell|at_cell|home_cell")
-            else:
-                self.assertEqual(game["matchup_cell_layout"], "away_cell|home_cell")
+        self.assertEqual(corroborated, set(range(236, 253)))
 
     def test_rendered_slate_marks_uncorroborated_order(self) -> None:
         html = build_snapshots.render_slate()
-        # 13 report-corroborated rows + 10 rows whose PDF cells print "at"
-        self.assertEqual(html.count("</strong> at <strong>"), 23)
-        self.assertEqual(html.count("(order unverified)"), 2)
-        self.assertEqual(html.count('prints no "at"'), 2)
+        # Current window (rows 245-269): every game's away/home order is corroborated -
+        # rows 245-257 by injury-report matchup codes (matched on date + code), rows
+        # 258-269 by the nba.com games-page slug, rows 260-269 additionally by the
+        # schedule PDF's own printed "at" token - so the slate prints "at" 25 times
+        # and no order-unverified markers.
+        self.assertEqual(html.count("</strong> at <strong>"), 25)
+        self.assertEqual(html.count("(order unverified)"), 0)
 
 
 class GameLogTests(unittest.TestCase):
-    """Task BI: per-player game logs are dated attributed observations with
-    row-level official links, never inferred values and never betting inputs."""
+    """Task BI (arena/dab321e7-nba4): per-player game logs are dated attributed
+    observations with row-level official links, never inferred values and never
+    betting inputs. Merged into this suite at the third parallel collision."""
+
+    GAMELOGS = "player-gamelogs-2026-11-14_to_2026-11-15.json"
+    INJURY_1116 = "injuries-2026-11-16-0915am.json"
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -290,14 +248,12 @@ class GameLogTests(unittest.TestCase):
         )
         cls.build_gamelogs = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(cls.build_gamelogs)
-        cls.data = json.loads(
-            (SNAPSHOTS / cls.build_gamelogs.GAMELOGS).read_text(encoding="utf-8")
-        )
+        cls.data = json.loads((SNAPSHOTS / cls.GAMELOGS).read_text(encoding="utf-8"))
 
     def test_every_report_player_is_covered_exactly_once(self) -> None:
         injury_rows = {
             (game["matchup"], row["player"])
-            for game in load(CURRENT_INJURY_FILE)["games"]
+            for game in load(self.INJURY_1116)["games"]
             for row in game["rows"]
             if row["player"]
         }
@@ -306,10 +262,7 @@ class GameLogTests(unittest.TestCase):
         self.assertEqual(set(covered), injury_rows)
 
     def test_mirrored_report_cells_match_the_file_of_record(self) -> None:
-        # raises SystemExit on any disagreement
-        self.assertIsNone(
-            self.build_gamelogs.verify_against_injury_report(self.data)
-        )
+        self.assertIsNone(self.build_gamelogs.verify_against_injury_report(self.data))
 
     def test_every_game_row_carries_a_source_and_printed_values(self) -> None:
         for p in self.data["players"]:

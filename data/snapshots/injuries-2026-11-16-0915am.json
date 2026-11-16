@@ -2,38 +2,63 @@
  "snapshot_id": "injuries-2026-11-16-0915am",
  "kind": "official_injury_report_rows",
  "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_09_15AM.pdf",
- "source_document": "Injury Report: 11/16/26 09:15 AM",
+ "source_document": "NBA Official Injury Report",
  "source_document_header": "Injury Report: 11/16/26 09:15 AM",
  "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
  "secondary_source_url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf",
- "fetched_at_utc": "2026-11-16T14:41:21Z",
- "extraction_tool": "fetch_page (PDF text extraction to markdown tables, one chunk)",
- "index_listing_checked": "The 11/16 entries of the official injury-report index (read 2026-11-16 via https://official.nba.com/nba-injury-report-2026-11-17-season/): reports run every 15 minutes from 12:00 a.m. through 9:15 a.m. ET; the 9:15 a.m. ET report was the newest listed at the check time (fetched 14:41 UTC). The URL pattern for the day is https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_<HH>_<MM><AM|PM>.pdf.",
+ "fetched_at_utc": "2026-11-16T14:31:30Z",
+ "extraction_tool": "fetch_page (PDF text extraction to markdown tables, 5 page-break sections in 1 chunk)",
+ "index_listing_checked": "The November 16 entries of the official injury-report index, read 2026-11-16T14:31Z (9:31 a.m. ET): the index lists 11/16 reports every 15 minutes from 12:00 a.m. through 9:15 a.m. ET, and the 9:15 a.m. ET report was the newest listed at the check time. Reports are updated on a continual basis; later files supersede this snapshot.",
  "newest_report_listed_at_check": {
   "label": "11/16 09:15 AM ET report",
   "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_09_15AM.pdf",
   "source_document_header": "Injury Report: 11/16/26 09:15 AM",
-  "checked_at_utc": "2026-11-16T14:41:21Z",
+  "checked_at_utc": "2026-11-16T14:31:00Z",
   "rows_transcribed": true,
-  "transcription_note": "Full row-level transcription is stored in injuries-2026-11-16-0915am.json (this file). The 09:00 AM report 15 minutes earlier is transcribed alongside it (raw/injury-2026-11-16T0900am-et.pipes) and the two revisions are diffed in injuries-2026-11-16-0900-to-0915.diff.json."
+  "transcription_note": "Full row-level transcription is stored in injuries-2026-11-16-0915am.json. The immediately preceding 09:00 AM ET revision is stored in injuries-2026-11-16-0900am.json and the consecutive diff in injuries-2026-11-16-0900-to-0915.diff.json."
  },
  "superseded_snapshot": {
   "snapshot_id": "injuries-2026-11-15-0615am",
   "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-15_06_15AM.pdf",
-  "status_on_site": "Kept as a dated historical snapshot in data/snapshots; the 11/15 reports are one day old and no longer current."
+  "status_on_site": "Kept as a dated historical snapshot in data/snapshots; the 11/15 report is one day old and covers the 11/15-11/16 slates. This 11/16 file supersedes it for the 11/16-11/17 slates."
  },
- "supersession_note": "Reports continue on a 15-minute cadence on game days and later files supersede this one. This file is the newest at 2026-11-16T14:41:21Z.",
+ "supersession_note": "This is one dated snapshot, not the newest possible report. The league publishes updated reports on a continual basis (the index lists 11/16 reports every 15 minutes), and any later file supersedes it.",
  "extraction_notes": [
-  "Verbatim extraction of the 09:15 AM ET report named in source_url; the 09:00 AM ET revision 15 minutes earlier is byte-identical in its 72 data rows (see the diff file: 0 status changes, 0 printing variances).",
-  "Game Time in the PDF is a 12-hour clock with no AM/PM marker (e.g. \\\"07:30 (ET)\\\"). Meridiems below come from the independent official schedule PDF (which prints the same games with AM/PM times) and are marked tip_et_from_schedule.",
-  "Rows continuing across a PDF page break lose cells. This report's affected rows: the five Memphis continuation rows and two New Orleans continuation rows (Reese, Julian / Watford, Trendon) lose date/time/matchup AND team cells (team stored as __lost__, flagged unverified); the ORL@BOS block and the POR@MIN (11/16) block rows print the matchup only; the Washington Wizards, Boston Celtics and Brooklyn continuation rows lose date/time/matchup; the New Orleans rows lose the matchup cell; every row after page 2 loses the date cell. No lost cell is filled from another document except date and tip, which README rule 3 permits with dual citation (cells_source records what was repaired and from where).",
-  "The Golden State block prints one status-or-reason cell per row: Butler III, Jimmy has no status cell printed (blank + flagged in the cells extraction), and Curry/Moody/Porzingis/Santos/Williams have no reason cell printed (blank + flagged). The printed page carries those blanks; nothing is inferred.",
-  "The report prints two POR@MIN blocks (the teams play in Portland/Minnesota on consecutive days 11/16 and 11/17). The first block carries the submitted player rows and sits among the 11/16 blocks; the second is in the 11/17 NOT YET SUBMITTED section after the NYK@TOR block that prints 11/17/2026. Both are kept as separate games with their schedule rows (250 and 254).",
-  "AN-02 tip conflicts: CHA@LAL the report prints 11:00 (ET) and the games page prints 11:00 PM ET while the schedule PDF prints 10:00 PM ET (schedule row 256); UTA@LAC the report prints 10:30 (ET) and the games page prints 10:30 PM ET while the schedule PDF prints 11:00 PM ET (row 257). Both printed values are stored (tip_et_from_report vs tip_et_from_schedule) and both are cited on the site.",
-  "A team that has not filed shows an empty player/status pair with the reason NOT YET SUBMITTED (15 rows here: 5 for tonight's games - Washington, Boston, Houston, Philadelphia, Phoenix - and all 10 team rows of the five 11/17 games). That is a reporting state, not an absence of injuries, and no status may be inferred from it.",
-  "The 13 matchup codes printed in this report (8 games on 11/16 and 5 NOT YET SUBMITTED games on 11/17) match schedule rows 245-257 one-for-one and corroborate the away/home order shown on the slate page.",
-  "No availability probability, minute estimate or production impact is stored here or derived from these rows."
+  "Game Time in the PDF is a 12-hour clock with no AM/PM marker (e.g. \"07:00 (ET)\"). Meridiems in tip_et_from_schedule come from the official schedule PDF (LOCAL/ET columns) and the nba.com games pages, which print AM/PM.",
+  "Rows that continue across a PDF page break lose their Game Date, Game Time and sometimes Team cells. Where a player row's team cell was lost, the team cell is stored as \"__lost__\" and flagged; no team is repaired from another document (policy P5-02).",
+  "7 player rows lost their team cell at a page break (5 in MEM@WAS between the printed Memphis rows and the Washington NOT YET SUBMITTED row; 2 in GSW@NOP after the printed New Orleans Pelicans rows). They are stored with team \"__lost__\" and an explanatory flag.",
+  "The 6 Golden State Warriors rows of GSW@NOP extract with 6 cells only: the Reason column is absent for the whole sub-block. Reasons are left blank and the rows are flagged. The Butler III row's single status-position cell holds reason-formatted text and is reproduced verbatim in the status field with no status asserted.",
+  "The ORL@BOS block's player rows and the POR@MIN 11/16 block's rows extract with blank date and/or time cells (page-break context). Game date/tip for those blocks are recorded from the block context and marked cells_source \"report-context\"; the schedule PDF rows 245 and 250 corroborate the date and tip.",
+  "The 11/17 tail blocks (DET@SAS, POR@MIN, UTA@LAC, CHA@LAL) print their time and matchup cells but the date cell is blank; the date 2026-11-17 comes from the preceding NYK@TOR block header and is corroborated by schedule rows 253-257 (cells_source \"report-context\").",
+  "A team that has not filed shows an empty player/status pair with the reason NOT YET SUBMITTED. That is a reporting state, not an absence of injuries, and no status may be inferred from it. On the page-5 rows the marker extracts in a collapsed 5-cell layout; it is stored in the reason field per the established convention.",
+  "Two 11/17 tips disagree with the August schedule PDF: UTA@LAC prints 10:30 (ET) here (schedule row 257 prints 11:00 PM ET) and CHA@LAL prints 11:00 (ET) (schedule row 256 prints 10:00 PM ET). The nba.com games pages print 10:30 PM ET and 11:00 PM ET respectively, agreeing with this report against the schedule PDF. Both readings are kept as printed and flagged (board flag AN-02, review flag P9-03).",
+  "The POR@MIN matchup code appears twice in this report: once for the 11/16 game (player rows, schedule row 250) and once for the 11/17 game (NOT YET SUBMITTED rows, schedule row 254). Rows are matched to games by (date, code), never by code alone.",
+  "The 13 matchup codes printed in this report (8 games on 11/16, 5 games on 11/17) match schedule rows 245-257 one-for-one and corroborate the away/home order shown on the slate page. The report does not list 11/18 games (schedule rows 258-269).",
+  "No availability probability, minute estimate or production impact is stored here or derived from these rows.",
+  "Reading variance (third collision record): the Golden State block prints one status-or-reason cell per row. The Butler III, Jimmy row prints a single cell \"Injury/Illness - Right ACL Repair / Surgery\". This file reads it as the STATUS cell (reason blank); the arena/dab321e7-nba4 extraction of the same document reads it as the REASON cell (status blank). Both readings are recorded; the cell position at the page break does not settle which column it belongs to. The game-log capture mirrors this file."
  ],
+ "matchups_not_in_snapshot": [
+  {
+   "date": "2026-11-18",
+   "matchups": [
+    "MEM@CLE",
+    "HOU@IND",
+    "MIL@MIA",
+    "PHI@ORL",
+    "CHI@BKN",
+    "WAS@TOR",
+    "DET@NOP",
+    "ATL@OKC",
+    "BOS@DEN",
+    "GSW@DAL",
+    "UTA@LAL",
+    "PHX@SAC"
+   ],
+   "note": "the 09:15 AM report does not list 11/18 games; scheduled reporting deadlines make those reports later. The codes above follow the schedule PDF rows 258-269; rows 260-269 print an explicit 'at' token (away team first) and rows 258-259 are corroborated by the nba.com games page slugs mem-vs-cle and hou-vs-ind."
+  }
+ ],
+ "row_count": 72,
+ "games_counted": 13,
  "games": [
   {
    "matchup": "CHI@CLE",
@@ -143,7 +168,7 @@
      "status": "Out",
      "reason": "Injury/Illness - Right Hip Soreness",
      "unverified": true,
-     "flag": "team cell lost at PDF page break; the row continues the MEM@WAS block between printed team rows, but the team is not asserted"
+     "flag": "team cell lost at PDF page break; the row sits between the printed Memphis Grizzlies rows and the Washington Wizards NOT YET SUBMITTED row of the MEM@WAS block, but the team is not asserted"
     },
     {
      "team": "__lost__",
@@ -151,7 +176,7 @@
      "status": "Out",
      "reason": "Injury/Illness - Lumbar Disc Herniation",
      "unverified": true,
-     "flag": "team cell lost at PDF page break; the row continues the MEM@WAS block between printed team rows, but the team is not asserted"
+     "flag": "team cell lost at PDF page break; the row sits between the printed Memphis Grizzlies rows and the Washington Wizards NOT YET SUBMITTED row of the MEM@WAS block, but the team is not asserted"
     },
     {
      "team": "__lost__",
@@ -159,7 +184,7 @@
      "status": "Questionable",
      "reason": "Injury/Illness - Concussion Protocol",
      "unverified": true,
-     "flag": "team cell lost at PDF page break; the row continues the MEM@WAS block between printed team rows, but the team is not asserted"
+     "flag": "team cell lost at PDF page break; the row sits between the printed Memphis Grizzlies rows and the Washington Wizards NOT YET SUBMITTED row of the MEM@WAS block, but the team is not asserted"
     },
     {
      "team": "__lost__",
@@ -167,7 +192,7 @@
      "status": "Out",
      "reason": "Injury/Illness - Right Knee Surgery",
      "unverified": true,
-     "flag": "team cell lost at PDF page break; the row continues the MEM@WAS block between printed team rows, but the team is not asserted"
+     "flag": "team cell lost at PDF page break; the row sits between the printed Memphis Grizzlies rows and the Washington Wizards NOT YET SUBMITTED row of the MEM@WAS block, but the team is not asserted"
     },
     {
      "team": "__lost__",
@@ -175,13 +200,15 @@
      "status": "Questionable",
      "reason": "Injury/Illness - Illness",
      "unverified": true,
-     "flag": "team cell lost at PDF page break; the row continues the MEM@WAS block between printed team rows, but the team is not asserted"
+     "flag": "team cell lost at PDF page break; the row sits between the printed Memphis Grizzlies rows and the Washington Wizards NOT YET SUBMITTED row of the MEM@WAS block, but the team is not asserted"
     },
     {
      "team": "Washington Wizards",
      "player": "",
      "status": "",
-     "reason": "NOT YET SUBMITTED"
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
     }
    ]
   },
@@ -191,7 +218,7 @@
    "tip_et_from_report": "",
    "tip_et_from_schedule": "7:00 PM",
    "schedule_row": 245,
-   "cells_source": "schedule (report block prints matchup only; date/time cells lost at page break)",
+   "cells_source": "report-context",
    "rows": [
     {
      "team": "Orlando Magic",
@@ -221,7 +248,9 @@
      "team": "Boston Celtics",
      "player": "",
      "status": "",
-     "reason": "NOT YET SUBMITTED"
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
     }
    ]
   },
@@ -231,13 +260,15 @@
    "tip_et_from_report": "07:30 (ET)",
    "tip_et_from_schedule": "7:30 PM",
    "schedule_row": 249,
-   "cells_source": "report time + schedule date (date cell lost at page break)",
+   "cells_source": "report",
    "rows": [
     {
      "team": "Houston Rockets",
      "player": "",
      "status": "",
-     "reason": "NOT YET SUBMITTED"
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
     },
     {
      "team": "Miami Heat",
@@ -265,13 +296,15 @@
    "tip_et_from_report": "07:30 (ET)",
    "tip_et_from_schedule": "7:30 PM",
    "schedule_row": 248,
-   "cells_source": "report time + schedule date (date cell lost at page break)",
+   "cells_source": "report",
    "rows": [
     {
      "team": "Philadelphia 76ers",
      "player": "",
      "status": "",
-     "reason": "NOT YET SUBMITTED"
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
     },
     {
      "team": "Brooklyn Nets",
@@ -311,15 +344,15 @@
    "tip_et_from_report": "08:00 (ET)",
    "tip_et_from_schedule": "8:00 PM",
    "schedule_row": 251,
-   "cells_source": "report time + schedule date (date cell lost at page break)",
+   "cells_source": "report",
    "rows": [
     {
      "team": "Golden State Warriors",
      "player": "Butler III, Jimmy",
-     "status": "",
-     "reason": "Injury/Illness - Right ACL Repair / Surgery",
+     "status": "Injury/Illness - Right ACL Repair / Surgery",
+     "reason": "",
      "unverified": true,
-     "flag": "the document prints no status cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
+     "flag": "the extracted row carries one status-position cell only, holding the text 'Injury/Illness - Right ACL Repair / Surgery'; it is reproduced in the status cell exactly as extracted, no status value is asserted, and the reason cell is blank. Flagged for manual review against the PDF rendering"
     },
     {
      "team": "Golden State Warriors",
@@ -327,7 +360,7 @@
      "status": "Out",
      "reason": "",
      "unverified": true,
-     "flag": "the document prints no reason cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
+     "flag": "the extracted row prints no separate Reason cell for this row (block-level extraction gap in the GSW@NOP Golden State rows); reason left blank and flagged"
     },
     {
      "team": "Golden State Warriors",
@@ -335,7 +368,7 @@
      "status": "Out",
      "reason": "",
      "unverified": true,
-     "flag": "the document prints no reason cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
+     "flag": "the extracted row prints no separate Reason cell for this row (block-level extraction gap in the GSW@NOP Golden State rows); reason left blank and flagged"
     },
     {
      "team": "Golden State Warriors",
@@ -343,7 +376,7 @@
      "status": "Out",
      "reason": "",
      "unverified": true,
-     "flag": "the document prints no reason cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
+     "flag": "the extracted row prints no separate Reason cell for this row (block-level extraction gap in the GSW@NOP Golden State rows); reason left blank and flagged"
     },
     {
      "team": "Golden State Warriors",
@@ -351,7 +384,7 @@
      "status": "Questionable",
      "reason": "",
      "unverified": true,
-     "flag": "the document prints no reason cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
+     "flag": "the extracted row prints no separate Reason cell for this row (block-level extraction gap in the GSW@NOP Golden State rows); reason left blank and flagged"
     },
     {
      "team": "Golden State Warriors",
@@ -359,7 +392,7 @@
      "status": "Out",
      "reason": "",
      "unverified": true,
-     "flag": "the document prints no reason cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
+     "flag": "the extracted row prints no separate Reason cell for this row (block-level extraction gap in the GSW@NOP Golden State rows); reason left blank and flagged"
     },
     {
      "team": "New Orleans Pelicans",
@@ -403,7 +436,7 @@
      "status": "Questionable",
      "reason": "G League - Two-Way",
      "unverified": true,
-     "flag": "team cell lost at PDF page break; the row continues the GSW@NOP block between printed team rows, but the team is not asserted"
+     "flag": "team cell lost at PDF page break; the row continues the GSW@NOP block after the printed New Orleans Pelicans rows, but the team is not asserted"
     },
     {
      "team": "__lost__",
@@ -411,7 +444,7 @@
      "status": "Out",
      "reason": "Injury/Illness - Right Ankle Sprain",
      "unverified": true,
-     "flag": "team cell lost at PDF page break; the row continues the GSW@NOP block between printed team rows, but the team is not asserted"
+     "flag": "team cell lost at PDF page break; the row continues the GSW@NOP block after the printed New Orleans Pelicans rows, but the team is not asserted"
     }
    ]
   },
@@ -421,7 +454,7 @@
    "tip_et_from_report": "",
    "tip_et_from_schedule": "8:00 PM",
    "schedule_row": 250,
-   "cells_source": "schedule (report rows print matchup only; date/time cells lost at page break; block position between the 11/16 GSW@NOP and PHX@DEN blocks and the player rows distinguish it from the 11/17 NOT YET SUBMITTED block)",
+   "cells_source": "report-context",
    "rows": [
     {
      "team": "Portland Trail Blazers",
@@ -479,13 +512,15 @@
    "tip_et_from_report": "09:00 (ET)",
    "tip_et_from_schedule": "9:00 PM",
    "schedule_row": 252,
-   "cells_source": "report time + schedule date (date cell lost at page break)",
+   "cells_source": "report",
    "rows": [
     {
      "team": "Phoenix Suns",
      "player": "",
      "status": "",
-     "reason": "NOT YET SUBMITTED"
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
     },
     {
      "team": "Denver Nuggets",
@@ -525,13 +560,17 @@
      "team": "New York Knicks",
      "player": "",
      "status": "",
-     "reason": "NOT YET SUBMITTED"
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
     },
     {
      "team": "Toronto Raptors",
      "player": "",
      "status": "",
-     "reason": "NOT YET SUBMITTED"
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
     }
    ]
   },
@@ -541,19 +580,23 @@
    "tip_et_from_report": "08:00 (ET)",
    "tip_et_from_schedule": "8:00 PM",
    "schedule_row": 255,
-   "cells_source": "report time + schedule date (date cell lost at page break)",
+   "cells_source": "report-context",
    "rows": [
     {
      "team": "Detroit Pistons",
      "player": "",
      "status": "",
-     "reason": "NOT YET SUBMITTED"
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
     },
     {
      "team": "San Antonio Spurs",
      "player": "",
      "status": "",
-     "reason": "NOT YET SUBMITTED"
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
     }
    ]
   },
@@ -563,19 +606,23 @@
    "tip_et_from_report": "08:00 (ET)",
    "tip_et_from_schedule": "8:00 PM",
    "schedule_row": 254,
-   "cells_source": "report time + schedule date (date cell lost at page break)",
+   "cells_source": "report-context",
    "rows": [
     {
      "team": "Portland Trail Blazers",
      "player": "",
      "status": "",
-     "reason": "NOT YET SUBMITTED"
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
     },
     {
      "team": "Minnesota Timberwolves",
      "player": "",
      "status": "",
-     "reason": "NOT YET SUBMITTED"
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
     }
    ]
   },
@@ -585,19 +632,23 @@
    "tip_et_from_report": "10:30 (ET)",
    "tip_et_from_schedule": "11:00 PM",
    "schedule_row": 257,
-   "cells_source": "report time + schedule date (date cell lost at page break; AN-02: the report and games page print 10:30 PM ET, the schedule PDF prints 11:00 PM ET)",
+   "cells_source": "report-context",
    "rows": [
     {
      "team": "Utah Jazz",
      "player": "",
      "status": "",
-     "reason": "NOT YET SUBMITTED"
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
     },
     {
      "team": "LA Clippers",
      "player": "",
      "status": "",
-     "reason": "NOT YET SUBMITTED"
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
     }
    ]
   },
@@ -607,44 +658,25 @@
    "tip_et_from_report": "11:00 (ET)",
    "tip_et_from_schedule": "10:00 PM",
    "schedule_row": 256,
-   "cells_source": "report time + schedule date (date cell lost at page break; AN-02: the report and games page print 11:00 PM ET, the schedule PDF prints 10:00 PM ET)",
+   "cells_source": "report-context",
    "rows": [
     {
      "team": "Charlotte Hornets",
      "player": "",
      "status": "",
-     "reason": "NOT YET SUBMITTED"
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
     },
     {
      "team": "Los Angeles Lakers",
      "player": "",
      "status": "",
-     "reason": "NOT YET SUBMITTED"
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team has not submitted"
     }
    ]
   }
- ],
- "matchups_not_in_snapshot": [
-  {
-   "date": "2026-11-18",
-   "matchups": [
-    "MEM@CLE",
-    "HOU@IND",
-    "MIL@MIA",
-    "PHI@ORL",
-    "CHI@BKN",
-    "WAS@TOR",
-    "DET@NOP",
-    "ATL@OKC",
-    "BOS@DEN",
-    "GSW@DAL",
-    "UTA@LAL",
-    "PHX@SAC"
-   ],
-   "note": "the 09:15 AM report does not list 11/18 games; those reports appear after 11/17 deadlines. The codes above follow the schedule PDF's printed team order on rows 258-269 (away cell first); rows 258-259 print no 'at' token while rows 260-269 print an explicit 'at' cell, so the away/home order on 258-259 is corroborated by the slate's games-page checks where they exist and is otherwise as printed."
-  }
- ],
- "row_count": 72,
- "cross_check": "See injuries-2026-11-16-0900am.cells.json and injuries-2026-11-16-0915am.cells.json: the cells extraction (scripts/build_brief_data.py) compares itself against this file row for row at build time.",
- "no_inference": "No availability, minute, production or game-flow value is derived from any report in this repository. Status labels are reported as printed only."
+ ]
 }

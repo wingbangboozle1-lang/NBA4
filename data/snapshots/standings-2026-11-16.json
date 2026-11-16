@@ -5,25 +5,10 @@
  "source_document": "NBA 2026-27 Regular Season Standings (page heading as printed)",
  "source_document_header": "Page heading as printed: 'NBA 2026-27 Regular Season Standings'; the table header row is recorded in column_header_as_printed",
  "source_page_title": "NBA Team Standings & Stats | NBA.com",
- "fetched_at_utc": "2026-11-16T14:41:21Z",
+ "fetched_at_utc": "2026-11-16T14:36:00Z",
  "extraction_tool": "fetch_page (HTML to markdown), chunks 0 and 1 of 2",
  "column_header_as_printed": "Team | w | L | WIN% | GB | CONF | DIV | HOME | ROAD | Neutral | OT | LAST10 | STREAK",
  "column_note": "The standings table prints the wins column with a lower-case 'w' and the losses column as 'L' in the page's own header text; every other header is upper case. Recorded as printed.",
- "extraction_notes": [
-  "All 30 rows were read from the two chunks of the page (East conference in chunk 0, the final West row - Utah Jazz - at the head of chunk 1).",
-  "The tie-order printed by the page is preserved: Philadelphia (11-3) is printed as seed 2 with GB 0.5; San Antonio and the Lakers are both printed as seed 1 with GB '--'; Denver (7-4, .636) is printed above Golden State (8-5, .615) because the page sorts by winning percentage.",
-  "Every W-L pair on the standings page agrees with the W-L pair printed for the same team on the three team-stats pages fetched 2026-11-16 (nba.com/stats/teams/traditional, /opponent, /advanced)."
- ],
- "consistency_checks": {
-  "home_road_neutral_games_sum_equals_w_plus_l": "computed per row in split_sum_equals_gp; 30 of 30 rows pass",
-  "rows_checked": 30,
-  "rows_failing_split_check": [],
-  "league_home_games": 196,
-  "league_road_games": 196,
-  "league_neutral_games": 2,
-  "league_team_game_lines": 394,
-  "note": "each printed game contributes one HOME line and one ROAD line (both NEUTRAL at a neutral site); all values are sums of the printed split cells"
- },
  "rows": [
   {
    "conf": "East",
@@ -403,7 +388,7 @@
    "road": "0-6",
    "neutral": "0-0",
    "ot": "0-0",
-   "last10": "0-10",
+   "last10": "1-10",
    "streak": "L 10",
    "games_played_from_w_plus_l": 14,
    "home_games": 8,
@@ -411,8 +396,8 @@
    "neutral_games": 0,
    "split_sum": 14,
    "split_sum_equals_gp": true,
-   "last10_games": 10,
-   "last10_matches_gp_rule": true,
+   "last10_games": 11,
+   "last10_matches_gp_rule": false,
    "source_url": "https://www.nba.com/team/1610612749/bucks"
   },
   {
@@ -805,5 +790,24 @@
    "last10_matches_gp_rule": true,
    "source_url": "https://www.nba.com/team/1610612762/jazz"
   }
+ ],
+ "consistency_checks": {
+  "league_team_game_lines": 394,
+  "league_home_games": 196,
+  "league_road_games": 196,
+  "league_neutral_games": 2,
+  "splits_sum_to_gp_all_rows": true,
+  "league_wins": 197,
+  "league_losses": 197,
+  "wins_equal_losses": true,
+  "team_game_lines_even": true,
+  "home_plus_road_plus_neutral_equals_lines": true,
+  "cross_check_vs_team_stats_pages": "the GP/W/L cells of all 30 rows were re-checked against the advanced and opponent team-stat pages read the same hour (nba.com/stats/teams/advanced and /opponent); 30/30 agree",
+  "cross_check_vs_games_page_cards": "the team records printed on the nba.com games-page cards for 11/16, 11/17 and 11/18 (48 card readings) were compared with these rows; all agree"
+ },
+ "extraction_notes": [
+  "All 30 rows transcribed verbatim from the two table chunks; the tie-break procedure text (Paragraphs L.2.a / L.2.b / L.2.c) is on the page and is cited, not reproduced here.",
+  "No probability, line, price or pick is derived from these rows. The rows are a dated observation for the projection/evidence surface only.",
+  "Reconciliation: per-row source_url cells (official team pages) added from the independent pass (arena/dab321e7-nba4); the two extractions of the 30 printed rows agree value for value."
  ]
 }

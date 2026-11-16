@@ -1,29 +1,38 @@
 {
  "snapshot_id": "slate-2026-11-16",
- "kind": "schedule_window_rows",
+ "kind": "official_schedule_rows",
  "source_url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf",
- "source_document": "2026-27 NBA Regular Season Schedule By Date (official league schedule PDF, August release)",
+ "source_document": "2026-27 NBA Regular Season Schedule By Date",
  "source_document_header": "2026-27 NBA REGULAR SEASON SCHEDULE AS OF AUGUST 13, 2026 | SUBJECT TO CHANGE",
- "fetched_at_utc": "2026-11-16T14:41:21Z",
- "extraction_tool": "fetch_page (PDF text to markdown), chunk 2 of 13 re-read 2026-11-16; rows transcribed verbatim; no inference",
+ "source_rows": "245-269",
+ "fetched_at_utc": "2026-11-16T14:33:00Z",
+ "extraction_tool": "fetch_page (PDF text extraction, chunks 1-2)",
  "window": {
-  "start_utc": "2026-11-16T14:41:21Z",
-  "end_utc": "2026-11-19T14:41:21Z",
-  "rule": "requested maximum horizon of 3 days from the observation time; games tipping off on or after 2026-11-19T14:41:21Z are outside the window. All four 11/19 rows (270-273) tip at or after 7:00 PM ET on 2026-11-19 (23:00Z) and are therefore out of window."
+  "start_utc": "2026-11-16T14:35:00Z",
+  "end_utc": "2026-11-19T14:35:00Z",
+  "rule": "requested maximum horizon of 3 days from the observation time; the four games of 2026-11-19 (rows 270-273) all tip after the window end and are excluded"
  },
  "extraction_notes": [
-  "Document header recorded exactly as the PDF prints it: '2026-27 NBA REGULAR SEASON SCHEDULE AS OF AUGUST 13, 2026 | SUBJECT TO CHANGE'. Window rows 245-269 were transcribed from chunk 2 read 2026-11-16 (row 245 from the chunk head).",
-  "The PDF's matchup columns render as two team cells for rows 245-259 (away cell then home cell, no connector) and three cells for rows 260-269 (away cell, literal 'at' cell, home cell). The layout is recorded per row in matchup_cell_layout; team order is away first in both layouts (corroborated by games-page slugs for rows 245-257).",
-  "The time columns print LOCAL | ET (home-venue local time first, Eastern second), the same rule verified in slate-2026-11-15.json.",
-  "AN-02 tip conflicts carried from slate-2026-11-15.json: row 256 (CHA@LAL) the injury report and the games page print 11:00 PM ET while the schedule PDF prints 10:00 PM ET; row 257 (UTA@LAC) the report and games page print 10:30 PM ET while the PDF prints 11:00 PM ET. Both printed values stay in the file (tip_et_col2 = PDF as printed, games_page_tip_et = games page as printed) with dual citation.",
-  "Rows 258-269 were not checked against their games pages in this pass; their game ids and slugs are left blank rather than inferred from the row-number convention (the convention held for rows 231-257 but is not carried as fact here).",
-  "TV tags transcribed as printed: row 245 'PCK/NBCSN', rows 255 and 257 'NBC/PCK', rows 260 and 267 'ESPN'."
+  "The PDF text carries the column header \"LOCAL | ET\". tip_et_col1 is the local tip time at the home venue and tip_et_col2 is the Eastern Time column, exactly as printed.",
+  "The extracted PDF text prints no \"at\" token on rows 215-259 (11/10 to 11/18 rows 258-259), while rows 260 onward print \"at\"; re-confirmed on the 2026-11-16 fetch (matches the pass 6/7 finding). For rows 258-259 the away/home order is corroborated by the nba.com games-page slugs mem-vs-cle and hou-vs-ind (checked 2026-11-16).",
+  "Corroboration (checked 2026-11-16): the 09:15 AM injury report prints 13 matchup codes that match window rows 245-257 one-for-one (8 games of 11/16, 5 games of 11/17). The nba.com games pages for 11/16, 11/17 and 11/18 were read on 2026-11-16 and every row's away/home slug and game id (0022600 + row number) was checked; rows 250 and 252 keep their 2026-11-15 games-page card readings recorded in slate-2026-11-15.json (the cards were not re-rendered in the 2026-11-16 fetch view) and their tips are additionally corroborated by today's report codes.",
+  "Four tip disagreements between the August schedule PDF and the current nba.com games pages (rows 256, 257, 266, 267) are kept as printed in both columns and flagged in each row (AN-02 and new flag P9-04). The PDF header itself says SUBJECT TO CHANGE.",
+  "No venue, broadcast-independent status, odds, probability or pick is present in this file or taken from the PDF."
  ],
- "corroborating_urls": [
-  "https://www.nba.com/games?date=2026-11-16",
-  "https://www.nba.com/games?date=2026-11-17",
-  "https://official.nba.com/nba-injury-report-2026-11-17-season/"
- ],
+ "basis": {
+  "away_home_rule": "Rows 260-269 print an explicit 'at' token (away first). Rows 245-259 print no token; the away/home reading is corroborated by the games-page slug ('away-vs-home') on every row and, for rows 245-257, by the injury report's AWAY@HOME code.",
+  "games_this_window_with_injury_report_code": 13,
+  "games_this_window_without_any_code": 11,
+  "games_with_games_page_slug": 25,
+  "games_order_corroborated": 25
+ },
+ "corroborating_urls": {
+  "injury_report": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_09_15AM.pdf",
+  "games_11_16": "https://www.nba.com/games?date=2026-11-16",
+  "games_11_17": "https://www.nba.com/games?date=2026-11-17",
+  "games_11_18": "https://www.nba.com/games?date=2026-11-18",
+  "injury_index": "https://official.nba.com/nba-injury-report-2026-27-season/"
+ },
  "games": [
   {
    "row": 245,
@@ -33,17 +42,17 @@
    "home": "Boston",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "7:00 PM",
-   "national_tv": "PCK/NBCSN",
-   "matchup_cell_layout": "away_cell|home_cell",
    "code": "ORL@BOS",
-   "code_source": "injury report 11/16 09:15 AM",
+   "code_source": "injury report 11/16 09:15 AM + games page 11/16",
    "games_page_slug": "orl-vs-bos",
    "games_page_game_id": "0022600245",
-   "games_page_url": "https://www.nba.com/game/orl-vs-bos-0022600245",
    "games_page_tip_et": "7:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/orl-vs-bos-0022600245",
+   "at_token_printed_in_schedule": false,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games page URL slug 'away-vs-home'"
+    "games page URL slug 'away-vs-home'",
+    "schedule PDF printed order (first cell = away, per the games-page slug)",
+    "injury report AWAY@HOME code"
    ],
    "tip_disagreement": null
   },
@@ -55,17 +64,17 @@
    "home": "Cleveland",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "7:00 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|home_cell",
    "code": "CHI@CLE",
-   "code_source": "injury report 11/16 09:15 AM",
+   "code_source": "injury report 11/16 09:15 AM + games page 11/16",
    "games_page_slug": "chi-vs-cle",
    "games_page_game_id": "0022600246",
-   "games_page_url": "https://www.nba.com/game/chi-vs-cle-0022600246",
    "games_page_tip_et": "7:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/chi-vs-cle-0022600246",
+   "at_token_printed_in_schedule": false,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games page URL slug 'away-vs-home'"
+    "games page URL slug 'away-vs-home'",
+    "schedule PDF printed order (first cell = away, per the games-page slug)",
+    "injury report AWAY@HOME code"
    ],
    "tip_disagreement": null
   },
@@ -77,17 +86,17 @@
    "home": "Washington",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "7:00 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|home_cell",
    "code": "MEM@WAS",
-   "code_source": "injury report 11/16 09:15 AM",
+   "code_source": "injury report 11/16 09:15 AM + games page 11/16",
    "games_page_slug": "mem-vs-was",
    "games_page_game_id": "0022600247",
-   "games_page_url": "https://www.nba.com/game/mem-vs-was-0022600247",
    "games_page_tip_et": "7:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/mem-vs-was-0022600247",
+   "at_token_printed_in_schedule": false,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games page URL slug 'away-vs-home'"
+    "games page URL slug 'away-vs-home'",
+    "schedule PDF printed order (first cell = away, per the games-page slug)",
+    "injury report AWAY@HOME code"
    ],
    "tip_disagreement": null
   },
@@ -99,17 +108,17 @@
    "home": "Brooklyn",
    "tip_et_col1": "7:30 PM",
    "tip_et_col2": "7:30 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|home_cell",
    "code": "PHI@BKN",
-   "code_source": "injury report 11/16 09:15 AM",
+   "code_source": "injury report 11/16 09:15 AM + games page 11/16",
    "games_page_slug": "phi-vs-bkn",
    "games_page_game_id": "0022600248",
-   "games_page_url": "https://www.nba.com/game/phi-vs-bkn-0022600248",
    "games_page_tip_et": "7:30 PM ET",
+   "games_page_url": "https://www.nba.com/game/phi-vs-bkn-0022600248",
+   "at_token_printed_in_schedule": false,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games page URL slug 'away-vs-home'"
+    "games page URL slug 'away-vs-home'",
+    "schedule PDF printed order (first cell = away, per the games-page slug)",
+    "injury report AWAY@HOME code"
    ],
    "tip_disagreement": null
   },
@@ -121,17 +130,17 @@
    "home": "Miami",
    "tip_et_col1": "7:30 PM",
    "tip_et_col2": "7:30 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|home_cell",
    "code": "HOU@MIA",
-   "code_source": "injury report 11/16 09:15 AM",
+   "code_source": "injury report 11/16 09:15 AM + games page 11/16",
    "games_page_slug": "hou-vs-mia",
    "games_page_game_id": "0022600249",
-   "games_page_url": "https://www.nba.com/game/hou-vs-mia-0022600249",
    "games_page_tip_et": "7:30 PM ET",
+   "games_page_url": "https://www.nba.com/game/hou-vs-mia-0022600249",
+   "at_token_printed_in_schedule": false,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games page URL slug 'away-vs-home'"
+    "games page URL slug 'away-vs-home'",
+    "schedule PDF printed order (first cell = away, per the games-page slug)",
+    "injury report AWAY@HOME code"
    ],
    "tip_disagreement": null
   },
@@ -143,17 +152,17 @@
    "home": "Minnesota",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "8:00 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|home_cell",
    "code": "POR@MIN",
-   "code_source": "injury report 11/16 09:15 AM",
+   "code_source": "injury report 11/16 09:15 AM; games-page card recorded 2026-11-15 in slate-2026-11-15.json",
    "games_page_slug": "por-vs-min",
    "games_page_game_id": "0022600250",
-   "games_page_url": "https://www.nba.com/game/por-vs-min-0022600250",
    "games_page_tip_et": "8:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/por-vs-min-0022600250",
+   "at_token_printed_in_schedule": false,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games page URL slug 'away-vs-home'"
+    "games page URL slug 'away-vs-home'",
+    "schedule PDF printed order (first cell = away, per the games-page slug)",
+    "injury report AWAY@HOME code"
    ],
    "tip_disagreement": null
   },
@@ -165,17 +174,17 @@
    "home": "New Orleans",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "8:00 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|home_cell",
    "code": "GSW@NOP",
-   "code_source": "injury report 11/16 09:15 AM",
+   "code_source": "injury report 11/16 09:15 AM + games page 11/16",
    "games_page_slug": "gsw-vs-nop",
    "games_page_game_id": "0022600251",
-   "games_page_url": "https://www.nba.com/game/gsw-vs-nop-0022600251",
    "games_page_tip_et": "8:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/gsw-vs-nop-0022600251",
+   "at_token_printed_in_schedule": false,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games page URL slug 'away-vs-home'"
+    "games page URL slug 'away-vs-home'",
+    "schedule PDF printed order (first cell = away, per the games-page slug)",
+    "injury report AWAY@HOME code"
    ],
    "tip_disagreement": null
   },
@@ -187,17 +196,17 @@
    "home": "Denver",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "9:00 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|home_cell",
    "code": "PHX@DEN",
-   "code_source": "injury report 11/16 09:15 AM",
+   "code_source": "injury report 11/16 09:15 AM; games-page card recorded 2026-11-15 in slate-2026-11-15.json",
    "games_page_slug": "phx-vs-den",
    "games_page_game_id": "0022600252",
-   "games_page_url": "https://www.nba.com/game/phx-vs-den-0022600252",
    "games_page_tip_et": "9:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/phx-vs-den-0022600252",
+   "at_token_printed_in_schedule": false,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games page URL slug 'away-vs-home'"
+    "games page URL slug 'away-vs-home'",
+    "schedule PDF printed order (first cell = away, per the games-page slug)",
+    "injury report AWAY@HOME code"
    ],
    "tip_disagreement": null
   },
@@ -209,17 +218,17 @@
    "home": "Toronto",
    "tip_et_col1": "7:30 PM",
    "tip_et_col2": "7:30 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|home_cell",
    "code": "NYK@TOR",
-   "code_source": "injury report 11/16 09:15 AM",
+   "code_source": "injury report 11/16 09:15 AM + games page 11/17",
    "games_page_slug": "nyk-vs-tor",
    "games_page_game_id": "0022600253",
-   "games_page_url": "https://www.nba.com/game/nyk-vs-tor-0022600253",
    "games_page_tip_et": "7:30 PM ET",
+   "games_page_url": "https://www.nba.com/game/nyk-vs-tor-0022600253",
+   "at_token_printed_in_schedule": false,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games page URL slug 'away-vs-home'"
+    "games page URL slug 'away-vs-home'",
+    "schedule PDF printed order (first cell = away, per the games-page slug)",
+    "injury report AWAY@HOME code"
    ],
    "tip_disagreement": null
   },
@@ -231,17 +240,17 @@
    "home": "Minnesota",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "8:00 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|home_cell",
    "code": "POR@MIN",
-   "code_source": "injury report 11/16 09:15 AM",
+   "code_source": "injury report 11/16 09:15 AM + games page 11/17",
    "games_page_slug": "por-vs-min",
    "games_page_game_id": "0022600254",
-   "games_page_url": "https://www.nba.com/game/por-vs-min-0022600254",
    "games_page_tip_et": "8:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/por-vs-min-0022600254",
+   "at_token_printed_in_schedule": false,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games page URL slug 'away-vs-home'"
+    "games page URL slug 'away-vs-home'",
+    "schedule PDF printed order (first cell = away, per the games-page slug)",
+    "injury report AWAY@HOME code"
    ],
    "tip_disagreement": null
   },
@@ -253,17 +262,17 @@
    "home": "San Antonio",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "8:00 PM",
-   "national_tv": "NBC/PCK",
-   "matchup_cell_layout": "away_cell|home_cell",
    "code": "DET@SAS",
-   "code_source": "injury report 11/16 09:15 AM",
+   "code_source": "injury report 11/16 09:15 AM + games page 11/17",
    "games_page_slug": "det-vs-sas",
    "games_page_game_id": "0022600255",
-   "games_page_url": "https://www.nba.com/game/det-vs-sas-0022600255",
    "games_page_tip_et": "8:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/det-vs-sas-0022600255",
+   "at_token_printed_in_schedule": false,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games page URL slug 'away-vs-home'"
+    "games page URL slug 'away-vs-home'",
+    "schedule PDF printed order (first cell = away, per the games-page slug)",
+    "injury report AWAY@HOME code"
    ],
    "tip_disagreement": null
   },
@@ -275,19 +284,19 @@
    "home": "LA Lakers",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "10:00 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|home_cell",
    "code": "CHA@LAL",
-   "code_source": "injury report 11/16 09:15 AM",
+   "code_source": "injury report 11/16 09:15 AM + games page 11/17",
    "games_page_slug": "cha-vs-lal",
    "games_page_game_id": "0022600256",
-   "games_page_url": "https://www.nba.com/game/cha-vs-lal-0022600256",
    "games_page_tip_et": "11:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/cha-vs-lal-0022600256",
+   "at_token_printed_in_schedule": false,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games page URL slug 'away-vs-home'"
+    "games page URL slug 'away-vs-home'",
+    "schedule PDF printed order (first cell = away, per the games-page slug)",
+    "injury report AWAY@HOME code"
    ],
-   "tip_disagreement": "games page prints 11:00 PM ET for this pairing; the August schedule PDF prints 10:00 PM ET"
+   "tip_disagreement": "The August schedule PDF row 256 prints 10:00 PM ET; the nba.com games page (checked 2026-11-16) and the 09:15 AM injury report both print 11:00 PM ET. Both readings kept as printed; flagged AN-02 / P9-03."
   },
   {
    "row": 257,
@@ -297,19 +306,19 @@
    "home": "LA Clippers",
    "tip_et_col1": "8:00 PM",
    "tip_et_col2": "11:00 PM",
-   "national_tv": "NBC/PCK",
-   "matchup_cell_layout": "away_cell|home_cell",
    "code": "UTA@LAC",
-   "code_source": "injury report 11/16 09:15 AM",
+   "code_source": "injury report 11/16 09:15 AM + games page 11/17",
    "games_page_slug": "uta-vs-lac",
    "games_page_game_id": "0022600257",
-   "games_page_url": "https://www.nba.com/game/uta-vs-lac-0022600257",
    "games_page_tip_et": "10:30 PM ET",
+   "games_page_url": "https://www.nba.com/game/uta-vs-lac-0022600257",
+   "at_token_printed_in_schedule": false,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games page URL slug 'away-vs-home'"
+    "games page URL slug 'away-vs-home'",
+    "schedule PDF printed order (first cell = away, per the games-page slug)",
+    "injury report AWAY@HOME code"
    ],
-   "tip_disagreement": "games page prints 10:30 PM ET for this pairing; the August schedule PDF prints 11:00 PM ET"
+   "tip_disagreement": "The August schedule PDF row 257 prints 11:00 PM ET; the nba.com games page (checked 2026-11-16) and the 09:15 AM injury report both print 10:30 PM ET. Both readings kept as printed; flagged AN-02 / P9-03."
   },
   {
    "row": 258,
@@ -319,17 +328,16 @@
    "home": "Cleveland",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "7:00 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|home_cell",
-   "code": null,
-   "code_source": null,
-   "games_page_slug": null,
-   "games_page_game_id": null,
-   "games_page_url": null,
-   "games_page_tip_et": null,
+   "code": "MEM@CLE",
+   "code_source": "games page 11/18 (printed order; schedule rows 215-259 print no 'at')",
+   "games_page_slug": "mem-vs-cle",
+   "games_page_game_id": "0022600258",
+   "games_page_tip_et": "7:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/mem-vs-cle-0022600258",
+   "at_token_printed_in_schedule": false,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games-page check not done for this row in this pass"
+    "games page URL slug 'away-vs-home'",
+    "schedule PDF printed order (first cell = away, per the games-page slug)"
    ],
    "tip_disagreement": null
   },
@@ -341,17 +349,16 @@
    "home": "Indiana",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "7:00 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|home_cell",
-   "code": null,
-   "code_source": null,
-   "games_page_slug": null,
-   "games_page_game_id": null,
-   "games_page_url": null,
-   "games_page_tip_et": null,
+   "code": "HOU@IND",
+   "code_source": "games page 11/18 (printed order; schedule rows 215-259 print no 'at')",
+   "games_page_slug": "hou-vs-ind",
+   "games_page_game_id": "0022600259",
+   "games_page_tip_et": "7:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/hou-vs-ind-0022600259",
+   "at_token_printed_in_schedule": false,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games-page check not done for this row in this pass"
+    "games page URL slug 'away-vs-home'",
+    "schedule PDF printed order (first cell = away, per the games-page slug)"
    ],
    "tip_disagreement": null
   },
@@ -363,17 +370,16 @@
    "home": "Miami",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "7:00 PM",
-   "national_tv": "ESPN",
-   "matchup_cell_layout": "away_cell|at_cell|home_cell",
-   "code": null,
-   "code_source": null,
-   "games_page_slug": null,
-   "games_page_game_id": null,
-   "games_page_url": null,
-   "games_page_tip_et": null,
+   "code": "MIL@MIA",
+   "code_source": "schedule PDF prints 'at' + games page 11/18",
+   "games_page_slug": "mil-vs-mia",
+   "games_page_game_id": "0022600260",
+   "games_page_tip_et": "7:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/mil-vs-mia-0022600260",
+   "at_token_printed_in_schedule": true,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games-page check not done for this row in this pass"
+    "schedule PDF printed 'at' token (away team first)",
+    "games page URL slug 'away-vs-home'"
    ],
    "tip_disagreement": null
   },
@@ -385,17 +391,16 @@
    "home": "Orlando",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "7:00 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|at_cell|home_cell",
-   "code": null,
-   "code_source": null,
-   "games_page_slug": null,
-   "games_page_game_id": null,
-   "games_page_url": null,
-   "games_page_tip_et": null,
+   "code": "PHI@ORL",
+   "code_source": "schedule PDF prints 'at' + games page 11/18",
+   "games_page_slug": "phi-vs-orl",
+   "games_page_game_id": "0022600261",
+   "games_page_tip_et": "7:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/phi-vs-orl-0022600261",
+   "at_token_printed_in_schedule": true,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games-page check not done for this row in this pass"
+    "schedule PDF printed 'at' token (away team first)",
+    "games page URL slug 'away-vs-home'"
    ],
    "tip_disagreement": null
   },
@@ -407,17 +412,16 @@
    "home": "Brooklyn",
    "tip_et_col1": "7:30 PM",
    "tip_et_col2": "7:30 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|at_cell|home_cell",
-   "code": null,
-   "code_source": null,
-   "games_page_slug": null,
-   "games_page_game_id": null,
-   "games_page_url": null,
-   "games_page_tip_et": null,
+   "code": "CHI@BKN",
+   "code_source": "schedule PDF prints 'at' + games page 11/18",
+   "games_page_slug": "chi-vs-bkn",
+   "games_page_game_id": "0022600262",
+   "games_page_tip_et": "7:30 PM ET",
+   "games_page_url": "https://www.nba.com/game/chi-vs-bkn-0022600262",
+   "at_token_printed_in_schedule": true,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games-page check not done for this row in this pass"
+    "schedule PDF printed 'at' token (away team first)",
+    "games page URL slug 'away-vs-home'"
    ],
    "tip_disagreement": null
   },
@@ -429,17 +433,16 @@
    "home": "Toronto",
    "tip_et_col1": "7:30 PM",
    "tip_et_col2": "7:30 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|at_cell|home_cell",
-   "code": null,
-   "code_source": null,
-   "games_page_slug": null,
-   "games_page_game_id": null,
-   "games_page_url": null,
-   "games_page_tip_et": null,
+   "code": "WAS@TOR",
+   "code_source": "schedule PDF prints 'at' + games page 11/18",
+   "games_page_slug": "was-vs-tor",
+   "games_page_game_id": "0022600263",
+   "games_page_tip_et": "7:30 PM ET",
+   "games_page_url": "https://www.nba.com/game/was-vs-tor-0022600263",
+   "at_token_printed_in_schedule": true,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games-page check not done for this row in this pass"
+    "schedule PDF printed 'at' token (away team first)",
+    "games page URL slug 'away-vs-home'"
    ],
    "tip_disagreement": null
   },
@@ -451,17 +454,16 @@
    "home": "New Orleans",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "8:00 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|at_cell|home_cell",
-   "code": null,
-   "code_source": null,
-   "games_page_slug": null,
-   "games_page_game_id": null,
-   "games_page_url": null,
-   "games_page_tip_et": null,
+   "code": "DET@NOP",
+   "code_source": "schedule PDF prints 'at' + games page 11/18",
+   "games_page_slug": "det-vs-nop",
+   "games_page_game_id": "0022600264",
+   "games_page_tip_et": "8:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/det-vs-nop-0022600264",
+   "at_token_printed_in_schedule": true,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games-page check not done for this row in this pass"
+    "schedule PDF printed 'at' token (away team first)",
+    "games page URL slug 'away-vs-home'"
    ],
    "tip_disagreement": null
   },
@@ -473,17 +475,16 @@
    "home": "Oklahoma City",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "8:00 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|at_cell|home_cell",
-   "code": null,
-   "code_source": null,
-   "games_page_slug": null,
-   "games_page_game_id": null,
-   "games_page_url": null,
-   "games_page_tip_et": null,
+   "code": "ATL@OKC",
+   "code_source": "schedule PDF prints 'at' + games page 11/18",
+   "games_page_slug": "atl-vs-okc",
+   "games_page_game_id": "0022600265",
+   "games_page_tip_et": "8:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/atl-vs-okc-0022600265",
+   "at_token_printed_in_schedule": true,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games-page check not done for this row in this pass"
+    "schedule PDF printed 'at' token (away team first)",
+    "games page URL slug 'away-vs-home'"
    ],
    "tip_disagreement": null
   },
@@ -495,19 +496,18 @@
    "home": "Denver",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "9:00 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|at_cell|home_cell",
-   "code": null,
-   "code_source": null,
-   "games_page_slug": null,
-   "games_page_game_id": null,
-   "games_page_url": null,
-   "games_page_tip_et": null,
+   "code": "BOS@DEN",
+   "code_source": "schedule PDF prints 'at' + games page 11/18",
+   "games_page_slug": "bos-vs-den",
+   "games_page_game_id": "0022600266",
+   "games_page_tip_et": "9:30 PM ET",
+   "games_page_url": "https://www.nba.com/game/bos-vs-den-0022600266",
+   "at_token_printed_in_schedule": true,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games-page check not done for this row in this pass"
+    "schedule PDF printed 'at' token (away team first)",
+    "games page URL slug 'away-vs-home'"
    ],
-   "tip_disagreement": null
+   "tip_disagreement": "The August schedule PDF row 266 prints 9:00 PM ET; the nba.com games page (checked 2026-11-16) prints 9:30 PM ET. Both readings kept as printed; flagged P9-04 (new this pass)."
   },
   {
    "row": 267,
@@ -517,19 +517,18 @@
    "home": "Dallas",
    "tip_et_col1": "8:30 PM",
    "tip_et_col2": "9:30 PM",
-   "national_tv": "ESPN",
-   "matchup_cell_layout": "away_cell|at_cell|home_cell",
-   "code": null,
-   "code_source": null,
-   "games_page_slug": null,
-   "games_page_game_id": null,
-   "games_page_url": null,
-   "games_page_tip_et": null,
+   "code": "GSW@DAL",
+   "code_source": "schedule PDF prints 'at' + games page 11/18",
+   "games_page_slug": "gsw-vs-dal",
+   "games_page_game_id": "0022600267",
+   "games_page_tip_et": "8:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/gsw-vs-dal-0022600267",
+   "at_token_printed_in_schedule": true,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games-page check not done for this row in this pass"
+    "schedule PDF printed 'at' token (away team first)",
+    "games page URL slug 'away-vs-home'"
    ],
-   "tip_disagreement": null
+   "tip_disagreement": "The August schedule PDF row 267 prints 9:30 PM ET (8:30 PM local); the nba.com games page (checked 2026-11-16) prints 8:00 PM ET. Both readings kept as printed; flagged P9-04 (new this pass)."
   },
   {
    "row": 268,
@@ -539,17 +538,16 @@
    "home": "LA Lakers",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "10:00 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|at_cell|home_cell",
-   "code": null,
-   "code_source": null,
-   "games_page_slug": null,
-   "games_page_game_id": null,
-   "games_page_url": null,
-   "games_page_tip_et": null,
+   "code": "UTA@LAL",
+   "code_source": "schedule PDF prints 'at' + games page 11/18",
+   "games_page_slug": "uta-vs-lal",
+   "games_page_game_id": "0022600268",
+   "games_page_tip_et": "10:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/uta-vs-lal-0022600268",
+   "at_token_printed_in_schedule": true,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games-page check not done for this row in this pass"
+    "schedule PDF printed 'at' token (away team first)",
+    "games page URL slug 'away-vs-home'"
    ],
    "tip_disagreement": null
   },
@@ -561,17 +559,16 @@
    "home": "Sacramento",
    "tip_et_col1": "7:00 PM",
    "tip_et_col2": "10:00 PM",
-   "national_tv": null,
-   "matchup_cell_layout": "away_cell|at_cell|home_cell",
-   "code": null,
-   "code_source": null,
-   "games_page_slug": null,
-   "games_page_game_id": null,
-   "games_page_url": null,
-   "games_page_tip_et": null,
+   "code": "PHX@SAC",
+   "code_source": "schedule PDF prints 'at' + games page 11/18",
+   "games_page_slug": "phx-vs-sac",
+   "games_page_game_id": "0022600269",
+   "games_page_tip_et": "10:00 PM ET",
+   "games_page_url": "https://www.nba.com/game/phx-vs-sac-0022600269",
+   "at_token_printed_in_schedule": true,
    "order_corroborated_by": [
-    "schedule PDF printed order (first team cell = away; rows 260+ print an explicit 'at' cell)",
-    "games-page check not done for this row in this pass"
+    "schedule PDF printed 'at' token (away team first)",
+    "games page URL slug 'away-vs-home'"
    ],
    "tip_disagreement": null
   }

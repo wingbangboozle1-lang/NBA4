@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Availability and rotation surface: reported status as an observation, the rotation-availability column, and the top-8 minutes-share redistribution model — with model cells blank until rights clear.">
-  <title>NBA4 — Availability &amp; rotation</title>
+  <meta name="description" content="Rotation availability from the official injury report and the explicit minutes-redistribution rule.">
+  <title>NBA4 &mdash; Rotation availability</title>
   <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
@@ -19,9 +19,10 @@
       <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
       <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
       <li><a href="results.html"><span class="nav-icon" aria-hidden="true">≣</span>Results &amp; standings</a></li>
-      <li><a href="model.html"><span class="nav-icon" aria-hidden="true">∑</span>Model &amp; estimators</a></li>
-      <li><a href="availability.html" aria-current="page"><span class="nav-icon" aria-hidden="true">◒</span>Availability &amp; rotation</a></li>
-      <li><a href="ledger.html"><span class="nav-icon" aria-hidden="true">⌗</span>Ledger &amp; seals</a></li>
+      <li><a href="team-stats.html"><span class="nav-icon" aria-hidden="true">▦</span>Team stats</a></li>
+      <li><a href="model.html"><span class="nav-icon" aria-hidden="true">◎</span>Model status</a></li>
+      <li><a href="availability.html" aria-current="page"><span class="nav-icon" aria-hidden="true">⊙</span>Availability</a></li>
+      <li><a href="ledger.html"><span class="nav-icon" aria-hidden="true">◈</span>Settlement ledger</a></li>
       <li><a href="line-origination.html"><span class="nav-icon" aria-hidden="true">≡</span>Line origination</a></li>
       <li><a href="automation.html"><span class="nav-icon" aria-hidden="true">⟳</span>Automation</a></li>
       <li><a href="strategies.html"><span class="nav-icon" aria-hidden="true">◇</span>Strategies &amp; gates</a></li>
@@ -37,63 +38,31 @@
     <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
   </aside>
   <div class="content-shell">
-    <header class="topbar"><div><p class="topbar-title">Availability &amp; rotation desk</p><p class="topbar-meta">Engine reference implementation &middot; synthetic fixtures only &middot; 16 Nov 2026</p></div><span class="status-pill">NO PICKS ISSUED</span></header>
+    <header class="topbar"><div><p class="topbar-title">Availability desk</p><p class="topbar-meta">Counted from the official 2026-11-16 09:15 AM ET injury report</p></div><span class="status-pill">NO PICKS ISSUED</span></header>
     <main id="main" class="main-content">
-      <header class="page-header"><p class="eyebrow">Status is not a minutes projection</p><h1>Availability &amp; rotation</h1><p>The official injury report states reported status and reasons; it does not state playing time. This page documents the reference engine's availability and rotation layer &mdash; the rotation-availability column the picks page must carry, and the top-8 minutes-share redistribution model &mdash; exactly as implemented, and shows what each part reports <strong>today</strong>: observed status with its official link, and model cells left blank. No availability probability, minutes estimate, production impact or game script is derived from an injury label here (rights gate G0; stances D-01/IR-T4 stand).</p></header>
+      <header class="page-header"><p class="eyebrow">Injuries &rarr; rotation &middot; dated 2026-11-16</p><h1>Rotation availability and the minutes-redistribution rule</h1><p>Availability is published as its own column on <a href="slate.html">the picks page</a>, counted from the newest official injury report at game level. This page carries the method, the redistribution rule the brief requires, and the honest gap between the two.</p></header>
 
-      <div class="notice notice-info"><span class="notice-icon" aria-hidden="true">i</span><div><strong>Keep the evidence chain separate.</strong><p>A status report is an input observation. Availability probability, rotation minutes, player production and game-flow scenarios are modelled outputs that each need data, uncertainty and validation. The table below keeps them on separate rows for that reason &mdash; the <a href="injuries.html">injuries page</a> publishes the observation side row by row, and the <a href="results.html">results page</a> carries the per-player game logs behind the rotation estimates.</p></div></div>
-
-      <section class="section" aria-labelledby="column-title">
-        <div class="section-heading"><div><h2 id="column-title">The rotation-availability column on the picks page</h2><p>The brief requires rotation availability on the picks page as its own column. The column is defined here; with no picks issued and no cleared inputs it renders blank on every surface &mdash; a blank means &ldquo;not sourced&rdquo;, never &ldquo;healthy&rdquo;.</p></div><span class="flag">Bet surface &mdash; gated</span></div>
+      <section class="panel">
+        <h2>Current availability state</h2>
         <div class="table-card table-wrap">
           <table class="data-table">
-            <thead><tr><th scope="col">Column layer</th><th scope="col">Rule as implemented</th><th scope="col">Live value</th><th scope="col">Status</th><th scope="col">Official source</th></tr></thead>
+            <thead><tr><th scope="col">Item</th><th scope="col">Scope</th><th scope="col">Rows / state</th><th scope="col">What it feeds / what it does not</th><th scope="col">Official source</th></tr></thead>
             <tbody>
-              <tr><td><strong>Reported status</strong></td><td>Verbatim status/reason cells from the newest injury report, with revision time and retrieval time on the banner. An observation, not a model output.</td><td>Published row by row on the injuries page (72 rows, revision 11/16/26 09:15 AM ET)</td><td><span class="flag flag-green">Observation</span><br>every row carries its document link.</td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-11-17-season/" target="_blank" rel="noopener noreferrer">NBA injury report index</a><br><a class="source-link" href="https://wingbangboozle1-lang.github.io/NBA4/injuries.html" target="_blank" rel="noopener noreferrer">Published rows</a></td></tr>
-              <tr><td><strong>Availability state</strong></td><td>Probability or an explicit unresolved state, conditioned on the report revision and the tip time. Status alone is never treated as certainty.</td><td class="empty-value"></td><td><span class="flag">Unverified</span><br><code>[NO INPUT]</code> &mdash; no point-in-time history, no cleared input.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/rotations.py" target="_blank" rel="noopener noreferrer">engine/rotations.py</a></td></tr>
-              <tr><td><strong>Minutes-share change</strong></td><td>Redistributed minutes for each unavailable player, from the model below &mdash; conditional on the availability state, so it stays blank while that is blank.</td><td class="empty-value"></td><td><span class="flag">Unverified</span><br><code>[NO INPUT]</code> &mdash; do not infer from status alone.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/rotations.py" target="_blank" rel="noopener noreferrer">engine/rotations.py</a></td></tr>
-              <tr><td><strong>Conservative fallback</strong></td><td>When the chain is unresolved the column prints the blank/unresolved state; the pick layer suppresses rather than assumes (see the automation page).</td><td>Suppressed &mdash; no picks exist to suppress</td><td><span class="flag flag-green">Gate in force</span></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/rotations.py" target="_blank" rel="noopener noreferrer">engine/rotations.py</a></td></tr>
+              <tr><td>2026-11-16 09:15 AM ET report</td><td>13 matchup blocks (8 on 11/16, 5 on 11/17)</td><td>72 rows; 56 carry a status cell; 8 NOT YET SUBMITTED (reporting state, not a status)</td><td>Counts printed on the slate&rsquo;s per-game availability column (rows whose status cell reads exactly &ldquo;Out&rdquo;)</td><td><a href="https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_09_15AM.pdf">Injury-Report_2026-11-16_09_15AM.pdf</a></td></tr>
+              <tr><td>Consecutive-revision diff 09:00 &rarr; 09:15</td><td>same 13 blocks</td><td>0 status changes, 0 reason changes, 1 printing variance (Mathurin name cell)</td><td>Published as an extraction artifact; the report itself shows no status movement this interval</td><td><a href="https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_09_15AM.pdf">Injury-Report_2026-11-16_09_15AM.pdf</a></td></tr>
+              <tr><td>Minutes redistribution (top-8 + replacement)</td><td>&mdash;</td><td><span class="flag">SPECIFIED, NOT APPLIED</span></td><td>Injured minutes redistribute to the top eight by played minutes in proportion to played-minute share; the replacement group takes auditioned shares. Applying shares needs played-minute inputs, which gate G0 blocks on this run (see <a href="model.html">model status</a>)</td><td><a href="https://www.nba.com/termsofuse">NBA Terms of Use s.1, s.9(ii)</a></td></tr>
+              <tr><td>Per-player game logs (min, pts, reb, ast, opponent)</td><td>2026-11-15 report&rsquo;s players</td><td>28 players logged in <code>data/snapshots/injuries-2026-11-15-0615am.json</code> with the explicit no-publication caveat</td><td>Games confirmed played by schedule + finals; zero-minute rows (e.g. Adebayo 0 on 11/15) retained as printed. The 11/16 report adds 24 player entries; their game logs await the same verified-lines treatment</td><td><a href="https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf">Official schedule PDF (August release)</a></td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <section class="section" aria-labelledby="minutes-title">
-        <div class="section-heading"><div><h2 id="minutes-title">Top-8 minutes-share redistribution model</h2><p>Minutes are a fixed budget: 240 team-minutes in regulation (five players &times; 48), plus five per overtime period. When one player's minutes fall, an equal amount must appear somewhere else &mdash; the model redistributes a constant, it never rescales one.</p></div><span class="flag">Model spec</span></div>
-        <div class="table-card table-wrap">
-          <table class="data-table">
-            <thead><tr><th scope="col">Item</th><th scope="col">Rule as implemented</th><th scope="col">Live value</th><th scope="col">Status</th><th scope="col">Official source</th></tr></thead>
-            <tbody>
-              <tr><td><strong>Budget check</strong></td><td>Top-8 group shares must be non-negative, must not exceed the game length, and must not exceed the team budget; overtime adds five minutes per printed OT period.</td><td class="empty-value"></td><td><span class="flag">Unverified</span><br>no authorised lineup/minute history.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/rotations.py" target="_blank" rel="noopener noreferrer">engine/rotations.py</a><br><a class="source-link" href="https://www.nba.com/stats/help/glossary" target="_blank" rel="noopener noreferrer">NBA Stats glossary</a></td></tr>
-              <tr><td><strong>Redistribution rule</strong></td><td>new_share(p) = old_share(p) + removed_minutes &times; weight(p) / &Sigma;weights, where removed_minutes is the summed shortfall of unavailable players.</td><td class="empty-value"></td><td><span class="flag">Unverified</span><br>mechanics tested on synthetic fixtures only.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/rotations.py" target="_blank" rel="noopener noreferrer">engine/rotations.py</a></td></tr>
-              <tr><td><strong>Replacement weights</strong></td><td>Coach-behaviour parameters, supplied by the caller and <strong>never defaulted</strong> &mdash; who absorbs the minutes is the empirical question, and a guessed weight would put the answer in the input.</td><td class="empty-value"></td><td><span class="flag">Unverified</span><br><code>[NO INPUT]</code> &mdash; no registered weight table.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/rotations.py" target="_blank" rel="noopener noreferrer">engine/rotations.py</a></td></tr>
-              <tr><td><strong>Unallocated minutes</strong></td><td>If the weights cannot absorb the shortfall, the model reports <code>unallocated_minutes</code> instead of silently spreading it.</td><td class="empty-value"></td><td><span class="flag">Unverified</span><br>nothing to allocate yet.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/rotations.py" target="_blank" rel="noopener noreferrer">engine/rotations.py</a></td></tr>
-            </tbody>
-          </table>
-        </div>
+      <section class="panel">
+        <h2>How the redistribution will work when the gates clear</h2>
+        <p>When a player is ruled out, his minutes are redistributed explicitly &mdash; never implicitly &mdash; in two steps: the top eight rotation players by played minutes absorb shares proportional to their played-minute share; the replacement group (the next auditioned players) absorbs shares proportional to auditioned share; any remainder becomes replacement minutes. Production is scaled by the same shares. The rule is recorded here and in the engine work items; on this run it is <strong>not applied</strong>, because the played-minute shares are model inputs and gate G0 blocks NBA statistics from that use (IR-T2). The slate&rsquo;s availability column shows the printed report state instead &mdash; never a projected redistribution.</p>
+        <p><a href="injuries.html">Injuries &amp; game flow &rarr;</a> &middot; <a href="model.html">Model status &rarr;</a></p>
       </section>
-
-      <section class="section" aria-labelledby="chain-title">
-        <div class="section-heading"><div><h2 id="chain-title">Injury &rarr; rotation &rarr; game flow: the required analysis chain</h2><p>Each step needs a timestamped source and its own validation; the chain stops at the first blank.</p></div><span class="flag">Chain status</span></div>
-        <div class="table-card table-wrap">
-          <table class="data-table">
-            <thead><tr><th scope="col">Step</th><th scope="col">Input needed</th><th scope="col">Live value</th><th scope="col">Status</th><th scope="col">Official source</th></tr></thead>
-            <tbody>
-              <tr><td><strong>1. Reported status</strong></td><td>Official report version, timestamp, revision time.</td><td>11/16/26 09:15 AM ET revision, published row by row</td><td><span class="flag flag-green">Sourced</span></td><td><a class="source-link" href="https://official.nba.com/nba-injury-report-2026-11-17-season/" target="_blank" rel="noopener noreferrer">NBA injury policy</a></td></tr>
-              <tr><td><strong>2. Availability</strong></td><td>Point-in-time history or a declared unresolved state.</td><td class="empty-value"></td><td><span class="flag">Unverified</span><br>chain stops here.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/rotations.py" target="_blank" rel="noopener noreferrer">engine/rotations.py</a></td></tr>
-              <tr><td><strong>3. Rotation minutes</strong></td><td>Registered replacement weights and the top-8 share table.</td><td class="empty-value"></td><td><span class="flag">Unverified</span></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/rotations.py" target="_blank" rel="noopener noreferrer">engine/rotations.py</a></td></tr>
-              <tr><td><strong>4. Production</strong></td><td>Conditional per-minute/possession distribution, validated separately.</td><td class="empty-value"></td><td><span class="flag">Not estimated</span></td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms</a></td></tr>
-              <tr><td><strong>5. Game flow</strong></td><td>Calibrated pace/margin/lineup model and scenario distribution.</td><td class="empty-value"></td><td><span class="flag">Not estimated</span></td><td><a class="source-link" href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank" rel="noopener noreferrer">Time-based validation</a></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="section two-column" aria-label="Availability review notes">
-        <article class="panel"><h2>Refresh and snapshot controls</h2><ul><li>Keep each permitted official report version with source time and observed time.</li><li>Never overwrite a prior estimate after an injury update; create a new version.</li><li>Suppress picks if reports are late, stale, missing, or unresolved.</li><li>Do not use a previous day's report as a current slate status.</li></ul></article>
-        <article class="panel"><h2>What to review next</h2><p>Resolve authorised injury-history access and point-in-time retention, register the replacement weights, then test availability &rarr; minutes &rarr; production separately on future data.</p><p><a href="review.html">Open flagged issues →</a> · <a href="automation.html">How an unresolved status suppresses a pick →</a> · <a href="results.html">Per-player game logs →</a></p></article>
-      </section>
-      <footer class="footer"><p>All minute and impact cells are intentionally blank.</p><p><a href="sources.html">Official source register</a></p></footer>
+      <footer class="footer"><p>Snapshot tables are regenerated by <code>python3 scripts/build_snapshots.py</code>; gate status by the verification pass recorded in <code>docs/verification-pass-7ce5c0cc.md</code>.</p><p><a href="sources.html">Official source register</a></p></footer>
     </main>
   </div>
 </div>

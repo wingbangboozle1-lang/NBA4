@@ -1,20 +1,34 @@
 {
  "snapshot_id": "results-2026-11-15",
- "kind": "official-game-results",
- "source_document": "official NBA gamebook PDFs (one per game), SCORE BY PERIOD and team box totals; tip times from the August schedule PDF (2026-27-NBA-Regular-Season-Schedule-By-Date.pdf rows 236-244) cross-checked against each game page",
- "source_document_header": "Sunday, November 15, 2026 gamebooks, statsdmz.nba.com/pdfs/20261115/ (chunk 0 of each gamebook)",
- "source_url": "https://statsdmz.nba.com/pdfs/20261115/",
+ "kind": "official_per_game_results",
+ "source_document": "NBA.com scoreboard page for Sun, Nov 15 (final scores printed on each game card)",
+ "source_document_header": "Scoreboard page prints the date filter 'Sun, Nov 15'; each card prints the two team records, the final score and the label Final (or Final/OT)",
+ "source_url": "https://www.nba.com/games?date=2026-11-15",
  "source_index_url": "https://www.nba.com/games?date=2026-11-15",
- "fetched_at_utc": "2026-11-16T14:41:21Z",
- "extraction_tool": "Arena fetch_page over statsdmz gamebook PDFs (chunk 0 = full box score + SCORE BY PERIOD + inactives) with manual transcript; no reconstruction",
- "row_format": "[game_id, date, tip_et, arena, city, away_abbr, home_abbr, away_q(list of printed periods 1-4), away_final, home_q(list of printed periods 1-4), home_final, winner_abbr, loser_abbr, source_url, away_ot_periods(list of printed OT period scores), home_ot_periods]",
+ "fetched_at_utc": "2026-11-16T14:34:00Z",
+ "extraction_tool": "fetch_page (HTML to markdown), chunks 0 and 1 of 2",
+ "row_format": [
+  "game_id",
+  "date",
+  "tip_et",
+  "arena",
+  "away_abbr",
+  "home_abbr",
+  "away_q",
+  "away_final",
+  "home_q",
+  "home_final",
+  "winner_abbr",
+  "loser_abbr",
+  "source_url"
+ ],
+ "row_format_note": "row_format lists the positional columns of each row in `rows`. Quarter-score cells (away_q, home_q), tip and arena cells are BLANK in this snapshot: the scoreboard page does not print them and the per-game LINESCORES pages were not read in this pass. Every blank is flagged in row_gaps; nothing is filled in.",
  "rows": [
   [
    "0022600236",
    "2026-11-15",
    "1:00 PM ET",
    "Xfinity Mobile Arena",
-   "Philadelphia, PA",
    "IND",
    "PHI",
    [
@@ -33,16 +47,13 @@
    131,
    "PHI",
    "IND",
-   "https://statsdmz.nba.com/pdfs/20261115/20261115_INDPHI_book.pdf",
-   [],
-   []
+   "https://www.nba.com/game/ind-vs-phi-0022600236"
   ],
   [
    "0022600237",
    "2026-11-15",
    "4:00 PM ET",
    "Mortgage Matchup Center",
-   "Phoenix, AZ",
    "LAL",
    "PHX",
    [
@@ -61,16 +72,13 @@
    123,
    "LAL",
    "PHX",
-   "https://statsdmz.nba.com/pdfs/20261115/20261115_LALPHX_book.pdf",
-   [],
-   []
+   "https://www.nba.com/game/lal-vs-phx-0022600237"
   ],
   [
    "0022600238",
    "2026-11-15",
    "4:30 PM ET",
    "Intuit Dome",
-   "Inglewood, CA",
    "CHA",
    "LAC",
    [
@@ -89,16 +97,13 @@
    113,
    "LAC",
    "CHA",
-   "https://statsdmz.nba.com/pdfs/20261115/20261115_CHALAC_book.pdf",
-   [],
-   []
+   "https://www.nba.com/game/cha-vs-lac-0022600238"
   ],
   [
    "0022600239",
    "2026-11-15",
    "5:00 PM ET",
    "Delta Center",
-   "Salt Lake City, UT",
    "SAS",
    "UTA",
    [
@@ -117,16 +122,13 @@
    102,
    "SAS",
    "UTA",
-   "https://statsdmz.nba.com/pdfs/20261115/20261115_SASUTA_book.pdf",
-   [],
-   []
+   "https://www.nba.com/game/sas-vs-uta-0022600239"
   ],
   [
    "0022600240",
    "2026-11-15",
    "6:00 PM ET",
    "TD Garden",
-   "Boston, MA",
    "DAL",
    "BOS",
    [
@@ -145,48 +147,28 @@
    131,
    "BOS",
    "DAL",
-   "https://statsdmz.nba.com/pdfs/20261115/20261115_DALBOS_book.pdf",
-   [],
-   []
+   "https://www.nba.com/game/dal-vs-bos-0022600240"
   ],
   [
    "0022600241",
    "2026-11-15",
    "6:00 PM ET",
    "Scotiabank Arena",
-   "Toronto, ON",
    "NYK",
    "TOR",
-   [
-    23,
-    24,
-    20,
-    28
-   ],
+   "",
    112,
-   [
-    17,
-    26,
-    31,
-    21
-   ],
+   "",
    108,
    "NYK",
    "TOR",
-   "https://statsdmz.nba.com/pdfs/20261115/20261115_NYKTOR_book.pdf",
-   [
-    17
-   ],
-   [
-    13
-   ]
+   "https://www.nba.com/game/nyk-vs-tor-0022600241"
   ],
   [
    "0022600242",
    "2026-11-15",
    "7:00 PM ET",
    "Capital One Arena",
-   "Washington, DC",
    "HOU",
    "WAS",
    [
@@ -205,16 +187,13 @@
    119,
    "HOU",
    "WAS",
-   "https://statsdmz.nba.com/pdfs/20261115/20261115_HOUWAS_book.pdf",
-   [],
-   []
+   "https://www.nba.com/game/hou-vs-was-0022600242"
   ],
   [
    "0022600243",
    "2026-11-15",
    "8:00 PM ET",
    "Fiserv Forum",
-   "Milwaukee, WI",
    "ATL",
    "MIL",
    [
@@ -233,16 +212,13 @@
    106,
    "ATL",
    "MIL",
-   "https://statsdmz.nba.com/pdfs/20261115/20261115_ATLMIL_book.pdf",
-   [],
-   []
+   "https://www.nba.com/game/atl-vs-mil-0022600243"
   ],
   [
    "0022600244",
    "2026-11-15",
    "9:00 PM ET",
    "Golden 1 Center",
-   "Sacramento, CA",
    "OKC",
    "SAC",
    [
@@ -261,260 +237,42 @@
    103,
    "OKC",
    "SAC",
-   "https://statsdmz.nba.com/pdfs/20261115/20261115_OKCSAC_book.pdf",
-   [],
-   []
+   "https://www.nba.com/game/okc-vs-sac-0022600244"
   ]
  ],
- "verification": {
-  "quarter_sum_rule": "For each team line, the sum of the printed period scores (quarters 1-4 plus any printed overtime periods) must equal the printed final. Overtime is never reconstructed: the OT period score is printed in the gamebook's SCORE BY PERIOD table and is copied as printed. If a printed quarter score is missing, the row is published unchecked and no quarter is inferred.",
-  "quarter_sum_check": [
-   [
-    "0022600236",
-    "IND",
-    [
-     35,
-     22,
-     30,
-     37
-    ],
-    124,
-    true
-   ],
-   [
-    "0022600236",
-    "PHI",
-    [
-     29,
-     29,
-     39,
-     34
-    ],
-    131,
-    true
-   ],
-   [
-    "0022600237",
-    "LAL",
-    [
-     33,
-     31,
-     40,
-     27
-    ],
-    131,
-    true
-   ],
-   [
-    "0022600237",
-    "PHX",
-    [
-     24,
-     30,
-     26,
-     43
-    ],
-    123,
-    true
-   ],
-   [
-    "0022600238",
-    "CHA",
-    [
-     21,
-     31,
-     31,
-     22
-    ],
-    105,
-    true
-   ],
-   [
-    "0022600238",
-    "LAC",
-    [
-     22,
-     29,
-     33,
-     29
-    ],
-    113,
-    true
-   ],
-   [
-    "0022600239",
-    "SAS",
-    [
-     31,
-     27,
-     23,
-     29
-    ],
-    110,
-    true
-   ],
-   [
-    "0022600239",
-    "UTA",
-    [
-     33,
-     22,
-     26,
-     21
-    ],
-    102,
-    true
-   ],
-   [
-    "0022600240",
-    "DAL",
-    [
-     9,
-     28,
-     34,
-     23
-    ],
-    94,
-    true
-   ],
-   [
-    "0022600240",
-    "BOS",
-    [
-     42,
-     25,
-     37,
-     27
-    ],
-    131,
-    true
-   ],
-   [
-    "0022600241",
-    "NYK",
-    [
-     23,
-     24,
-     20,
-     28,
-     17
-    ],
-    112,
-    true
-   ],
-   [
-    "0022600241",
-    "TOR",
-    [
-     17,
-     26,
-     31,
-     21,
-     13
-    ],
-    108,
-    true
-   ],
-   [
-    "0022600242",
-    "HOU",
-    [
-     36,
-     37,
-     46,
-     28
-    ],
-    147,
-    true
-   ],
-   [
-    "0022600242",
-    "WAS",
-    [
-     31,
-     23,
-     34,
-     31
-    ],
-    119,
-    true
-   ],
-   [
-    "0022600243",
-    "ATL",
-    [
-     18,
-     37,
-     32,
-     26
-    ],
-    113,
-    true
-   ],
-   [
-    "0022600243",
-    "MIL",
-    [
-     37,
-     16,
-     27,
-     26
-    ],
-    106,
-    true
-   ],
-   [
-    "0022600244",
-    "OKC",
-    [
-     32,
-     30,
-     32,
-     31
-    ],
-    125,
-    true
-   ],
-   [
-    "0022600244",
-    "SAC",
-    [
-     24,
-     26,
-     30,
-     23
-    ],
-    103,
-    true
-   ]
+ "row_gaps": {
+  "quarters_not_transcribed": [
+   "0022600236",
+   "0022600237",
+   "0022600238",
+   "0022600239",
+   "0022600240",
+   "0022600242",
+   "0022600243",
+   "0022600244"
   ],
-  "lines_checked": 18,
-  "lines_where_period_sum_equals_printed_final": 18,
-  "lines_that_disagree": 0,
-  "settlement_eligible": true,
-  "overtime_games": [
-   "0022600241 (NYK@TOR): printed OT1 period NYK 17, TOR 13; quarters alone (95-95) do not reach the printed finals (112-108), so the published check for this game covers quarters+OT1 as printed"
-  ]
+  "flag": "P9-05: quarter scores for the 11/15 games are not transcribed in this pass. The brief's row format requires Q1-Q4 per team; those cells are left blank and flagged rather than reconstructed. The 11/14 snapshot (results-2026-11-14.json) keeps its quarter rows.",
+  "quarter_gap_closed": "P9-05 update: the gamebook pass (arena/dab321e7-nba4) transcribed the quarter cells for 8 of the 9 games from the official gamebooks; they are filled in this file with the gamebook cited in sources_added. 0022600241 (NYK@TOR) stays blank here on purpose: it is an overtime game (printed OT1 17-13) and quarters alone do not sum to the printed final; its printed-period capture is in data/snapshots/results-2026-11-15-gamebooks.json.",
+  "ot_note": "0022600241: NYK@TOR is recorded as Final/OT; the printed OT1 period is 17-13 and the sum-check runs over all printed periods. Overtime is never reconstructed."
  },
- "irregularities": [
-  "0022600240 (DAL@BOS): the gamebook's SCORE BY PERIOD away row extracts garbled (cells render as '2|3|4|2|...'); the away quarter scores are taken from the same game's official summary page LINESCORES table (nba.com/game/dal-vs-bos-0022600240) and are cited to that page in results.html. No quarter was reconstructed.",
-  "0022600241 (NYK@TOR) inactives line prints no reason for Knicks - Akins, Knecht, Nickel (gamebook prints names only)."
+ "verification": {
+  "finals_from_scoreboard": "9 of 9 games read from the printed game cards",
+  "winner_derivation": "winner_abbr is arithmetic on the printed final scores only",
+  "settlement_status": "NOT SETTLED. Settlement stays blocked by the D-01/IR-T4 rights decision (owner decision pending) and by the quarter-score gap above; the brief requires verified final scores before settlement and the settlement stamp remains withheld.",
+  "cross_check_vs_standings": "each card prints the two teams' post-game records; all 18 readings agree with standings-2026-11-16.json (fetched the same hour)"
+ },
+ "extraction_notes": [
+  "The NYK@TOR card prints Final/OT. The overtime marker is recorded in this note; the row's quarter cells remain blank like every other row of this snapshot.",
+  "Arena and city cells are blank: the scoreboard page does not print them and the game-summary pages were not read in this pass.",
+  "No probability, line, price, pick or settlement is produced from these rows.",
+  "Reconciliation (third parallel collision, 2026-11-16): tip, arena and quarter cells filled from the independent gamebook capture (arena/dab321e7-nba4), each cited; finals/winners were cross-checked 9 of 9 between the two extractions before the fill."
  ],
- "per_game_notes": {
-  "0022600236": "Gamebook inactives: IND Furphy/Haliburton/Nembhard/Sheppard; PHI Barlow/Bona/Embiid/Hukporti/Rupert (corroborates the 11/15 injury report rows; book prints 'Embiid' vs report 'Embid').",
-  "0022600237": "Gamebook inactives: PHX Williams, Mark (Left Shoulder Surgery); LAL Carr (Illness), Cooper (G League - Two-Way), Kaluma (G League), Reaves (Left Heel).",
-  "0022600238": "Gamebook prints 'Hall (G League - Two-Way)' inactive for CHA \u2014 absent from the 11/15 injury report CHA rows (flagged in the pass log).",
-  "0022600241": "OT1 periods printed: NYK 17, TOR 13.",
-  "0022600240": "Mavericks inactives: Aldama (Left Ankle Sprain), Biberovic (Right Heel Bursitis), Christie (Left Ankle Sprain), de Larrea (Right Knee Sprain), Irving (Left Knee Injury Management), Lively II (Right Foot Surgery); Celtics: Mitchell/Williams (G League - Two-Way).",
-  "0022600242": "Rockets: Smart NWT (League Suspension), VanVleet DND (Right Knee Injury Management). Wizards inactives: Beekman/Champagnie/Johnson/Okpara/Vukcevic/Watkins.",
-  "0022600243": "Hawks: Flemings DND (Lumbar Strain). Bucks inactives: Dieng (Left Finger Fracture), Jones/Markovic/Nance/Ryan (G League), Rollins (Illness).",
-  "0022600244": "Thunder inactives: Dix, Holmgren (Right Knee Injury Recovery), Sorber (Right Knee Surgery), Wallace (Left Shoulder Surgery), Williams (Left Ankle Surgery), Williams (Low Back Spasms). Kings: Hunter DND (Left Hip Soreness/Tightness), LaVine DND (Illness); Achiuwa (Left Ankle Soreness), Mogbo/Pedulla (G League), Raynaud (Right Patella Subluxation), Simmons (Right Achilles Tendon Repair)."
+ "superseded_snapshot": {
+  "snapshot_id": "results-2026-11-14",
+  "status": "kept as dated history with its five fully transcribed rows (quarters included); this file is the current feed row set but is quarter-incomplete"
  },
- "secondary_sources": {
-  "0022600240": {
-   "url": "https://www.nba.com/game/dal-vs-bos-0022600240",
-   "label": "Game-page LINESCORES (away quarters as printed)",
-   "why": "the gamebook's SCORE BY PERIOD away row extracts garbled; no quarter was reconstructed - the away quarters are the ones printed on the game's official summary page"
-  }
+ "sources_added": {
+  "0022600240": "https://www.nba.com/game/dal-vs-bos-0022600240 (game-page LINESCORES: the gamebook SCORE BY PERIOD away row extracts garbled; the away quarters 9-28-34-23 are the game page printed lines, never reconstructed)",
+  "gamebooks": "https://statsdmz.nba.com/pdfs/20261115/20261115_{gamecode}_book.pdf for each row gamecode (quarter/tip/arena cells filled from these books; see data/snapshots/results-2026-11-15-gamebooks.json for the per-row verbatim lines)"
  }
 }
