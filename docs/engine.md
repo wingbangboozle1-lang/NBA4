@@ -123,7 +123,7 @@ this branch never built, and no page for them.
 ## Verification performed
 
 - `python3 -m unittest tests.test_estimators` — 10 additional synthetic tests pass for empirical home-rate anchoring, future exclusion, duplicate rejection, suppressed extremes, and disagreement-first output.
-- `python3 -m unittest tests.test_engine_models` — 43 tests, all passing (`python3 -m unittest discover -s tests -t .` runs all 327 across seven suites: 47 in tests/test_engine.py, 43 in tests/test_engine_models.py, 17 in tests/test_snapshots.py, 10 in tests/test_estimators.py, 135 in tests/test_engine_requirements.py, 48 in tests/test_engine_brief_gaps.py and 27 in tests/test_scheduled_refresh.py) (schema rejection rules, ledger provenance enforcement, future-leak guard, min-sample gates, shrinkage direction, injury resolution, game-flow partition, Pearson/phi known values, bootstrap determinism, Brier/log-loss known values, chronological folds, horizon filter, NO PICK suppression, parlay dependence rule, selftest smoke).
+- `python3 -m unittest tests.test_engine_models` — 43 tests, all passing (`python3 -m unittest discover -s tests -t .` runs all 454 across ten suites: 47 in tests/test_engine.py, 43 in tests/test_engine_models.py, 17 in tests/test_snapshots.py, 10 in tests/test_estimators.py, 135 in tests/test_engine_requirements.py, 48 in tests/test_engine_brief_gaps.py, 27 in tests/test_scheduled_refresh.py, 57 in tests/test_engine_refresh.py, 38 in tests/test_engine_teamstats.py and 32 in tests/test_engine_playerlogs.py) (schema rejection rules, ledger provenance enforcement, future-leak guard, min-sample gates, shrinkage direction, injury resolution, game-flow partition, Pearson/phi known values, bootstrap determinism, Brier/log-loss known values, chronological folds, horizon filter, NO PICK suppression, parlay dependence rule, selftest smoke).
 - `python3 -m engine.cli status` on the real repository state reports `NO AUTHORIZED INPUTS -> no lines, no picks` — the honest output the site mirrors.
 - Method statements in the module map were quote-checked against their official sources in [`docs/verification-log.md`](verification-log.md) (ML-01…ML-03, STAT-01…STAT-02, NBA-03…NBA-06).
 
@@ -158,6 +158,83 @@ the dated official extractions in `data/snapshots/`.
 `engine/ratings.py` is unchanged: `HOME_ADVANTAGE_POINTS` stays `0.0` and the module
 docstring's "no default parameters" rule still holds — `homerate.for_ratings` is the
 only path that could hand a calibrated value to a line, and it is gated twice.
+
+## Task BF/BG modules: the scheduled-job gate, player logs and the team-stat re-cut (2026-11-16)
+
+Session `arena/cc82e369-nba4` (tasks BF–BH) adds three modules and the CLI
+surface for the twelve brief-gap modules above. Nothing existing was modified to
+make room for them; `engine/pipeline.py` gained one exported hook
+(`refresh_gate`) and nothing else.
+
+| Module | What it computes | What it refuses | Official input it needs |
+| --- | --- | --- | --- |
+| [`engine/refresh.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/refresh.py) | the rolling 72-hour window; one gate per declared feed (schedule, standings, three team-stat pages, injuries, results); a binary may-we-rebuild | rebuilding when a required feed is missing, stale, partial, uncleared or observed from the wrong document; treating a missing feed as an empty feed | a `FeedObservation` per feed: the official URL ([injury report index](https://official.nba.com/nba-injury-report-2026-27-season/)), the document's own timestamp where it prints one, the retrieval time, the rows and chunks read |
+| [`engine/playerlogs.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/playerlogs.py) | one row per player-game with minutes, points, rebounds, assists and the **opponent**; coverage against the roster on an injury report; a canonical hash | a row with no opponent; minutes exceeding `48 + 5 x overtime_periods`; a second observation that disagrees; inferring a log for a player who has none | official game-log rows ([NBA games](https://www.nba.com/games)) carrying `engine.contracts.Provenance` |
+| [`engine/teamstats.py`](https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/teamstats.py) | possessions per game from pace, offensive and defensive points per possession, league averages, and a cross-check against the printed OffRtg / DefRtg / NetRtg / POSS | a page read in part (fewer than 30 rows, or fewer chunks than the document has); any row whose provenance is not cleared; a matchup for a team absent from the three pages | the three official team-stat pages ([advanced](https://www.nba.com/stats/teams/advanced), [opponent](https://www.nba.com/stats/teams/opponent), [traditional](https://www.nba.com/stats/teams/traditional)) |
+
+Design documents: [the refresh gate](refresh-gate.md) and
+[player logs and the team-stat re-cut](player-logs-and-team-stats.md). The
+30 rows of each of the three pages, read on 2026-11-16, and the verification of
+the re-cut against the pages' own arithmetic are in
+[verification pass 9b](verification-pass-cc82e369.md).
+
+### CLI
+
+```
+python3 -m engine.cli status|validate|generate|refresh|teamstats|playerlogs|modules|surfaces|selftest
+```
+
+Every subcommand that evaluates a gate **exits 1 when the gate blocks**, so a
+scheduled job cannot mistake a refusal for an empty result.
+
+* `refresh` — may the slate be rebuilt from the feeds the job just refreshed?
+  `--observations FILE` (a JSON list of feed observations; omitted means a
+  refusal). Its declarations come from the official documents listed in
+  [the refresh gate](refresh-gate.md).
+* `teamstats` — does the three-page re-cut pass its read and rating checks?
+  `--pages FILE`, a JSON object holding a `traditional`, an `opponent` and an
+  `advanced` row list, all three read from
+  [the official pages](https://www.nba.com/stats/teams/advanced).
+* `playerlogs` — is the roster fully captured, and what is the book's hash?
+  `--logs FILE` plus `--roster p1,p2`.
+* `modules` — does every engine module import, and what does each refuse to
+  invent? No input.
+* `surfaces` — what is on the projection surface and what is gated on the bet
+  surface? No input.
+
+Row schemas for the two JSON files (every row carries a `provenance` mapping with
+`source_id`, `source_name`, `source_url`, `source_timestamp`, `observed_at` and
+`version`):
+
+```json
+{
+  "retrieved_at": "2026-11-16T12:00:00Z",
+  "traditional_chunks_read": 5, "traditional_chunks_total": 5,
+  "opponent_chunks_read": 2, "opponent_chunks_total": 2,
+  "advanced_chunks_read": 2, "advanced_chunks_total": 2,
+  "traditional": [
+    {"team": "…", "games_played": 14, "minutes_per_game": 48.0, "points": 122.8,
+     "field_goals_made": 42.1, "field_goal_attempts": 83.8,
+     "free_throw_attempts": 30.2, "offensive_rebounds": 11.4, "turnovers": 16.8,
+     "provenance": {"source_id": "…", "source_name": "…",
+                    "source_url": "https://www.nba.com/stats/teams/traditional",
+                    "source_timestamp": "2026-11-16T11:00:00Z",
+                    "observed_at": "2026-11-16T12:00:00Z", "version": "…",
+                    "allowed_use": false}}
+  ],
+  "opponent": [{"team": "…", "opponent_points": 114.9, "opponent_field_goals_made": 39.2,
+                "opponent_field_goal_attempts": 86.1, "opponent_free_throw_attempts": 28.2,
+                "opponent_offensive_rebounds": 13.6, "opponent_turnovers": 18.4,
+                "opponent_plus_minus": -7.9, "provenance": {}}],
+  "advanced": [{"team": "…", "minutes_total": 672.0, "pace": 100.64, "possessions_total": 1408,
+                "offensive_rating": 122.1, "defensive_rating": 114.0, "net_rating": 8.0,
+                "provenance": {}}]
+}
+```
+
+`allowed_use` defaults to `false` everywhere, so with no rights cleared the
+subcommands report `RIGHTS_NOT_CLEARED` and exit 1 — which is the honest state
+of this repository.
 
 ## Public API decision (AN-09 / IR-T1, recorded 2026-11-16)
 

@@ -8,7 +8,7 @@ correction made during the pass. Snapshot writers
 their provenance record. Post-refresh count on this branch: **300 unit tests OK**
 (47+43+17+10+135+48); after the parallel session's scheduled-refresh suite merged
 into the integration branch the total is **327 across seven suites**, site check
-PASS (16 pages, 517 HTML data rows, 831 Markdown data rows).
+PASS (16 pages, 517 HTML data rows, 831 Markdown data rows); a second parallel wave (engine/refresh.py, engine/teamstats.py, engine/playerlogs.py + 127 tests) merged before the integration PR, bringing the tree to **454 tests across ten suites**.
 
 ## 1. Fetches performed (2026-11-16, UTC times as recorded)
 
