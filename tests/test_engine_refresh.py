@@ -310,9 +310,6 @@ class PipelineHookTest(unittest.TestCase):
         self.assertEqual(reasons, ())
 
 
-if __name__ == "__main__":
-    unittest.main()
-
 
 class RefreshCliTest(unittest.TestCase):
     """The scheduled job must not be able to mistake a refusal for success."""
@@ -394,3 +391,194 @@ class RefreshCliTest(unittest.TestCase):
         self.assertIn("playerlogs", out)
         self.assertIn("teamstats", out)
         self.assertIn("modules imported cleanly", out)
+
+
+class RunRecordBridgeTest(unittest.TestCase):
+    """The bridge to scripts/scheduled_refresh.py.
+
+    That script is owned by session `arena/cbc8e41a-nba4` (task BH) and is not
+    edited here; these tests use a run record in the shape it emits. No test in
+    this class reads, imports or executes it.
+    """
+
+    def _record(self, **overrides):
+        record = {
+            "kind": "scheduled_refresh_run_record",
+            "script": "scripts/scheduled_refresh.py",
+            "mode": "gates",
+            "now_utc": "2026-11-16T15:30:00Z",
+            "gates": [{"name": "schedule_pdf_fetch", "phase": "fetch", "passed": True,
+                       "detail": "status 200", "source_url": STANDINGS,
+                       "observed_at_utc": "2026-11-16T15:30:00Z"}],
+            "fetches": {
+                "schedule_pdf": {"status": 200, "bytes": 2048, "sha256": "a" * 64},
+                "injury_index": {"status": 200, "bytes": 4096},
+                "injury_report_newest": {
+                    "status": 200,
+                    "url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_09_15AM.pdf",
+                    "label": "11/16/26 09:15 AM",
+                },
+                "standings": {"status": 200, "rows": 30},
+                "teamstats_traditional": {"status": 200, "rows": 30},
+                "teamstats_opponent": {"status": 200, "rows": 30},
+                "teamstats_advanced": {"status": 200, "rows": 30},
+            },
+            "summary": {"gates_total": 1, "gates_passed": 1, "gates_failed": 0,
+                        "failed": [], "all_passed": True, "rebuild_allowed": True,
+                        "exit_code": 0},
+        }
+        record.update(overrides)
+        return record
+
+    def test_a_complete_fresh_run_record_permits_the_rebuild(self):
+        decision = refresh.decision_from_run_record(
+            self._record(), allowed_use=True, report_tz=timezone(timedelta(hours=-5))
+        )
+        self.assertTrue(decision.may_rebuild)
+        self.assertEqual(decision.blocking_reasons, ())
+        # Results is optional pre-tip, so its absence warns rather than blocks.
+        self.assertTrue(any("results" in w.lower() for w in decision.warnings))
+
+    def test_a_feed_absent_from_the_fetch_map_is_not_a_successful_fetch(self):
+        record = self._record()
+        del record["fetches"]["standings"]
+        decision = refresh.decision_from_run_record(
+            record, allowed_use=True, report_tz=timezone(timedelta(hours=-5))
+        )
+        self.assertFalse(decision.may_rebuild)
+        standings = [v for v in decision.verdicts if v.feed_id == "standings"]
+        self.assertEqual(standings[0].state, refresh.FeedState.NOT_RETRIEVED)
+
+    def test_a_non_200_fetch_is_not_observed_as_a_feed(self):
+        record = self._record()
+        record["fetches"]["standings"] = {"status": 503}
+        decision = refresh.decision_from_run_record(
+            record, allowed_use=True, report_tz=timezone(timedelta(hours=-5))
+        )
+        standings = [v for v in decision.verdicts if v.feed_id == "standings"]
+        self.assertEqual(standings[0].state, refresh.FeedState.NOT_RETRIEVED)
+
+    def test_a_partial_tabular_read_blocks_on_row_count(self):
+        record = self._record()
+        record["fetches"]["teamstats_advanced"] = {"status": 200, "rows": 13}
+        decision = refresh.decision_from_run_record(
+            record, allowed_use=True, report_tz=timezone(timedelta(hours=-5))
+        )
+        self.assertFalse(decision.may_rebuild)
+        adv = [v for v in decision.verdicts if v.feed_id == "team_stats_advanced"]
+        self.assertEqual(adv[0].state, refresh.FeedState.INCOMPLETE_ROWS)
+
+    def test_the_offline_mode_record_blocks_every_feed(self):
+        record = self._record(fetches={"note": "offline mode: no network fetches attempted"})
+        decision = refresh.decision_from_run_record(
+            record, allowed_use=True, report_tz=timezone(timedelta(hours=-5))
+        )
+        self.assertFalse(decision.may_rebuild)
+        self.assertEqual(len(decision.blocking_reasons), 6)
+
+    def test_without_a_report_offset_the_printed_revision_is_not_converted(self):
+        """The injury feed must not get an invented timezone."""
+        decision = refresh.decision_from_run_record(self._record(), allowed_use=True)
+        injuries = [v for v in decision.verdicts if v.feed_id == "injuries"]
+        self.assertEqual(injuries[0].state, refresh.FeedState.NO_DOCUMENT_TIMESTAMP)
+        self.assertFalse(decision.may_rebuild)
+        # The note on the observation explains why the printed label was not used.
+        note = refresh.observations_from_run_record(self._record())["injuries"].note
+        self.assertIn("report_tz", note)
+        self.assertIn("guessed", note)
+
+    def test_the_retrieval_time_is_the_run_records_own_clock_and_says_so(self):
+        observations = refresh.observations_from_run_record(self._record())
+        standings = observations["standings"]
+        self.assertEqual(
+            standings.retrieved_at, datetime(2026, 11, 16, 15, 30, tzinfo=timezone.utc)
+        )
+        self.assertIn("now_utc", standings.note)
+        self.assertIn("not a per-feed clock", standings.note)
+
+    def test_a_feed_with_no_url_in_the_record_keeps_the_declared_document(self):
+        observations = refresh.observations_from_run_record(self._record())
+        self.assertEqual(observations["standings"].url, STANDINGS)
+
+    def test_a_record_without_fetches_is_refused_not_treated_as_empty(self):
+        with self.assertRaises(refresh.RefreshError):
+            refresh.observations_from_run_record({"now_utc": "2026-11-16T12:00:00Z"})
+
+    def test_a_record_without_a_clock_is_refused(self):
+        with self.assertRaises(refresh.RefreshError):
+            refresh.observations_from_run_record({"fetches": {}, "now_utc": ""})
+
+    def test_rights_are_not_implied_by_a_successful_fetch(self):
+        decision = refresh.decision_from_run_record(
+            self._record(), report_tz=timezone(timedelta(hours=-5))
+        )
+        self.assertFalse(decision.may_rebuild)
+        for verdict in decision.verdicts:
+            if verdict.feed_id == "results":
+                continue
+            self.assertEqual(verdict.state, refresh.FeedState.RIGHTS_NOT_CLEARED)
+
+
+    def test_a_document_from_an_unrelated_host_is_still_refused(self):
+        """accepted_url_prefixes must not become 'accept anything'."""
+        record = self._record()
+        record["fetches"]["standings"] = {
+            "status": 200, "rows": 30, "url": "https://example.com/standings",
+        }
+        decision = refresh.decision_from_run_record(
+            record, allowed_use=True, report_tz=timezone(timedelta(hours=-5))
+        )
+        standings = [v for v in decision.verdicts if v.feed_id == "standings"]
+        self.assertEqual(standings[0].state, refresh.FeedState.URL_MISMATCH)
+
+    def test_the_injury_pdf_url_is_accepted_but_a_foreign_one_is_not(self):
+        """The PDF is published under the index; an unrelated host is not."""
+        record = self._record()
+        record["fetches"]["injury_report_newest"]["url"] = (
+            "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_09_15AM.pdf"
+        )
+        ok = refresh.decision_from_run_record(
+            record, allowed_use=True, report_tz=timezone(timedelta(hours=-5))
+        )
+        injuries_ok = [v for v in ok.verdicts if v.feed_id == "injuries"]
+        self.assertEqual(injuries_ok[0].state, refresh.FeedState.PASS)
+
+        record["fetches"]["injury_report_newest"]["url"] = "https://example.com/report.pdf"
+        bad = refresh.decision_from_run_record(
+            record, allowed_use=True, report_tz=timezone(timedelta(hours=-5))
+        )
+        injuries_bad = [v for v in bad.verdicts if v.feed_id == "injuries"]
+        self.assertEqual(injuries_bad[0].state, refresh.FeedState.URL_MISMATCH)
+
+
+class ReportLabelTest(unittest.TestCase):
+    """The printed injury-report revision label: 11/16/26 09:15 AM."""
+
+    TZ = timezone(timedelta(hours=-5))
+
+    def test_am_label_parses_to_the_supplied_offset(self):
+        self.assertEqual(
+            refresh.parse_report_label("11/16/26 09:15 AM", self.TZ),
+            datetime(2026, 11, 16, 9, 15, tzinfo=self.TZ),
+        )
+
+    def test_pm_label_shifts_twelve_hours(self):
+        self.assertEqual(
+            refresh.parse_report_label("11/16/26 05:30 PM", self.TZ),
+            datetime(2026, 11, 16, 17, 30, tzinfo=self.TZ),
+        )
+
+    def test_twelve_am_is_midnight_not_noon(self):
+        self.assertEqual(refresh.parse_report_label("11/16/26 12:00 AM", self.TZ).hour, 0)
+
+    def test_twelve_pm_is_noon_not_midnight(self):
+        self.assertEqual(refresh.parse_report_label("11/16/26 12:00 PM", self.TZ).hour, 12)
+
+    def test_a_label_in_any_other_shape_is_not_parsed(self):
+        for label in ("", "09:15 AM", "2026-11-16T09:15:00Z", "not a label"):
+            with self.subTest(label=label):
+                self.assertIsNone(refresh.parse_report_label(label, self.TZ))
+
+
+if __name__ == "__main__":
+    unittest.main()

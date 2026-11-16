@@ -39,7 +39,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from enum import Enum
-from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+import re
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 __all__ = [
     "RefreshError",
@@ -53,7 +54,11 @@ __all__ = [
     "rolling_window",
     "evaluate",
     "refresh_decision",
+    "INJURY_PDF_PREFIX",
     "default_feed_specs",
+    "observations_from_run_record",
+    "decision_from_run_record",
+    "parse_report_label",
 ]
 
 DEFAULT_HORIZON_HOURS = 72
@@ -61,6 +66,8 @@ DEFAULT_HORIZON_HOURS = 72
 
 SCHEDULE_URL = "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
 STANDINGS_URL = "https://www.nba.com/standings"
+INJURY_PDF_PREFIX = "https://ak-static.cms.nba.com/referee/injury/"
+"""Host and path the official index publishes the dated report PDFs under."""
 TEAM_STATS_URLS = (
     "https://www.nba.com/stats/teams/traditional",
     "https://www.nba.com/stats/teams/opponent",
@@ -135,6 +142,7 @@ class FeedSpec:
     requires_document_timestamp: bool = False
     expected_rows: Optional[int] = None
     expected_chunks: Optional[int] = None
+    accepted_url_prefixes: Tuple[str, ...] = ()
     notes: Tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
@@ -145,6 +153,8 @@ class FeedSpec:
             raise RefreshError(f"{self.feed_id}: max_age_minutes must be positive")
         if self.expected_rows is not None and self.expected_rows <= 0:
             raise RefreshError(f"{self.feed_id}: expected_rows must be positive when set")
+        for prefix in self.accepted_url_prefixes:
+            _https(prefix, f"{self.feed_id}.accepted_url_prefixes")
         if self.expected_chunks is not None and self.expected_chunks <= 0:
             raise RefreshError(f"{self.feed_id}: expected_chunks must be positive when set")
 
@@ -268,6 +278,20 @@ def rolling_window(
     return SlateWindow(start=now, end=now + timedelta(hours=horizon_hours), horizon_hours=horizon_hours)
 
 
+def _url_accepted(spec: FeedSpec, url: str) -> bool:
+    """Is ``url`` the document this feed declares, or an accepted alternative?
+
+    Exact equality is the rule for every feed by default. ``accepted_url_prefixes``
+    exists for the one case where an official feed is served from more than one
+    host: the injury report is *listed* on an index page but *published* as a
+    dated PDF on a different host, and a run that records the PDF it actually
+    fetched must not be reported as reading the wrong document.
+    """
+    if url == spec.url:
+        return True
+    return any(url.startswith(prefix) for prefix in spec.accepted_url_prefixes)
+
+
 def evaluate(spec: FeedSpec, observation: Optional[FeedObservation], now_utc: datetime) -> FeedVerdict:
     """Gate one feed against its declaration.
 
@@ -296,11 +320,16 @@ def evaluate(spec: FeedSpec, observation: Optional[FeedObservation], now_utc: da
             "no observation was recorded for this feed; the refresh did not run or did not "
             "report, and a missing feed is not treated as an empty feed",
         )
-    if observation.url != spec.url:
+    if not _url_accepted(spec, observation.url):
         return verdict(
             FeedState.URL_MISMATCH,
-            f"observed from {observation.url} but the declared official document is {spec.url}; "
-            "a feed is identified by its document",
+            f"observed from {observation.url} but the declared official document is {spec.url}"
+            + (
+                f" or one of {list(spec.accepted_url_prefixes)}"
+                if spec.accepted_url_prefixes
+                else ""
+            )
+            + "; a feed is identified by its document",
         )
     if observation.document_timestamp is not None and observation.retrieved_at < observation.document_timestamp:
         return verdict(
@@ -503,6 +532,7 @@ def default_feed_specs() -> Tuple[FeedSpec, ...]:
             required=True,
             max_age_minutes=90,
             requires_document_timestamp=True,
+            accepted_url_prefixes=(INJURY_PDF_PREFIX,),
             notes=(
                 "the report PDF prints its own revision time "
                 '(for example "Injury Report: 11/15/26 06:15 AM"), which is the strong basis',
@@ -523,3 +553,176 @@ def default_feed_specs() -> Tuple[FeedSpec, ...]:
             ),
         ),
     )
+
+
+# --- bridge to scripts/scheduled_refresh.py -----------------------------------
+#
+# Session `arena/cbc8e41a-nba4` (task BH) owns `scripts/scheduled_refresh.py`,
+# which performs the fetches and records a run record. This module owns the
+# per-feed decision. Rather than either session editing the other's file, the
+# adapter below converts one artefact into the other's input. It reads a run
+# record and never writes one.
+
+_RUN_RECORD_FEEDS: Tuple[Tuple[str, str], ...] = (
+    ("schedule", "schedule_pdf"),
+    ("standings", "standings"),
+    ("team_stats_traditional", "teamstats_traditional"),
+    ("team_stats_opponent", "teamstats_opponent"),
+    ("team_stats_advanced", "teamstats_advanced"),
+    ("injuries", "injury_report_newest"),
+)
+"""feed_id -> the key `scripts/scheduled_refresh.py` uses for that fetch."""
+
+
+def observations_from_run_record(
+    record: Mapping[str, Any],
+    *,
+    allowed_use: bool = False,
+    report_tz: Optional[timezone] = None,
+) -> Dict[str, FeedObservation]:
+    """Translate a scheduled-refresh run record into feed observations.
+
+    The run record is the output of ``scripts/scheduled_refresh.py``: a mapping
+    with ``now_utc``, ``fetches`` and ``gates``. Its ``fetches`` entries carry a
+    ``status``, and for the tabular pages a ``rows`` count, which is exactly the
+    completeness evidence this gate needs.
+
+    Two honesty rules govern the translation:
+
+    * A run record carries one clock, ``now_utc``, not a per-feed retrieval
+      time. The adapter uses it for every feed and says so in the observation
+      note, so a freshness verdict is never presented as more precise than the
+      record supports.
+    * A feed absent from ``fetches`` produces **no** observation. It therefore
+      arrives at the gate as ``NOT_RETRIEVED`` and blocks, rather than being
+      smoothed into an empty or successful fetch.
+
+    A fetch whose ``status`` is not 200 also produces no observation, for the
+    same reason: a failed fetch is not a feed that was read and happened to be
+    empty.
+
+    ``allowed_use`` defaults to ``False``, so observations produced here block
+    on rights gate G0 until an operator clears them.
+
+    ``report_tz`` is the offset to attach to the injury report's printed
+    revision label. It defaults to ``None``, meaning *do not parse the label*;
+    the feed then fails with ``NO_DOCUMENT_TIMESTAMP`` rather than carrying a
+    timestamp built on a guessed offset. See :func:`parse_report_label`.
+    """
+    fetches = record.get("fetches")
+    if not isinstance(fetches, Mapping):
+        raise RefreshError("run record has no 'fetches' mapping; nothing can be observed")
+
+    now_text = record.get("now_utc")
+    if not isinstance(now_text, str) or not now_text:
+        raise RefreshError("run record has no 'now_utc'; the retrieval time is unknown")
+    retrieved_at = _parse_iso(now_text)
+
+    declared = {spec.feed_id: spec.url for spec in default_feed_specs()}
+    observations: Dict[str, FeedObservation] = {}
+    for feed_id, key in _RUN_RECORD_FEEDS:
+        entry = fetches.get(key)
+        if not isinstance(entry, Mapping):
+            continue
+        if entry.get("status") != 200:
+            continue
+        notes = [f"translated from scripts/scheduled_refresh.py fetch key {key!r}"]
+        notes.append("retrieval time is the run record's now_utc, not a per-feed clock")
+        document_timestamp = None
+        label = entry.get("label")
+        if isinstance(label, str) and label:
+            notes.append(f"report label as printed: {label}")
+            if report_tz is not None:
+                document_timestamp = parse_report_label(label, report_tz)
+                if document_timestamp is None:
+                    notes.append("label is not in the printed MM/DD/YY HH:MM AM/PM form")
+                else:
+                    notes.append(
+                        f"revision parsed at offset {report_tz} supplied by the caller"
+                    )
+            else:
+                notes.append(
+                    "no report_tz supplied, so the printed revision is not converted "
+                    "to a timestamp rather than being given a guessed offset"
+                )
+        entry_url = entry.get("url")
+        url = str(entry_url) if isinstance(entry_url, str) and entry_url else declared[feed_id]
+        if url != declared[feed_id]:
+            notes.append(f"fetched from {url}; the declared document is {declared[feed_id]}")
+        observations[feed_id] = FeedObservation(
+            feed_id=feed_id,
+            url=url,
+            retrieved_at=retrieved_at,
+            document_timestamp=document_timestamp,
+            rows_read=entry.get("rows") if isinstance(entry.get("rows"), int) else None,
+            chunks_read=entry.get("chunks") if isinstance(entry.get("chunks"), int) else None,
+            allowed_use=allowed_use,
+            note="; ".join(notes),
+        )
+    return observations
+
+
+def decision_from_run_record(
+    record: Mapping[str, Any],
+    *,
+    allowed_use: bool = False,
+    report_tz: Optional[timezone] = None,
+    specs: Optional[Sequence[FeedSpec]] = None,
+) -> RefreshDecision:
+    """Gate a scheduled-refresh run record with the declared feed specs.
+
+    Convenience wrapper: :func:`observations_from_run_record` followed by
+    :func:`refresh_decision` at the run record's own ``now_utc``.
+    """
+    now_text = record.get("now_utc")
+    if not isinstance(now_text, str) or not now_text:
+        raise RefreshError("run record has no 'now_utc'; the decision time is unknown")
+    return refresh_decision(
+        tuple(specs) if specs is not None else default_feed_specs(),
+        observations_from_run_record(record, allowed_use=allowed_use, report_tz=report_tz),
+        _parse_iso(now_text),
+    )
+
+
+_REPORT_LABEL_RE = re.compile(
+    r"^\s*(\d{1,2})/(\d{1,2})/(\d{2,4})\s+(\d{1,2}):(\d{2})\s*(AM|PM)\s*$",
+    re.IGNORECASE,
+)
+"""The injury-report revision label: ``11/16/26 09:15 AM``."""
+
+
+def parse_report_label(label: str, tz: timezone) -> Optional[datetime]:
+    """Turn a printed injury-report revision label into an aware timestamp.
+
+    The official report prints its revision as ``11/16/26 09:15 AM``. That is a
+    wall-clock time with no offset, so the offset cannot be derived from the
+    label and this function does not guess one: the caller supplies ``tz`` and
+    thereby owns the assumption. Callers that will not assert an offset should
+    pass nothing and let the feed fail with ``NO_DOCUMENT_TIMESTAMP``, which is
+    the honest outcome, rather than accept a silently invented one.
+
+    Returns ``None`` when the label is not in the printed form.
+    """
+    match = _REPORT_LABEL_RE.match(label)
+    if match is None:
+        return None
+    month, day, year, hour, minute, meridiem = match.groups()
+    year_int = int(year)
+    if year_int < 100:
+        year_int += 2000
+    hour_int = int(hour) % 12
+    if meridiem.upper() == "PM":
+        hour_int += 12
+    return datetime(
+        year_int, int(month), int(day), hour_int, int(minute), tzinfo=tz
+    )
+
+
+def _parse_iso(text: str) -> datetime:
+    """Parse an ISO-8601 timestamp, requiring a UTC-aware result."""
+    cleaned = text.strip().replace("Z", "+00:00")
+    try:
+        parsed = datetime.fromisoformat(cleaned)
+    except ValueError as exc:
+        raise RefreshError(f"not an ISO-8601 timestamp: {text!r}") from exc
+    return _utc(parsed, "timestamp")

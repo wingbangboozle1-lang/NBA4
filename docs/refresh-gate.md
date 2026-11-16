@@ -120,6 +120,48 @@ The manifest schema (`feeds.json`):
 data rights, every feed fails with `RIGHTS_NOT_CLEARED` and the rebuild never
 runs — which is the correct behaviour for this repository today.
 
+## Wiring it to the fetcher
+
+`scripts/scheduled_refresh.py` (session `arena/cbc8e41a-nba4`, task BH) performs
+the fetches and emits a run record. This module performs the per-feed decision.
+Rather than either session editing the other's file, `engine/refresh.py` reads
+that run record:
+
+```python
+from datetime import timedelta, timezone
+from engine import refresh
+
+record = json.load(open("run-record.json"))
+decision = refresh.decision_from_run_record(
+    record,
+    allowed_use=True,
+    report_tz=timezone(timedelta(hours=-5)),   # the offset the printed label is in
+)
+if not decision.may_rebuild:
+    raise SystemExit("no rebuild: " + "; ".join(decision.blocking_reasons))
+```
+
+The adapter encodes three rules.
+
+* **One clock, honestly labelled.** A run record carries `now_utc`, not a
+  per-feed retrieval time. The adapter uses it for every feed and records that
+  in the observation note, so a freshness verdict is never presented as more
+  precise than the record supports.
+* **A missing or failed fetch is not an empty feed.** A feed absent from
+  `fetches`, or fetched with a non-200 status, produces no observation at all,
+  so it arrives at the gate as `NOT_RETRIEVED` and blocks.
+* **No invented offset.** The injury report prints its revision as
+  `11/16/26 09:15 AM` with no offset. `parse_report_label()` requires the caller
+  to supply the timezone and returns `None` for any other shape; without one the
+  feed fails with `NO_DOCUMENT_TIMESTAMP` rather than carrying a timestamp built
+  on a guess.
+
+The injury feed also accepts the dated PDF the index publishes
+(`accepted_url_prefixes`), because a run that records the PDF it actually
+fetched must not be reported as reading the wrong document. Every other feed
+still requires an exact URL match, and two tests pin that an unrelated host
+yields `URL_MISMATCH`.
+
 ## What this module does not do
 
 * It does not fetch. It is the decision layer a fetcher reports into, so a run
