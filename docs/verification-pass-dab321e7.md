@@ -105,3 +105,23 @@ render if any mirrored report cell disagrees with the injury file of record; 57/
 Irregularities added: **SP-01** (`Mobely`/`Mobley` spelling variance), window gap for ORL/GSW/POR
 players (no game 11/14–15; 11/13 books not captured this cycle), and the note that only the
 gamebook — never the report — attributes the 7 team-lost rows.
+
+---
+
+## Task BH — AV closure: the three engine-surface pages (`259250d`)
+
+`model.html`, `availability.html` and `ledger.html` publish the implemented reference-engine spec
+(`engine/*.py`, pinned by `tests/test_engine_requirements.py`, 132 cases) with every live model
+value blank (`[NO INPUT]` / `[NO BASELINE]`) or clearly labelled as a measured observation with its
+official link. No NBA-derived model value is invented; G0/D-01/IR-T4 stand. The sidebar of every
+page now carries the canonical 15-item navigation enforced by `scripts/check_site.py` (PAGES and
+CANONICAL_NAV updated in the same commit); README and `docs/site-spec.md` list the new pages.
+
+| Page | What it renders | Live state published |
+| --- | --- | --- |
+| `model.html` | Two independent estimators (matchup PPP; point-differential means halved), the disagreement headline with the shared-input audit, the arithmetic blend (never called confidence), the home-court pin (measured 0.5204 (102–94) &rarr; 12.0 &times; &Phi;&sup1;(rate) &asymp; +0.614 pts, `HOME_ADVANTAGE_POINTS` left unset), the market-anchored prior weighted by measured OOS log loss, parlay &rho; beside the naive product (`BOUNDED_NOT_PRICED` without a measured &rho;), totals = possessions &times; PPP beside the naive scoring average, and the luck z-band publication gate | All model values blank; the one number shown is the measured home-win rate, cited to the official standings and the published aggregates |
+| `availability.html` | The rotation-availability column (blank = "not sourced", never "healthy"), the top-8 minutes-share redistribution (240-minute budget, caller-supplied replacement weights, `unallocated_minutes` reported), and the injury &rarr; rotation &rarr; game-flow chain that stops at the first blank | Status row sourced (11/16 09:15 AM ET revision); availability, minutes and production rows blank |
+| `ledger.html` | Pre-registration freeze rules (four sections, non-defaultable thresholds, `frozen_at` before the first bet, universe check), per-pick SHA-256 hashes, the append-only chain, the Merkle day seal before tip with inclusion proofs, and the settlement stamp from verified finals | NOT FROZEN / zero entries &mdash; the production ledger is empty because G0 is uncleared; the synthetic test fixtures are labelled and never stand in for a published pick |
+
+Verification: `check_site.py --with-tests` PASS on the 15-page tree (542 HTML + 839 Markdown rows,
+304 unit tests); every table row on the three pages carries an official HTTPS source cell.
