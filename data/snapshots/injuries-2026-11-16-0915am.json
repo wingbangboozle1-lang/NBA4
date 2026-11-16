@@ -34,7 +34,8 @@
   "Two 11/17 tips disagree with the August schedule PDF: UTA@LAC prints 10:30 (ET) here (schedule row 257 prints 11:00 PM ET) and CHA@LAL prints 11:00 (ET) (schedule row 256 prints 10:00 PM ET). The nba.com games pages print 10:30 PM ET and 11:00 PM ET respectively, agreeing with this report against the schedule PDF. Both readings are kept as printed and flagged (board flag AN-02, review flag P9-03).",
   "The POR@MIN matchup code appears twice in this report: once for the 11/16 game (player rows, schedule row 250) and once for the 11/17 game (NOT YET SUBMITTED rows, schedule row 254). Rows are matched to games by (date, code), never by code alone.",
   "The 13 matchup codes printed in this report (8 games on 11/16, 5 games on 11/17) match schedule rows 245-257 one-for-one and corroborate the away/home order shown on the slate page. The report does not list 11/18 games (schedule rows 258-269).",
-  "No availability probability, minute estimate or production impact is stored here or derived from these rows."
+  "No availability probability, minute estimate or production impact is stored here or derived from these rows.",
+  "Reading variance (third collision record): the Golden State block prints one status-or-reason cell per row. The Butler III, Jimmy row prints a single cell \"Injury/Illness - Right ACL Repair / Surgery\". This file reads it as the STATUS cell (reason blank); the arena/dab321e7-nba4 extraction of the same document reads it as the REASON cell (status blank). Both readings are recorded; the cell position at the page break does not settle which column it belongs to. The game-log capture mirrors this file."
  ],
  "matchups_not_in_snapshot": [
   {

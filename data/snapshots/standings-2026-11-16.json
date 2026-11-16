@@ -33,7 +33,8 @@
    "split_sum": 13,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612738/celtics"
   },
   {
    "conf": "East",
@@ -58,7 +59,8 @@
    "split_sum": 14,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612755/sixers"
   },
   {
    "conf": "East",
@@ -83,7 +85,8 @@
    "split_sum": 12,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612765/pistons"
   },
   {
    "conf": "East",
@@ -108,7 +111,8 @@
    "split_sum": 14,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612737/hawks"
   },
   {
    "conf": "East",
@@ -133,7 +137,8 @@
    "split_sum": 13,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612748/heat"
   },
   {
    "conf": "East",
@@ -158,7 +163,8 @@
    "split_sum": 13,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612752/knicks"
   },
   {
    "conf": "East",
@@ -183,7 +189,8 @@
    "split_sum": 14,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612739/cavaliers"
   },
   {
    "conf": "East",
@@ -208,7 +215,8 @@
    "split_sum": 12,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612753/magic"
   },
   {
    "conf": "East",
@@ -233,7 +241,8 @@
    "split_sum": 13,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612761/raptors"
   },
   {
    "conf": "East",
@@ -258,7 +267,8 @@
    "split_sum": 14,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612754/pacers"
   },
   {
    "conf": "East",
@@ -283,7 +293,8 @@
    "split_sum": 13,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612766/hornets"
   },
   {
    "conf": "East",
@@ -308,7 +319,8 @@
    "split_sum": 14,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612764/wizards"
   },
   {
    "conf": "East",
@@ -333,7 +345,8 @@
    "split_sum": 12,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612751/nets"
   },
   {
    "conf": "East",
@@ -358,7 +371,8 @@
    "split_sum": 12,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612741/bulls"
   },
   {
    "conf": "East",
@@ -383,7 +397,8 @@
    "split_sum": 14,
    "split_sum_equals_gp": true,
    "last10_games": 11,
-   "last10_matches_gp_rule": false
+   "last10_matches_gp_rule": false,
+   "source_url": "https://www.nba.com/team/1610612749/bucks"
   },
   {
    "conf": "West",
@@ -408,7 +423,8 @@
    "split_sum": 14,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612759/spurs"
   },
   {
    "conf": "West",
@@ -433,7 +449,8 @@
    "split_sum": 14,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612747/lakers"
   },
   {
    "conf": "West",
@@ -458,7 +475,8 @@
    "split_sum": 14,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612745/rockets"
   },
   {
    "conf": "West",
@@ -483,7 +501,8 @@
    "split_sum": 12,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612757/blazers"
   },
   {
    "conf": "West",
@@ -508,7 +527,8 @@
    "split_sum": 13,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612750/timberwolves"
   },
   {
    "conf": "West",
@@ -533,7 +553,8 @@
    "split_sum": 13,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612763/grizzlies"
   },
   {
    "conf": "West",
@@ -558,7 +579,8 @@
    "split_sum": 14,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612760/thunder"
   },
   {
    "conf": "West",
@@ -583,7 +605,8 @@
    "split_sum": 11,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612743/nuggets"
   },
   {
    "conf": "West",
@@ -608,7 +631,8 @@
    "split_sum": 13,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612744/warriors"
   },
   {
    "conf": "West",
@@ -633,7 +657,8 @@
    "split_sum": 14,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612742/mavericks"
   },
   {
    "conf": "West",
@@ -658,7 +683,8 @@
    "split_sum": 12,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612756/suns"
   },
   {
    "conf": "West",
@@ -683,7 +709,8 @@
    "split_sum": 12,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612746/clippers"
   },
   {
    "conf": "West",
@@ -708,7 +735,8 @@
    "split_sum": 14,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612740/pelicans"
   },
   {
    "conf": "West",
@@ -733,7 +761,8 @@
    "split_sum": 13,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612758/kings"
   },
   {
    "conf": "West",
@@ -758,7 +787,8 @@
    "split_sum": 14,
    "split_sum_equals_gp": true,
    "last10_games": 10,
-   "last10_matches_gp_rule": true
+   "last10_matches_gp_rule": true,
+   "source_url": "https://www.nba.com/team/1610612762/jazz"
   }
  ],
  "consistency_checks": {
@@ -777,6 +807,7 @@
  },
  "extraction_notes": [
   "All 30 rows transcribed verbatim from the two table chunks; the tie-break procedure text (Paragraphs L.2.a / L.2.b / L.2.c) is on the page and is cited, not reproduced here.",
-  "No probability, line, price or pick is derived from these rows. The rows are a dated observation for the projection/evidence surface only."
+  "No probability, line, price or pick is derived from these rows. The rows are a dated observation for the projection/evidence surface only.",
+  "Reconciliation: per-row source_url cells (official team pages) added from the independent pass (arena/dab321e7-nba4); the two extractions of the 30 printed rows agree value for value."
  ]
 }

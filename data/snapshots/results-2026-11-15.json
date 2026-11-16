@@ -27,13 +27,23 @@
   [
    "0022600236",
    "2026-11-15",
-   "",
-   "",
+   "1:00 PM ET",
+   "Xfinity Mobile Arena",
    "IND",
    "PHI",
-   "",
+   [
+    35,
+    22,
+    30,
+    37
+   ],
    124,
-   "",
+   [
+    29,
+    29,
+    39,
+    34
+   ],
    131,
    "PHI",
    "IND",
@@ -42,13 +52,23 @@
   [
    "0022600237",
    "2026-11-15",
-   "",
-   "",
+   "4:00 PM ET",
+   "Mortgage Matchup Center",
    "LAL",
    "PHX",
-   "",
+   [
+    33,
+    31,
+    40,
+    27
+   ],
    131,
-   "",
+   [
+    24,
+    30,
+    26,
+    43
+   ],
    123,
    "LAL",
    "PHX",
@@ -57,13 +77,23 @@
   [
    "0022600238",
    "2026-11-15",
-   "",
-   "",
+   "4:30 PM ET",
+   "Intuit Dome",
    "CHA",
    "LAC",
-   "",
+   [
+    21,
+    31,
+    31,
+    22
+   ],
    105,
-   "",
+   [
+    22,
+    29,
+    33,
+    29
+   ],
    113,
    "LAC",
    "CHA",
@@ -72,13 +102,23 @@
   [
    "0022600239",
    "2026-11-15",
-   "",
-   "",
+   "5:00 PM ET",
+   "Delta Center",
    "SAS",
    "UTA",
-   "",
+   [
+    31,
+    27,
+    23,
+    29
+   ],
    110,
-   "",
+   [
+    33,
+    22,
+    26,
+    21
+   ],
    102,
    "SAS",
    "UTA",
@@ -87,13 +127,23 @@
   [
    "0022600240",
    "2026-11-15",
-   "",
-   "",
+   "6:00 PM ET",
+   "TD Garden",
    "DAL",
    "BOS",
-   "",
+   [
+    9,
+    28,
+    34,
+    23
+   ],
    94,
-   "",
+   [
+    42,
+    25,
+    37,
+    27
+   ],
    131,
    "BOS",
    "DAL",
@@ -102,8 +152,8 @@
   [
    "0022600241",
    "2026-11-15",
-   "",
-   "",
+   "6:00 PM ET",
+   "Scotiabank Arena",
    "NYK",
    "TOR",
    "",
@@ -117,13 +167,23 @@
   [
    "0022600242",
    "2026-11-15",
-   "",
-   "",
+   "7:00 PM ET",
+   "Capital One Arena",
    "HOU",
    "WAS",
-   "",
+   [
+    36,
+    37,
+    46,
+    28
+   ],
    147,
-   "",
+   [
+    31,
+    23,
+    34,
+    31
+   ],
    119,
    "HOU",
    "WAS",
@@ -132,13 +192,23 @@
   [
    "0022600243",
    "2026-11-15",
-   "",
-   "",
+   "8:00 PM ET",
+   "Fiserv Forum",
    "ATL",
    "MIL",
-   "",
+   [
+    18,
+    37,
+    32,
+    26
+   ],
    113,
-   "",
+   [
+    37,
+    16,
+    27,
+    26
+   ],
    106,
    "ATL",
    "MIL",
@@ -147,13 +217,23 @@
   [
    "0022600244",
    "2026-11-15",
-   "",
-   "",
+   "9:00 PM ET",
+   "Golden 1 Center",
    "OKC",
    "SAC",
-   "",
+   [
+    32,
+    30,
+    32,
+    31
+   ],
    125,
-   "",
+   [
+    24,
+    26,
+    30,
+    23
+   ],
    103,
    "OKC",
    "SAC",
@@ -167,12 +247,13 @@
    "0022600238",
    "0022600239",
    "0022600240",
-   "0022600241",
    "0022600242",
    "0022600243",
    "0022600244"
   ],
-  "flag": "P9-05: quarter scores for the 11/15 games are not transcribed in this pass. The brief's row format requires Q1-Q4 per team; those cells are left blank and flagged rather than reconstructed. The 11/14 snapshot (results-2026-11-14.json) keeps its quarter rows."
+  "flag": "P9-05: quarter scores for the 11/15 games are not transcribed in this pass. The brief's row format requires Q1-Q4 per team; those cells are left blank and flagged rather than reconstructed. The 11/14 snapshot (results-2026-11-14.json) keeps its quarter rows.",
+  "quarter_gap_closed": "P9-05 update: the gamebook pass (arena/dab321e7-nba4) transcribed the quarter cells for 8 of the 9 games from the official gamebooks; they are filled in this file with the gamebook cited in sources_added. 0022600241 (NYK@TOR) stays blank here on purpose: it is an overtime game (printed OT1 17-13) and quarters alone do not sum to the printed final; its printed-period capture is in data/snapshots/results-2026-11-15-gamebooks.json.",
+  "ot_note": "0022600241: NYK@TOR is recorded as Final/OT; the printed OT1 period is 17-13 and the sum-check runs over all printed periods. Overtime is never reconstructed."
  },
  "verification": {
   "finals_from_scoreboard": "9 of 9 games read from the printed game cards",
@@ -183,10 +264,15 @@
  "extraction_notes": [
   "The NYK@TOR card prints Final/OT. The overtime marker is recorded in this note; the row's quarter cells remain blank like every other row of this snapshot.",
   "Arena and city cells are blank: the scoreboard page does not print them and the game-summary pages were not read in this pass.",
-  "No probability, line, price, pick or settlement is produced from these rows."
+  "No probability, line, price, pick or settlement is produced from these rows.",
+  "Reconciliation (third parallel collision, 2026-11-16): tip, arena and quarter cells filled from the independent gamebook capture (arena/dab321e7-nba4), each cited; finals/winners were cross-checked 9 of 9 between the two extractions before the fill."
  ],
  "superseded_snapshot": {
   "snapshot_id": "results-2026-11-14",
   "status": "kept as dated history with its five fully transcribed rows (quarters included); this file is the current feed row set but is quarter-incomplete"
+ },
+ "sources_added": {
+  "0022600240": "https://www.nba.com/game/dal-vs-bos-0022600240 (game-page LINESCORES: the gamebook SCORE BY PERIOD away row extracts garbled; the away quarters 9-28-34-23 are the game page printed lines, never reconstructed)",
+  "gamebooks": "https://statsdmz.nba.com/pdfs/20261115/20261115_{gamecode}_book.pdf for each row gamecode (quarter/tip/arena cells filled from these books; see data/snapshots/results-2026-11-15-gamebooks.json for the per-row verbatim lines)"
  }
 }

@@ -231,5 +231,71 @@ class AwayHomeBasisTests(unittest.TestCase):
         self.assertEqual(html.count("(order unverified)"), 0)
 
 
+class GameLogTests(unittest.TestCase):
+    """Task BI (arena/dab321e7-nba4): per-player game logs are dated attributed
+    observations with row-level official links, never inferred values and never
+    betting inputs. Merged into this suite at the third parallel collision."""
+
+    GAMELOGS = "player-gamelogs-2026-11-14_to_2026-11-15.json"
+    INJURY_1116 = "injuries-2026-11-16-0915am.json"
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location(
+            "build_gamelogs", ROOT / "scripts" / "build_gamelogs.py"
+        )
+        cls.build_gamelogs = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.build_gamelogs)
+        cls.data = json.loads((SNAPSHOTS / cls.GAMELOGS).read_text(encoding="utf-8"))
+
+    def test_every_report_player_is_covered_exactly_once(self) -> None:
+        injury_rows = {
+            (game["matchup"], row["player"])
+            for game in load(self.INJURY_1116)["games"]
+            for row in game["rows"]
+            if row["player"]
+        }
+        covered = [(p["report_block"], p["report_name"]) for p in self.data["players"]]
+        self.assertEqual(len(covered), len(set(covered)))
+        self.assertEqual(set(covered), injury_rows)
+
+    def test_mirrored_report_cells_match_the_file_of_record(self) -> None:
+        self.assertIsNone(self.build_gamelogs.verify_against_injury_report(self.data))
+
+    def test_every_game_row_carries_a_source_and_printed_values(self) -> None:
+        for p in self.data["players"]:
+            for g in p["games"]:
+                self.assertTrue(g["source_url"].startswith("https://"), g["source_url"])
+                self.assertIn("gamebook", g["source_label"])
+                if g["designation"] == "played":
+                    for key in ("min_printed", "pts_printed", "reb_printed", "ast_printed", "line_printed"):
+                        self.assertTrue(g[key], f"{p['report_name']}: {key} must be the printed cell")
+                else:
+                    self.assertTrue(g["designation_printed"], p["report_name"])
+                    for key in ("min_printed", "pts_printed", "reb_printed", "ast_printed"):
+                        self.assertIsNone(g[key], f"{p['report_name']}: no stat line may be invented")
+
+    def test_gap_players_have_no_invented_games(self) -> None:
+        gaps = [p for p in self.data["players"] if p.get("gap")]
+        self.assertEqual(len(gaps), 14)  # ORL + GSW + POR, idle both window days
+        for p in gaps:
+            self.assertEqual(p["games"], [])
+
+    def test_no_model_output_is_stored(self) -> None:
+        forbidden = ("probability", "minutes_model", "impact", "pick", "projection")
+        for p in self.data["players"]:
+            for key in p:
+                self.assertNotIn(key, forbidden, key)
+
+    def test_rendered_block_is_in_sync(self) -> None:
+        page = ROOT / "results.html"
+        self.assertIsNone(
+            build_snapshots.splice(page, "player-gamelogs", self.build_gamelogs.render_gamelogs()),
+            "results.html is out of date; run python3 scripts/build_gamelogs.py",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
