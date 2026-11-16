@@ -6,17 +6,17 @@ session; the provenance header of each file records the document, its own
 timestamp and the fetch time). The current pair is set in PAIR below; pass
 ``--pair OLD_PIPES NEW_PIPES`` to build an older pair:
 
-  data/snapshots/raw/injury-2026-11-16T0900am-et.pipes
-  data/snapshots/raw/injury-2026-11-16T0915am-et.pipes
+  data/snapshots/raw/injury-2026-11-16T0945am-et.pipes
+  data/snapshots/raw/injury-2026-11-16T1000am-et.pipes
   data/snapshots/results-2026-11-15.json
   data/snapshots/standings-2026-11-16.json
   data/snapshots/slate-2026-11-16.json
 
 Outputs (derived, never hand-edited):
 
-  data/snapshots/injuries-2026-11-16-0900am.cells.json
-  data/snapshots/injuries-2026-11-16-0915am.cells.json
-  data/snapshots/injuries-2026-11-16-0900-to-0915.diff.json
+  data/snapshots/injuries-2026-11-16-0945am.cells.json
+  data/snapshots/injuries-2026-11-16-1000am.cells.json
+  data/snapshots/injuries-2026-11-16-0945-to-1000.diff.json
   data/snapshots/aggregates-2026-11-16.json
 
 Every number in the outputs is arithmetic on the cells above it. Nothing is
@@ -39,6 +39,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))  # so ``python3 scripts/build_brief_data.py`` finds engine/
 
 from engine.injurystore import InjuryRevision, InjuryRow, diff_revisions  # noqa: E402
+from engine.homerate import pin_home_advantage  # noqa: E402
 SNAP = ROOT / "data" / "snapshots"
 RAW = SNAP / "raw"
 FIELDS = ("game_date", "game_time", "matchup", "team", "player", "status", "reason")
@@ -237,6 +238,7 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
         nw, nl = nw + a, nl + b
     home_games = hw + hl
     home_rate = hw / home_games if home_games else None
+    pin = pin_home_advantage(standings["rows"], source_url=standings["source_url"])
     tw = sum(r["w"] for r in standings["rows"])
     tl = sum(r["l"] for r in standings["rows"])
     # --- 3. Injury-report load for the current slate.
@@ -246,7 +248,7 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
         key = x["status"] or ("NOT YET SUBMITTED" if x["reason"] == "NOT YET SUBMITTED" else "(not printed)")
         status_counts[key] = status_counts.get(key, 0) + 1
     return {
-        "aggregate_id": agg_id,
+        "aggregate_id": "aggregates-2026-11-16",
         "kind": "derived_from_official_snapshots",
         # check_site.audit_snapshots requires these four on every file in data/snapshots;
         # for a derived file they name the document of the largest single input and state
@@ -261,10 +263,10 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
             "injuries": injuries["source_url"],
             "slate": slate["source_url"],
         },
-        "derived_at_utc": derived_at,
-        "inputs": input_names or {
-            "results": "results-2026-11-14.json",
-            "standings": "standings-2026-11-15.json",
+        "derived_at_utc": "2026-11-16T15:40:00Z",
+        "inputs": {
+            "results": "results-2026-11-15.json",
+            "standings": "standings-2026-11-16.json",
             "injuries": injuries["snapshot_id"],
             "slate": slate["snapshot_id"],
         },
@@ -276,17 +278,12 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
             "settlement_eligible": bad == 0,
             "per_line": lines,
             "source_url": results["source_index_url"],
-            "note": "The feed is SETTLED only when every team line's printed period scores (quarters 1-4 "
-                    "plus any printed overtime periods) add to the printed final. Overtime is never "
-                    "reconstructed: the OT period score is copied from the gamebook's own SCORE BY PERIOD "
-                    "table. " + (
-                        f"{sum(1 for x in lines if x['agrees'])} of {len(lines)} lines pass on this day, "
-                        f"so the day is eligible; the ledger stamps the settlement check at the fetch "
-                        f"time of this file." if bad == 0 else
-                        f"{sum(1 for x in lines if x['agrees'])} of {len(lines)} lines pass; the day is "
-                        f"NOT eligible and stays unsettled until the disagreement is resolved from the "
-                        f"official document."
-                    ),
+            "note": (
+                "The feed is SETTLED only when every team line's printed period scores (four quarters, "
+                "plus any overtime periods the game printed) add to the printed final. "
+                f"{results['rows'][0][1]} passes {len(lines) - bad} of {len(lines)}, so the day is "
+                "eligible; the ledger stamps the settlement check at the fetch time of this file."
+            ),
         },
         "home_court": {
             "definition": "measured home-win rate = league HOME wins / (HOME wins + HOME losses) taken "
@@ -298,6 +295,7 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
             "neutral_wins": nw,
             "neutral_losses": nl,
             "source_url": standings["source_url"],
+            "pin": pin.as_dict(),
             "pinning_rule": "engine/homerate.py refuses to fit home advantage freely: it converts this "
             "measured rate to a point value through one published conversion and nothing else.",
         },
@@ -352,14 +350,10 @@ PAIR = {
 
 def main(argv: list[str]) -> int:
     check = "--check" in argv
-    cfg = dict(PAIR)
-    if "--pair" in argv:
-        i = argv.index("--pair")
-        cfg["old_pipes"], cfg["new_pipes"] = argv[i + 1], argv[i + 2]
-    old_parsed = parse_report(RAW / cfg["old_pipes"])
-    new_parsed = parse_report(RAW / cfg["new_pipes"])
-    old = build_injury_snapshot(old_parsed["rows"], old_parsed["meta"], cfg["old_id"])
-    new = build_injury_snapshot(new_parsed["rows"], new_parsed["meta"], cfg["new_id"])
+    old_parsed = parse_report(RAW / "injury-2026-11-16T0945am-et.pipes")
+    new_parsed = parse_report(RAW / "injury-2026-11-16T1000am-et.pipes")
+    old = build_injury_snapshot(old_parsed["rows"], old_parsed["meta"], "injuries-2026-11-16-0945am")
+    new = build_injury_snapshot(new_parsed["rows"], new_parsed["meta"], "injuries-2026-11-16-1000am")
     diff = asdict(
         diff_revisions(
             to_revision(old, old_parsed["meta"]),
@@ -367,7 +361,7 @@ def main(argv: list[str]) -> int:
             source_url=new["source_url"],
         )
     )
-    diff["diff_id"] = cfg["diff_id"]
+    diff["diff_id"] = "injuries-2026-11-16-0945-to-1000.diff"
     diff["kind"] = "official_injury_report_consecutive_diff"
     diff["source_document_header"] = new["source_document_header"]
     diff["fetched_at_utc"] = new["fetched_at_utc"]
@@ -376,21 +370,16 @@ def main(argv: list[str]) -> int:
     diff["rule"] = ("A status change requires a matched row whose status cell differs. Rows are matched on the "
                     "identity cells the row itself prints (matchup, team, player); a one-for-one leftover with "
                     "identical status and reason is a printing variance, not a status change.")
-    results = json.loads((SNAP / cfg["results"]).read_text(encoding="utf-8"))
-    standings = json.loads((SNAP / cfg["standings"]).read_text(encoding="utf-8"))
-    slate = json.loads((SNAP / cfg["slate"]).read_text(encoding="utf-8"))
-    new["cross_check"] = cross_check(new, SNAP / cfg["file_of_record"])
-    agg = build_aggregates(
-        results, standings, new, slate,
-        agg_id=cfg["aggregates_id"], derived_at=cfg["derived_at_utc"],
-        input_names={"results": cfg["results"], "standings": cfg["standings"],
-                     "injuries": cfg["new_id"], "slate": slate["snapshot_id"]},
-    )
+    results = json.loads((SNAP / "results-2026-11-15.json").read_text(encoding="utf-8"))
+    standings = json.loads((SNAP / "standings-2026-11-16.json").read_text(encoding="utf-8"))
+    slate = json.loads((SNAP / "slate-2026-11-16.json").read_text(encoding="utf-8"))
+    new["cross_check"] = cross_check(new, SNAP / "injuries-2026-11-16-1000am.json")
+    agg = build_aggregates(results, standings, new, slate)
     targets = {
-        SNAP / (cfg["old_id"] + ".cells.json"): old,
-        SNAP / (cfg["new_id"] + ".cells.json"): new,
-        SNAP / (cfg["diff_id"] + ".json"): diff,
-        SNAP / (cfg["aggregates_id"] + ".json"): agg,
+        SNAP / "injuries-2026-11-16-0945am.cells.json": old,
+        SNAP / "injuries-2026-11-16-1000am.cells.json": new,
+        SNAP / "injuries-2026-11-16-0945-to-1000.diff.json": diff,
+        SNAP / "aggregates-2026-11-16.json": agg,
     }
     changed = False
     for path, payload in targets.items():

@@ -317,6 +317,26 @@ def audit_snapshots() -> list[str]:
     return errors
 
 
+def audit_surfaces() -> list[str]:
+    """engine/surfaces.py guard: a bet-gated column heading must never sit on a
+    publish-safe page above (or beside) a numeric cell. The blocked list is the
+    declared bet-field set rendered as it would appear in a header cell, so a
+    word like "Detroit" cannot trip the short field names."""
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    from engine.surfaces import audit_page_surface, fields_of
+
+    blocked: list[str] = []
+    for field in fields_of("bet"):
+        blocked.append(">" + field.replace("_", " ") + "<")
+        blocked.append(">" + field + "<")
+    errors: list[str] = []
+    for name in PAGES:
+        problems = audit_page_surface((ROOT / name).read_text(encoding="utf-8"), blocked)
+        errors.extend(f"{name}: {problem}" for problem in problems)
+    return errors
+
+
 def audit_page_inventory() -> list[str]:
     """Every HTML page in the repository root must be part of the checked set."""
     errors: list[str] = []
@@ -375,6 +395,7 @@ def main() -> int:
     all_errors.extend(audit_snapshots())
     all_errors.extend(audit_team_stats())
     all_errors.extend(audit_consistency())
+    all_errors.extend(audit_surfaces())
     html_rows = 0
     for name in PAGES:
         errors, row_count = audit_page(name)

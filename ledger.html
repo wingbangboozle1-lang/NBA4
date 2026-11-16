@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Tamper-evident ledger and pre-registration: procedure recorded, entries withheld while picks are barred.">
-  <title>NBA4 &mdash; Settlement ledger</title>
+  <meta name="description" content="Pre-registration freeze and tamper-evident pick-hash ledger: mechanics implemented and tested, zero sealed picks while rights gate G0 is blocked.">
+  <title>NBA4 — Pre-registration ledger</title>
   <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
     <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N4</span><span class="brand-copy">NBA4<small>RESEARCH DASHBOARD</small></span></a>
     <p class="nav-label">Workspace</p>
     <nav class="primary-nav" aria-label="Primary navigation">
-      <ul>
+                  <ul>
       <li><a href="index.html"><span class="nav-icon" aria-hidden="true">◆</span>Overview</a></li>
       <li><a href="slate.html"><span class="nav-icon" aria-hidden="true">◷</span>Upcoming slate</a></li>
       <li><a href="injuries.html"><span class="nav-icon" aria-hidden="true">△</span>Injuries &amp; flow</a></li>
@@ -34,35 +34,38 @@
       </ul>
     </nav>
     <div class="sidebar-spacer"></div>
-    <div class="sidebar-note"><strong>Research-only state</strong><p>No validated strategies, licensed feed, or NBA picks are available in this repository.</p></div>
+    <div class="sidebar-note"><strong>Empty on purpose</strong><p>Zero frozen versions, zero sealed picks — the ledger records refusals.</p></div>
     <p class="sidebar-disclaimer">Independent project. Not affiliated with or endorsed by the NBA.</p>
   </aside>
   <div class="content-shell">
-    <header class="topbar"><div><p class="topbar-title">Settlement ledger</p><p class="topbar-meta">Chain state as of 2026-11-16 &middot; 0 entries &middot; settlement withheld</p></div><span class="status-pill">NO PICKS ISSUED</span></header>
+    <header class="topbar"><div><p class="topbar-title">Pre-registration ledger</p><p class="topbar-meta">Tamper-evident by design · 0 sealed picks</p></div><span class="status-pill">NO PICKS SEALED</span></header>
     <main id="main" class="main-content">
-      <header class="page-header"><p class="eyebrow">Tamper-evident record &middot; honest state</p><h1>Settlement ledger and pre-registration: procedure recorded, entries withheld</h1><p>The brief&rsquo;s tamper-evident chain has three stages: freeze the pre-registration file before the first bet; hash each pick and publish the hash before tip-off; verify the chain after settlement against official finals with a visible stamp. This page publishes the procedure and the current (empty) state. It does not perform any stage on evidence that does not exist.</p></header>
+      <header class="page-header"><p class="eyebrow">Freeze first, hash every entry, settle only from verified finals</p><h1>Pre-registration &amp; pick ledger</h1><p>The brief's anti-hindsight machinery is implemented and tested: a strategy version is frozen and hashed before any pick can reference it, each pick is appended to a hash-chained ledger that cannot be edited quietly, and a settlement entry is written only from a verified final. The ledger below is empty because rights gate G0 has not cleared — an empty ledger is the correct state, not a missing feature.</p></header>
 
-      <section class="panel">
-        <h2>Ledger state at 2026-11-16</h2>
+      <div class="notice notice-danger"><span class="notice-icon" aria-hidden="true">!</span><div><strong>Why there are no entries.</strong><p>Sealing a pick requires originating one, and originating a line from NBA Statistics for publication is refused while G0 stands (NBA.com Terms &sect;9; owner decision D-01 / IR-T4 outstanding). The ledger therefore records the refusal instead of a placeholder hash — a placeholder would be indistinguishable from a real entry later.</p></div></div>
+
+      <section class="section" aria-labelledby="mechanics-title">
+        <div class="section-heading"><div><h2 id="mechanics-title">Ledger mechanics and current state</h2><p>Each mechanism is implemented with tests; the state column reports what has actually happened.</p></div></div>
         <div class="table-card table-wrap">
           <table class="data-table">
-            <thead><tr><th scope="col">Ledger stage</th><th scope="col">State</th><th scope="col">Basis</th><th scope="col">Official source</th></tr></thead>
+            <thead><tr><th scope="col">Mechanism</th><th scope="col">What it guarantees</th><th scope="col">Current state</th><th scope="col">Source</th></tr></thead>
             <tbody>
-              <tr><td><strong>Pre-registration file (signal, thresholds, universe, settlement rule)</strong></td><td><span class="flag flag-red">NOT YET ISSUED</span></td><td>The brief freezes it before the first bet. No strategy has passed the validation gates, so the file would be fiction; it is not written.</td><td><a href="https://www.nba.com/termsofuse">NBA Terms of Use s.1, s.9(ii)</a></td></tr>
-              <tr><td><strong>Pre-tip pick hash published</strong></td><td><span class="flag flag-red">NONE</span></td><td>There are no picks. When one exists, its hash commits here before tip-off so later edits are detectable.</td><td><a href="https://www.nba.com/termsofuse">NBA Terms of Use s.1, s.9(ii)</a></td></tr>
-              <tr><td><strong>Post-settlement verification + stamp</strong></td><td><span class="flag">WITHHELD</span></td><td>Settlement itself is blocked (D-01/IR-T4) and the 11/15 quarter-score gap (flag P9-05) remains; the stamp is withheld rather than issued on partial evidence.</td><td><a href="https://www.nba.com/standings">NBA.com standings</a></td></tr>
-              <tr><td><strong>Sealed ledger content</strong></td><td>0 entries</td><td>The ledger is intentionally empty: hash picks, publish hash pre-tip, verify post-settlement &mdash; all three stages idle with picks barred.</td><td><a href="https://www.nba.com/termsofuse">NBA Terms of Use s.1, s.9(ii)</a></td></tr>
+              <tr><td><strong>Pre-registration freeze</strong></td><td>The strategy version, inputs, thresholds and gates are hashed and frozen before any pick can cite them; a later edit changes the hash and is visible.</td><td><span class="flag">Implemented &amp; tested</span><br>0 versions frozen.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/preregistration.py" target="_blank" rel="noopener noreferrer">engine/preregistration.py</a></td></tr>
+              <tr><td><strong>Pick-hash ledger</strong></td><td>Append-only entries chained by hash: every pick's content hash includes the previous entry, so silent rewrites break the chain.</td><td><span class="flag">Implemented &amp; tested</span><br>0 entries sealed.</td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/publishedledger.py" target="_blank" rel="noopener noreferrer">engine/publishedledger.py</a></td></tr>
+              <tr><td><strong>Seal layer</strong></td><td>Freezes the standings-derived tie-break chain used by ratings so a re-derived table cannot differ from the sealed one without detection.</td><td><span class="flag">Implemented &amp; tested</span><br>Standings observed 2026-11-16; no seal requested (G0).</td><td><a class="source-link" href="https://www.nba.com/standings" target="_blank" rel="noopener noreferrer">NBA standings</a><br><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/seallayer.py" target="_blank" rel="noopener noreferrer">engine/seallayer.py</a></td></tr>
+              <tr><td><strong>Settlement stamp</strong></td><td>A settlement entry can only reference a day whose every team line's printed periods add to the printed final, stamped at the results fetch time.</td><td><span class="flag flag-green">Computed, not sealed</span><br>2026-11-15 passes 18 of 18; no pick to settle.</td><td><a class="source-link" href="https://www.nba.com/games" target="_blank" rel="noopener noreferrer">NBA games</a><br><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/officialresults.py" target="_blank" rel="noopener noreferrer">engine/officialresults.py</a></td></tr>
+              <tr><td><strong>Refusal entries</strong></td><td>Each blocked cycle writes why nothing was sealed — gate, authority and timestamp — so an empty ledger is auditable rather than ambiguous.</td><td><span class="flag">Active</span><br>G0 refusal standing since the first cycle.</td><td><a class="source-link" href="https://www.nba.com/termsofuse" target="_blank" rel="noopener noreferrer">NBA.com Terms &sect;9</a></td></tr>
+              <tr><td><strong>Ledger contents</strong></td><td>The published entries themselves: pick hash, frozen version, market, line, price, timestamp, and later the settlement result.</td><td><span class="empty-value">no entries</span></td><td><a class="source-link" href="https://github.com/wingbangboozle1-lang/NBA4/blob/main/engine/publishedledger.py" target="_blank" rel="noopener noreferrer">engine/publishedledger.py</a></td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <section class="panel">
-        <h2>Why the ledger is empty</h2>
-        <p>Picks are barred at three independent gates: strategy validation (nothing has passed), rights gate G0 (NBA statistics may not feed gambling activity per <a href="https://www.nba.com/termsofuse">Terms of Use s.1, s.9(ii)</a>), and settlement evidence (quarter scores for the 11/15 games are not transcribed &mdash; flag P9-05 &mdash; while the 11/14 quarters remain the only full verified set). The chain design is recorded so that when a pick does exist, its pre-tip hash and post-settlement verification are mechanical.</p>
-        <p><a href="results.html">Results &amp; standings &rarr;</a> &middot; <a href="strategies.html">Strategies &amp; gates &rarr;</a></p>
+      <section class="section two-column" aria-label="Ledger notes">
+        <article class="panel"><h2>What a sealed entry will look like</h2><p>A frozen strategy hash, a pick hash chained to the previous entry, the market and line as originated, the observation time, and — after verified finals — a settlement stamp naming the results file that settled it. Every field is written once; corrections are new entries, never edits.</p><p><a href="automation.html">Automation schedule →</a></p></article>
+        <article class="panel"><h2>Ordering is the point</h2><p>Freeze, then pick, then hash, then settle — in that order, every time. Skipping the freeze is what the mechanism exists to prevent; skipping the settlement stamp would let an unsettled claim look final. Until G0 clears, the sequence stops at the freeze.</p><p><a href="model.html">Model status →</a> · <a href="strategies.html">Promotion gates →</a></p></article>
       </section>
-      <footer class="footer"><p>Snapshot tables are regenerated by <code>python3 scripts/build_snapshots.py</code>; gate status by the verification pass recorded in <code>docs/verification-pass-7ce5c0cc.md</code>.</p><p><a href="sources.html">Official source register</a></p></footer>
+      <footer class="footer"><p>The ledger is append-only and currently empty. An empty ledger is the correct refusal state.</p><p><a href="review.html">Flagged blockers →</a></p></footer>
     </main>
   </div>
 </div>
