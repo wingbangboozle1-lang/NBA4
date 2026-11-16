@@ -72,6 +72,9 @@ TEAMSTAT_MEASURES = ("Base", "Advanced", "Opponent")
 
 MAX_TRANSCRIPTION_AGE_H = 24.0
 REPORT_LINK_RE = re.compile(r"Injury-Report_(\d{4}-\d{2}-\d{2})_(\d{2})_(\d{2})(AM|PM)\.pdf")
+# Tolerant of layout extraction: the printed header can arrive split across
+# lines or with irregular spacing ("Injury" + newline + "Report:"), so the text
+# is whitespace-collapsed before matching (see parse_report_header).
 REPORT_HEADER_RE = re.compile(r"Injury Report:\s*(\d{1,2})/(\d{1,2})/(\d{2})\s+(\d{1,2}):(\d{2})\s*(AM|PM)")
 
 USER_AGENT = (
@@ -215,8 +218,13 @@ def _report_sort_key(date: str, clock: str) -> tuple[int, int, int, int, int, in
 
 
 def parse_report_header(pdf_text: str) -> str | None:
-    """Return the printed 'M/D/YY' date from the report header, or None."""
-    match = REPORT_HEADER_RE.search(pdf_text)
+    """Return the printed 'M/D/YY' date from the report header, or None.
+
+    The input is whitespace-collapsed first so a header split across lines by
+    the PDF text extractor still matches.
+    """
+    collapsed = re.sub(r"\s+", " ", pdf_text)
+    match = REPORT_HEADER_RE.search(collapsed)
     if not match:
         return None
     month, day, year = match.group(1), match.group(2), match.group(3)
@@ -516,15 +524,23 @@ def run(
                     if text is None:
                         record.gates.append(
                             Gate("injury_report_header", "fetch", False,
-                                 "pypdf is not available in this environment; the printed header "
-                                 "cannot be verified (fail closed)",
+                                 "no PDF text extractor available (pypdf/pdfminer.six); the printed "
+                                 "header cannot be verified (fail closed)",
                                  source_url=newest_url, observed_at_utc=_iso(now))
                         )
                     else:
                         header_date = parse_report_header(text)
+                        if header_date is None:
+                            sample = re.sub(r"\s+", " ", text)[:120]
+                            detail = (
+                                f"no printed header found in {len(text)} extracted chars "
+                                f"(sample: {sample!r}); URL date from {newest_label}"
+                            )
+                        else:
+                            detail = f"printed header date {header_date!r} vs URL date from {newest_label}"
                         record.gates.append(
                             Gate("injury_report_header", "fetch", bool(header_matches_url(header_date, newest_url)),
-                                 f"printed header date {header_date!r} vs URL date from {newest_label}",
+                                 detail,
                                  source_url=newest_url, observed_at_utc=_iso(now))
                         )
             except Exception as exc:
@@ -578,18 +594,35 @@ def run(
 
 
 def _pdf_text(data: bytes) -> str | None:
-    """Extract text with pypdf when installed; None means 'cannot verify'."""
+    """Extract text for header verification; None means 'no extractor installed'.
+
+    Tries pypdf first, then pdfminer.six when pypdf's output does not even
+    mention the document title (font/layout differences between the two
+    extractors are common on these reports). Every page is read: the printed
+    header is not guaranteed to survive on page 1 alone.
+    """
+    text = ""
     try:
         import io
 
         from pypdf import PdfReader
-    except Exception:
-        return None
-    try:
+
         reader = PdfReader(io.BytesIO(data))
-        return "\n".join((page.extract_text() or "") for page in reader.pages[:2])
+        text = "\n".join((page.extract_text() or "") for page in reader.pages[:30])
     except Exception:
-        return None
+        text = ""
+    if "Injury" not in text:
+        try:
+            import io
+
+            from pdfminer.high_level import extract_text as _extract
+
+            alt = _extract(io.BytesIO(data))
+            if len(alt) > len(text):
+                text = alt
+        except Exception:
+            pass
+    return text or None
 
 
 def main(argv: list[str] | None = None) -> int:

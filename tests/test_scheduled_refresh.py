@@ -85,6 +85,13 @@ class ParseTests(unittest.TestCase):
     def test_header_absent(self):
         self.assertIsNone(sr.parse_report_header("no header on this page"))
 
+    def test_header_survives_line_splits(self):
+        # pdfminer/pypdf can emit the printed header split across lines.
+        split = "page header junk\nInjury\nReport: 11/16/26 10:00 AM\nTEAM | PLAYER"
+        self.assertEqual(sr.parse_report_header(split), "2026-11-16")
+        wide = "Injury  Report:  11/16/26   10:00   AM"
+        self.assertEqual(sr.parse_report_header(wide), "2026-11-16")
+
     def test_row_count(self):
         self.assertEqual(sr.count_nba_rows(STANDINGS_JSON), (30, True))
         self.assertEqual(sr.count_nba_rows(STANDINGS_SHORT), (29, False))

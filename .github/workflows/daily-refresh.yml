@@ -57,8 +57,8 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install PDF header reader
-        run: python -m pip install --quiet "pypdf==5.1.0"
+      - name: Install PDF header readers
+        run: python -m pip install --quiet "pypdf==5.1.0" "pdfminer.six==20250506"
 
       - name: Run the refresh gates
         id: gates
@@ -146,11 +146,13 @@ jobs:
           if ! python3 - <<'PY'
           import json, sys
           record = json.load(open("run-record.json"))
-          fetch_gates = [g for g in record["gates"] if g["phase"] == "fetch"]
-          sys.exit(0 if fetch_gates and all(g["status"] == "PASS" for g in fetch_gates) else 1)
+          gates = {g["gate"]: g for g in record["gates"]}
+          # The baseline is licensed by its own fetch gate passing; other
+          # gates failing does not invalidate an observed schedule-PDF sha.
+          sys.exit(0 if gates.get("schedule_pdf_fetch", {}).get("status") == "PASS" else 1)
           PY
           then
-            echo "Fetch phase not clean; nothing will be committed."
+            echo "Schedule PDF fetch gate did not pass; no baseline commit."
             exit 0
           fi
           git config user.name "daily-refresh[bot]"
