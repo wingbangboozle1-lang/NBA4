@@ -509,5 +509,12 @@
   "0022600242": "Rockets: Smart NWT (League Suspension), VanVleet DND (Right Knee Injury Management). Wizards inactives: Beekman/Champagnie/Johnson/Okpara/Vukcevic/Watkins.",
   "0022600243": "Hawks: Flemings DND (Lumbar Strain). Bucks inactives: Dieng (Left Finger Fracture), Jones/Markovic/Nance/Ryan (G League), Rollins (Illness).",
   "0022600244": "Thunder inactives: Dix, Holmgren (Right Knee Injury Recovery), Sorber (Right Knee Surgery), Wallace (Left Shoulder Surgery), Williams (Left Ankle Surgery), Williams (Low Back Spasms). Kings: Hunter DND (Left Hip Soreness/Tightness), LaVine DND (Illness); Achiuwa (Left Ankle Soreness), Mogbo/Pedulla (G League), Raynaud (Right Patella Subluxation), Simmons (Right Achilles Tendon Repair)."
+ },
+ "secondary_sources": {
+  "0022600240": {
+   "url": "https://www.nba.com/game/dal-vs-bos-0022600240",
+   "label": "Game-page LINESCORES (away quarters as printed)",
+   "why": "the gamebook's SCORE BY PERIOD away row extracts garbled; no quarter was reconstructed - the away quarters are the ones printed on the game's official summary page"
+  }
  }
 }

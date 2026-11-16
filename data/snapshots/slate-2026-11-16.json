@@ -3,7 +3,7 @@
  "kind": "schedule_window_rows",
  "source_url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf",
  "source_document": "2026-27 NBA Regular Season Schedule By Date (official league schedule PDF, August release)",
- "source_document_header": "Official NBA 2026-27 regular-season schedule-by-date PDF; window rows 245-269 (chunk 2 read 2026-11-16, row 245 from the chunk-1 tail/chunk-2 head captured 2026-11-16)",
+ "source_document_header": "2026-27 NBA REGULAR SEASON SCHEDULE AS OF AUGUST 13, 2026 | SUBJECT TO CHANGE",
  "fetched_at_utc": "2026-11-16T14:41:21Z",
  "extraction_tool": "fetch_page (PDF text to markdown), chunk 2 of 13 re-read 2026-11-16; rows transcribed verbatim; no inference",
  "window": {
@@ -12,6 +12,7 @@
   "rule": "requested maximum horizon of 3 days from the observation time; games tipping off on or after 2026-11-19T14:41:21Z are outside the window. All four 11/19 rows (270-273) tip at or after 7:00 PM ET on 2026-11-19 (23:00Z) and are therefore out of window."
  },
  "extraction_notes": [
+  "Document header recorded exactly as the PDF prints it: '2026-27 NBA REGULAR SEASON SCHEDULE AS OF AUGUST 13, 2026 | SUBJECT TO CHANGE'. Window rows 245-269 were transcribed from chunk 2 read 2026-11-16 (row 245 from the chunk head).",
   "The PDF's matchup columns render as two team cells for rows 245-259 (away cell then home cell, no connector) and three cells for rows 260-269 (away cell, literal 'at' cell, home cell). The layout is recorded per row in matchup_cell_layout; team order is away first in both layouts (corroborated by games-page slugs for rows 245-257).",
   "The time columns print LOCAL | ET (home-venue local time first, Eastern second), the same rule verified in slate-2026-11-15.json.",
   "AN-02 tip conflicts carried from slate-2026-11-15.json: row 256 (CHA@LAL) the injury report and the games page print 11:00 PM ET while the schedule PDF prints 10:00 PM ET; row 257 (UTA@LAC) the report and games page print 10:30 PM ET while the PDF prints 11:00 PM ET. Both printed values stay in the file (tip_et_col2 = PDF as printed, games_page_tip_et = games page as printed) with dual citation.",

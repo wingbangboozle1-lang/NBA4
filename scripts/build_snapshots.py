@@ -23,14 +23,15 @@ import html
 import json
 import sys
 from pathlib import Path
+from statistics import NormalDist
 
 ROOT = Path(__file__).resolve().parents[1]
 SNAPSHOTS = ROOT / "data" / "snapshots"
 SCHEDULE_URL = (
     "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
 )
-REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-15_06_15AM.pdf"
-REPORT_LABEL = "2026-11-15 06:15 AM ET report"
+REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_09_15AM.pdf"
+REPORT_LABEL = "2026-11-16 09:15 AM ET report"
 
 # Engine reason codes (engine/pipeline.py REASON_CODES) applied to every game.
 NO_PICK_REASONS = (
@@ -93,24 +94,34 @@ def load(name: str) -> dict:
 
 
 def render_slate() -> str:
-    data = load("slate-2026-11-15.json")
-    # The schedule PDF text prints no "at" token on rows 215-259, so away/home order
-    # is shown as "at" only when the 06:15 AM injury report independently prints the
-    # same AWAY@HOME code for the same game date. Every other row shows printed order
-    # and is flagged. Matching the code alone is not enough: matchups repeat across
-    # dates (e.g. NYK@TOR and POR@MIN appear in the report on 11/15 and on the slate
-    # again on 11/17), which would falsely corroborate the 11/17 rows.
+    data = load("slate-2026-11-16.json")
+    # The schedule PDF text prints no "at" token on rows 245-259 (the away and home
+    # teams sit in adjacent cells). Away/home order is shown as "at" when either
+    # (a) the PDF itself prints an explicit "at" cell (rows 260-269), or
+    # (b) the newest injury report independently prints the same AWAY@HOME code for
+    # the same game date. Every other row shows printed order and is flagged.
+    # Matching the code alone is not enough: matchups repeat across dates (POR@MIN
+    # appears in the report on 11/16 and on the slate again on 11/17), which would
+    # falsely corroborate the wrong row.
     report_codes = {
         (g.get("game_date") or g.get("game_date_from_schedule", ""), g["matchup"])
-        for g in load("injuries-2026-11-15-0615am.json")["games"]
+        for g in load("injuries-2026-11-16-0915am.json")["games"]
     }
     rows: list[str] = []
     for game in data["games"]:
         away, home = game["away"], game["home"]
-        corroborated = (game["date"], f"{ABBR[away]}@{ABBR[home]}") in report_codes
-        if corroborated:
+        at_printed = game.get("matchup_cell_layout") == "away_cell|at_cell|home_cell"
+        corroborated = at_printed or (game["date"], f"{ABBR[away]}@{ABBR[home]}") in report_codes
+        if at_printed:
             matchup = f"{ABBR[away]} @ {ABBR[home]}"
             game_cell = f"<strong>{e(away)}</strong> at <strong>{e(home)}</strong>"
+        elif corroborated:
+            matchup = f"{ABBR[away]} @ {ABBR[home]}"
+            game_cell = (
+                f"<strong>{e(away)}</strong> at <strong>{e(home)}</strong>"
+                '<br><span class="muted">Order per the injury report\u2019s AWAY@HOME code; '
+                "this schedule row prints no \u201cat\u201d token.</span>"
+            )
         else:
             matchup = f"{ABBR[away]} / {ABBR[home]} (order unverified)"
             game_cell = (
@@ -164,10 +175,10 @@ def game_label(game: dict) -> str:
 
 
 def render_injuries() -> str:
-    data = load("injuries-2026-11-15-0615am.json")
+    data = load("injuries-2026-11-16-0915am.json")
     rows: list[str] = []
     for game in data["games"]:
-        from_schedule = game["cells_source"].startswith("schedule")
+        from_schedule = "schedule" in game["cells_source"]
         for row in game["rows"]:
             team = row["team"]
             player = row["player"]
@@ -248,11 +259,11 @@ def splice(page: Path, block_id: str, body: str) -> str | None:
 # snapshot file it names, so a published row can be re-derived from that file.
 # ---------------------------------------------------------------------------
 
-INJ_0615 = "injuries-2026-11-15-0615am.cells.json"
-INJ_DIFF = "injuries-2026-11-15-0600-to-0615.diff.json"
-RESULTS_1114 = "results-2026-11-14.json"
-STANDINGS_1115 = "standings-2026-11-15.json"
-AGGREGATES_1115 = "aggregates-2026-11-15.json"
+INJ_0915 = "injuries-2026-11-16-0915am.cells.json"
+INJ_DIFF = "injuries-2026-11-16-0900-to-0915.diff.json"
+RESULTS_1115 = "results-2026-11-15.json"
+STANDINGS_1116 = "standings-2026-11-16.json"
+AGGREGATES_1116 = "aggregates-2026-11-16.json"
 
 
 def _row(cells: list[str]) -> str:
@@ -261,6 +272,8 @@ def _row(cells: list[str]) -> str:
 
 def render_injuries_diff() -> str:
     data = load(INJ_DIFF)
+    old_label = data["old"]["revision_label"].split(" ", 1)[-1]  # "11/16/26 09:00 AM" -> "09:00 AM"
+    new_label = data["new"]["revision_label"].split(" ", 1)[-1]
     rows: list[str] = []
     for change in data["changes"]:
         cells = [
@@ -270,15 +283,15 @@ def render_injuries_diff() -> str:
             f"<td>{e(str(change.get('old', '')))}</td>" if change.get("old") else empty(),
             f"<td>{e(str(change.get('new', '')))}</td>" if change.get("new") else empty(),
             f'<td>{e(change["note"])}</td>' if change.get("note") else empty(),
-            f"<td>{link(data['source_url'], '06:15 AM revision')}<br>"
-            f"{link(data['old']['source_url'], '06:00 AM revision')}</td>",
+            f"<td>{link(data['source_url'], new_label + ' revision')}<br>"
+            f"{link(data['old']['source_url'], old_label + ' revision')}</td>",
         ]
         rows.append(_row(cells))
     counts = data["counts"]
     summary = _row(
         [
             "<td><strong>Summary</strong></td>",
-            f'<td>{counts["old_rows"]} rows at 06:00, {counts["new_rows"]} at 06:15</td>',
+            f'<td>{counts["old_rows"]} rows at {e(old_label)}, {counts["new_rows"]} at {e(new_label)}</td>',
             f'<td>{counts["status_changes"]} status changes</td>',
             f'<td>{counts["reason_changes"]} reason changes</td>',
             f'<td>{counts["printing_variances"]} name-cell variance</td>',
@@ -291,33 +304,46 @@ def render_injuries_diff() -> str:
         '<div class="table-card table-wrap">\n          <table class="data-table">\n'
         "            <thead><tr>"
         '<th scope="col">Change type</th><th scope="col">Game</th><th scope="col">Player</th>'
-        '<th scope="col">At 06:00 AM</th><th scope="col">At 06:15 AM</th><th scope="col">Data note</th>'
+        f'<th scope="col">At {e(old_label)}</th><th scope="col">At {e(new_label)}</th>'
+        '<th scope="col">Data note</th>'
         '<th scope="col">Official source</th></tr></thead>\n            <tbody>\n'
     )
     return head + "\n".join(rows) + "\n            </tbody>\n          </table>\n        </div>"
 
 
 def render_results() -> str:
-    data = load(RESULTS_1114)
+    data = load(RESULTS_1115)
+    secondary = data.get("secondary_sources", {})
     rows: list[str] = []
     for row in data["rows"]:
-        (gid, date, tip, arena, city, away, home, aq, af, hq, hf, winner, loser, url) = row
-        for team, quarters, final in ((away, aq, af), (home, hq, hf)):
-            total = sum(quarters)
+        (gid, date, tip, arena, city, away, home, aq, af, hq, hf, winner, loser, url) = row[:14]
+        aot = row[14] if len(row) > 14 else []
+        hot = row[15] if len(row) > 15 else []
+        for team, quarters, ot, final in ((away, aq, aot, af), (home, hq, hot, hf)):
+            total = sum(quarters) + sum(ot)
             ok = total == final
+            ot_cell = "".join(f"<td>{p}</td>" for p in ot) if ot else empty()
+            if ot:
+                check_text = ("quarters + printed OT periods add to the printed final" if ok
+                              else "quarters + printed OT periods do not add to the printed final")
+            else:
+                check_text = ("printed quarter scores add to the printed final" if ok
+                              else "quarter sum does not equal the printed final")
+            sources = [link(url, f"Official gamebook {gid}")]
+            if gid in secondary:
+                sources.append(link(secondary[gid]["url"], secondary[gid]["label"]))
             cells = [
                 f'<td>{e(gid)}</td>',
-                f'<td>{e(date)} {e(tip)} ET</td>',
+                f'<td>{e(date)} {e(tip)}</td>',
                 f"<td>{e(team)}</td>",
                 "".join(f"<td>{q}</td>" for q in quarters),
+                ot_cell,
                 f"<td><strong>{total}</strong></td>",
                 f"<td><strong>{final}</strong></td>",
                 f'<td><span class="flag {"flag-green" if ok else "flag-red"}">'
-                f'{"AGREES" if ok else "DISAGREES"}</span><br>'
-                f'{"quarter scores add to the printed final" if ok else "quarter sum does not equal the printed final"}'
-                f"</td>",
+                f'{"AGREES" if ok else "DISAGREES"}</span><br>{e(check_text)}</td>',
                 f'<td>{"SETTLEMENT_ELIGIBLE" if ok else "BLOCKED"}</td>',
-                f"<td>{link(url, f'Official game page {gid}')}</td>",
+                "<td>" + "<br>".join(sources) + "</td>",
             ]
             rows.append(_row(cells))
     head = (
@@ -325,14 +351,15 @@ def render_results() -> str:
         "            <thead><tr>"
         '<th scope="col">Game id</th><th scope="col">Date / tip (as printed)</th><th scope="col">Team</th>'
         '<th scope="col">Q1</th><th scope="col">Q2</th><th scope="col">Q3</th><th scope="col">Q4</th>'
-        '<th scope="col">Quarter sum</th><th scope="col">Printed final</th><th scope="col">Check</th>'
+        '<th scope="col">OT (printed)</th>'
+        '<th scope="col">Period sum</th><th scope="col">Printed final</th><th scope="col">Check</th>'
         '<th scope="col">Settlement</th><th scope="col">Official source</th></tr></thead>\n            <tbody>\n'
     )
     return head + "\n".join(rows) + "\n            </tbody>\n          </table>\n        </div>"
 
 
 def render_standings() -> str:
-    data = load(STANDINGS_1115)
+    data = load(STANDINGS_1116)
     rows: list[str] = []
     for r in data["rows"]:
         cells = [
@@ -366,12 +393,12 @@ def render_standings() -> str:
 
 
 def render_aggregates() -> str:
-    data = load(AGGREGATES_1115)
+    data = load(AGGREGATES_1116)
     hc = data["home_court"]
     rf = data["result_feed"]
     il = data["injury_load"]
     sc = data["standings_consistency"]
-    st = load(STANDINGS_1115)["consistency_checks"]
+    st = load(STANDINGS_1116)["consistency_checks"]
 
     def row(label: str, value: str, rule: str, url: str, what: str) -> str:
         return _row(
@@ -390,32 +417,33 @@ def render_aggregates() -> str:
             f'<strong>{hc["measured_home_win_rate"]}</strong> ({hc["home_wins"]}-{hc["home_losses"]} over '
             f'{hc["home_games"]} home games)',
             "league HOME wins / (HOME wins + HOME losses); neutral-site games held out",
-            load(STANDINGS_1115)["source_url"],
+            load(STANDINGS_1116)["source_url"],
             "input to engine/homerate.py, which converts it to points and refuses to apply it before "
             "pre-registration and rights gate G0 clear",
         ),
         row(
             "Home-advantage point value",
-            "+0.885 pts (proposed, not applied)",
-            "points = MARGIN_SD_DEFAULT x Phi^-1(rate) = 12.0 x 0.0738; the exact inverse of "
+            f"+{12.0 * NormalDist().inv_cdf(hc['measured_home_win_rate']):.3f} pts (proposed, not applied)",
+            f"points = MARGIN_SD_DEFAULT x Phi^-1(rate) = 12.0 x "
+            f"{NormalDist().inv_cdf(hc['measured_home_win_rate']):.4f}; the exact inverse of "
             "ratings.win_probability",
-            load(STANDINGS_1115)["source_url"],
+            load(STANDINGS_1116)["source_url"],
             "ratings.HOME_ADVANTAGE_POINTS stays 0.0 until the gates clear; no per-arena or altitude term is fitted",
         ),
         row(
             "Result-feed settlement",
             f'{rf["lines_where_quarter_sum_equals_printed_final"]}/{rf["team_lines_checked"]} team lines agree; '
             f'{rf["lines_that_disagree"]} disagreements',
-            "a day settles only when every team line's four printed quarter scores add to the printed final",
-            load(RESULTS_1114)["source_url"],
+            "a day settles only when every team line's printed period scores (quarters plus any printed overtime periods) add to the printed final; overtime is never reconstructed",
+            load(RESULTS_1115)["source_url"],
             "engine/resultfeed.py settlement_gate",
         ),
         row(
             "Feed delay",
             '<span class="flag">[NO INPUT]</span>',
             "the results document prints a tip time and quarter scores but no game-end clock; no end time is invented",
-            load(RESULTS_1114)["source_url"],
-            "retrieval lag after the printed tip of the last game is 9.78 h (11/15 02:00 UTC tip to 11:47 UTC fetch)",
+            load(RESULTS_1115)["source_url"],
+            "retrieval lag after the printed tip of the last game is 12.69 h (last tip 2026-11-16 02:00 UTC = 11/15 9:00 PM ET, fetch 2026-11-16 14:41 UTC)",
         ),
         row(
             "Injury-report load, current revision",
@@ -427,7 +455,10 @@ def render_aggregates() -> str:
         ),
         row(
             "Consecutive-revision change",
-            '0 status changes, 1 name-spelling variance between 06:00 and 06:15 AM ET',
+            f"{load(INJ_DIFF)['counts']['status_changes']} status changes, "
+            f"{load(INJ_DIFF)['counts']['printing_variances']} name-cell variances between the "
+            f"{load(INJ_DIFF)['old']['revision_label'].split(' ', 1)[-1]} and "
+            f"{load(INJ_DIFF)['new']['revision_label'].split(' ', 1)[-1]} ET revisions",
             "rows matched on the identity cells each row prints; a one-for-one leftover with identical status and "
             "reason is a printing variance",
             load(INJ_DIFF)["source_url"],
@@ -439,7 +470,7 @@ def render_aggregates() -> str:
             f'neutral = {st["league_team_game_lines"]} team-game lines; league W {sc["league_wins"]} = L '
             f'{sc["league_losses"]}',
             "each game prints one HOME line and one ROAD line (both NEUTRAL at a neutral site)",
-            load(STANDINGS_1115)["source_url"],
+            load(STANDINGS_1116)["source_url"],
             "a reader can re-check the extraction without re-fetching the page",
         ),
         row(

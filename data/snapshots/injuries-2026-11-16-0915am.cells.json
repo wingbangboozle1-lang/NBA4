@@ -402,8 +402,8 @@
           "player": "Butler III, Jimmy",
           "status": "",
           "reason": "Injury/Illness - Right ACL Repair / Surgery",
-          "unverified": false,
-          "flag": ""
+          "unverified": true,
+          "flag": "the document prints no status cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
         },
         {
           "team": "Golden State Warriors",
@@ -411,8 +411,8 @@
           "player": "Curry, Stephen",
           "status": "Out",
           "reason": "",
-          "unverified": false,
-          "flag": ""
+          "unverified": true,
+          "flag": "the document prints no reason cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
         },
         {
           "team": "Golden State Warriors",
@@ -420,8 +420,8 @@
           "player": "Moody, Moses",
           "status": "Out",
           "reason": "",
-          "unverified": false,
-          "flag": ""
+          "unverified": true,
+          "flag": "the document prints no reason cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
         },
         {
           "team": "Golden State Warriors",
@@ -429,8 +429,8 @@
           "player": "Porzingis, Kristaps",
           "status": "Out",
           "reason": "",
-          "unverified": false,
-          "flag": ""
+          "unverified": true,
+          "flag": "the document prints no reason cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
         },
         {
           "team": "Golden State Warriors",
@@ -438,8 +438,8 @@
           "player": "Santos, Gui",
           "status": "Questionable",
           "reason": "",
-          "unverified": false,
-          "flag": ""
+          "unverified": true,
+          "flag": "the document prints no reason cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
         },
         {
           "team": "Golden State Warriors",
@@ -447,8 +447,8 @@
           "player": "Williams, Brandon",
           "status": "Out",
           "reason": "",
-          "unverified": false,
-          "flag": ""
+          "unverified": true,
+          "flag": "the document prints no reason cell on this row (one status-or-reason cell per row in this block); the cell stays blank and is not inferred"
         }
       ]
     },

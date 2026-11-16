@@ -93,12 +93,18 @@ def build_injury_snapshot(parsed_rows: list[dict], meta: dict, snapshot_id: str)
                         "player": r["player"],
                         "status": r["status"],
                         "reason": r["reason"],
-                        "unverified": not r["aligned"],
+                        "unverified": (not r["aligned"]) or bool(r["player"]) and (not r["status"] or not r["reason"]),
                         "flag": (
-                            ""
-                            if r["aligned"]
-                            else "matchup/team cells not printed on this row (PDF page break); "
+                            "matchup/team cells not printed on this row (PDF page break); "
                             "no value was inferred"
+                            if not r["aligned"]
+                            else (
+                                "the document prints no %s cell on this row (one status-or-reason "
+                                "cell per row in this block); the cell stays blank and is not inferred"
+                                % " or ".join(k for k in ("status", "reason") if not r[k])
+                                if r["player"] and (not r["status"] or not r["reason"])
+                                else ""
+                            )
                         ),
                     }
                     for r in game_rows

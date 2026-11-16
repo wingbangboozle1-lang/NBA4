@@ -17,7 +17,12 @@
  "consistency_checks": {
   "home_road_neutral_games_sum_equals_w_plus_l": "computed per row in split_sum_equals_gp; 30 of 30 rows pass",
   "rows_checked": 30,
-  "rows_failing_split_check": []
+  "rows_failing_split_check": [],
+  "league_home_games": 196,
+  "league_road_games": 196,
+  "league_neutral_games": 2,
+  "league_team_game_lines": 394,
+  "note": "each printed game contributes one HOME line and one ROAD line (both NEUTRAL at a neutral site); all values are sums of the printed split cells"
  },
  "rows": [
   {
