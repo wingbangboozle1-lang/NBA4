@@ -223,6 +223,12 @@ class PublishedLedger:
                 f"{pick_id}: refused - the hash must be published before tip "
                 f"(published {published_dt.isoformat()} > tip {tip_dt.isoformat()})"
             )
+        game_date = str(dict(pick).get("game_date", ""))
+        if any(e.kind == KIND_SEAL and str(e.payload.get("game_date")) == game_date for e in self._entries):
+            raise LedgerError(
+                f"{pick_id}: refused - the game day {game_date} is already sealed; "
+                "a sealed day's pick set is closed so the pre-tip seal cannot be diluted"
+            )
         return self._append(
             KIND_PUBLISH,
             published_at,
@@ -312,6 +318,12 @@ class PublishedLedger:
         game_date = str(publish_entry.payload.get("pick", {}).get("game_date", ""))
         if not seals.is_file() or game_date not in json.loads(seals.read_text(encoding="utf-8")):
             raise LedgerError(f"{pick_id}: {game_date or 'this game day'} was never sealed before tip")
+        seal_check = self.verify_against_seal(pick_id)
+        if not seal_check.get("verified"):
+            raise LedgerError(
+                f"{pick_id}: settlement refused - the pick does not verify against its day's seal "
+                f"({seal_check.get('code')}); a sealed ledger settles only sealed picks"
+            )
         return self._append(
             KIND_SETTLE,
             settled_at,
