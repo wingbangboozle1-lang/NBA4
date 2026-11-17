@@ -1,0 +1,175 @@
+{
+  "captured_date_utc": "2026-11-17",
+  "generated_at_utc": "2026-11-17T15:53:28Z",
+  "generator": "scripts/capture_official_pages.py",
+  "runner": "GitHub-hosted ubuntu-latest (unrestricted egress)",
+  "headers_sent": {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://www.nba.com/",
+    "Origin": "https://www.nba.com/"
+  },
+  "records": [
+    {
+      "key": "standings",
+      "url": "https://www.nba.com/standings",
+      "kind": "html",
+      "note": "official standings page; the job's standings feed",
+      "retrieved_at_utc": "2026-11-17T15:51:57Z",
+      "reached": true,
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "byte_length": 254207,
+      "sha256": "d9cfd080b9a7127cca1c49ad9a1a49c50b5c45545e23f0efcc60127bfaad5af8",
+      "captured_files": [
+        "standings.head.html",
+        "standings.next.json"
+      ],
+      "shape_check": {
+        "has_next_data_marker": true,
+        "next_data_parses_as_json": true
+      },
+      "failure": null,
+      "host": "www.nba.com"
+    },
+    {
+      "key": "teamstats_traditional",
+      "url": "https://www.nba.com/stats/teams/traditional",
+      "kind": "html",
+      "note": "official traditional team-stat page",
+      "retrieved_at_utc": "2026-11-17T15:51:57Z",
+      "reached": true,
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "byte_length": 322770,
+      "sha256": "4a22de5a1b2fbc21d6f8e0b720fc5dc32c057b7744f110f809930d84b6fa2223",
+      "captured_files": [
+        "teamstats_traditional.head.html",
+        "teamstats_traditional.next.json"
+      ],
+      "shape_check": {
+        "has_next_data_marker": true,
+        "next_data_parses_as_json": true
+      },
+      "failure": null,
+      "host": "www.nba.com"
+    },
+    {
+      "key": "teamstats_opponent",
+      "url": "https://www.nba.com/stats/teams/opponent",
+      "kind": "html",
+      "note": "official opponent team-stat page",
+      "retrieved_at_utc": "2026-11-17T15:51:57Z",
+      "reached": true,
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "byte_length": 322521,
+      "sha256": "06c2a781a66490cef9187c9560ed33e1119b350ac5f723ff8d712b4ad4e0bc7c",
+      "captured_files": [
+        "teamstats_opponent.head.html",
+        "teamstats_opponent.next.json"
+      ],
+      "shape_check": {
+        "has_next_data_marker": true,
+        "next_data_parses_as_json": true
+      },
+      "failure": null,
+      "host": "www.nba.com"
+    },
+    {
+      "key": "teamstats_advanced",
+      "url": "https://www.nba.com/stats/teams/advanced",
+      "kind": "html",
+      "note": "official advanced team-stat page",
+      "retrieved_at_utc": "2026-11-17T15:51:57Z",
+      "reached": true,
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "byte_length": 322464,
+      "sha256": "2e053e9762d7bd15b7c9aa8aebb3a6689f412093d96e0778233f65c5962defbe",
+      "captured_files": [
+        "teamstats_advanced.head.html",
+        "teamstats_advanced.next.json"
+      ],
+      "shape_check": {
+        "has_next_data_marker": true,
+        "next_data_parses_as_json": true
+      },
+      "failure": null,
+      "host": "www.nba.com"
+    },
+    {
+      "key": "injury_index",
+      "url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+      "kind": "html",
+      "note": "official injury-report index",
+      "retrieved_at_utc": "2026-11-17T15:51:57Z",
+      "reached": true,
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "byte_length": 41606,
+      "sha256": "2bb1e7ac3e0d38846cf5abffe2cbf7c8d4a0b2447ee6ff0e529547383457aff4",
+      "captured_files": [
+        "injury_index.head.html"
+      ],
+      "shape_check": {
+        "has_next_data_marker": false,
+        "next_data_parses_as_json": false
+      },
+      "failure": null,
+      "host": "official.nba.com"
+    },
+    {
+      "key": "stats_api_standings",
+      "url": "https://stats.nba.com/stats/leaguestandingsv3?GroupBy=conf&LeagueID=00&Season=2026-27&SeasonType=Regular+Season&Section=overall",
+      "kind": "json",
+      "note": "the stats.nba.com JSON endpoint the job currently targets for standings",
+      "retrieved_at_utc": "2026-11-17T15:52:42Z",
+      "reached": false,
+      "http_status": null,
+      "content_type": null,
+      "byte_length": null,
+      "sha256": null,
+      "captured_files": [],
+      "shape_check": null,
+      "failure": "TimeoutError: The read operation timed out"
+    },
+    {
+      "key": "stats_api_teamstats",
+      "url": "https://stats.nba.com/stats/leaguedashteamstats?Conference=&DateFrom=&DateTo=&Division=&GameScope=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PaceAdjust=N&PerMode=PerGame&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2026-27&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=0&VsConference=&VsDivision=",
+      "kind": "json",
+      "note": "the stats.nba.com JSON endpoint the job currently targets for team stats",
+      "retrieved_at_utc": "2026-11-17T15:53:28Z",
+      "reached": false,
+      "http_status": null,
+      "content_type": null,
+      "byte_length": null,
+      "sha256": null,
+      "captured_files": [],
+      "shape_check": null,
+      "failure": "TimeoutError: The read operation timed out"
+    },
+    {
+      "key": "schedule_pdf",
+      "url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf",
+      "kind": "pdf",
+      "note": "official 2026-27 regular-season schedule PDF",
+      "retrieved_at_utc": "2026-11-17T15:53:28Z",
+      "reached": true,
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "byte_length": 541060,
+      "sha256": "5e82e37ef1b19e226dee57be69958b95b5694516280d3034aa7c1d64292b3570",
+      "captured_files": [
+        "schedule_pdf.pdf"
+      ],
+      "shape_check": {
+        "starts_with_pdf_magic": true,
+        "page_marker_count": 0
+      },
+      "failure": null,
+      "host": "cdn.nba.com"
+    }
+  ]
+}
