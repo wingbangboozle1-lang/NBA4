@@ -6,18 +6,18 @@ session; the provenance header of each file records the document, its own
 timestamp and the fetch time). The current pair is set in PAIR below; pass
 ``--pair OLD_PIPES NEW_PIPES`` to build an older pair:
 
-  data/snapshots/raw/injury-2026-11-16T0945am-et.pipes
-  data/snapshots/raw/injury-2026-11-16T1000am-et.pipes
-  data/snapshots/results-2026-11-15.json
-  data/snapshots/standings-2026-11-16.json
-  data/snapshots/slate-2026-11-16.json
+  data/snapshots/raw/injury-2026-11-17T1015am-et.pipes
+  data/snapshots/raw/injury-2026-11-17T1030am-et.pipes
+  data/snapshots/results-2026-11-16.json
+  data/snapshots/standings-2026-11-17.json
+  data/snapshots/slate-2026-11-17.json
 
 Outputs (derived, never hand-edited):
 
-  data/snapshots/injuries-2026-11-16-0945am.cells.json
-  data/snapshots/injuries-2026-11-16-1000am.cells.json
-  data/snapshots/injuries-2026-11-16-0945-to-1000.diff.json
-  data/snapshots/aggregates-2026-11-16.json
+  data/snapshots/injuries-2026-11-17-1015am.cells.json
+  data/snapshots/injuries-2026-11-17-1030am.cells.json
+  data/snapshots/injuries-2026-11-17-1015-to-1030.diff.json
+  data/snapshots/aggregates-2026-11-17.json
 
 Every number in the outputs is arithmetic on the cells above it. Nothing is
 estimated, filled in or inferred: a cell the document did not print stays an
@@ -96,7 +96,14 @@ def build_injury_snapshot(parsed_rows: list[dict], meta: dict, snapshot_id: str)
                         "reason": r["reason"],
                         "unverified": (not r["aligned"]) or bool(r["player"]) and (not r["status"] or not r["reason"]),
                         "flag": (
-                            "matchup/team cells not printed on this row (PDF page break); "
+                            # A row carrying no placement cell has no game to belong to. It is
+                            # published in its own block and never attached to the block printed
+                            # above it, because that attachment would be an inferred fact.
+                            "no placement cell printed on this row (date, time and matchup all blank): "
+                            "the row is published standalone and not attributed to any game; no value "
+                            "was inferred"
+                            if (not r["aligned"]) and (not r["team"]) and (not r["player"])
+                            else "matchup/team cells not printed on this row (PDF page break); "
                             "no value was inferred"
                             if not r["aligned"]
                             else (
@@ -239,6 +246,10 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
     home_games = hw + hl
     home_rate = hw / home_games if home_games else None
     pin = pin_home_advantage(standings["rows"], source_url=standings["source_url"])
+    rw = rl = 0
+    for r in standings["rows"]:
+        a, b = rec(r["road"])
+        rw, rl = rw + a, rl + b
     tw = sum(r["w"] for r in standings["rows"])
     tl = sum(r["l"] for r in standings["rows"])
     # --- 3. Injury-report load for the current slate.
@@ -248,7 +259,7 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
         key = x["status"] or ("NOT YET SUBMITTED" if x["reason"] == "NOT YET SUBMITTED" else "(not printed)")
         status_counts[key] = status_counts.get(key, 0) + 1
     return {
-        "aggregate_id": "aggregates-2026-11-16",
+        "aggregate_id": agg_id,
         "kind": "derived_from_official_snapshots",
         # check_site.audit_snapshots requires these four on every file in data/snapshots;
         # for a derived file they name the document of the largest single input and state
@@ -263,10 +274,10 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
             "injuries": injuries["source_url"],
             "slate": slate["source_url"],
         },
-        "derived_at_utc": "2026-11-16T15:40:00Z",
+        "derived_at_utc": derived_at,
         "inputs": {
-            "results": "results-2026-11-15.json",
-            "standings": "standings-2026-11-16.json",
+            "results": results.get("snapshot_id", "results-2026-11-15"),
+            "standings": standings.get("snapshot_id", "standings-2026-11-16"),
             "injuries": injuries["snapshot_id"],
             "slate": slate["snapshot_id"],
         },
@@ -305,7 +316,17 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
             "wins_equal_losses": tw == tl,
             "note": "Two league games are played at a neutral site, so HOME + ROAD + NEUTRAL games must "
             "equal the total games played: checked below.",
-            "home_plus_road_plus_neutral": None,
+            # Game counts, not win counts: each game prints one HOME line and one ROAD
+            # line, so the three split totals must sum to the team-game lines.
+            "home_plus_road_plus_neutral": {
+                "home": hw + hl,
+                "road": rw + rl,
+                "neutral": nw + nl,
+                "sum": (hw + hl) + (rw + rl) + (nw + nl),
+                "equals_league_team_game_lines": ((hw + hl) + (rw + rl) + (nw + nl))
+                == sum(r["w"] + r["l"] for r in standings["rows"]),
+                "home_wins": hw, "home_losses": hl, "road_wins": rw, "road_losses": rl,
+            },
         },
         "injury_load": {
             "revision": injuries["revision_et_label"],
@@ -348,12 +369,47 @@ PAIR = {
 }
 
 
+# The current cycle only. Historical (11/16 and earlier) outputs are NOT re-derived by this
+# script: they were produced by an earlier revision of it and are kept exactly as published.
+# Re-deriving them now would rewrite published files from changed code (the flag wording and
+# the cross-check source both changed with this cycle), which is a silent edit of the record.
+# A reader who wants to re-check an older cycle re-reads its dated .pipes transcription and the
+# document it names; the derived files carry their own rule text for that purpose.
+PAIRS: dict[str, dict] = {
+    # The current cycle. Every name in here is a dated file; nothing is overwritten.
+    "1117": {
+        "old_pipes": RAW / "injury-2026-11-17T1015am-et.pipes",
+        "new_pipes": RAW / "injury-2026-11-17T1030am-et.pipes",
+        "old_id": "injuries-2026-11-17-1015am",
+        "new_id": "injuries-2026-11-17-1030am",
+        "diff_id": "injuries-2026-11-17-1015-to-1030.diff",
+        "results": SNAP / "results-2026-11-16.json",
+        "standings": SNAP / "standings-2026-11-17.json",
+        "slate": SNAP / "slate-2026-11-17.json",
+        "aggregates_id": "aggregates-2026-11-17",
+        "derived_at_utc": "2026-11-17T15:50:00Z",
+        "new_cells_from": "injuries-2026-11-17-1030am.json",
+        "cross_check_note": "",
+    },
+}
+CURRENT_PAIR = "1117"
+
+
 def main(argv: list[str]) -> int:
     check = "--check" in argv
-    old_parsed = parse_report(RAW / "injury-2026-11-16T0945am-et.pipes")
-    new_parsed = parse_report(RAW / "injury-2026-11-16T1000am-et.pipes")
-    old = build_injury_snapshot(old_parsed["rows"], old_parsed["meta"], "injuries-2026-11-16-0945am")
-    new = build_injury_snapshot(new_parsed["rows"], new_parsed["meta"], "injuries-2026-11-16-1000am")
+    pair_id = CURRENT_PAIR
+    if "--pair" in argv:
+        pair_id = argv[argv.index("--pair") + 1]
+    if pair_id not in PAIRS:
+        raise SystemExit(
+            f"no recipe for pair {pair_id!r}: only {sorted(PAIRS)} can be re-derived. Older cycles "
+            "are kept as published (see the comment above PAIRS)."
+        )
+    P = PAIRS[pair_id]
+    old_parsed = parse_report(P["old_pipes"])
+    new_parsed = parse_report(P["new_pipes"])
+    old = build_injury_snapshot(old_parsed["rows"], old_parsed["meta"], P["old_id"])
+    new = build_injury_snapshot(new_parsed["rows"], new_parsed["meta"], P["new_id"])
     diff = asdict(
         diff_revisions(
             to_revision(old, old_parsed["meta"]),
@@ -361,7 +417,7 @@ def main(argv: list[str]) -> int:
             source_url=new["source_url"],
         )
     )
-    diff["diff_id"] = "injuries-2026-11-16-0945-to-1000.diff"
+    diff["diff_id"] = P["diff_id"]
     diff["kind"] = "official_injury_report_consecutive_diff"
     diff["source_document_header"] = new["source_document_header"]
     diff["fetched_at_utc"] = new["fetched_at_utc"]
@@ -370,16 +426,22 @@ def main(argv: list[str]) -> int:
     diff["rule"] = ("A status change requires a matched row whose status cell differs. Rows are matched on the "
                     "identity cells the row itself prints (matchup, team, player); a one-for-one leftover with "
                     "identical status and reason is a printing variance, not a status change.")
-    results = json.loads((SNAP / "results-2026-11-15.json").read_text(encoding="utf-8"))
-    standings = json.loads((SNAP / "standings-2026-11-16.json").read_text(encoding="utf-8"))
-    slate = json.loads((SNAP / "slate-2026-11-16.json").read_text(encoding="utf-8"))
-    new["cross_check"] = cross_check(new, SNAP / "injuries-2026-11-16-1000am.json")
-    agg = build_aggregates(results, standings, new, slate)
+    results = json.loads(P["results"].read_text(encoding="utf-8"))
+    standings = json.loads(P["standings"].read_text(encoding="utf-8"))
+    slate = json.loads(P["slate"].read_text(encoding="utf-8"))
+    if P["cross_check_note"]:
+        # A historical pair whose counterpart extraction was never committed: keep the
+        # published comparison exactly as it stands rather than replacing it with an
+        # absent-counterpart placeholder. The note is printed so the gap is visible.
+        print(f"cross-check left as published for {P['aggregates_id']}: {P['cross_check_note']}")
+    else:
+        new["cross_check"] = cross_check(new, SNAP / P["new_cells_from"])
+    agg = build_aggregates(results, standings, new, slate, P["aggregates_id"], P["derived_at_utc"])
     targets = {
-        SNAP / "injuries-2026-11-16-0945am.cells.json": old,
-        SNAP / "injuries-2026-11-16-1000am.cells.json": new,
-        SNAP / "injuries-2026-11-16-0945-to-1000.diff.json": diff,
-        SNAP / "aggregates-2026-11-16.json": agg,
+        SNAP / (P["old_id"] + ".cells.json"): old,
+        SNAP / (P["new_id"] + ".cells.json"): new,
+        SNAP / (P["diff_id"] + ".json"): diff,
+        SNAP / (P["aggregates_id"] + ".json"): agg,
     }
     changed = False
     for path, payload in targets.items():
