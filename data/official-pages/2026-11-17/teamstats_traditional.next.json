@@ -7212,7 +7212,7 @@
    }
   ],
   "akamaiHeaders": {
-   "xAkamaiEdgescape": "georegion=274,country_code=US,region_code=NY,city=NEWYORK,dma=501,pmsa=5600,msa=5602,areacode=212,county=NEWYORK,fips=36061,lat=40.7500,long=-73.9967,timezone=EST,zip=10001-10014+10016-10041+10043-10045+10055+10060+10065+10069+10075+10080-10081+10087+10090+10095+10101-10126+10128-10133+10138+10150-10179+10185+10199-10200+10203+10211-10213+10242+10249+10256-10261+10265+10268-10282+10285-10286+10292,continent=NA,throughput=vhigh,bw=5000,asnum=46450,location_id=0",
+   "xAkamaiEdgescape": "georegion=289,country_code=US,region_code=WA,city=QUINCY,dma=881,areacode=509,county=GRANT,fips=53025,lat=47.1872,long=-119.8129,timezone=PST,zip=98848,continent=NA,throughput=vhigh,bw=5000,network=microsoft,asnum=8075,network_type=hosted,location_id=0",
    "xRegionMap": "united-states",
    "xLpPackageCountry": "US",
    "xTargetMarket": "with-commercials"

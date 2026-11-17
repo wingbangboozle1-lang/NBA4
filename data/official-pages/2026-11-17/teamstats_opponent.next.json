@@ -3122,9 +3122,9 @@
       },
       "gamelogs": {
        "name": "gamelogs",
-       "Season": "2026-27",
+       "Season": "2025-26",
        "SeasonType": "Regular Season",
-       "YearTo": 2026,
+       "YearTo": 2025,
        "TypeId": 2,
        "YearFrom": 1946,
        "flags": []
@@ -7212,7 +7212,7 @@
    }
   ],
   "akamaiHeaders": {
-   "xAkamaiEdgescape": "georegion=288,country_code=US,region_code=VA,city=DULLES,dma=511,pmsa=8840,msa=8872,areacode=703,county=LOUDOUN,fips=51107,lat=39.3355,long=-77.8426,timezone=EST,zip=20101-20104,continent=NA,throughput=vhigh,bw=5000,network=microsoft,asnum=8075,network_type=hosted,location_id=0",
+   "xAkamaiEdgescape": "georegion=289,country_code=US,region_code=WA,city=QUINCY,dma=881,areacode=509,county=GRANT,fips=53025,lat=47.1872,long=-119.8129,timezone=PST,zip=98848,continent=NA,throughput=vhigh,bw=5000,network=microsoft,asnum=8075,network_type=hosted,location_id=0",
    "xRegionMap": "united-states",
    "xLpPackageCountry": "US",
    "xTargetMarket": "with-commercials"

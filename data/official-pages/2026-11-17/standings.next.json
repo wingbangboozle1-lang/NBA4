@@ -2420,9 +2420,9 @@
      ]
     }
    ],
-   "region": "united-states"
+   "region": "international-lpp"
   },
-  "xRegionMap": "united-states",
+  "xRegionMap": "international-lpp",
   "isIndex": false,
   "cmsSiteSettings": {
    "games": {
@@ -2962,9 +2962,9 @@
       },
       "gamelogs": {
        "name": "gamelogs",
-       "Season": "2026-27",
+       "Season": "2025-26",
        "SeasonType": "Regular Season",
-       "YearTo": 2026,
+       "YearTo": 2025,
        "TypeId": 2,
        "YearFrom": 1946,
        "flags": []
@@ -7052,7 +7052,7 @@
    }
   ],
   "akamaiHeaders": {
-   "xAkamaiEdgescape": "georegion=264,country_code=US,region_code=MI,city=LIVONIA,dma=505,pmsa=2160,msa=2162,areacode=734,county=WAYNE,fips=26163,lat=42.3684,long=-83.3717,timezone=EST,zip=48150-48154,continent=NA,throughput=vhigh,bw=5000,network=charter,asnum=33363,location_id=0",
+   "xAkamaiEdgescape": "georegion=193,country_code=SG,city=SINGAPORE,lat=1.29,long=103.86,timezone=GMT+8,continent=AS,throughput=vhigh,bw=5000,asnum=132203,location_id=0",
    "xRegionMap": "united-states",
    "xLpPackageCountry": "US",
    "xTargetMarket": "with-commercials"
