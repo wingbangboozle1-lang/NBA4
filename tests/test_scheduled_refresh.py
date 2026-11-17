@@ -330,5 +330,110 @@ class RunOrchestrationTests(unittest.TestCase):
         self.assertEqual(payload["summary"]["exit_code"], record.exit_code())
 
 
+class RefreshBridgeTests(unittest.TestCase):
+    """Task BN (arena/ec0a4dc9-nba4): the job attaches the engine-refresh
+    per-feed decision alongside its own four-phase gates. The bridge is additive
+    and rights-gated: allowed_use defaults to False, so the engine decision blocks
+    every feed on rights gate G0 and never replaces the job's own gates or exit
+    code."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        snap = Path(self._tmp.name) / "snapshots"
+        snap.mkdir()
+        (snap / "injuries-newest-pointer-2026-11-16.json").write_text(
+            json.dumps(
+                {
+                    "kind": "official_report_pointer_metadata_only",
+                    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_09_15AM.pdf",
+                    "fetched_at_utc": "2026-11-16T09:20:00Z",
+                }
+            )
+        )
+        (snap / "slate-2026-11-16.json").write_text(
+            json.dumps(
+                {
+                    "kind": "official_schedule_rows",
+                    "source_url": sr.SCHEDULE_URL,
+                    "fetched_at_utc": "2026-11-16T09:00:00Z",
+                    "window": {"start_utc": "2026-11-16T00:00:00Z", "end_utc": "2026-11-19T00:00:00Z"},
+                }
+            )
+        )
+        self._orig_snapshots = sr.SNAPSHOTS
+        sr.SNAPSHOTS = snap
+        self._orig_build = sr.gate_build
+        sr.gate_build = lambda now: [sr.Gate("build_stub", "build", True, "stubbed for tests", observed_at_utc=sr._iso(now))]
+        self._baseline = Path(self._tmp.name) / "baseline.txt"
+
+    def tearDown(self):
+        sr.SNAPSHOTS = self._orig_snapshots
+        sr.gate_build = self._orig_build
+        self._tmp.cleanup()
+
+    def test_run_record_carries_engine_decision(self):
+        record = sr.run("gates", now=NOW, fetch=ok_fetch, baseline_path=self._baseline, pdf_text=fake_pdf_text)
+        self.assertIsNotNone(record.engine_decision)
+        self.assertEqual(record.engine_decision["kind"], "engine_refresh_decision")
+        self.assertNotIn("error", record.engine_decision)
+        self.assertIn("may_rebuild", record.engine_decision)
+        self.assertIn("feeds", record.engine_decision)
+
+    def test_rights_gate_blocks_every_required_feed(self):
+        record = sr.run("gates", now=NOW, fetch=ok_fetch, baseline_path=self._baseline, pdf_text=fake_pdf_text)
+        decision = record.engine_decision
+        self.assertFalse(decision["may_rebuild"])
+        feeds = {f["feed"]: f for f in decision["feeds"]}
+        # every feed that was retrieved is blocked on rights (G0), not on a
+        # freshness/completeness verdict, because allowed_use defaults to False
+        for feed_id in ("schedule", "standings", "team_stats_traditional", "team_stats_advanced",
+                        "team_stats_opponent", "injuries"):
+            self.assertIn(feed_id, feeds)
+            self.assertEqual(feeds[feed_id]["state"], "RIGHTS_NOT_CLEARED", feed_id)
+            self.assertTrue(feeds[feed_id]["blocking"], feed_id)
+        self.assertTrue(any("RIGHTS_NOT_CLEARED" in r for r in decision["blocking_reasons"]))
+
+    def test_engine_decision_is_additive_not_replacing(self):
+        # the job's own four-phase gates are all green here, so the job licenses
+        # a rebuild; the engine-refresh decision still blocks on rights. The two
+        # verdicts sit side by side and neither replaces the other.
+        record = sr.run("gates", now=NOW, fetch=ok_fetch, baseline_path=self._baseline, pdf_text=fake_pdf_text)
+        self.assertTrue(record.all_passed)
+        self.assertEqual(record.exit_code(), 0)
+        self.assertTrue(record.rebuild_allowed())
+        self.assertFalse(record.engine_decision["may_rebuild"])
+
+    def test_as_dict_includes_engine_decision(self):
+        record = sr.run("gates", now=NOW, fetch=ok_fetch, baseline_path=self._baseline, pdf_text=fake_pdf_text)
+        payload = record.as_dict()
+        self.assertIn("engine_decision", payload)
+        self.assertEqual(payload["engine_decision"]["kind"], "engine_refresh_decision")
+
+    def test_offline_bridge_records_not_retrieved(self):
+        record = sr.run("offline", now=NOW, fetch=None, baseline_path=self._baseline)
+        decision = record.engine_decision
+        self.assertIsNotNone(decision)
+        self.assertFalse(decision["may_rebuild"])
+        feeds = {f["feed"]: f for f in decision["feeds"]}
+        # offline mode performs no fetches, so every feed is NOT_RETRIEVED
+        for feed_id in ("schedule", "standings", "injuries"):
+            self.assertEqual(feeds[feed_id]["state"], "NOT_RETRIEVED", feed_id)
+
+    def test_bridge_survives_a_failed_fetch(self):
+        def broken_standings(url, *, headers=None, timeout=30.0):
+            status, body, final = ok_fetch(url, headers=headers, timeout=timeout)
+            if url == sr.STANDINGS_API:
+                return 500, b"err", url
+            return status, body, final
+
+        record = sr.run("gates", now=NOW, fetch=broken_standings, baseline_path=self._baseline, pdf_text=fake_pdf_text)
+        decision = record.engine_decision
+        self.assertIsNotNone(decision)
+        feeds = {f["feed"]: f for f in decision["feeds"]}
+        # a non-200 fetch produces no observation, so it is NOT_RETRIEVED rather
+        # than being smoothed into an empty or successful fetch
+        self.assertEqual(feeds["standings"]["state"], "NOT_RETRIEVED")
+
+
 if __name__ == "__main__":  # pragma: no cover
     unittest.main()

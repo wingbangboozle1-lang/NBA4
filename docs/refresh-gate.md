@@ -162,6 +162,27 @@ fetched must not be reported as reading the wrong document. Every other feed
 still requires an exact URL match, and two tests pin that an unrelated host
 yields `URL_MISMATCH`.
 
+### Wired into the job (task BN, session `arena/ec0a4dc9-nba4`)
+
+The adapter above is no longer a separate manual step. `scripts/scheduled_refresh.py`
+now calls `engine.refresh.decision_from_run_record()` itself, at the end of
+`run()`, and attaches the resulting `RefreshDecision` to the run record as
+`engine_decision` (printed by `main()` and serialised by `as_dict()`). This is
+**additive**: the job keeps its own four-phase gates (fetch → freshness →
+provenance → build) and their exit code exactly as before; the engine-refresh
+per-feed decision sits beside them and is recorded, not substituted.
+
+The bridge is called with `allowed_use=False` (the default), so every feed the
+job retrieved is blocked on **rights gate G0** (NBA Terms §1/§9) in the engine
+decision until an operator clears them. The two verdicts are deliberately
+independent: a run whose own gates are all green still records an engine
+decision with `may_rebuild=False`, because the engine layer refuses to treat an
+uncleared feed as a model input. The per-feed tolerances (freshness,
+completeness, document timestamps) still run and are recorded in the decision's
+`feeds`; with `allowed_use=False` the rights verdict simply precedes them. Once
+rights are cleared, the same decision surfaces the per-feed freshness and
+completeness verdicts without any change to the bridge.
+
 ## What this module does not do
 
 * It does not fetch. It is the decision layer a fetcher reports into, so a run

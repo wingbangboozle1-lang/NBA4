@@ -57,6 +57,24 @@ ROOT = Path(__file__).resolve().parents[1]
 SNAPSHOTS = ROOT / "data" / "snapshots"
 RAW = SNAPSHOTS / "raw"
 
+# --- bridge to engine.refresh (task BN, session arena/ec0a4dc9-nba4) --------
+# The job performs the fetches and records a run record; engine.refresh owns the
+# per-feed decision. The bridge below is additive: it attaches the engine-refresh
+# RefreshDecision to the run record and prints it, without replacing the job's own
+# four-phase (fetch/freshness/provenance/build) gates or their exit code. The
+# engine decision is computed with allowed_use=False (rights gate G0), so it
+# blocks every feed on rights until an operator clears them -- never a silent
+# green.
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+try:
+    from engine.refresh import decision_from_run_record as _engine_decision_from_run_record
+
+    _ENGINE_REFRESH_IMPORT_ERROR: str | None = None
+except Exception as _exc:  # pragma: no cover - engine/refresh is a core module
+    _engine_decision_from_run_record = None
+    _ENGINE_REFRESH_IMPORT_ERROR = str(_exc)
+
 SCHEDULE_URL = "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
 INJURY_INDEX_URL = "https://official.nba.com/nba-injury-report-2026-27-season/"
 STANDINGS_API = (
@@ -117,6 +135,7 @@ class RunRecord:
     now_utc: str
     gates: list[Gate] = field(default_factory=list)
     fetches: dict[str, Any] = field(default_factory=dict)
+    engine_decision: dict[str, Any] | None = None
 
     @property
     def all_passed(self) -> bool:
@@ -149,6 +168,7 @@ class RunRecord:
             "now_utc": self.now_utc,
             "gates": [g.as_dict() for g in self.gates],
             "fetches": self.fetches,
+            "engine_decision": self.engine_decision,
             "summary": {
                 "gates_total": len(self.gates),
                 "gates_passed": sum(1 for g in self.gates if g.passed),
@@ -455,6 +475,46 @@ def _latest_snapshot(pattern: str) -> dict[str, Any] | None:
 
 # --- orchestrator ------------------------------------------------------------
 
+def _engine_refresh_decision(record: RunRecord) -> dict[str, Any]:
+    """Attach the engine-refresh per-feed decision to a run record (additive).
+
+    Calls ``engine.refresh.decision_from_run_record`` on the run record's own
+    ``now_utc`` and ``fetches``. ``allowed_use`` is passed as ``False`` so the
+    engine decision blocks every feed on rights gate G0 until an operator clears
+    them; the job's own four-phase gates and exit code are untouched.
+
+    A malformed run record or an unimportable engine fails closed: the decision
+    is recorded with ``may_rebuild=False`` and the error named, never a default
+    pass.
+    """
+    if _engine_decision_from_run_record is None:
+        return {
+            "kind": "engine_refresh_decision",
+            "error": f"engine.refresh bridge unavailable: {_ENGINE_REFRESH_IMPORT_ERROR}",
+            "may_rebuild": False,
+            "blocking_reasons": [f"bridge unavailable: {_ENGINE_REFRESH_IMPORT_ERROR}"],
+            "warnings": [],
+            "decided_at": record.now_utc,
+            "feeds": [],
+        }
+    try:
+        decision = _engine_decision_from_run_record(
+            {"now_utc": record.now_utc, "fetches": record.fetches},
+            allowed_use=False,
+        )
+    except Exception as exc:  # RefreshError or malformed record -> fail closed
+        return {
+            "kind": "engine_refresh_decision",
+            "error": str(exc),
+            "may_rebuild": False,
+            "blocking_reasons": [f"bridge could not be evaluated: {exc}"],
+            "warnings": [],
+            "decided_at": record.now_utc,
+            "feeds": [],
+        }
+    return {"kind": "engine_refresh_decision", **decision.as_dict()}
+
+
 def run(
     mode: str,
     *,
@@ -590,6 +650,11 @@ def run(
     # ---- phase 4: build ----
     record.gates.extend(gate_build(now))
 
+    # ---- bridge (additive): engine-refresh per-feed decision ----
+    # Runs alongside the four-phase gates; recorded on the run record and printed
+    # by main(). It never replaces the job's gates or their exit code.
+    record.engine_decision = _engine_refresh_decision(record)
+
     return record
 
 
@@ -651,6 +716,19 @@ def main(argv: list[str] | None = None) -> int:
         f"failed={summary['failed'] or 'none'}; "
         f"rebuild_allowed={summary['rebuild_allowed']}"
     )
+    decision = record.engine_decision
+    if decision is not None:
+        if decision.get("error"):
+            print(f"engine-refresh decision: ERROR {decision['error']}")
+        else:
+            feeds = decision.get("feeds", [])
+            passed = sum(1 for f in feeds if f.get("state") == "PASS")
+            print(
+                f"engine-refresh decision: {passed}/{len(feeds)} feeds pass; "
+                f"may_rebuild={decision.get('may_rebuild')}; "
+                f"blocking={len(decision.get('blocking_reasons', []))} reason(s) "
+                "(rights gate G0 blocks until cleared)"
+            )
     return record.exit_code()
 
 
