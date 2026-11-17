@@ -77,6 +77,25 @@ class SlateSnapshotTests(unittest.TestCase):
                 self.assertEqual({game["date"] for game in load(name)["games"]}, dates)
                 self.assertEqual(len(load(name)["games"]), count)
 
+    def test_slate_is_rows_253_to_273_in_three_dates(self) -> None:
+        # folded from the parallel BM session (arena/4326c586-nba4, PR #70)
+        games = load(CURRENT_SLATE_FILE)["games"]
+        self.assertEqual([g["row"] for g in games], list(range(253, 274)))
+        self.assertEqual({g["date"] for g in games}, {"2026-11-17", "2026-11-18", "2026-11-19"})
+
+    def test_every_slate_row_matches_its_verbatim_raw_line(self) -> None:
+        # folded from the parallel BM session: the published games must equal the
+        # verbatim raw schedule transcription cell for cell (tip column depends on
+        # whether the printed row carries an "at" token)
+        raw = (ROOT / "data/snapshots/raw/schedule-2026-11-17-window-rows-253-273.txt").read_text(encoding="utf-8")
+        by_row = {}
+        for line in raw.splitlines():
+            if line and not line.startswith("#"):
+                by_row[int(line.split("|", 1)[0])] = line
+        for g in load(CURRENT_SLATE_FILE)["games"]:
+            cells = by_row[g["row"]].split("|")
+            self.assertEqual(g["tip_et_col1"], cells[5] if cells[4] != "at" else cells[6], g["row"])
+
     def test_no_model_output_is_stored(self) -> None:
         forbidden = ("line", "price", "probability", "pick", "edge")
         for name in SLATE_FILES:
@@ -172,6 +191,37 @@ class CurrentInjurySnapshotTests(unittest.TestCase):
             self.assertEqual(row["reason"], "NOT YET SUBMITTED")
             self.assertEqual(row["player"], "")
             self.assertEqual(row["status"], "")
+
+    def test_report_revision_is_the_1030_document(self) -> None:
+        # folded from the parallel BM session (adapted: this file records the
+        # revision in the printed header, not a separate revision label field)
+        self.assertIn("10:30 AM", load(CURRENT_INJURY_FILE)["source_document_header"])
+        self.assertEqual(self.data["source_url"], build_snapshots.REPORT_URL)
+
+    def test_lost_team_rows_are_kept_not_unattributed(self) -> None:
+        # folded from the parallel BM session (adapted to this extraction, which
+        # keeps both printed page-break rows inside their blocks with a blank
+        # lost team cell rather than a separate unattributed_rows list — the
+        # printed 'Soreness' fragment would be unpublished otherwise)
+        self.assertEqual(len(self.rows), 60)
+        lost = [row for row in self.rows if row["team"] == "__lost__"]
+        self.assertEqual([row["player"] for row in lost], ["Soreness", "Reaves, Austin"])
+        for row in lost:
+            self.assertTrue(row["unverified"])
+            self.assertTrue(row["flag"])
+
+    def test_block_position_rows_are_unverified(self) -> None:
+        # folded from the parallel BM session (adapted): any row whose printed
+        # matchup cell was lost, so the game attachment rests on block position
+        # alone, must carry unverified
+        for game in self.data["games"]:
+            for row in game["rows"]:
+                if row["team"] == "__lost__" or (
+                    row["player"] == "" and row["reason"] != "NOT YET SUBMITTED"
+                ):
+                    self.assertTrue(row["unverified"], row)
+        minnesota = [g for g in self.data["games"] if g["matchup"] == "POR@MIN"]
+        self.assertEqual(len(minnesota), 1)
 
     def test_not_yet_submitted_rows_are_reporting_states(self) -> None:
         nys = [row for row in self.rows if row["reason"] == "NOT YET SUBMITTED"]

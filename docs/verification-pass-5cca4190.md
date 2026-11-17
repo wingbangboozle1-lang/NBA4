@@ -4,8 +4,9 @@ Board tasks BM–BO (2026-11-17 refresh cycle, verification pass 12, final integ
 Branch `arena/5cca4190-nba4`, based on `main` at `96434de`. This log records every
 fetch of the pass, every check that was computed (not asserted), every correction
 made before publication, and the flags the pass opens or extends. Post-pass state on
-this branch: **498 unit tests OK** (47 + 48 + 43 + 32 + 57 + 135 + 38 + 10 + 27 + 6 + 55,
-eleven suites), site check **PASS (16 pages, 611 HTML data rows, 1189 Markdown data rows)**.
+this branch after the rebase onto `main`@`49e7238`: **547 unit tests OK** (47 + 48 + 43 + 32 + 57 + 135 + 38 + 10 + 44 + 27 + 6 + 60,
+twelve suites — the +44 transport suite and this file's edits are folded from or reconciled with the parallel sessions below),
+site check **PASS (16 pages, 646 HTML data rows, 1275 Markdown data rows)**.
 No `engine/**` file was modified (verified with `git diff 96434de --name-only | grep -c '^engine/' = 0`).
 
 Pass numbering note: two earlier sessions each published a "pass 9" (see flag AN-08),
@@ -57,8 +58,8 @@ and nothing on the site is a pick.
 | Gamebook mirror of the 11/17 report | 34/34 printed player rows covered exactly once (26 game rows from 4 gamebooks, 7 Detroit window gaps, 1 page-break fragment with no game log) | `scripts/build_gamelogs.py` mirror check + `tests/test_snapshots.py::GameLogTests` | [Gamebooks](https://statsdmz.nba.com/pdfs/20261115/20261115_LALPHX_book.pdf) |
 | Gamebook SCORE BY PERIOD vs results-2026-11-15 | 4/4 games agree period for period (incl. the NYK@TOR double-OT line) | recorded in the gamelogs snapshot's extraction notes | [Games 11/15](https://www.nba.com/games?date=2026-11-15) |
 | Derived files re-derive byte-identically | `build_brief_data.py --check`, `build_snapshots.py --check`, `build_gamelogs.py --check` all unchanged | run twice during the pass | [Repo scripts](https://github.com/wingbangboozle1-lang/NBA4/tree/main/scripts) |
-| Unit suite | 498 tests OK | `python3 -m unittest discover -s tests -t .` | [Repo tests](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
-| Site check | PASS: 16 pages, 611 HTML data rows, 1189 Markdown data rows; engine tests green | `python3 scripts/check_site.py --with-tests` | [Repo site check](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/check_site.py) |
+| Unit suite | 547 tests OK (60 in the snapshot suite, incl. three tests folded from the parallel BM session and re-pointed at this extraction) | `python3 -m unittest discover -s tests -t .` | [Repo tests](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
+| Site check | PASS: 16 pages, 646 HTML data rows, 1275 Markdown data rows; engine tests green | `python3 scripts/check_site.py --with-tests` | [Repo site check](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/check_site.py) |
 | No engine edits this cycle | 0 engine files in `git diff 96434de --name-only` | verified | [Repo engine](https://github.com/wingbangboozle1-lang/NBA4/tree/main/engine) |
 
 ## 3. Corrections made during the pass (transparently, before publication)
@@ -95,10 +96,11 @@ and nothing on the site is a pick.
 
 | Flag | Status | What | Why it does not block the informational site | Official source |
 | --- | --- | --- | --- | --- |
-| P12-01 | Open (owner) | `scripts/check_site.py::audit_team_stats` still pins `team-stats-2026-11-16.json` | The checker is outside this session's recorded file scope, so the repoint to `team-stats-2026-11-17.json` is logged as a request in COORDINATION.md rather than edited. The gap is covered on this branch by `tests/test_snapshots.py::TeamStatsSnapshotTests`, which asserts the same properties (30 unique rows, no RANK keys, GP/W/L agreement with the standings) for the 11/17 file. The site check still passes because the 11/16 file remains in the repo as dated history. | [Advanced page](https://www.nba.com/stats/teams/advanced) · [checker on main](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/check_site.py) |
-| P12-02 | Info | Daily-refresh workflow run 44072241605 failed; its log could not be downloaded (`gh run view --log-failed` ended with EOF) | The cause is unresolved and deliberately not asserted. The site publishes dated observations with their own provenance, so a CI refresh failure cannot publish anything by itself. Owner re-check requested in COORDINATION.md. | [Repository actions](https://github.com/wingbangboozle1-lang/NBA4/actions) |
-| P12-03 | Info | Name/spacing variances between the 11/15 gamebooks and the 11/17 report: Nurkić/Nurkic (plus "Right 2nd Plantar Plate Tear" vs "Right Right Foot; 2nd Plantar Plate Tear"), Niederhäuser/Niederhauser, Schröder/Schroder | Both spellings are kept as printed and flagged on the game-log rows (SP-02..SP-04); nothing is normalised. | [SAS@UTA gamebook](https://statsdmz.nba.com/pdfs/20261115/20261115_SASUTA_book.pdf) · [10:30 AM report](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf) |
-| AN-02 | Extended | The four tip conflicts are re-confirmed by the 11/17 sources; GSW@DAL additionally prints no time cell in the 10:30 report, so its block carries both printed values and no report clock | Both values of every conflict stay published side by side; no disagreeing game is modelled. | [Schedule PDF](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) · [games page 11/18](https://www.nba.com/games?date=2026-11-18) |
+| P12-01 | Resolved | The 2026-11-17 observation set is published (report 60/60 rows incl. both printed page-break rows, diff 0 changes, window 21/21 corroborated, eight 11/16 finals, standings split, team stats, game-log mirror) — see §2 | This closes the pass-10 row's open items (standings, team stats, games-page check) on the rebased tree. | [10:30 AM report](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf) · [standings](https://www.nba.com/standings) |
+| P12-02 | Open (owner) | `scripts/check_site.py::audit_team_stats` still pins `team-stats-2026-11-16.json` | The checker is outside this session's recorded file scope, so the repoint to `team-stats-2026-11-17.json` is logged as a request in COORDINATION.md rather than edited. The gap is covered on this branch by `tests/test_snapshots.py::TeamStatsSnapshotTests`, which asserts the same properties (30 unique rows, no RANK keys, GP/W/L agreement with the standings) for the 11/17 file. The site check still passes because the 11/16 file remains in the repo as dated history. | [Advanced page](https://www.nba.com/stats/teams/advanced) · [checker on main](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/check_site.py) |
+| P12-03 | Info | Daily-refresh workflow run 44072241605 failed; its log could not be downloaded (`gh run view --log-failed` ended with EOF) | The cause is unresolved and deliberately not asserted. The site publishes dated observations with their own provenance, so a CI refresh failure cannot publish anything by itself. Owner re-check requested in COORDINATION.md. | [Repository actions](https://github.com/wingbangboozle1-lang/NBA4/actions) |
+| P12-04 | Info | Name/spacing variances between the 11/15 gamebooks and the 11/17 report: Nurkić/Nurkic (plus "Right 2nd Plantar Plate Tear" vs "Right Right Foot; 2nd Plantar Plate Tear"), Niederhäuser/Niederhauser, Schröder/Schroder | Both spellings are kept as printed and flagged on the game-log rows (SP-02..SP-04); nothing is normalised. | [SAS@UTA gamebook](https://statsdmz.nba.com/pdfs/20261115/20261115_SASUTA_book.pdf) · [10:30 AM report](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf) |
+| P12-05 | Open | AN-02 extended: the four tip conflicts are re-confirmed by the 11/17 sources; GSW@DAL additionally prints no time cell in the 10:30 report, so its block carries both printed values and no report clock | Both values of every conflict stay published side by side; no disagreeing game is modelled. | [Schedule PDF](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) · [games page 11/18](https://www.nba.com/games?date=2026-11-18) |
 
 The pre-existing open flags BB-01, P8-07 and P9-06 are unchanged this cycle and are
 restated in the refreshed page banners where they apply.
@@ -132,3 +134,49 @@ restated in the refreshed page banners where they apply.
   `player-gamelogs-2026-11-15_to_2026-11-16.json` — every one carries the four
   provenance fields `check_site.py` audits, and every published row carries an
   official-HTTPS link in its last cell.
+
+## 6. Collision with the parallel sessions on `main` (PRs #70 and #71) and its resolution
+
+While this pass was running, two parallel sessions landed on `main`:
+
+* `arena/4326c586-nba4` (PR #70) independently ran the same 2026-11-17 refresh (also claimed
+  as task BM on the board) and published `slate-2026-11-17.json`, `injuries-2026-11-17-1030am.json`
+  and the raw schedule transcription, with its own verification log
+  ([`docs/verification-pass-4326c586.md`](docs/verification-pass-4326c586.md)).
+* `arena/af666c53-nba4` (PR #71) built the official-page transport layer on top (tasks BU–BW)
+  and remeasured the suite on that tree.
+
+The rebase of this branch onto `main`@`49e7238` hit conflicts exactly in the shared day-files.
+Resolution, per the board's standing union rule (nothing discarded, the published record stays
+coherent):
+
+* **`slate-2026-11-17.json` — both versions compared first.** The two independent transcriptions
+  agree on every core value (21 rows 253–273, same teams, dates, tips, ids, corroboration codes,
+  and all 21 tips equal the verbatim raw lines both sessions transcribed). The versions differ in
+  framing metadata only. Resolved to this branch's version because the whole derived stack
+  (aggregates, tests, pages) is keyed to it; it carries the window *rule* and the
+  `games_page_corroboration` summary blocks.
+* **`injuries-2026-11-17-1030am.json` — resolved to this branch's version.** The core named rows
+  agree (both extractions have the same 17 blocks and the same status/reason cells). They differ
+  in the two printed page-break rows: main's version keeps 58 block rows and moves the Reaves row
+  to an `unattributed_rows` side list, and does not publish the printed `Soreness` fragment at
+  all; this branch's version keeps all 60 printed rows in place with the lost cells blank and
+  flagged, per the repo's lost-cell rule ("a lost cell stays blank and is flagged, never filled").
+  Main's version also states it fills lost game-date cells from the schedule — that conflicts
+  with the same rule, so the first-pass row's handling was not adopted.
+* **The raw 10:30 pipes** — both transcriptions of the same document; resolved to this branch's
+  (byte-level peer of main's; the mirror check runs against it).
+* **`scripts/build_snapshots.py`, the generated page blocks and the rewritten test file** —
+  resolved to this branch's versions, which are the generator of the resolved data files. Main's
+  `build_snapshots.py` still pointed at the 11/16 snapshot constants (its 11/17 tables were
+  written by its own `build_window_2026_11_17.py`), so adopting it would have desynced the
+  checker's `--check` modes from the published 11/17 pages.
+* **Folded, not dropped.** Main's three compatible test ideas were folded into the snapshot
+  suite (slate rows 253–273, slate-vs-verbatim-raw-lines, revision-is-the-10:30-document), two
+  were folded in adapted form (the unattributed-row assertions are re-pointed at this file's
+  lost-row structure; the tip-conflict set is the four conflicts this extraction prints, main's
+  version listed three), and the transport suite (`tests/test_official_pages.py`, 44 tests),
+  the capture workflow and captures, `docs/official-pages-transport.md`, the board rows and the
+  pass-10 log all survive the rebase untouched.
+* **Counts remeasured on the merged tree** (README/index are coupled by `audit_consistency`):
+  547 tests across twelve suites; site check 16 pages / 646 HTML rows / 1275 Markdown rows.
