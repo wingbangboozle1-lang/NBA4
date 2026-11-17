@@ -3,7 +3,7 @@
 The site's slate and injury tables are generated from ``data/snapshots/*.json``
 by ``scripts/build_snapshots.py``. These tests keep the data honest (provenance,
 no invented values) and keep the published pages in sync with the data. The
-current snapshot is the 2026-11-16 refresh; the 2026-11-15 and 2026-11-14
+current snapshot is the 2026-11-17 refresh (10:30 AM report); the 2026-11-16, 2026-11-15 and 2026-11-14
 files are kept as dated historical snapshots and stay covered by their own
 assertions.
 """
@@ -25,15 +25,19 @@ REQUIRED_PROVENANCE = ("source_url", "source_document_header", "fetched_at_utc",
 
 # file name -> (expected game dates, expected row range, expected game count)
 SLATE_FILES = {
+    "slate-2026-11-17.json": ({"2026-11-17", "2026-11-18", "2026-11-19"}, 253, 273, 21),
     "slate-2026-11-16.json": ({"2026-11-16", "2026-11-17", "2026-11-18"}, 245, 269, 25),
     "slate-2026-11-15.json": ({"2026-11-15", "2026-11-16", "2026-11-17"}, 236, 257, 22),
     "slate-2026-11-14.json": ({"2026-11-14", "2026-11-15", "2026-11-16"}, 231, 252, 22),
 }
 
-CURRENT_INJURY_FILE = "injuries-2026-11-16-1000am.json"
+CURRENT_INJURY_FILE = "injuries-2026-11-17-1030am.json"
+# The 11/16 files are kept on disk as history; the classes below that describe them name them explicitly.
+HIST_INJURY_1116 = "injuries-2026-11-16-1000am.json"
+HIST_SLATE_1116 = "slate-2026-11-16.json"
 PREVIOUS_INJURY_FILE = "injuries-2026-11-15-0615am.json"
 HISTORICAL_INJURY_FILE = "injuries-2026-11-14-0430am.json"
-CURRENT_SLATE_FILE = "slate-2026-11-16.json"
+CURRENT_SLATE_FILE = "slate-2026-11-17.json"
 GAMELOGS = "player-gamelogs-2026-11-14_to_2026-11-15.json"
 
 VALID_STATUSES = {"Out", "Available", "Probable", "Questionable", "Doubtful"}
@@ -84,7 +88,7 @@ class SlateSnapshotTests(unittest.TestCase):
                         self.assertNotIn(key, forbidden, f"model output stored for row {game['row']}")
 
     def test_current_slate_games_page_ids_and_tip_agreement(self) -> None:
-        data = load(CURRENT_SLATE_FILE)
+        data = load(HIST_SLATE_1116)
         disagreeing = set(data["games_page_corroboration"]["tip_disagreements_kept_as_printed"])
         self.assertEqual(disagreeing, {256, 257, 266, 267})
         matches = 0
@@ -110,8 +114,8 @@ class SlateSnapshotTests(unittest.TestCase):
 class CurrentInjurySnapshotTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.data = load(CURRENT_INJURY_FILE)
-        cls.rows = injury_rows(CURRENT_INJURY_FILE)
+        cls.data = load(HIST_INJURY_1116)
+        cls.rows = injury_rows(HIST_INJURY_1116)
 
     def test_provenance_present(self) -> None:
         for key in REQUIRED_PROVENANCE:
@@ -156,7 +160,7 @@ class CurrentInjurySnapshotTests(unittest.TestCase):
             self.assertIn("reason cell not printed", rows[0]["flag"], name)
 
     def test_game_cells_come_from_the_report_and_match_the_slate(self) -> None:
-        slate = {game["row"]: game for game in load(CURRENT_SLATE_FILE)["games"]}
+        slate = {game["row"]: game for game in load(HIST_SLATE_1116)["games"]}
 
         def clock(value: str) -> str:
             hour, minute = value.split(":")
@@ -332,7 +336,7 @@ class RestWindowTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.rest = load("rest-window-2026-11-16.json")
-        cls.slate = load(CURRENT_SLATE_FILE)
+        cls.slate = load(HIST_SLATE_1116)
 
     def test_coverage_rule_is_declared(self) -> None:
         self.assertEqual(self.rest["coverage"]["first_date"], "2026-11-10")
@@ -378,12 +382,12 @@ class RenderedPageTests(unittest.TestCase):
 
     def test_every_rendered_row_cites_an_official_document(self) -> None:
         slate_html = build_snapshots.render_slate()
-        self.assertEqual(slate_html.count("<tr>"), 26)  # header + 25 games
-        self.assertEqual(slate_html.count("NO PICK"), 25)
-        self.assertEqual(slate_html.count(build_snapshots.SCHEDULE_URL), 25)
+        self.assertEqual(slate_html.count("<tr>"), 22)  # header + 21 games
+        self.assertEqual(slate_html.count("NO PICK"), 21)
+        self.assertEqual(slate_html.count(build_snapshots.SCHEDULE_URL), 21)
 
         injuries_html = build_snapshots.render_injuries()
-        self.assertEqual(injuries_html.count(build_snapshots.REPORT_URL), 72)  # one per report row
+        self.assertEqual(injuries_html.count(build_snapshots.REPORT_URL), 59)  # one per printed row (58 + 1 unattributed)
         self.assertEqual(
             injuries_html.count(build_snapshots.SCHEDULE_URL),
             sum(
@@ -410,19 +414,19 @@ class AwayHomeBasisTests(unittest.TestCase):
         for game in load(CURRENT_SLATE_FILE)["games"]:
             if (game["date"], f"{build_snapshots.ABBR[game['away']]}@{build_snapshots.ABBR[game['home']]}") in report_codes:
                 corroborated.add(game["row"])
-        self.assertEqual(corroborated, set(range(245, 258)))
+        self.assertEqual(corroborated, set(range(253, 270)))
 
     def test_rendered_slate_marks_uncorroborated_order(self) -> None:
         html = build_snapshots.render_slate()
-        # 13 report-code rows + 10 rows with the schedule's printed "at" token
-        self.assertEqual(html.count("</strong> at <strong>"), 23)
-        self.assertEqual(html.count("(order unverified)"), 2)
-        self.assertEqual(html.count('prints no "at"'), 2)
+        # 17 report-code rows (253-269) + 4 rows with the schedule's printed "at" token and no report code (270-273)
+        self.assertEqual(html.count("</strong> at <strong>"), 21)
+        self.assertEqual(html.count("(order unverified)"), 0)
+        self.assertEqual(html.count('prints no "at"'), 0)
 
     def test_at_token_rows_are_not_flagged(self) -> None:
         data = load(CURRENT_SLATE_FILE)
         at_rows = {g["row"] for g in data["games"] if g.get("at_token_printed")}
-        self.assertEqual(at_rows, set(range(260, 270)))
+        self.assertEqual(at_rows, set(range(260, 274)))
 
 
 class GameLogTests(unittest.TestCase):
@@ -493,3 +497,53 @@ class GameLogTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Window20261117Tests(unittest.TestCase):
+    """Task BM (2026-11-17): the current window (rows 253-273, 11/17-11/19) and the
+    10:30 AM report, checked against the verbatim raw extractions they came from."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.slate = load(CURRENT_SLATE_FILE)
+        cls.inj = load(CURRENT_INJURY_FILE)
+
+    def test_slate_is_rows_253_to_273_in_three_dates(self) -> None:
+        games = self.slate["games"]
+        self.assertEqual([g["row"] for g in games], list(range(253, 274)))
+        self.assertEqual({g["date"] for g in games}, {"2026-11-17", "2026-11-18", "2026-11-19"})
+
+    def test_every_slate_row_matches_its_verbatim_raw_line(self) -> None:
+        raw = (ROOT / "data/snapshots/raw/schedule-2026-11-17-window-rows-253-273.txt").read_text(encoding="utf-8")
+        by_row = {}
+        for line in raw.splitlines():
+            if line and not line.startswith("#"):
+                by_row[int(line.split("|", 1)[0])] = line
+        for g in self.slate["games"]:
+            cells = by_row[g["row"]].split("|")
+            self.assertEqual(cells[2], g["date_printed"] if "date_printed" in g else cells[2])
+            self.assertEqual(g["tip_et_col1"], cells[5] if cells[4] != "at" else cells[6])
+
+    def test_three_tip_conflicts_are_flagged_not_resolved(self) -> None:
+        conflicts = {g["code"] for g in self.slate["games"] if g.get("tip_disagreement")}
+        self.assertEqual(conflicts, {"UTA@LAC", "CHA@LAL", "BOS@DEN"})
+        for g in self.inj["games"]:
+            if g["matchup"] in conflicts:
+                self.assertIn("kept as printed", g["tip_disagreement"])
+
+    def test_row_counts_and_unattributed_row(self) -> None:
+        self.assertEqual(sum(len(g["rows"]) for g in self.inj["games"]), 58)
+        self.assertEqual(len(self.inj["unattributed_rows"]), 1)
+        self.assertEqual(self.inj["unattributed_rows"][0]["player"], "Reaves, Austin")
+        self.assertEqual(self.inj["unattributed_rows"][0]["team"], "")
+
+    def test_matchup_by_position_rows_are_unverified(self) -> None:
+        for g in self.inj["games"]:
+            for r in g["rows"]:
+                if "matchup_by_position" in r["flags"]:
+                    self.assertTrue(r["unverified"])
+                    self.assertEqual(g["matchup"], "POR@MIN")
+
+    def test_report_revision_is_the_1030_document(self) -> None:
+        self.assertEqual(self.inj["revision_et_label"], "11/17/26 10:30 AM")
+        self.assertEqual(self.inj["source_url"], build_snapshots.REPORT_URL)
