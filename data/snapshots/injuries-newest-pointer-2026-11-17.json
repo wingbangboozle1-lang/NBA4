@@ -1,0 +1,13 @@
+{
+  "snapshot_id": "injuries-newest-pointer-2026-11-17",
+  "kind": "official_injury_report_index_pointer",
+  "source_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+  "source_document": "NBA Injury Report: 2026-27 Season (official index)",
+  "source_document_header": "NBA Injury Report: 2026-27 Season (official index)",
+  "fetched_at_utc": "2026-11-17T16:28:00Z",
+  "extraction_tool": "fetch_page (web page extraction, single chunk)",
+  "newest_report_listed": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf",
+  "newest_report_label": "11/17/26 10:30 AM",
+  "note": "the 11/17 10:30 AM ET report was the newest listed on the official index at the 16:28 UTC check; 11/17 reports run every 15 minutes from 12:00 a.m. through 10:30 a.m. ET at that check",
+  "transcribed_in": "injuries-2026-11-17-1030am.json"
+}
