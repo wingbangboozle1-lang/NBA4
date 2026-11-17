@@ -1,0 +1,325 @@
+{
+  "aggregate_id": "aggregates-2026-11-17",
+  "kind": "derived_from_official_snapshots",
+  "source_url": "https://www.nba.com/standings",
+  "source_document_header": "NBA 2026-27 Regular Season Standings (as printed on the standings page)",
+  "fetched_at_utc": "2026-11-17T16:03:00Z",
+  "extraction_tool": "scripts/build_brief_data.py (derived; performs no fetching)",
+  "derived_from": {
+    "results": "https://www.nba.com/games?date=2026-11-16",
+    "standings": "https://www.nba.com/standings",
+    "injuries": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf",
+    "slate": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
+  },
+  "derived_at_utc": "2026-11-17T16:10:00Z",
+  "inputs": {
+    "results": "results-2026-11-16.json",
+    "standings": "standings-2026-11-17.json",
+    "injuries": "injuries-2026-11-17-1030am.json",
+    "slate": "slate-2026-11-17.json"
+  },
+  "result_feed": {
+    "games": 8,
+    "team_lines_checked": 16,
+    "lines_where_quarter_sum_equals_printed_final": 16,
+    "lines_that_disagree": 0,
+    "settlement_eligible": true,
+    "per_line": [
+      {
+        "game_id": "0022600245",
+        "team": "ORL",
+        "quarters": [
+          20,
+          30,
+          25,
+          40
+        ],
+        "ot_periods": [],
+        "quarter_sum": 115,
+        "printed_periods_sum": 115,
+        "printed_final": 115,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600245",
+        "team": "BOS",
+        "quarters": [
+          17,
+          24,
+          36,
+          28
+        ],
+        "ot_periods": [],
+        "quarter_sum": 105,
+        "printed_periods_sum": 105,
+        "printed_final": 105,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600246",
+        "team": "CHI",
+        "quarters": [
+          31,
+          17,
+          31,
+          36
+        ],
+        "ot_periods": [],
+        "quarter_sum": 115,
+        "printed_periods_sum": 115,
+        "printed_final": 115,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600246",
+        "team": "CLE",
+        "quarters": [
+          25,
+          32,
+          31,
+          38
+        ],
+        "ot_periods": [],
+        "quarter_sum": 126,
+        "printed_periods_sum": 126,
+        "printed_final": 126,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600247",
+        "team": "MEM",
+        "quarters": [
+          33,
+          26,
+          42,
+          35
+        ],
+        "ot_periods": [],
+        "quarter_sum": 136,
+        "printed_periods_sum": 136,
+        "printed_final": 136,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600247",
+        "team": "WAS",
+        "quarters": [
+          35,
+          34,
+          18,
+          33
+        ],
+        "ot_periods": [],
+        "quarter_sum": 120,
+        "printed_periods_sum": 120,
+        "printed_final": 120,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600248",
+        "team": "PHI",
+        "quarters": [
+          33,
+          45,
+          27,
+          30
+        ],
+        "ot_periods": [],
+        "quarter_sum": 135,
+        "printed_periods_sum": 135,
+        "printed_final": 135,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600248",
+        "team": "BKN",
+        "quarters": [
+          26,
+          33,
+          36,
+          28
+        ],
+        "ot_periods": [],
+        "quarter_sum": 123,
+        "printed_periods_sum": 123,
+        "printed_final": 123,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600249",
+        "team": "HOU",
+        "quarters": [
+          15,
+          31,
+          35,
+          29
+        ],
+        "ot_periods": [],
+        "quarter_sum": 110,
+        "printed_periods_sum": 110,
+        "printed_final": 110,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600249",
+        "team": "MIA",
+        "quarters": [
+          29,
+          33,
+          39,
+          27
+        ],
+        "ot_periods": [],
+        "quarter_sum": 128,
+        "printed_periods_sum": 128,
+        "printed_final": 128,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600250",
+        "team": "POR",
+        "quarters": [
+          26,
+          25,
+          22,
+          25
+        ],
+        "ot_periods": [],
+        "quarter_sum": 98,
+        "printed_periods_sum": 98,
+        "printed_final": 98,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600250",
+        "team": "MIN",
+        "quarters": [
+          26,
+          33,
+          28,
+          19
+        ],
+        "ot_periods": [],
+        "quarter_sum": 106,
+        "printed_periods_sum": 106,
+        "printed_final": 106,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600251",
+        "team": "GSW",
+        "quarters": [
+          11,
+          25,
+          29,
+          29
+        ],
+        "ot_periods": [],
+        "quarter_sum": 94,
+        "printed_periods_sum": 94,
+        "printed_final": 94,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600251",
+        "team": "NOP",
+        "quarters": [
+          35,
+          26,
+          32,
+          22
+        ],
+        "ot_periods": [],
+        "quarter_sum": 115,
+        "printed_periods_sum": 115,
+        "printed_final": 115,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600252",
+        "team": "PHX",
+        "quarters": [
+          20,
+          36,
+          34,
+          27
+        ],
+        "ot_periods": [],
+        "quarter_sum": 117,
+        "printed_periods_sum": 117,
+        "printed_final": 117,
+        "agrees": true
+      },
+      {
+        "game_id": "0022600252",
+        "team": "DEN",
+        "quarters": [
+          24,
+          29,
+          29,
+          23
+        ],
+        "ot_periods": [],
+        "quarter_sum": 105,
+        "printed_periods_sum": 105,
+        "printed_final": 105,
+        "agrees": true
+      }
+    ],
+    "source_url": "https://www.nba.com/games",
+    "note": "The feed is SETTLED only when every team line's printed period scores (four quarters, plus any overtime periods the game printed) add to the printed final. 2026-11-16 passes 16 of 16, so the day is eligible; the ledger stamps the settlement check at the fetch time of this file."
+  },
+  "home_court": {
+    "definition": "measured home-win rate = league HOME wins / (HOME wins + HOME losses) taken from the standings page; neutral-site records are held out and reported separately.",
+    "home_wins": 106,
+    "home_losses": 98,
+    "home_games": 204,
+    "measured_home_win_rate": 0.5196,
+    "neutral_wins": 1,
+    "neutral_losses": 1,
+    "source_url": "https://www.nba.com/standings",
+    "pin": {
+      "measured_home_win_rate": 0.5196,
+      "margin_sd_points": 12.0,
+      "z": 0.0492,
+      "home_advantage_points": 0.59,
+      "conversion": "delegates to ratings.home_advantage_from_win_rate(rate, margin_sd) = margin_sd * Phi^-1(rate)",
+      "rows_used": 30,
+      "rows_without_home_cell": 0,
+      "authorized_for_ratings": false,
+      "source_url": "https://www.nba.com/standings",
+      "note": "neutral-site games held out of the rate"
+    },
+    "pinning_rule": "engine/homerate.py refuses to fit home advantage freely: it converts this measured rate to a point value through one published conversion and nothing else."
+  },
+  "standings_consistency": {
+    "league_wins": 205,
+    "league_losses": 205,
+    "wins_equal_losses": true,
+    "note": "Two league games are played at a neutral site, so HOME + ROAD + NEUTRAL games must equal the total games played: checked below.",
+    "home_plus_road_plus_neutral": null
+  },
+  "injury_load": {
+    "revision": "11/17/26 10:30 AM",
+    "revision_document": "Injury Report: 11/17/26 10:30 AM",
+    "revision_utc": "2026-11-17T15:30:00Z",
+    "retrieved_utc": "2026-11-17T15:53:00Z",
+    "rows": 59,
+    "rows_with_a_status": 33,
+    "not_yet_submitted_rows": 26,
+    "unverified_rows_after_page_breaks": 1,
+    "status_counts": {
+      "Out": 31,
+      "Doubtful": 1,
+      "NOT YET SUBMITTED": 26,
+      "Available": 1
+    },
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf"
+  },
+  "slate": {
+    "games": 21,
+    "window_start_utc": "2026-11-17T16:00:00Z",
+    "window_end_utc": "2026-11-20T16:00:00Z",
+    "source_url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
+  }
+}

@@ -1,0 +1,413 @@
+{
+ "snapshot_id": "results-2026-11-16",
+ "kind": "official_finals_observation",
+ "source_document": "NBA game summary pages for 2026-11-16",
+ "source_document_header": "Game Summary (LINESCORES + GAME INFO) as printed on each official NBA game page",
+ "source_url": "https://www.nba.com/games?date=2026-11-16",
+ "source_index_url": "https://www.nba.com/games",
+ "fetched_at_utc": "2026-11-17T16:04:00Z",
+ "extraction_tool": "fetch_page (web page extraction; one game page per game, LINESCORES + GAME INFO)",
+ "row_format": [
+  "game_id",
+  "date",
+  "tip_et",
+  "arena",
+  "city",
+  "away",
+  "home",
+  "away_q",
+  "away_final",
+  "home_q",
+  "home_final",
+  "winner",
+  "loser",
+  "source_url"
+ ],
+ "row_format_note": "away_q/home_q hold every period score the page printed: four quarters, and the overtime period for games that went to OT (no 11/16 game printed an OT column). The tip is the Eastern-time value the game page prints; arena and city are the GAME INFO values.",
+ "verification": {
+  "quarter_sum_rule": "For every row the printed period scores (four quarters, plus any overtime periods) were added and compared with the printed Final. 16 of 16 team lines agree, so every row is SETTLEMENT_ELIGIBLE.",
+  "quarter_sum_check": [
+   [
+    "0022600245",
+    "ORL",
+    20,
+    30,
+    25,
+    40,
+    115,
+    true
+   ],
+   [
+    "0022600245",
+    "BOS",
+    17,
+    24,
+    36,
+    28,
+    105,
+    true
+   ],
+   [
+    "0022600246",
+    "CHI",
+    31,
+    17,
+    31,
+    36,
+    115,
+    true
+   ],
+   [
+    "0022600246",
+    "CLE",
+    25,
+    32,
+    31,
+    38,
+    126,
+    true
+   ],
+   [
+    "0022600247",
+    "MEM",
+    33,
+    26,
+    42,
+    35,
+    136,
+    true
+   ],
+   [
+    "0022600247",
+    "WAS",
+    35,
+    34,
+    18,
+    33,
+    120,
+    true
+   ],
+   [
+    "0022600248",
+    "PHI",
+    33,
+    45,
+    27,
+    30,
+    135,
+    true
+   ],
+   [
+    "0022600248",
+    "BKN",
+    26,
+    33,
+    36,
+    28,
+    123,
+    true
+   ],
+   [
+    "0022600249",
+    "HOU",
+    15,
+    31,
+    35,
+    29,
+    110,
+    true
+   ],
+   [
+    "0022600249",
+    "MIA",
+    29,
+    33,
+    39,
+    27,
+    128,
+    true
+   ],
+   [
+    "0022600250",
+    "POR",
+    26,
+    25,
+    22,
+    25,
+    98,
+    true
+   ],
+   [
+    "0022600250",
+    "MIN",
+    26,
+    33,
+    28,
+    19,
+    106,
+    true
+   ],
+   [
+    "0022600251",
+    "GSW",
+    11,
+    25,
+    29,
+    29,
+    94,
+    true
+   ],
+   [
+    "0022600251",
+    "NOP",
+    35,
+    26,
+    32,
+    22,
+    115,
+    true
+   ],
+   [
+    "0022600252",
+    "PHX",
+    20,
+    36,
+    34,
+    27,
+    117,
+    true
+   ],
+   [
+    "0022600252",
+    "DEN",
+    24,
+    29,
+    29,
+    23,
+    105,
+    true
+   ]
+  ],
+  "settlement_eligible": true,
+  "games": 8,
+  "team_lines_checked": 16,
+  "lines_that_disagree": 0,
+  "overtime_games": []
+ },
+ "extraction_notes": [
+  "Official observation of the printed final, quarter by quarter, retrieved on 2026-11-17 after the last game of 2026-11-16 had ended. This is not a live feed and carries no game-end clock; no end time is invented.",
+  "Every team line's printed periods add to the printed final, so all eight games are settlement-eligible under the rule stated in verification.quarter_sum_rule.",
+  "Cross-check: the eight winners and losers above move the standings page read at 2026-11-17T16:03Z exactly as printed (e.g. Orlando 6-7, Boston 11-3, Denver 7-5, Phoenix 6-7); no standings cell contradicts these results.",
+  "No pick, probability, odds or model output is present in this file."
+ ],
+ "rows": [
+  [
+   "0022600245",
+   "2026-11-16",
+   "7:00 PM",
+   "TD Garden",
+   "Boston, MA",
+   "ORL",
+   "BOS",
+   [
+    20,
+    30,
+    25,
+    40
+   ],
+   115,
+   [
+    17,
+    24,
+    36,
+    28
+   ],
+   105,
+   "ORL",
+   "BOS",
+   "https://www.nba.com/game/orl-vs-bos-0022600245"
+  ],
+  [
+   "0022600246",
+   "2026-11-16",
+   "7:00 PM",
+   "Rocket Arena",
+   "Cleveland, OH",
+   "CHI",
+   "CLE",
+   [
+    31,
+    17,
+    31,
+    36
+   ],
+   115,
+   [
+    25,
+    32,
+    31,
+    38
+   ],
+   126,
+   "CLE",
+   "CHI",
+   "https://www.nba.com/game/chi-vs-cle-0022600246"
+  ],
+  [
+   "0022600247",
+   "2026-11-16",
+   "7:00 PM",
+   "Capital One Arena",
+   "Washington, DC",
+   "MEM",
+   "WAS",
+   [
+    33,
+    26,
+    42,
+    35
+   ],
+   136,
+   [
+    35,
+    34,
+    18,
+    33
+   ],
+   120,
+   "MEM",
+   "WAS",
+   "https://www.nba.com/game/mem-vs-was-0022600247"
+  ],
+  [
+   "0022600248",
+   "2026-11-16",
+   "7:30 PM",
+   "Barclays Center",
+   "Brooklyn, NY",
+   "PHI",
+   "BKN",
+   [
+    33,
+    45,
+    27,
+    30
+   ],
+   135,
+   [
+    26,
+    33,
+    36,
+    28
+   ],
+   123,
+   "PHI",
+   "BKN",
+   "https://www.nba.com/game/phi-vs-bkn-0022600248"
+  ],
+  [
+   "0022600249",
+   "2026-11-16",
+   "7:30 PM",
+   "Kaseya Center",
+   "Miami, FL",
+   "HOU",
+   "MIA",
+   [
+    15,
+    31,
+    35,
+    29
+   ],
+   110,
+   [
+    29,
+    33,
+    39,
+    27
+   ],
+   128,
+   "MIA",
+   "HOU",
+   "https://www.nba.com/game/hou-vs-mia-0022600249"
+  ],
+  [
+   "0022600250",
+   "2026-11-16",
+   "8:00 PM",
+   "Target Center",
+   "Minneapolis, MN",
+   "POR",
+   "MIN",
+   [
+    26,
+    25,
+    22,
+    25
+   ],
+   98,
+   [
+    26,
+    33,
+    28,
+    19
+   ],
+   106,
+   "MIN",
+   "POR",
+   "https://www.nba.com/game/por-vs-min-0022600250"
+  ],
+  [
+   "0022600251",
+   "2026-11-16",
+   "8:00 PM",
+   "Smoothie King Center",
+   "New Orleans, LA",
+   "GSW",
+   "NOP",
+   [
+    11,
+    25,
+    29,
+    29
+   ],
+   94,
+   [
+    35,
+    26,
+    32,
+    22
+   ],
+   115,
+   "NOP",
+   "GSW",
+   "https://www.nba.com/game/gsw-vs-nop-0022600251"
+  ],
+  [
+   "0022600252",
+   "2026-11-16",
+   "9:00 PM",
+   "Ball Arena",
+   "Denver, CO",
+   "PHX",
+   "DEN",
+   [
+    20,
+    36,
+    34,
+    27
+   ],
+   117,
+   [
+    24,
+    29,
+    29,
+    23
+   ],
+   105,
+   "PHX",
+   "DEN",
+   "https://www.nba.com/game/phx-vs-den-0022600252"
+  ]
+ ]
+}
