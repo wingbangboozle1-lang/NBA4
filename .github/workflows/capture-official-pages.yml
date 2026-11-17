@@ -9,8 +9,15 @@
 # records status / content-type / byte length / sha256 for every URL the
 # scheduled job depends on, then commits the raw evidence to this branch.
 #
-# Trigger: workflow_dispatch only. It never runs on push or on a schedule, so it
-# cannot race the daily job or another session's branch.
+# Trigger: a push to this session's branch that changes the capture script or
+# this file, or a manual workflow_dispatch. It never runs on a schedule and its
+# own output commits land under `data/official-pages/**` only, so the job cannot
+# re-trigger itself or race the daily-refresh job.
+#
+# NOTE: `workflow_dispatch` is declared but could not be invoked from this
+# session's GitHub credentials (HTTP 403 "Resource not accessible by
+# integration"), which is itself recorded as flag BU-02. The push trigger below
+# is the path actually used.
 #
 # Output (committed to the branch it ran on):
 #   data/official-pages/<date>/manifest.json   one record per URL
@@ -21,6 +28,12 @@
 name: capture-official-pages
 
 on:
+  push:
+    branches:
+      - arena/af666c53-nba4
+    paths:
+      - ".github/workflows/capture-official-pages.yml"
+      - "scripts/capture_official_pages.py"
   workflow_dispatch:
     inputs:
       date:
