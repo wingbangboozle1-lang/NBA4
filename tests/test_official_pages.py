@@ -315,6 +315,121 @@ class InjuryIndexParsing(unittest.TestCase):
         self.assertEqual([self.read.dates[0]], verdict.evidence["dates"])
 
 
+def _load_scheduled_refresh():
+    """Load `scripts/scheduled_refresh.py` by path, as its own suite does."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "scheduled_refresh", ROOT / "scripts" / "scheduled_refresh.py"
+    )
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["scheduled_refresh"] = module  # required for @dataclass
+    spec.loader.exec_module(module)
+    return module
+
+
+NOW_UTC = __import__("datetime").datetime(2026, 11, 17, 16, 0, 0, tzinfo=__import__("datetime").timezone.utc)
+
+API_JSON_30 = json.dumps({"ResultSet": {"RowSet": [[f"row{i}"] for i in range(30)]}}).encode()
+API_JSON_29 = json.dumps({"ResultSet": {"RowSet": [[f"row{i}"] for i in range(29)]}}).encode()
+SHELL_HTML = b'<html><script id="__NEXT_DATA__" type="application/json">{"props":{}}</script></html>'
+TABLE_HTML_30 = (
+    "<html><table><tbody>"
+    + "".join(f"<tr><td>{i}</td><td>v</td><td>w</td></tr>" for i in range(30))
+    + "</tbody></table></html>"
+).encode()
+
+
+class TransportGateTests(unittest.TestCase):
+    """The two-transport gate: status codes are not evidence of data."""
+
+    def setUp(self):
+        self.sr = _load_scheduled_refresh()
+
+    def test_a_working_api_transport_passes_on_the_api(self):
+        gate, info = self.sr.gate_official_feed(
+            "standings", "standings_fetch", lambda url, *, headers=None, timeout=30.0: (200, API_JSON_30, url), NOW_UTC
+        )
+        self.assertTrue(gate.passed)
+        self.assertEqual("stats_api", info["transport_used"])
+        self.assertEqual(30, info["rows"])
+
+    def test_the_page_transport_is_used_when_the_api_times_out(self):
+        def fetch(url, *, headers=None, timeout=30.0):
+            if "stats.nba.com" in url:
+                raise TimeoutError("The read operation timed out")
+            return 200, TABLE_HTML_30, url
+
+        gate, info = self.sr.gate_official_feed("standings", "standings_fetch", fetch, NOW_UTC)
+        self.assertTrue(gate.passed)
+        self.assertEqual("official_page", info["transport_used"])
+        self.assertEqual(30, info["rows"])
+
+    def test_a_rendered_shell_fails_even_though_it_returns_200(self):
+        # This is the exact shape the official pages return: HTTP 200, a parsed
+        # Next.js payload, and no statistics. Treating it as a pass is the
+        # BH-06 false-green, so it must fail with that reason visible.
+        def fetch(url, *, headers=None, timeout=30.0):
+            if "stats.nba.com" in url:
+                raise TimeoutError("The read operation timed out")
+            return 200, SHELL_HTML, url
+
+        gate, info = self.sr.gate_official_feed("standings", "standings_fetch", fetch, NOW_UTC)
+        self.assertFalse(gate.passed)
+        self.assertEqual(op.NO_DATA_IN_BODY, info["verdict"])
+        self.assertIn("NO_DATA_IN_BODY", gate.detail)
+        self.assertIn("rendered shell", gate.detail)
+
+    def test_a_short_api_response_falls_through_to_the_page(self):
+        def fetch(url, *, headers=None, timeout=30.0):
+            if "stats.nba.com" in url:
+                return 200, API_JSON_29, url
+            return 200, TABLE_HTML_30, url
+
+        gate, info = self.sr.gate_official_feed("standings", "standings_fetch", fetch, NOW_UTC)
+        self.assertTrue(gate.passed)
+        self.assertEqual("official_page", info["transport_used"])
+        self.assertIn("rows=29", "; ".join(info["attempts"]))
+
+    def test_both_transports_failing_records_both_attempts(self):
+        def fetch(url, *, headers=None, timeout=30.0):
+            if "stats.nba.com" in url:
+                raise TimeoutError("The read operation timed out")
+            return 403, b"", url
+
+        gate, info = self.sr.gate_official_feed("standings", "standings_fetch", fetch, NOW_UTC)
+        self.assertFalse(gate.passed)
+        joined = "; ".join(info["attempts"])
+        self.assertIn("TimeoutError", joined)
+        self.assertIn("HTTP 403", joined)
+
+    def test_the_gate_cites_the_page_a_reader_can_open(self):
+        def fetch(url, *, headers=None, timeout=30.0):
+            return 200, API_JSON_30, url
+
+        gate, _ = self.sr.gate_official_feed("standings", "standings_fetch", fetch, NOW_UTC)
+        self.assertEqual("https://www.nba.com/standings", gate.source_url)
+        self.assertNotIn("stats.nba.com", gate.source_url)
+
+    def test_an_undeclared_feed_key_fails_closed(self):
+        gate, info = self.sr.gate_official_feed(
+            "no_such_feed", "no_such_feed_fetch", lambda url, *, headers=None, timeout=30.0: (200, b"", url), NOW_UTC
+        )
+        self.assertFalse(gate.passed)
+        self.assertIsNone(info["transport_used"])
+
+    def test_every_declared_statistics_feed_has_a_gate_helper_contract(self):
+        for key in STAT_PAGE_KEYS:
+            spec = op.PAGE_SPECS[key]
+            self.assertEqual(30, spec.expected_rows)
+            gate, _ = self.sr.gate_official_feed(
+                key, f"{key}_fetch",
+                lambda url, *, headers=None, timeout=30.0: (200, API_JSON_30, url), NOW_UTC,
+            )
+            self.assertTrue(gate.passed, key)
+
+
 class PageSpecIntegrity(unittest.TestCase):
     """The declared contracts themselves."""
 
