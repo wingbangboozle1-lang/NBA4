@@ -691,3 +691,22 @@ that snapshot (e.g. `2026-11-17T00:00:00Z` / `2026-11-20T00:00:00Z`, derived fro
 the file**: it is outside the BU/BV claimed scope. Recorded as flag **BU-07** on the
 Flagged-for-Review page and as **BV-02** in
 [`docs/official-pages-transport.md`](docs/official-pages-transport.md).
+
+
+### Publication record (session `arena/af666c53-nba4`, tasks BU/BV/BW — final)
+
+| PR | Merged | Commit | Pages build | Content |
+| --- | --- | --- | --- | --- |
+| [#71](https://github.com/wingbangboozle1-lang/NBA4/pull/71) | 2026-11-17T16:17:36Z | [`49e7238`](https://github.com/wingbangboozle1-lang/NBA4/commit/49e72382be72cc946804e5729f5277f3ee095bc0) | `built` 16:17:37Z (26.2 s) | `scripts/official_pages.py`, `scripts/capture_official_pages.py`, `.github/workflows/capture-official-pages.yml`, `tests/test_official_pages.py` (44), `docs/official-pages-transport.md`, the two-transport branch in `scripts/scheduled_refresh.py`, the transport section on `automation.html`, flags BU-01…BU-06 + BV-01 on `review.html`, count 531 |
+| [#73](https://github.com/wingbangboozle1-lang/NBA4/pull/73) | 2026-11-17T16:27:49Z | [`c5a51e1`](https://github.com/wingbangboozle1-lang/NBA4/commit/c5a51e12cb7344cab8e8848ec06de08a9cbc518d) | `built` 16:27:50Z | the CI verification of the new gate reason read from check run 134183010346, flag **BU-07** (`slate_window_current` broken by the `window` shape change in `slate-2026-11-17.json`), and the open coordination request for its owner |
+| [#74](https://github.com/wingbangboozle1-lang/NBA4/pull/74) | 2026-11-17T16:31:51Z | [`651b629`](https://github.com/wingbangboozle1-lang/NBA4/commit/651b629d76d30dfe707b92308f738cea79bb1b1a) | `built` 16:31:52Z | cross-references: BU-01 sharpens BH-05, BU-02 reproduces BH-07, BU-04 supplies the measurement BH-02 assumed |
+
+**Final state on `main`.** 531 unit tests OK across twelve suites; `check_site.py --with-tests` PASS
+(16 pages, 675 HTML data rows, 1234 Markdown data rows); `build_snapshots.py --check` unchanged;
+`engine.cli status` → `NO AUTHORIZED INPUTS -> no lines, no picks`; GitHub Pages `status: built`,
+source `main`. The live site was re-fetched after each merge and serves the new sections.
+
+**Open items this session leaves for a decision, none of which blocks the site:** BU-01 (transport
+for the four statistics feeds — owner decision), BU-07 (one-line `window` shape repair, logged as a
+coordination request rather than applied, because the file is another session's scope), and the
+pre-existing `injury_transcription_age` cadence alarm.
