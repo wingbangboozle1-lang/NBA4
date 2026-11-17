@@ -3122,9 +3122,9 @@
       },
       "gamelogs": {
        "name": "gamelogs",
-       "Season": "2025-26",
+       "Season": "2026-27",
        "SeasonType": "Regular Season",
-       "YearTo": 2025,
+       "YearTo": 2026,
        "TypeId": 2,
        "YearFrom": 1946,
        "flags": []
@@ -7212,7 +7212,7 @@
    }
   ],
   "akamaiHeaders": {
-   "xAkamaiEdgescape": "georegion=289,country_code=US,region_code=WA,city=QUINCY,dma=881,areacode=509,county=GRANT,fips=53025,lat=47.1872,long=-119.8129,timezone=PST,zip=98848,continent=NA,throughput=vhigh,bw=5000,network=microsoft,asnum=8075,network_type=hosted,location_id=0",
+   "xAkamaiEdgescape": "georegion=246,country_code=US,region_code=CA,city=SANFRANCISCO,dma=807,pmsa=7360,msa=7362,areacode=415+650,county=SANFRANCISCO+SANMATEO,fips=06075+06081,lat=37.7795,long=-122.4195,timezone=PST,zip=94102-94105+94107-94112+94114-94134+94137+94139-94147+94151+94153-94154+94156+94159-94164+94171-94172+94177+94188,continent=NA,throughput=vhigh,bw=5000,asnum=7203,network_type=hosted,location_id=0",
    "xRegionMap": "united-states",
    "xLpPackageCountry": "US",
    "xTargetMarket": "with-commercials"

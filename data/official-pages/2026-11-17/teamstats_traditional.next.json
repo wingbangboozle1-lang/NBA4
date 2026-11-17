@@ -7212,7 +7212,7 @@
    }
   ],
   "akamaiHeaders": {
-   "xAkamaiEdgescape": "georegion=289,country_code=US,region_code=WA,city=QUINCY,dma=881,areacode=509,county=GRANT,fips=53025,lat=47.1872,long=-119.8129,timezone=PST,zip=98848,continent=NA,throughput=vhigh,bw=5000,network=microsoft,asnum=8075,network_type=hosted,location_id=0",
+   "xAkamaiEdgescape": "georegion=244,country_code=US,region_code=AZ,city=PHOENIX,dma=753,msa=6200,areacode=602+480+623,county=MARICOPA,fips=04013,lat=33.4486,long=-112.0733,timezone=MST,zip=85001-85046+85048+85050-85051+85053-85055+85060-85076+85078-85080+85082+85083+85085-85086+85097-85098,continent=NA,throughput=vhigh,bw=5000,network=microsoft,asnum=8075,network_type=hosted,location_id=0",
    "xRegionMap": "united-states",
    "xLpPackageCountry": "US",
    "xTargetMarket": "with-commercials"

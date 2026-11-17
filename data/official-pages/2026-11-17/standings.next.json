@@ -2962,9 +2962,9 @@
       },
       "gamelogs": {
        "name": "gamelogs",
-       "Season": "2025-26",
+       "Season": "2026-27",
        "SeasonType": "Regular Season",
-       "YearTo": 2025,
+       "YearTo": 2026,
        "TypeId": 2,
        "YearFrom": 1946,
        "flags": []
@@ -7052,7 +7052,7 @@
    }
   ],
   "akamaiHeaders": {
-   "xAkamaiEdgescape": "georegion=193,country_code=SG,city=SINGAPORE,lat=1.29,long=103.86,timezone=GMT+8,continent=AS,throughput=vhigh,bw=5000,asnum=132203,location_id=0",
+   "xAkamaiEdgescape": "georegion=101,country_code=HK,city=HONGKONG,lat=22.30,long=114.20,timezone=GMT+8,continent=AS,throughput=low,bw=1,asnum=9304,location_id=0",
    "xRegionMap": "united-states",
    "xLpPackageCountry": "US",
    "xTargetMarket": "with-commercials"

@@ -1,6 +1,6 @@
 {
   "captured_date_utc": "2026-11-17",
-  "generated_at_utc": "2026-11-17T15:57:51Z",
+  "generated_at_utc": "2026-11-17T16:00:04Z",
   "generator": "scripts/capture_official_pages.py",
   "runner": "GitHub-hosted ubuntu-latest (unrestricted egress)",
   "headers_sent": {
@@ -16,12 +16,12 @@
       "url": "https://www.nba.com/standings",
       "kind": "html",
       "note": "official standings page; the job's standings feed",
-      "retrieved_at_utc": "2026-11-17T15:56:33Z",
+      "retrieved_at_utc": "2026-11-17T15:58:46Z",
       "reached": true,
       "http_status": 200,
       "content_type": "text/html; charset=utf-8",
-      "byte_length": 254106,
-      "sha256": "678b414578dfafe99280fd2f53c4211efccdf94e41db5a018685bdee2bc93e54",
+      "byte_length": 254098,
+      "sha256": "e14de9d281fb0fd91e6c62c67b68cfd1660639847cc80206cc24680fc0ceec8a",
       "captured_files": [
         "standings.head.html",
         "standings.next.json"
@@ -31,6 +31,13 @@
         "next_data_parses_as_json": true
       },
       "failure": null,
+      "headers_sent": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.nba.com/",
+        "Origin": "https://www.nba.com/"
+      },
       "host": "www.nba.com"
     },
     {
@@ -38,12 +45,12 @@
       "url": "https://www.nba.com/stats/teams/traditional",
       "kind": "html",
       "note": "official traditional team-stat page",
-      "retrieved_at_utc": "2026-11-17T15:56:33Z",
+      "retrieved_at_utc": "2026-11-17T15:58:47Z",
       "reached": true,
       "http_status": 200,
       "content_type": "text/html; charset=utf-8",
-      "byte_length": 322560,
-      "sha256": "d73c0a9e792aa1b598fe74ed181d05b307768d308821bb2f1853102d45793cf1",
+      "byte_length": 322676,
+      "sha256": "44f649b547c2cdb8f7db050fb62a24c1ddf80e56141fd7eec37d4f9cffafcedd",
       "captured_files": [
         "teamstats_traditional.head.html",
         "teamstats_traditional.next.json"
@@ -53,6 +60,13 @@
         "next_data_parses_as_json": true
       },
       "failure": null,
+      "headers_sent": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.nba.com/",
+        "Origin": "https://www.nba.com/"
+      },
       "host": "www.nba.com"
     },
     {
@@ -60,12 +74,12 @@
       "url": "https://www.nba.com/stats/teams/opponent",
       "kind": "html",
       "note": "official opponent team-stat page",
-      "retrieved_at_utc": "2026-11-17T15:56:34Z",
+      "retrieved_at_utc": "2026-11-17T15:58:47Z",
       "reached": true,
       "http_status": 200,
       "content_type": "text/html; charset=utf-8",
-      "byte_length": 322497,
-      "sha256": "dc8f11526b7940a3f12aaffdd2ca485f5a82d21034d32e7dbb9d70182a267837",
+      "byte_length": 322637,
+      "sha256": "e6fe6d2a5c1fe2e3f17da9ac0929087d6a191f09c350e82fdf03e28cc7119445",
       "captured_files": [
         "teamstats_opponent.head.html",
         "teamstats_opponent.next.json"
@@ -75,6 +89,13 @@
         "next_data_parses_as_json": true
       },
       "failure": null,
+      "headers_sent": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.nba.com/",
+        "Origin": "https://www.nba.com/"
+      },
       "host": "www.nba.com"
     },
     {
@@ -82,12 +103,12 @@
       "url": "https://www.nba.com/stats/teams/advanced",
       "kind": "html",
       "note": "official advanced team-stat page",
-      "retrieved_at_utc": "2026-11-17T15:56:34Z",
+      "retrieved_at_utc": "2026-11-17T15:58:47Z",
       "reached": true,
       "http_status": 200,
       "content_type": "text/html; charset=utf-8",
-      "byte_length": 322497,
-      "sha256": "8d07673274897e17566b9dd8f69d9ce89b037e05b3df754daa100acc1069917b",
+      "byte_length": 322613,
+      "sha256": "c4759f91b4161f47b52dc87313921c011ee0e7e72227213edee787e14bdaeef5",
       "captured_files": [
         "teamstats_advanced.head.html",
         "teamstats_advanced.next.json"
@@ -97,6 +118,13 @@
         "next_data_parses_as_json": true
       },
       "failure": null,
+      "headers_sent": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.nba.com/",
+        "Origin": "https://www.nba.com/"
+      },
       "host": "www.nba.com"
     },
     {
@@ -104,12 +132,12 @@
       "url": "https://official.nba.com/nba-injury-report-2026-27-season/",
       "kind": "html",
       "note": "official injury-report index",
-      "retrieved_at_utc": "2026-11-17T15:56:34Z",
+      "retrieved_at_utc": "2026-11-17T15:58:47Z",
       "reached": true,
       "http_status": 200,
       "content_type": "text/html; charset=UTF-8",
-      "byte_length": 41472,
-      "sha256": "7a655e5eedbd9012795058b52adc6f8e178c1ecf076b35971655a7cfaded9fc2",
+      "byte_length": 41606,
+      "sha256": "f12bedd8a6ce5982bc49abc667138efc2469b73a0f171ff8c97f77d99285ecf9",
       "captured_files": [
         "injury_index.head.html"
       ],
@@ -118,6 +146,13 @@
         "next_data_parses_as_json": false
       },
       "failure": null,
+      "headers_sent": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.nba.com/",
+        "Origin": "https://www.nba.com/"
+      },
       "host": "official.nba.com"
     },
     {
@@ -125,7 +160,7 @@
       "url": "https://stats.nba.com/stats/leaguestandingsv3?GroupBy=conf&LeagueID=00&Season=2026-27&SeasonType=Regular+Season&Section=overall",
       "kind": "json",
       "note": "the stats.nba.com JSON endpoint the job currently targets for standings",
-      "retrieved_at_utc": "2026-11-17T15:56:59Z",
+      "retrieved_at_utc": "2026-11-17T15:59:13Z",
       "reached": false,
       "http_status": null,
       "content_type": null,
@@ -133,14 +168,21 @@
       "sha256": null,
       "captured_files": [],
       "shape_check": null,
-      "failure": "TimeoutError: The read operation timed out"
+      "failure": "TimeoutError: The read operation timed out",
+      "headers_sent": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.nba.com/",
+        "Origin": "https://www.nba.com/"
+      }
     },
     {
       "key": "stats_api_teamstats",
       "url": "https://stats.nba.com/stats/leaguedashteamstats?Conference=&DateFrom=&DateTo=&Division=&GameScope=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PaceAdjust=N&PerMode=PerGame&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2026-27&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=0&VsConference=&VsDivision=",
       "kind": "json",
       "note": "the stats.nba.com JSON endpoint the job currently targets for team stats",
-      "retrieved_at_utc": "2026-11-17T15:57:24Z",
+      "retrieved_at_utc": "2026-11-17T15:59:38Z",
       "reached": false,
       "http_status": null,
       "content_type": null,
@@ -148,14 +190,21 @@
       "sha256": null,
       "captured_files": [],
       "shape_check": null,
-      "failure": "TimeoutError: The read operation timed out"
+      "failure": "TimeoutError: The read operation timed out",
+      "headers_sent": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.nba.com/",
+        "Origin": "https://www.nba.com/"
+      }
     },
     {
       "key": "schedule_pdf",
       "url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf",
       "kind": "pdf",
       "note": "official 2026-27 regular-season schedule PDF",
-      "retrieved_at_utc": "2026-11-17T15:57:24Z",
+      "retrieved_at_utc": "2026-11-17T15:59:38Z",
       "reached": true,
       "http_status": 200,
       "content_type": "application/pdf",
@@ -169,6 +218,13 @@
         "page_marker_count": 0
       },
       "failure": null,
+      "headers_sent": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.nba.com/",
+        "Origin": "https://www.nba.com/"
+      },
       "host": "cdn.nba.com"
     },
     {
@@ -176,7 +232,7 @@
       "url": "https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json",
       "kind": "json",
       "note": "cdn.nba.com live scoreboard JSON (candidate results transport)",
-      "retrieved_at_utc": "2026-11-17T15:57:25Z",
+      "retrieved_at_utc": "2026-11-17T15:59:38Z",
       "reached": false,
       "http_status": 403,
       "content_type": "text/html",
@@ -184,14 +240,21 @@
       "sha256": null,
       "captured_files": [],
       "shape_check": null,
-      "failure": "HTTPError 403 Forbidden"
+      "failure": "HTTPError 403 Forbidden",
+      "headers_sent": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.nba.com/",
+        "Origin": "https://www.nba.com/"
+      }
     },
     {
       "key": "cdn_static_schedule",
       "url": "https://cdn.nba.com/static/json/staticData/scheduleLeagueV2_1.json",
       "kind": "json",
       "note": "cdn.nba.com static full-season schedule JSON (candidate schedule transport)",
-      "retrieved_at_utc": "2026-11-17T15:57:25Z",
+      "retrieved_at_utc": "2026-11-17T15:59:38Z",
       "reached": false,
       "http_status": 403,
       "content_type": "text/html",
@@ -199,14 +262,21 @@
       "sha256": null,
       "captured_files": [],
       "shape_check": null,
-      "failure": "HTTPError 403 Forbidden"
+      "failure": "HTTPError 403 Forbidden",
+      "headers_sent": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.nba.com/",
+        "Origin": "https://www.nba.com/"
+      }
     },
     {
       "key": "data_nba_today",
       "url": "https://data.nba.net/prod/v1/today.json",
       "kind": "json",
       "note": "data.nba.net today index (candidate, historically public)",
-      "retrieved_at_utc": "2026-11-17T15:57:25Z",
+      "retrieved_at_utc": "2026-11-17T15:59:38Z",
       "reached": false,
       "http_status": null,
       "content_type": null,
@@ -214,14 +284,21 @@
       "sha256": null,
       "captured_files": [],
       "shape_check": null,
-      "failure": "URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'data.nba.net'. (_ssl.c:1018)>"
+      "failure": "URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'data.nba.net'. (_ssl.c:1018)>",
+      "headers_sent": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.nba.com/",
+        "Origin": "https://www.nba.com/"
+      }
     },
     {
       "key": "stats_api_scoreboard",
       "url": "https://stats.nba.com/stats/scoreboardv3?GameDate=2026-11-16&LeagueID=00",
       "kind": "json",
       "note": "stats.nba.com scoreboard endpoint, same host as the two feeds that timed out",
-      "retrieved_at_utc": "2026-11-17T15:57:50Z",
+      "retrieved_at_utc": "2026-11-17T16:00:03Z",
       "reached": false,
       "http_status": null,
       "content_type": null,
@@ -229,14 +306,21 @@
       "sha256": null,
       "captured_files": [],
       "shape_check": null,
-      "failure": "TimeoutError: The read operation timed out"
+      "failure": "TimeoutError: The read operation timed out",
+      "headers_sent": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.nba.com/",
+        "Origin": "https://www.nba.com/"
+      }
     },
     {
       "key": "nba_api_standings",
       "url": "https://www.nba.com/api/v1/standings",
       "kind": "json",
       "note": "www.nba.com JSON API guess, probed to be recorded as 404 rather than assumed",
-      "retrieved_at_utc": "2026-11-17T15:57:51Z",
+      "retrieved_at_utc": "2026-11-17T16:00:04Z",
       "reached": false,
       "http_status": 404,
       "content_type": "text/html; charset=utf-8",
@@ -244,7 +328,74 @@
       "sha256": null,
       "captured_files": [],
       "shape_check": null,
-      "failure": "HTTPError 404 Not Found"
+      "failure": "HTTPError 404 Not Found",
+      "headers_sent": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.nba.com/",
+        "Origin": "https://www.nba.com/"
+      }
+    },
+    {
+      "key": "cdn_live_scoreboard_minimal",
+      "url": "https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json",
+      "kind": "json",
+      "note": "same URL as cdn_live_scoreboard, browser-plain headers only",
+      "retrieved_at_utc": "2026-11-17T16:00:04Z",
+      "reached": false,
+      "http_status": 403,
+      "content_type": "text/html",
+      "byte_length": null,
+      "sha256": null,
+      "captured_files": [],
+      "shape_check": null,
+      "failure": "HTTPError 403 Forbidden",
+      "headers_sent": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "Accept": "*/*"
+      }
+    },
+    {
+      "key": "cdn_live_scoreboard_no_ua",
+      "url": "https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json",
+      "kind": "json",
+      "note": "same URL, urllib default headers (no User-Agent, no Referer)",
+      "retrieved_at_utc": "2026-11-17T16:00:04Z",
+      "reached": false,
+      "http_status": 403,
+      "content_type": "text/html",
+      "byte_length": null,
+      "sha256": null,
+      "captured_files": [],
+      "shape_check": null,
+      "failure": "HTTPError 403 Forbidden",
+      "headers_sent": {}
+    },
+    {
+      "key": "cdn_schedule_pdf_minimal",
+      "url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf",
+      "kind": "pdf",
+      "note": "control: the same PDF that returned 200, requested with minimal headers",
+      "retrieved_at_utc": "2026-11-17T16:00:04Z",
+      "reached": true,
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "byte_length": 541060,
+      "sha256": "5e82e37ef1b19e226dee57be69958b95b5694516280d3034aa7c1d64292b3570",
+      "captured_files": [
+        "cdn_schedule_pdf_minimal.pdf"
+      ],
+      "shape_check": {
+        "starts_with_pdf_magic": true,
+        "page_marker_count": 0
+      },
+      "failure": null,
+      "headers_sent": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "Accept": "*/*"
+      },
+      "host": "cdn.nba.com"
     }
   ]
 }
