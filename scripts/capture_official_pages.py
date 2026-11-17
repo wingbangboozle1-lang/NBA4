@@ -34,7 +34,7 @@ OUT_ROOT = ROOT / "data" / "official-pages"
 
 HEAD_BYTES = 300_000
 NEXT_JSON_BYTES = 2_000_000
-TIMEOUT = 45
+TIMEOUT = 25
 
 # The User-Agent and Referer below are the ones `scripts/scheduled_refresh.py`
 # already sends, so this probe measures the same request the job makes.
@@ -100,6 +100,40 @@ TARGETS: dict[str, dict[str, str]] = {
         "url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf",
         "kind": "pdf",
         "note": "official 2026-27 regular-season schedule PDF",
+    },
+    # ---- batch 2: candidate data endpoints -------------------------------
+    # Batch 1 showed the four official HTML pages return 200 but carry no
+    # statistics in their raw bodies (client-rendered). These candidates are
+    # probed so the transport question is settled with evidence rather than a
+    # guess: each is recorded as REACHED or NOT REACHED, and a 404 is reported
+    # as a 404, never as an empty feed.
+    "cdn_live_scoreboard": {
+        "url": "https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json",
+        "kind": "json",
+        "note": "cdn.nba.com live scoreboard JSON (candidate results transport)",
+    },
+    "cdn_static_schedule": {
+        "url": "https://cdn.nba.com/static/json/staticData/scheduleLeagueV2_1.json",
+        "kind": "json",
+        "note": "cdn.nba.com static full-season schedule JSON (candidate schedule transport)",
+    },
+    "data_nba_today": {
+        "url": "https://data.nba.net/prod/v1/today.json",
+        "kind": "json",
+        "note": "data.nba.net today index (candidate, historically public)",
+    },
+    "stats_api_scoreboard": {
+        "url": (
+            "https://stats.nba.com/stats/scoreboardv3"
+            "?GameDate=2026-11-16&LeagueID=00"
+        ),
+        "kind": "json",
+        "note": "stats.nba.com scoreboard endpoint, same host as the two feeds that timed out",
+    },
+    "nba_api_standings": {
+        "url": "https://www.nba.com/api/v1/standings",
+        "kind": "json",
+        "note": "www.nba.com JSON API guess, probed to be recorded as 404 rather than assumed",
     },
 }
 
