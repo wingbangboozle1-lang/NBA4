@@ -125,6 +125,7 @@ The checker verifies each page's title and single heading, that every page's tag
 
 ## Publication record
 
+- **PR #80** ([link](https://github.com/wingbangboozle1-lang/NBA4/pull/80), tasks BP+BQ, `arena/0fec89b5-nba4`) landed the 2026-11-17 completion pieces: flag BZ-01 and pass 12b on the Flagged-for-Review page, the pass-12b verification log, the DET@MIA coverage in the per-player game-log snapshots, snapshot-registry rows and the four-session collision record — merged with main's 11:15 AM ET chain and 547-test suite without discarding either side.
 - **PR #47** ([link](https://github.com/wingbangboozle1-lang/NBA4/pull/47), merged `2026-11-15` as `2924b14`) added the research-only disagreement-first estimators, measured home-win-rate anchor, no-possession-imputation rule and tests. The Pages build succeeded; the live strategy page was re-fetched with S7. No live picks/data were published.
 - **PR #10** (`arena/248bb9ab-nba4` → `main`, merged `2026-11-14`) brought the reference engine, the 11-page dashboard and the integration of all parallel sessions' work into `main`. GitHub Pages built the merge commit `f9c63d2` successfully (`status: built`, 29.3s) and every page was re-fetched from the live URL with intact tables, merged suggestion registers and source links.
 - PRs #1–#9 (initial dashboard, integrations, independent verification and the one Pages build-rate-limit incident) are recorded in [`COORDINATION.md`](COORDINATION.md).
