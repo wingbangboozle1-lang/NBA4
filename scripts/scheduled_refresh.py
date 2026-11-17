@@ -90,6 +90,45 @@ JSON_HEADERS = {
     "X-NBA-Stats-Token": "true",
 }
 
+# Task BV (session `arena/af666c53-nba4`). The four statistics feeds were only
+# ever fetched from `stats.nba.com`, and when that host stopped answering the
+# gates went red with "unreachable" and stayed red with no diagnosis. A probe run
+# on a GitHub-hosted runner (see `data/official-pages/2026-11-17/manifest.json`)
+# showed why: `stats.nba.com` returns no HTTP response at all from a runner,
+# while the official pages a human opens return 200 but render their tables in
+# the browser, so the raw body carries none of the statistics.
+#
+# The job therefore tries both transports and judges the *body*, not the status
+# code. `official_pages.classify_body` returns CARRIES_ROWS only when the body
+# really holds the declared number of rows; a 200 carrying a rendered shell is a
+# failure with a reason, never a pass. That is the guard against the BH-06
+# false-green: switching to a URL that answers 200 without changing what is
+# verified would have manufactured a green check out of an empty feed.
+HTML_HEADERS = {
+    "User-Agent": USER_AGENT,
+    "Referer": "https://www.nba.com/",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
+
+def _official_pages():
+    """Load `scripts/official_pages.py` by path (this file runs as a script)."""
+    import importlib.util
+
+    module = sys.modules.get("official_pages")
+    if module is not None:
+        return module
+    spec = importlib.util.spec_from_file_location(
+        "official_pages", Path(__file__).with_name("official_pages.py")
+    )
+    if spec is None or spec.loader is None:  # pragma: no cover - packaging error
+        return None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["official_pages"] = module
+    spec.loader.exec_module(module)
+    return module
+
 
 @dataclass
 class Gate:
@@ -248,6 +287,93 @@ def count_nba_rows(payload: bytes | str, *, expect: int = 30) -> tuple[int, bool
     except Exception:
         return 0, False
     return len(result_sets), len(result_sets) == expect
+
+
+def gate_official_feed(
+    key: str,
+    gate_name: str,
+    fetch: Callable[..., Any],
+    now: datetime,
+) -> tuple[Gate, dict[str, Any]]:
+    """Fetch one declared statistics feed, trying both known transports.
+
+    Transport 1 is the ``stats.nba.com`` JSON API the job has always used.
+    Transport 2 is the official page a reader opens (``www.nba.com/standings``
+    and the three team-stat pages). Neither is trusted on its status code: the
+    API body must yield the declared row count and the page body must be
+    classified as actually carrying rows.
+
+    Returns the gate and a summary for the run record. The summary always states
+    which transport, if any, satisfied the contract, and every attempt that did
+    not, so a red gate can be diagnosed from the record alone.
+    """
+    op = _official_pages()
+    if op is None or key not in op.PAGE_SPECS:  # pragma: no cover - packaging error
+        return (
+            Gate(gate_name, "fetch", False, f"no declared page spec for {key}",
+                 observed_at_utc=_iso(now)),
+            {"transport_used": None},
+        )
+    spec = op.PAGE_SPECS[key]
+    attempts: list[str] = []
+    info: dict[str, Any] = {"transport_used": None, "attempts": attempts}
+
+    # Transport 1: the JSON API.
+    api_status = None
+    try:
+        api_status, body, _ = fetch(spec.transport_url, headers=JSON_HEADERS)
+    except Exception as exc:  # noqa: BLE001 - the failure text is the diagnosis
+        attempts.append(f"stats_api: {type(exc).__name__}: {exc}")
+        body = None
+    if body is not None:
+        if api_status == 200:
+            count, ok = count_nba_rows(body)
+            attempts.append(f"stats_api: HTTP 200 rows={count}")
+            if ok:
+                info.update(transport_used="stats_api", rows=count, status=200)
+                return (
+                    Gate(gate_name, "fetch", True,
+                         f"stats_api HTTP 200, rows={count} (expected {spec.expected_rows})",
+                         source_url=spec.page_url, observed_at_utc=_iso(now)),
+                    info,
+                )
+        else:
+            attempts.append(f"stats_api: HTTP {api_status}")
+
+    # Transport 2: the official page, judged on its body rather than its status.
+    page_status = None
+    try:
+        page_status, page_body, _ = fetch(spec.page_url, headers=HTML_HEADERS)
+    except Exception as exc:  # noqa: BLE001
+        attempts.append(f"official_page: {type(exc).__name__}: {exc}")
+        page_body = None
+    if page_body is not None:
+        if page_status == 200:
+            verdict = op.classify_body(key, page_body)
+            attempts.append(f"official_page: HTTP 200 verdict={verdict.verdict} rows={verdict.rows}")
+            info["verdict"] = verdict.verdict
+            if verdict.ok:
+                info.update(transport_used="official_page", rows=verdict.rows, status=200)
+                return (
+                    Gate(gate_name, "fetch", True,
+                         f"official_page HTTP 200, {verdict.rows} rows carried in the body",
+                         source_url=spec.page_url, observed_at_utc=_iso(now)),
+                    info,
+                )
+        else:
+            attempts.append(f"official_page: HTTP {page_status}")
+
+    detail = (
+        f"no transport supplied {spec.expected_rows} rows; "
+        + "; ".join(attempts)
+        + " (a 200 that carries no rows is a rendered shell, not a satisfied feed)"
+    )
+    info["status"] = api_status if api_status is not None else page_status
+    return (
+        Gate(gate_name, "fetch", False, detail, source_url=spec.page_url,
+             observed_at_utc=_iso(now)),
+        info,
+    )
 
 
 def parse_slate_window(snapshot: dict[str, Any]) -> tuple[datetime, datetime] | None:
@@ -548,35 +674,18 @@ def run(
         else:
             record.gates.append(Gate("injury_report_newest_fetch", "fetch", False, "no report link parsed from the index", source_url=INJURY_INDEX_URL, observed_at_utc=_iso(now)))
 
-        # Standings (official stats API behind nba.com/standings)
-        try:
-            status, body, _ = fetch(STANDINGS_API, headers=JSON_HEADERS)
-            count, ok = count_nba_rows(body) if status == 200 else (0, False)
-            record.fetches["standings"] = {"status": status, "rows": count}
-            record.gates.append(
-                Gate("standings_fetch", "fetch", ok,
-                     f"status {status}, rows={count} (expected 30)",
-                     source_url="https://www.nba.com/standings", observed_at_utc=_iso(now))
-            )
-        except Exception as exc:
-            record.gates.append(Gate("standings_fetch", "fetch", False, f"unreachable: {exc}", source_url="https://www.nba.com/standings", observed_at_utc=_iso(now)))
+        # Standings (official stats API, falling back to the official page; task BV)
+        gate, info = gate_official_feed("standings", "standings_fetch", fetch, now)
+        record.fetches["standings"] = info
+        record.gates.append(gate)
 
         # The three official team-stat pages (traditional=Base, advanced, opponent)
-        for measure in TEAMSTAT_MEASURES:
-            url = TEAMSTAT_API.format(measure=measure)
-            page = {"Base": "traditional", "Advanced": "advanced", "Opponent": "opponent"}[measure]
-            try:
-                status, body, _ = fetch(url, headers=JSON_HEADERS)
-                count, ok = count_nba_rows(body) if status == 200 else (0, False)
-                record.fetches[f"teamstats_{page}"] = {"status": status, "rows": count}
-                record.gates.append(
-                    Gate(f"teamstats_{page}_fetch", "fetch", ok,
-                         f"status {status}, rows={count} (expected 30)",
-                         source_url=f"https://www.nba.com/stats/teams/{page}",
-                         observed_at_utc=_iso(now))
-                )
-            except Exception as exc:
-                record.gates.append(Gate(f"teamstats_{page}_fetch", "fetch", False, f"unreachable: {exc}", source_url=f"https://www.nba.com/stats/teams/{page}", observed_at_utc=_iso(now)))
+        for page in ("traditional", "advanced", "opponent"):
+            gate, info = gate_official_feed(
+                f"teamstats_{page}", f"teamstats_{page}_fetch", fetch, now
+            )
+            record.fetches[f"teamstats_{page}"] = info
+            record.gates.append(gate)
 
         # ---- phase 2: freshness (uses fetched context) ----
         slate = _latest_snapshot("slate-*.json")
