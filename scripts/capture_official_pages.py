@@ -135,6 +135,38 @@ TARGETS: dict[str, dict[str, str]] = {
         "kind": "json",
         "note": "www.nba.com JSON API guess, probed to be recorded as 404 rather than assumed",
     },
+    # ---- batch 3: is the 403 on cdn.nba.com path-driven or header-driven? --
+    # Batch 2 returned 403 for the two cdn.nba.com JSON paths while the schedule
+    # PDF on the same host returned 200. A 403 is a refusal, not a missing file,
+    # so the same URL is retried with different headers to separate "this path is
+    # blocked" from "this request is blocked". Each variant keeps its own record.
+    "cdn_live_scoreboard_minimal": {
+        "url": "https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json",
+        "kind": "json",
+        "note": "same URL as cdn_live_scoreboard, browser-plain headers only",
+        "headers": {
+            "User-Agent": HEADERS["User-Agent"],
+            "Accept": "*/*",
+        },
+        "drop_default_headers": True,
+    },
+    "cdn_live_scoreboard_no_ua": {
+        "url": "https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json",
+        "kind": "json",
+        "note": "same URL, urllib default headers (no User-Agent, no Referer)",
+        "headers": {},
+        "drop_default_headers": True,
+    },
+    "cdn_schedule_pdf_minimal": {
+        "url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf",
+        "kind": "pdf",
+        "note": "control: the same PDF that returned 200, requested with minimal headers",
+        "headers": {
+            "User-Agent": HEADERS["User-Agent"],
+            "Accept": "*/*",
+        },
+        "drop_default_headers": True,
+    },
 }
 
 
@@ -185,7 +217,21 @@ def _extract_next_json(raw: bytes) -> tuple[bool, str | None]:
     return True, None
 
 
-def capture_one(key: str, spec: dict[str, str], out_dir: Path) -> dict:
+def _headers_for(spec: dict) -> dict[str, str]:
+    """The headers this target is probed with.
+
+    A target may declare ``drop_default_headers`` to start from an empty set so
+    the probe can tell a path-level refusal (403 with every header set) from a
+    request-level one (403 only with our usual browser-imitating headers).
+    """
+    if spec.get("drop_default_headers"):
+        return dict(spec.get("headers") or {})
+    headers = dict(HEADERS)
+    headers.update(spec.get("headers") or {})
+    return headers
+
+
+def capture_one(key: str, spec: dict, out_dir: Path) -> dict:
     url = spec["url"]
     record: dict = {
         "key": key,
@@ -201,8 +247,9 @@ def capture_one(key: str, spec: dict[str, str], out_dir: Path) -> dict:
         "captured_files": [],
         "shape_check": None,
         "failure": None,
+        "headers_sent": _headers_for(spec),
     }
-    request = urllib.request.Request(url, headers=HEADERS)
+    request = urllib.request.Request(url, headers=record["headers_sent"])
     try:
         with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
             raw = response.read()
