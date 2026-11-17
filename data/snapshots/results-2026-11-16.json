@@ -1,0 +1,445 @@
+{
+  "snapshot_id": "results-2026-11-16",
+  "kind": "official_finals_observation",
+  "source_document": "official NBA gamebooks (SCORE BY PERIOD) for seven games and the official game summary page (LINESCORES) for one game",
+  "source_document_header": "SCORE BY PERIOD (gamebooks) / LINESCORES and GAME INFO (game summary pages) as printed on each official document",
+  "source_url": "https://statsdmz.nba.com/pdfs/20261116/",
+  "source_index_url": "https://www.nba.com/games?date=2026-11-16",
+  "fetched_at_utc": "2026-11-17T15:55:00Z",
+  "extraction_tool": "fetch_page (PDF text extraction for the gamebooks, web page extraction for the game summary page)",
+  "row_format": [
+    "game_id",
+    "date",
+    "tip_et",
+    "arena",
+    "city",
+    "away",
+    "home",
+    "away_q",
+    "away_final",
+    "home_q",
+    "home_final",
+    "winner",
+    "loser",
+    "source_url",
+    "away_ot",
+    "home_ot"
+  ],
+  "row_format_note": "away_q/home_q hold every period score the document prints: four quarters for every game on this date, and no overtime period was played. The tip is the Eastern-time start printed by the schedule PDF and the official injury report; arena and city are the GAME INFO values printed by the gamebook or the game summary page. source_url names the document that prints this row's period scores; the game page URL is kept beside it in secondary_sources.",
+  "rows": [
+    [
+      "0022600245",
+      "2026-11-16",
+      "7:00 PM",
+      "TD Garden",
+      "Boston, MA",
+      "ORL",
+      "BOS",
+      [
+        20,
+        30,
+        25,
+        40
+      ],
+      115,
+      [
+        17,
+        24,
+        36,
+        28
+      ],
+      105,
+      "ORL",
+      "BOS",
+      "https://statsdmz.nba.com/pdfs/20261116/20261116_ORLBOS_book.pdf",
+      [],
+      []
+    ],
+    [
+      "0022600246",
+      "2026-11-16",
+      "7:00 PM",
+      "Rocket Arena",
+      "Cleveland, OH",
+      "CHI",
+      "CLE",
+      [
+        31,
+        17,
+        31,
+        36
+      ],
+      115,
+      [
+        25,
+        32,
+        31,
+        38
+      ],
+      126,
+      "CLE",
+      "CHI",
+      "https://statsdmz.nba.com/pdfs/20261116/20261116_CHICLE_book.pdf",
+      [],
+      []
+    ],
+    [
+      "0022600247",
+      "2026-11-16",
+      "7:00 PM",
+      "Capital One Arena",
+      "Washington, DC",
+      "MEM",
+      "WAS",
+      [
+        33,
+        26,
+        42,
+        35
+      ],
+      136,
+      [
+        35,
+        34,
+        18,
+        33
+      ],
+      120,
+      "MEM",
+      "WAS",
+      "https://statsdmz.nba.com/pdfs/20261116/20261116_MEMWAS_book.pdf",
+      [],
+      []
+    ],
+    [
+      "0022600248",
+      "2026-11-16",
+      "7:30 PM",
+      "Barclays Center",
+      "Brooklyn, NY",
+      "PHI",
+      "BKN",
+      [
+        33,
+        45,
+        27,
+        30
+      ],
+      135,
+      [
+        26,
+        33,
+        36,
+        28
+      ],
+      123,
+      "PHI",
+      "BKN",
+      "https://statsdmz.nba.com/pdfs/20261116/20261116_PHIBKN_book.pdf",
+      [],
+      []
+    ],
+    [
+      "0022600249",
+      "2026-11-16",
+      "7:30 PM",
+      "Kaseya Center",
+      "Miami, FL",
+      "HOU",
+      "MIA",
+      [
+        15,
+        31,
+        35,
+        29
+      ],
+      110,
+      [
+        29,
+        33,
+        39,
+        27
+      ],
+      128,
+      "MIA",
+      "HOU",
+      "https://www.nba.com/game/hou-vs-mia-0022600249",
+      [],
+      []
+    ],
+    [
+      "0022600250",
+      "2026-11-16",
+      "8:00 PM",
+      "Target Center",
+      "Minneapolis, MN",
+      "POR",
+      "MIN",
+      [
+        26,
+        25,
+        22,
+        25
+      ],
+      98,
+      [
+        26,
+        33,
+        28,
+        19
+      ],
+      106,
+      "MIN",
+      "POR",
+      "https://statsdmz.nba.com/pdfs/20261116/20261116_PORMIN_book.pdf",
+      [],
+      []
+    ],
+    [
+      "0022600251",
+      "2026-11-16",
+      "8:00 PM",
+      "Smoothie King Center",
+      "New Orleans, LA",
+      "GSW",
+      "NOP",
+      [
+        11,
+        25,
+        29,
+        29
+      ],
+      94,
+      [
+        35,
+        26,
+        32,
+        22
+      ],
+      115,
+      "NOP",
+      "GSW",
+      "https://statsdmz.nba.com/pdfs/20261116/20261116_GSWNOP_book.pdf",
+      [],
+      []
+    ],
+    [
+      "0022600252",
+      "2026-11-16",
+      "9:00 PM",
+      "Ball Arena",
+      "Denver, CO",
+      "PHX",
+      "DEN",
+      [
+        20,
+        36,
+        34,
+        27
+      ],
+      117,
+      [
+        24,
+        29,
+        29,
+        23
+      ],
+      105,
+      "PHX",
+      "DEN",
+      "https://statsdmz.nba.com/pdfs/20261116/20261116_PHXDEN_book.pdf",
+      [],
+      []
+    ]
+  ],
+  "verification": {
+    "quarter_sum_rule": "For every row the printed period scores (four quarters) were added and compared with the printed Final. 16 of 16 team lines agree, so every line is SETTLEMENT_ELIGIBLE.",
+    "quarter_sum_check": [
+      [
+        "0022600245",
+        "ORL",
+        20,
+        30,
+        25,
+        40,
+        115,
+        true
+      ],
+      [
+        "0022600245",
+        "BOS",
+        17,
+        24,
+        36,
+        28,
+        105,
+        true
+      ],
+      [
+        "0022600246",
+        "CHI",
+        31,
+        17,
+        31,
+        36,
+        115,
+        true
+      ],
+      [
+        "0022600246",
+        "CLE",
+        25,
+        32,
+        31,
+        38,
+        126,
+        true
+      ],
+      [
+        "0022600247",
+        "MEM",
+        33,
+        26,
+        42,
+        35,
+        136,
+        true
+      ],
+      [
+        "0022600247",
+        "WAS",
+        35,
+        34,
+        18,
+        33,
+        120,
+        true
+      ],
+      [
+        "0022600248",
+        "PHI",
+        33,
+        45,
+        27,
+        30,
+        135,
+        true
+      ],
+      [
+        "0022600248",
+        "BKN",
+        26,
+        33,
+        36,
+        28,
+        123,
+        true
+      ],
+      [
+        "0022600249",
+        "HOU",
+        15,
+        31,
+        35,
+        29,
+        110,
+        true
+      ],
+      [
+        "0022600249",
+        "MIA",
+        29,
+        33,
+        39,
+        27,
+        128,
+        true
+      ],
+      [
+        "0022600250",
+        "POR",
+        26,
+        25,
+        22,
+        25,
+        98,
+        true
+      ],
+      [
+        "0022600250",
+        "MIN",
+        26,
+        33,
+        28,
+        19,
+        106,
+        true
+      ],
+      [
+        "0022600251",
+        "GSW",
+        11,
+        25,
+        29,
+        29,
+        94,
+        true
+      ],
+      [
+        "0022600251",
+        "NOP",
+        35,
+        26,
+        32,
+        22,
+        115,
+        true
+      ],
+      [
+        "0022600252",
+        "PHX",
+        20,
+        36,
+        34,
+        27,
+        117,
+        true
+      ],
+      [
+        "0022600252",
+        "DEN",
+        24,
+        29,
+        29,
+        23,
+        105,
+        true
+      ]
+    ],
+    "finals_cross_check": {
+      "second_official_source": "https://www.nba.com/games?date=2026-11-16",
+      "games_whose_two_documents_agree_on_both_finals": 8,
+      "games_checked": 8,
+      "rule": "the games page prints the final of every game of the date; a game whose two official documents disagree would produce no row"
+    },
+    "irregularity": "The 11/16 Houston Rockets gamebook loses the visitor's SCORE BY PERIOD row at a PDF page break, so the Rockets' four quarter scores are taken from the official game summary page LINESCORES for the same game id; the final (110) is the same in the gamebook team totals, the games page and the summary page."
+  },
+  "extraction_notes": [
+    "One row per game of 2026-11-16, all eight games of the date.",
+    "Every printed final agrees with the official games page for the same date.",
+    "No game of this date went to overtime, so the overtime columns are empty arrays."
+  ],
+  "secondary_sources": {
+    "games_page": "https://www.nba.com/games?date=2026-11-16",
+    "game_pages": {
+      "0022600245": "https://www.nba.com/game/orl-vs-bos-0022600245",
+      "0022600246": "https://www.nba.com/game/chi-vs-cle-0022600246",
+      "0022600247": "https://www.nba.com/game/mem-vs-was-0022600247",
+      "0022600248": "https://www.nba.com/game/phi-vs-bkn-0022600248",
+      "0022600249": "https://www.nba.com/game/hou-vs-mia-0022600249",
+      "0022600250": "https://www.nba.com/game/por-vs-min-0022600250",
+      "0022600251": "https://www.nba.com/game/gsw-vs-nop-0022600251",
+      "0022600252": "https://www.nba.com/game/phx-vs-den-0022600252"
+    }
+  }
+}

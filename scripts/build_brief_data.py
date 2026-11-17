@@ -6,18 +6,18 @@ session; the provenance header of each file records the document, its own
 timestamp and the fetch time). The current pair is set in PAIR below; pass
 ``--pair OLD_PIPES NEW_PIPES`` to build an older pair:
 
-  data/snapshots/raw/injury-2026-11-16T0945am-et.pipes
-  data/snapshots/raw/injury-2026-11-16T1000am-et.pipes
-  data/snapshots/results-2026-11-15.json
-  data/snapshots/standings-2026-11-16.json
-  data/snapshots/slate-2026-11-16.json
+  data/snapshots/raw/injury-2026-11-17T1015am-et.pipes
+  data/snapshots/raw/injury-2026-11-17T1030am-et.pipes
+  data/snapshots/results-2026-11-16.json
+  data/snapshots/standings-2026-11-17.json
+  data/snapshots/slate-2026-11-17.json
 
 Outputs (derived, never hand-edited):
 
-  data/snapshots/injuries-2026-11-16-0945am.cells.json
-  data/snapshots/injuries-2026-11-16-1000am.cells.json
-  data/snapshots/injuries-2026-11-16-0945-to-1000.diff.json
-  data/snapshots/aggregates-2026-11-16.json
+  data/snapshots/injuries-2026-11-17-1015am.cells.json
+  data/snapshots/injuries-2026-11-17-1030am.cells.json
+  data/snapshots/injuries-2026-11-17-1015-to-1030.diff.json
+  data/snapshots/aggregates-2026-11-17.json
 
 Every number in the outputs is arithmetic on the cells above it. Nothing is
 estimated, filled in or inferred: a cell the document did not print stays an
@@ -230,12 +230,14 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
             )
             bad += s != final
     # --- 2. Home-court advantage, pinned to the measured home-win rate.
-    hw = hl = nw = nl = 0
+    hw = hl = nw = nl = rw = rl = 0
     for r in standings["rows"]:
         a, b = rec(r["home"])
         hw, hl = hw + a, hl + b
         a, b = rec(r["neutral"])
         nw, nl = nw + a, nl + b
+        a, b = rec(r["road"])
+        rw, rl = rw + a, rl + b
     home_games = hw + hl
     home_rate = hw / home_games if home_games else None
     pin = pin_home_advantage(standings["rows"], source_url=standings["source_url"])
@@ -248,7 +250,7 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
         key = x["status"] or ("NOT YET SUBMITTED" if x["reason"] == "NOT YET SUBMITTED" else "(not printed)")
         status_counts[key] = status_counts.get(key, 0) + 1
     return {
-        "aggregate_id": "aggregates-2026-11-16",
+        "aggregate_id": agg_id,
         "kind": "derived_from_official_snapshots",
         # check_site.audit_snapshots requires these four on every file in data/snapshots;
         # for a derived file they name the document of the largest single input and state
@@ -263,8 +265,9 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
             "injuries": injuries["source_url"],
             "slate": slate["source_url"],
         },
-        "derived_at_utc": "2026-11-16T15:40:00Z",
-        "inputs": {
+        "derived_at_utc": derived_at,
+        "inputs": input_names
+        or {
             "results": "results-2026-11-15.json",
             "standings": "standings-2026-11-16.json",
             "injuries": injuries["snapshot_id"],
@@ -303,9 +306,9 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
             "league_wins": tw,
             "league_losses": tl,
             "wins_equal_losses": tw == tl,
-            "note": "Two league games are played at a neutral site, so HOME + ROAD + NEUTRAL games must "
-            "equal the total games played: checked below.",
-            "home_plus_road_plus_neutral": None,
+            "note": f"{nw + nl} league team-game lines are printed in the NEUTRAL column, so HOME + ROAD + "
+            "NEUTRAL games must equal the total games played: checked below.",
+            "home_plus_road_plus_neutral": (hw + hl) + (rw + rl) + (nw + nl),
         },
         "injury_load": {
             "revision": injuries["revision_et_label"],
@@ -334,26 +337,26 @@ def write(path: Path, payload) -> None:
 
 # The pair of consecutive reports and the observation files the current build uses.
 PAIR = {
-    "old_pipes": "injury-2026-11-16T0900am-et.pipes",
-    "new_pipes": "injury-2026-11-16T0915am-et.pipes",
-    "old_id": "injuries-2026-11-16-0900am",
-    "new_id": "injuries-2026-11-16-0915am",
-    "diff_id": "injuries-2026-11-16-0900-to-0915.diff",
-    "file_of_record": "injuries-2026-11-16-0915am.json",
-    "results": "results-2026-11-15.json",
-    "standings": "standings-2026-11-16.json",
-    "slate": "slate-2026-11-16.json",
-    "aggregates_id": "aggregates-2026-11-16",
-    "derived_at_utc": "2026-11-16T15:10:00Z",
+    "old_pipes": "injury-2026-11-17T1015am-et.pipes",
+    "new_pipes": "injury-2026-11-17T1030am-et.pipes",
+    "old_id": "injuries-2026-11-17-1015am",
+    "new_id": "injuries-2026-11-17-1030am",
+    "diff_id": "injuries-2026-11-17-1015-to-1030.diff",
+    "file_of_record": "injuries-2026-11-17-1030am.json",
+    "results": "results-2026-11-16.json",
+    "standings": "standings-2026-11-17.json",
+    "slate": "slate-2026-11-17.json",
+    "aggregates_id": "aggregates-2026-11-17",
+    "derived_at_utc": "2026-11-17T16:25:00Z",
 }
 
 
 def main(argv: list[str]) -> int:
     check = "--check" in argv
-    old_parsed = parse_report(RAW / "injury-2026-11-16T0945am-et.pipes")
-    new_parsed = parse_report(RAW / "injury-2026-11-16T1000am-et.pipes")
-    old = build_injury_snapshot(old_parsed["rows"], old_parsed["meta"], "injuries-2026-11-16-0945am")
-    new = build_injury_snapshot(new_parsed["rows"], new_parsed["meta"], "injuries-2026-11-16-1000am")
+    old_parsed = parse_report(RAW / PAIR["old_pipes"])
+    new_parsed = parse_report(RAW / PAIR["new_pipes"])
+    old = build_injury_snapshot(old_parsed["rows"], old_parsed["meta"], PAIR["old_id"])
+    new = build_injury_snapshot(new_parsed["rows"], new_parsed["meta"], PAIR["new_id"])
     diff = asdict(
         diff_revisions(
             to_revision(old, old_parsed["meta"]),
@@ -361,7 +364,7 @@ def main(argv: list[str]) -> int:
             source_url=new["source_url"],
         )
     )
-    diff["diff_id"] = "injuries-2026-11-16-0945-to-1000.diff"
+    diff["diff_id"] = PAIR["diff_id"]
     diff["kind"] = "official_injury_report_consecutive_diff"
     diff["source_document_header"] = new["source_document_header"]
     diff["fetched_at_utc"] = new["fetched_at_utc"]
@@ -370,16 +373,29 @@ def main(argv: list[str]) -> int:
     diff["rule"] = ("A status change requires a matched row whose status cell differs. Rows are matched on the "
                     "identity cells the row itself prints (matchup, team, player); a one-for-one leftover with "
                     "identical status and reason is a printing variance, not a status change.")
-    results = json.loads((SNAP / "results-2026-11-15.json").read_text(encoding="utf-8"))
-    standings = json.loads((SNAP / "standings-2026-11-16.json").read_text(encoding="utf-8"))
-    slate = json.loads((SNAP / "slate-2026-11-16.json").read_text(encoding="utf-8"))
-    new["cross_check"] = cross_check(new, SNAP / "injuries-2026-11-16-1000am.json")
-    agg = build_aggregates(results, standings, new, slate)
+    results = json.loads((SNAP / PAIR["results"]).read_text(encoding="utf-8"))
+    standings = json.loads((SNAP / PAIR["standings"]).read_text(encoding="utf-8"))
+    slate = json.loads((SNAP / PAIR["slate"]).read_text(encoding="utf-8"))
+    new["cross_check"] = cross_check(new, SNAP / PAIR["file_of_record"])
+    agg = build_aggregates(
+        results,
+        standings,
+        new,
+        slate,
+        agg_id=PAIR["aggregates_id"],
+        derived_at=PAIR["derived_at_utc"],
+        input_names={
+            "results": PAIR["results"],
+            "standings": PAIR["standings"],
+            "injuries": new["snapshot_id"],
+            "slate": slate["snapshot_id"],
+        },
+    )
     targets = {
-        SNAP / "injuries-2026-11-16-0945am.cells.json": old,
-        SNAP / "injuries-2026-11-16-1000am.cells.json": new,
-        SNAP / "injuries-2026-11-16-0945-to-1000.diff.json": diff,
-        SNAP / "aggregates-2026-11-16.json": agg,
+        SNAP / f"{PAIR['old_id']}.cells.json": old,
+        SNAP / f"{PAIR['new_id']}.cells.json": new,
+        SNAP / f"{PAIR['diff_id']}.json": diff,
+        SNAP / f"{PAIR['aggregates_id']}.json": agg,
     }
     changed = False
     for path, payload in targets.items():
