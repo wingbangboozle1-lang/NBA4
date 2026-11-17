@@ -6,7 +6,7 @@ fetch of the pass, every check that was computed (not asserted), every correctio
 made before publication, and the flags the pass opens or extends. Post-pass state on
 this branch after the rebase onto `main`@`49e7238`: **547 unit tests OK** (47 + 48 + 43 + 32 + 57 + 135 + 38 + 10 + 44 + 27 + 6 + 60,
 twelve suites — the +44 transport suite and this file's edits are folded from or reconciled with the parallel sessions below),
-site check **PASS (16 pages, 646 HTML data rows, 1275 Markdown data rows)**.
+site check **PASS (16 pages, 647 HTML data rows, 1276 Markdown data rows)**.
 No `engine/**` file was modified (verified with `git diff 96434de --name-only | grep -c '^engine/' = 0`).
 
 Pass numbering note: two earlier sessions each published a "pass 9" (see flag AN-08),
@@ -59,7 +59,7 @@ and nothing on the site is a pick.
 | Gamebook SCORE BY PERIOD vs results-2026-11-15 | 4/4 games agree period for period (incl. the NYK@TOR double-OT line) | recorded in the gamelogs snapshot's extraction notes | [Games 11/15](https://www.nba.com/games?date=2026-11-15) |
 | Derived files re-derive byte-identically | `build_brief_data.py --check`, `build_snapshots.py --check`, `build_gamelogs.py --check` all unchanged | run twice during the pass | [Repo scripts](https://github.com/wingbangboozle1-lang/NBA4/tree/main/scripts) |
 | Unit suite | 547 tests OK (60 in the snapshot suite, incl. three tests folded from the parallel BM session and re-pointed at this extraction) | `python3 -m unittest discover -s tests -t .` | [Repo tests](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
-| Site check | PASS: 16 pages, 646 HTML data rows, 1275 Markdown data rows; engine tests green | `python3 scripts/check_site.py --with-tests` | [Repo site check](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/check_site.py) |
+| Site check | PASS: 16 pages, 647 HTML data rows, 1276 Markdown data rows; engine tests green | `python3 scripts/check_site.py --with-tests` | [Repo site check](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/check_site.py) |
 | No engine edits this cycle | 0 engine files in `git diff 96434de --name-only` | verified | [Repo engine](https://github.com/wingbangboozle1-lang/NBA4/tree/main/engine) |
 
 ## 3. Corrections made during the pass (transparently, before publication)
@@ -179,4 +179,4 @@ coherent):
   the capture workflow and captures, `docs/official-pages-transport.md`, the board rows and the
   pass-10 log all survive the rebase untouched.
 * **Counts remeasured on the merged tree** (README/index are coupled by `audit_consistency`):
-  547 tests across twelve suites; site check 16 pages / 646 HTML rows / 1275 Markdown rows.
+  547 tests across twelve suites; site check 16 pages / 647 HTML rows / 1276 Markdown rows.
