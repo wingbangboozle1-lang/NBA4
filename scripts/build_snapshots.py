@@ -29,8 +29,11 @@ SNAPSHOTS = ROOT / "data" / "snapshots"
 SCHEDULE_URL = (
     "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
 )
-REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-16_10_00AM.pdf"
-REPORT_LABEL = "2026-11-16 10:00 AM ET report"
+REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf"
+REPORT_LABEL = "2026-11-17 10:30 AM ET report"
+# Task BM (2026-11-17): the slate and injury tables are the 11/17 files; the 11/16 files stay on disk as history.
+CURRENT_SLATE = "slate-2026-11-17.json"
+CURRENT_INJURY = "injuries-2026-11-17-1030am.json"
 
 # Engine reason codes (engine/pipeline.py REASON_CODES) applied to every game.
 NO_PICK_REASONS = (
@@ -107,7 +110,7 @@ def load(name: str) -> dict:
 
 
 def render_slate() -> str:
-    data = load("slate-2026-11-16.json")
+    data = load(CURRENT_SLATE)
     # The schedule PDF text prints no "at" token on rows 215-259, so away/home order
     # is shown as "at" only when the schedule itself prints the token (rows 260+) or
     # the 10:00 AM injury report independently prints the same AWAY@HOME code for the
@@ -116,14 +119,14 @@ def render_slate() -> str:
     # appears on 11/16 and again on 11/17), which would falsely corroborate rows.
     report_codes = {
         (g.get("game_date") or g.get("game_date_from_schedule", ""), g["matchup"])
-        for g in load("injuries-2026-11-16-1000am.json")["games"]
+        for g in load(CURRENT_INJURY)["games"]
     }
     # Rotation availability per game: counts of rows whose printed status cell is
     # exactly "Out", per team, from the same dated report. Arithmetic on printed
     # cells only; NOT YET SUBMITTED rows are excluded because that is a reporting
     # state, not a status.
     availability: dict[str, str] = {}
-    for g in load("injuries-2026-11-16-1000am.json")["games"]:
+    for g in load(CURRENT_INJURY)["games"]:
         per_team: dict[str, int] = {}
         for r in g["rows"]:
             if r.get("status") == "Out" and r.get("team") and r["team"] != "__lost__":
@@ -157,11 +160,10 @@ def render_slate() -> str:
         note = game.get("tip_disagreement") or game.get("note", "")
         reason_html = "<br>".join(e(r.split(":")[0]) for r in NO_PICK_REASONS)
         reason_titles = " · ".join(e(r) for r in NO_PICK_REASONS)
-        sources = [
-            link(SCHEDULE_URL, "Schedule PDF row " + str(game["row"])),
-            link(game["games_page_url"], "Games page " + game["games_page_game_id"]),
-            link(REPORT_URL, "Availability: " + REPORT_LABEL),
-        ]
+        sources = [link(SCHEDULE_URL, "Schedule PDF row " + str(game["row"]))]
+        if game.get("games_page_url") and game.get("games_page_game_id"):
+            sources.append(link(game["games_page_url"], "Games page " + game["games_page_game_id"]))
+        sources.append(link(REPORT_URL, "Availability: " + REPORT_LABEL))
         rows.append(
             "              <tr>"
             f'<td>{e(game["weekday"])} {e(game["date"])}</td>'
@@ -206,7 +208,7 @@ def game_label(game: dict) -> str:
 
 
 def render_injuries() -> str:
-    data = load("injuries-2026-11-16-1000am.json")
+    data = load(CURRENT_INJURY)
     rows: list[str] = []
     for game in data["games"]:
         from_schedule = game["cells_source"].startswith("schedule")
@@ -224,7 +226,15 @@ def render_injuries() -> str:
                 )
                 sources.append(link(SCHEDULE_URL, f'Schedule PDF row {game["schedule_row"]}'))
             if row.get("unverified"):
-                notes.append(row.get("flag", "unverified"))
+                names = {
+                    "matchup_by_position": "matchup cell lost at a page break; attached by printed block position",
+                    "date_cell_lost": "date cell lost at a page break; date taken from the schedule row",
+                    "time_cell_lost": "time cell lost at a page break",
+                    "team_cell_lost": "team cell lost at a page break",
+                    "status_cell_lost": "status cell lost at a page break",
+                }
+                flags = row.get("flags") or []
+                notes.extend(names.get(f, f) for f in flags) if flags else notes.append(row.get("flag", "unverified"))
             if team == "__lost__":
                 team_cell = empty()
             else:
@@ -249,6 +259,22 @@ def render_injuries() -> str:
                 + f"<td>{'<br>'.join(sources)}</td>"
                 "</tr>"
             )
+    # Rows whose team and matchup cells were both lost at a page break are published
+    # unattributed, never attached to a game (task BM, 2026-11-17).
+    for row in data.get("unattributed_rows", []):
+        notes = ["Unattributed: team and matchup cells lost at a page break; not attached to any game"]
+        notes.append(row.get("reason_unattributed", ""))
+        rows.append(
+            "              <tr>"
+            "<td>Not attributed</td><td>&mdash;</td>"
+            + empty()
+            + (f"<td>{e(row['player'])}</td>" if row.get("player") else empty())
+            + (f"<td>{e(row['status'])}</td>" if row.get("status") else empty())
+            + (f"<td>{e(row['reason'])}</td>" if row.get("reason") else empty())
+            + '<td><span class="flag">Unverified</span><br>' + "<br>".join(e(n) for n in notes if n) + "</td>"
+            + f"<td>{link(REPORT_URL, REPORT_LABEL)}</td>"
+            "</tr>"
+        )
     return (
         '<div class="table-card table-wrap">\n'
         '          <table class="data-table">\n'
