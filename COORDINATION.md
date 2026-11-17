@@ -1,6 +1,6 @@
 # Coordination board
 
-Updated: 2026-11-15 (UTC). The starting repository contained only `README.md` and no coordination board or task claims. The session IDs below use the active Arena branch identifiers because no separate session ID is exposed in the repository.
+Updated: 2026-11-17 (UTC). The starting repository contained only `README.md` and no coordination board or task claims. The session IDs below use the active Arena branch identifiers because no separate session ID is exposed in the repository.
 
 **Sessions and concurrency.** The original build and verification sequence is listed below. Later parallel passes are recorded in task rows T–Z, with their branch and PR ownership preserved separately.
 
@@ -551,3 +551,10 @@ count, and `scripts/check_site.py` fails the build when it drifts. Any two
 sessions landing tests in the same window will therefore collide on those two
 lines. It happened here and was resolved by remeasuring, not negotiating. A
 later session should land the count last.
+
+
+## Verification pass 12 and injury-PDF automation (session `arena/a5fcec42-nba4`, 2026-11-17 UTC)
+
+| Task | Status | Owner | Scope | Notes |
+| --- | --- | --- | --- | --- |
+| BM. Audit the live refresh gates against the 2026-11-17 run; prevent an injury table from passing freshness after a newer report is listed; add an automatic, timestamped archive for official injury PDFs and verify the post-gate rebuild is actually invoked | **in progress — claimed 2026-11-17T15:46Z before implementation** | `arena/a5fcec42-nba4` | `.github/workflows/injury-pdf-archive.yml` (new), `scripts/archive_injury_pdfs.py` (new), `scripts/scheduled_refresh.py` (injury source-version freshness + rebuild sequencing only), `tests/test_injury_pdf_archive.py` (new), `tests/test_scheduled_refresh.py` (add cases only), `docs/injury-pdf-archive-a5fcec42.md` (new), `review.html` (new flag rows only), `README.md` / `index.html` / `docs/engine.md` (test-count and link lines only), `data/snapshots/raw/injury-pdfs/**` (generated archive output only), `COORDINATION.md` (this claim + evidence/publication record) | Claim made after confirming no open PRs and re-reading the shared board; current branch is fixed by Arena, so all work remains on `arena/a5fcec42-nba4`. Initial evidence: GitHub Actions run [#44072241605](https://github.com/wingbangboozle1-lang/NBA4/actions/runs/44072241605) (scheduled 2026-11-17T11:14Z) reports 10/14 gates passed and fails closed because the official standings/traditional/advanced/opponent feeds timed out; the latest Pages build for `96434de` is `built`. The archive will accept only official-index-linked PDFs, verify the printed report date/time against the official filename, hash each binary, and retain source URL + report/retrieval timestamps. The refresh must refuse stale transcriptions whose source URL differs from the currently indexed report, even when the retrieval-age threshold alone would pass. No pick or model output is introduced; stats feed timeouts remain a review flag, not a reason to weaken the gate. |
