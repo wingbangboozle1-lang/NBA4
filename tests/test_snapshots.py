@@ -35,7 +35,7 @@ CURRENT_INJURY_FILE = "injuries-2026-11-17-1030am.json"
 PREVIOUS_INJURY_FILE = "injuries-2026-11-15-0615am.json"
 HISTORICAL_INJURY_FILE = "injuries-2026-11-14-0430am.json"
 CURRENT_SLATE_FILE = "slate-2026-11-17.json"
-GAMELOGS = "player-gamelogs-2026-11-14_to_2026-11-15.json"
+GAMELOGS = "player-gamelogs-2026-11-14_to_2026-11-15-anchor-2026-11-17.json"
 
 VALID_STATUSES = {"Out", "Available", "Probable", "Questionable", "Doubtful"}
 
@@ -455,8 +455,11 @@ class GameLogTests(unittest.TestCase):
     observations with row-level official links, never inferred values and never
     betting inputs. Merged into this suite at the third parallel collision."""
 
-    GAMELOGS = "player-gamelogs-2026-11-14_to_2026-11-15.json"
-    INJURY_1116 = "injuries-2026-11-16-0915am.json"
+    GAMELOGS = "player-gamelogs-2026-11-14_to_2026-11-15-anchor-2026-11-17.json"
+    INJURY_ANCHOR = "injuries-2026-11-17-1030am.json"
+    # Task BI's original capture stays published as a dated historical snapshot.
+    GAMELOGS_BI = "player-gamelogs-2026-11-14_to_2026-11-15.json"
+    INJURY_BI = "injuries-2026-11-16-0915am.json"
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -472,7 +475,7 @@ class GameLogTests(unittest.TestCase):
     def test_every_report_player_is_covered_exactly_once(self) -> None:
         injury_rows = {
             (game["matchup"], row["player"])
-            for game in load(self.INJURY_1116)["games"]
+            for game in load(self.INJURY_ANCHOR)["games"]
             for row in game["rows"]
             if row["player"]
         }
@@ -497,8 +500,11 @@ class GameLogTests(unittest.TestCase):
                         self.assertIsNone(g[key], f"{p['report_name']}: no stat line may be invented")
 
     def test_gap_players_have_no_invented_games(self) -> None:
+        # 2026-11-17 cycle: every report player's team played on 11/14 or 11/15,
+        # so there are no window gaps; a gap would still be allowed to carry no
+        # invented games.
         gaps = [p for p in self.data["players"] if p.get("gap")]
-        self.assertEqual(len(gaps), 14)  # ORL + GSW + POR, idle both window days
+        self.assertEqual(len(gaps), 0)
         for p in gaps:
             self.assertEqual(p["games"], [])
 
@@ -507,6 +513,17 @@ class GameLogTests(unittest.TestCase):
         for p in self.data["players"]:
             for key in p:
                 self.assertNotIn(key, forbidden, key)
+
+    def test_bi_capture_stays_covered_as_a_historical_snapshot(self) -> None:
+        data = load(self.GAMELOGS_BI)
+        self.assertEqual(data["injury_report"]["file"], self.INJURY_BI)
+        load(self.INJURY_BI)  # the anchor file of that capture still exists
+        counts = data["counts"]
+        self.assertEqual(len(data["players"]), counts["players"])
+        rows = [g for p in data["players"] for g in p["games"]]
+        self.assertEqual(len(rows), counts["game_rows"])
+        covered = [(p["report_block"], p["report_name"]) for p in data["players"]]
+        self.assertEqual(len(covered), len(set(covered)))
 
     def test_rendered_block_is_in_sync(self) -> None:
         page = ROOT / "results.html"

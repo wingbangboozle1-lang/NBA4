@@ -1,0 +1,877 @@
+{
+ "schema": "player-gamelogs-1",
+ "snapshot_id": "player-gamelogs-2026-11-14_to_2026-11-15-anchor-2026-11-17",
+ "kind": "per-player game log capture (dated attributed observations)",
+ "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf",
+ "source_document_header": "Injury Report: 11/17/26 10:30 AM (roster anchor) + five official NBA gamebooks: 2026-11-14 DET@MIA and 2026-11-15 LAL@PHX, CHA@LAC, SAS@UTA, NYK@TOR - each game-log row cites its own gamebook in source_url/source_label",
+ "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+ "fetched_at_utc": "2026-11-17T16:40:00Z",
+ "extraction_tool": "manual verbatim transcription from gamebook PDF chunk text; verified by scripts/build_gamelogs.py (mirror check against the injury file of record)",
+ "observation_window": {
+  "from_date": "2026-11-14",
+  "to_date": "2026-11-15"
+ },
+ "generated_at_utc": "2026-11-17T16:45:00Z",
+ "purpose": "One dated, attributed observation row per player per game in the window, captured verbatim from the official gamebooks (played lines or the printed inactive/DND designation), covering every named player on the current injury file of record. These rows are evidence observations with row-level official links, NOT betting inputs: no projection, availability probability, minutes model or pick is derived from them (rights gate G0 and stances D-01/IR-T4 stand).",
+ "injury_report": {
+  "file": "injuries-2026-11-17-1030am.json",
+  "revision_label": "Injury Report: 11/17/26 10:30 AM ET",
+  "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf",
+  "players_listed": 33
+ },
+ "games_read": [
+  {
+   "date": "2026-11-14",
+   "matchup": "DET@MIA",
+   "game_id": "0022600233",
+   "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DETMIA_book.pdf",
+   "source_label": "Official NBA gamebook, DET@MIA 2026-11-14 (box score + inactive list)"
+  },
+  {
+   "date": "2026-11-15",
+   "matchup": "LAL@PHX",
+   "game_id": "0022600237",
+   "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_LALPHX_book.pdf",
+   "source_label": "Official NBA gamebook, LAL@PHX 2026-11-15 (box score + inactive list)"
+  },
+  {
+   "date": "2026-11-15",
+   "matchup": "CHA@LAC",
+   "game_id": "0022600238",
+   "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_CHALAC_book.pdf",
+   "source_label": "Official NBA gamebook, CHA@LAC 2026-11-15 (box score + inactive list)"
+  },
+  {
+   "date": "2026-11-15",
+   "matchup": "SAS@UTA",
+   "game_id": "0022600239",
+   "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_SASUTA_book.pdf",
+   "source_label": "Official NBA gamebook, SAS@UTA 2026-11-15 (box score + inactive list)"
+  },
+  {
+   "date": "2026-11-15",
+   "matchup": "NYK@TOR",
+   "game_id": "0022600241",
+   "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_NYKTOR_book.pdf",
+   "source_label": "Official NBA gamebook, NYK@TOR 2026-11-15 (box score + inactive list)"
+  }
+ ],
+ "games_read_note": "chunk 0 of each gamebook prints both teams' full-game box score and the inactive lists; every captured value comes from that chunk read on 2026-11-17. Window choice: Detroit's most recent game is 2026-11-14; the other six report teams last played on 2026-11-15; none of the 33 players' teams played on 2026-11-16 (the eight 11/16 finals carry no current-report team), so no 11/16 gamebook is needed.",
+ "counts": {
+  "players": 33,
+  "game_rows": 33,
+  "played": 5,
+  "inactive": 27,
+  "dnp": 0,
+  "dnd": 1,
+  "window_gap_players": 0,
+  "games_read": 5,
+  "players_with_a_game_in_window": 33
+ },
+ "refusals": [],
+ "extraction_notes": [
+  "report_status/report_reason/report_team are mirrored from data/snapshots/injuries-2026-11-17-1030am.json by (report_block, report_name) join at build time and were re-verified against it row for row (33/33); they are the report's printed cells, not this file's observations.",
+  "Verbatim rule: a player with a game in the window appears either with a printed stat line (MIN/PTS/REB/AST as printed strings; REB is the printed TOT column, AST the printed A column) or with the printed designation (Inactive list entry, DNP - Coach's Decision, DND - ...). No value was computed or inferred.",
+  "Every row cites its own gamebook URL in source_url; game_id values were verified on the official nba.com games pages (lal-vs-phx-0022600237, cha-vs-lac-0022600238, sas-vs-uta-0022600239, nyk-vs-tor-0022600241 read 2026-11-17) and det-vs-mia-0022600233 from results-2026-11-14.json (official game page recorded there on 2026-11-15).",
+  "Name matching between the report's 'Last, First' print and the gamebook's 'First Last' print is by exact name tokens; suffixes (Jr., II) and diacritics are kept as printed on both sides. Designation spellings that differ from the report are kept as printed in designation_printed and are never merged into the mirrored report cells: the gamebook prints 'Schröder', 'Nurkić' and 'Niederhäuser' where the report prints 'Schroder', 'Nurkic' and 'Niederhauser', and the gamebook's Nurkić entry reads 'Right 2nd Plantar Plate Tear' where the report row reads 'Right Right Foot; 2nd Plantar Plate Tear'.",
+  "The Lakers inactive-list entry for Reaves wraps across a line break in the PDF text ('... Left Heel Contusion / Bone' / 'Bruise)'); the two fragments are joined with one space to reproduce the single printed entry. No other cell is altered.",
+  "One report row (Reaves, Austin, CHA@LAL) lost its team cell at a PDF page break; it keeps a blank team in the injury snapshot and here (report_team null + report_team_flag), with the observed team attributed from the gamebook's own team header (attribution_note). This does not repair the injury row.",
+  "No availability probability, minute estimate or production impact is stored here or derived from these rows."
+ ],
+ "players": [
+  {
+   "report_name": "Bittle, Nate",
+   "report_team_cell": "Toronto Raptors",
+   "report_team": "Toronto Raptors",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Foot Avulsion Fracture",
+   "report_block": "NYK@TOR",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600241",
+     "team_printed_in_book": "TORONTO RAPTORS",
+     "opponent": "New York Knicks",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_NYKTOR_book.pdf",
+     "source_label": "Official NBA gamebook, NYK@TOR 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Raptors - Bittle (Injury/Illness - Right Foot Avulsion Fracture)"
+    }
+   ]
+  },
+  {
+   "report_name": "Leonard, Kawhi",
+   "report_team_cell": "Toronto Raptors",
+   "report_team": "Toronto Raptors",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Knee Injury Management",
+   "report_block": "NYK@TOR",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600241",
+     "team_printed_in_book": "TORONTO RAPTORS",
+     "opponent": "New York Knicks",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_NYKTOR_book.pdf",
+     "source_label": "Official NBA gamebook, NYK@TOR 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Raptors - Leonard (Injury/Illness - Left Knee Injury Management)"
+    }
+   ]
+  },
+  {
+   "report_name": "McCullar Jr., Kevin",
+   "report_team_cell": "Toronto Raptors",
+   "report_team": "Toronto Raptors",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "NYK@TOR",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600241",
+     "team_printed_in_book": "TORONTO RAPTORS",
+     "opponent": "New York Knicks",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_NYKTOR_book.pdf",
+     "source_label": "Official NBA gamebook, NYK@TOR 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Raptors - McCullar Jr. (G League - Two-Way)"
+    }
+   ]
+  },
+  {
+   "report_name": "Smith, Malachi",
+   "report_team_cell": "Toronto Raptors",
+   "report_team": "Toronto Raptors",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "NYK@TOR",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600241",
+     "team_printed_in_book": "TORONTO RAPTORS",
+     "opponent": "New York Knicks",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_NYKTOR_book.pdf",
+     "source_label": "Official NBA gamebook, NYK@TOR 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Raptors - Smith (G League - Two-Way)"
+    }
+   ]
+  },
+  {
+   "report_name": "Duren, Jalen",
+   "report_team_cell": "Detroit Pistons",
+   "report_team": "Detroit Pistons",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Hamstring Strain",
+   "report_block": "DET@SAS",
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600233",
+     "team_printed_in_book": "Detroit Pistons",
+     "opponent": "MIAMI HEAT",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DETMIA_book.pdf",
+     "source_label": "Official NBA gamebook, DET@MIA 2026-11-14 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Pistons - Duren (Injury/Illness - Right Hamstring Strain)"
+    }
+   ]
+  },
+  {
+   "report_name": "Holland II, Ronald",
+   "report_team_cell": "Detroit Pistons",
+   "report_team": "Detroit Pistons",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Knee Contusion / Bone Bruise",
+   "report_block": "DET@SAS",
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600233",
+     "team_printed_in_book": "Detroit Pistons",
+     "opponent": "MIAMI HEAT",
+     "designation": "played",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DETMIA_book.pdf",
+     "source_label": "Official NBA gamebook, DET@MIA 2026-11-14 (box score + inactive list)",
+     "min_printed": "21:33",
+     "pts_printed": "5",
+     "reb_printed": "7",
+     "ast_printed": "3",
+     "line_printed": "5 Ronald Holland II |  | 21:33 | 2-6 FG | 1-1 3P | 0-0 FT | 5 OR | 2 DR | 7 TOT | 3 A | 5 PTS"
+    }
+   ]
+  },
+  {
+   "report_name": "Joe, Isaiah",
+   "report_team_cell": "Detroit Pistons",
+   "report_team": "Detroit Pistons",
+   "report_status": "Doubtful",
+   "report_reason": "Injury/Illness - Right Hip Contusion",
+   "report_block": "DET@SAS",
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600233",
+     "team_printed_in_book": "Detroit Pistons",
+     "opponent": "MIAMI HEAT",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DETMIA_book.pdf",
+     "source_label": "Official NBA gamebook, DET@MIA 2026-11-14 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Pistons - Joe (Injury/Illness - Right Hip Contusion)"
+    }
+   ]
+  },
+  {
+   "report_name": "Okorie, Ebuka",
+   "report_team_cell": "Detroit Pistons",
+   "report_team": "Detroit Pistons",
+   "report_status": "Out",
+   "report_reason": "G League - On Assignment",
+   "report_block": "DET@SAS",
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600233",
+     "team_printed_in_book": "Detroit Pistons",
+     "opponent": "MIAMI HEAT",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DETMIA_book.pdf",
+     "source_label": "Official NBA gamebook, DET@MIA 2026-11-14 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Pistons - Okorie (G League - On Assignment)"
+    }
+   ]
+  },
+  {
+   "report_name": "Onyenso, Ugonna",
+   "report_team_cell": "Detroit Pistons",
+   "report_team": "Detroit Pistons",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "DET@SAS",
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600233",
+     "team_printed_in_book": "Detroit Pistons",
+     "opponent": "MIAMI HEAT",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DETMIA_book.pdf",
+     "source_label": "Official NBA gamebook, DET@MIA 2026-11-14 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Pistons - Onyenso (G League - Two-Way)"
+    }
+   ]
+  },
+  {
+   "report_name": "Prince, Taurean",
+   "report_team_cell": "Detroit Pistons",
+   "report_team": "Detroit Pistons",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Knee Soreness",
+   "report_block": "DET@SAS",
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600233",
+     "team_printed_in_book": "Detroit Pistons",
+     "opponent": "MIAMI HEAT",
+     "designation": "played",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DETMIA_book.pdf",
+     "source_label": "Official NBA gamebook, DET@MIA 2026-11-14 (box score + inactive list)",
+     "min_printed": "08:16",
+     "pts_printed": "2",
+     "reb_printed": "1",
+     "ast_printed": "1",
+     "line_printed": "12 Taurean Prince |  | 08:16 | 1-3 FG | 0-1 3P | 0-0 FT | 0 OR | 0 DR | 1 TOT | 1 A | 2 PTS"
+    }
+   ]
+  },
+  {
+   "report_name": "Robinson, Duncan",
+   "report_team_cell": "Detroit Pistons",
+   "report_team": "Detroit Pistons",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Quadriceps Strain",
+   "report_block": "DET@SAS",
+   "games": [
+    {
+     "date": "2026-11-14",
+     "game_id": "0022600233",
+     "team_printed_in_book": "Detroit Pistons",
+     "opponent": "MIAMI HEAT",
+     "designation": "played",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261114/20261114_DETMIA_book.pdf",
+     "source_label": "Official NBA gamebook, DET@MIA 2026-11-14 (box score + inactive list)",
+     "min_printed": "16:55",
+     "pts_printed": "10",
+     "reb_printed": "1",
+     "ast_printed": "1",
+     "line_printed": "55 Duncan Robinson | F | 16:55 | 3-8 FG | 2-6 3P | 2-2 FT | 0 OR | 1 DR | 1 TOT | 1 A | 10 PTS"
+    }
+   ]
+  },
+  {
+   "report_name": "Brown, Maliq",
+   "report_team_cell": "San Antonio Spurs",
+   "report_team": "San Antonio Spurs",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "DET@SAS",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600239",
+     "team_printed_in_book": "San Antonio Spurs",
+     "opponent": "UTAH JAZZ",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_SASUTA_book.pdf",
+     "source_label": "Official NBA gamebook, SAS@UTA 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Spurs - Brown (G League - Two-Way)"
+    }
+   ]
+  },
+  {
+   "report_name": "Gillespie, Ja'Kobi",
+   "report_team_cell": "San Antonio Spurs",
+   "report_team": "San Antonio Spurs",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "DET@SAS",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600239",
+     "team_printed_in_book": "San Antonio Spurs",
+     "opponent": "UTAH JAZZ",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_SASUTA_book.pdf",
+     "source_label": "Official NBA gamebook, SAS@UTA 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Spurs - Gillespie (G League - Two-Way)"
+    }
+   ]
+  },
+  {
+   "report_name": "Harris, Tobias",
+   "report_team_cell": "San Antonio Spurs",
+   "report_team": "San Antonio Spurs",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Calf Strain",
+   "report_block": "DET@SAS",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600239",
+     "team_printed_in_book": "San Antonio Spurs",
+     "opponent": "UTAH JAZZ",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_SASUTA_book.pdf",
+     "source_label": "Official NBA gamebook, SAS@UTA 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Spurs - Harris (Injury/Illness - Left Calf Strain)"
+    }
+   ]
+  },
+  {
+   "report_name": "Quaintance, Jayden",
+   "report_team_cell": "San Antonio Spurs",
+   "report_team": "San Antonio Spurs",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Knee Surgery",
+   "report_block": "DET@SAS",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600239",
+     "team_printed_in_book": "San Antonio Spurs",
+     "opponent": "UTAH JAZZ",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_SASUTA_book.pdf",
+     "source_label": "Official NBA gamebook, SAS@UTA 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Spurs - Quaintance (Injury/Illness - Right Knee Surgery)"
+    }
+   ]
+  },
+  {
+   "report_name": "Bufkin, Kobe",
+   "report_team_cell": "Utah Jazz",
+   "report_team": "Utah Jazz",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "UTA@LAC",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600239",
+     "team_printed_in_book": "UTAH JAZZ",
+     "opponent": "San Antonio Spurs",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_SASUTA_book.pdf",
+     "source_label": "Official NBA gamebook, SAS@UTA 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Jazz - Bufkin (G League - Two-Way)"
+    }
+   ]
+  },
+  {
+   "report_name": "Hayes, Jaxson",
+   "report_team_cell": "Utah Jazz",
+   "report_team": "Utah Jazz",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Knee Strain",
+   "report_block": "UTA@LAC",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600239",
+     "team_printed_in_book": "UTAH JAZZ",
+     "opponent": "San Antonio Spurs",
+     "designation": "dnd",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_SASUTA_book.pdf",
+     "source_label": "Official NBA gamebook, SAS@UTA 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "11 Jaxson Hayes | DND - Injury/Illness - Left Knee Strain"
+    }
+   ]
+  },
+  {
+   "report_name": "Ingram, Harrison",
+   "report_team_cell": "Utah Jazz",
+   "report_team": "Utah Jazz",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "UTA@LAC",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600239",
+     "team_printed_in_book": "UTAH JAZZ",
+     "opponent": "San Antonio Spurs",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_SASUTA_book.pdf",
+     "source_label": "Official NBA gamebook, SAS@UTA 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Jazz - Ingram (G League - Two-Way)"
+    }
+   ]
+  },
+  {
+   "report_name": "Jackson Jr., Jaren",
+   "report_team_cell": "Utah Jazz",
+   "report_team": "Utah Jazz",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right MCL Tear",
+   "report_block": "UTA@LAC",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600239",
+     "team_printed_in_book": "UTAH JAZZ",
+     "opponent": "San Antonio Spurs",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_SASUTA_book.pdf",
+     "source_label": "Official NBA gamebook, SAS@UTA 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Jazz - Jackson Jr. (Injury/Illness - Right MCL Tear)"
+    }
+   ]
+  },
+  {
+   "report_name": "Markkanen, Lauri",
+   "report_team_cell": "Utah Jazz",
+   "report_team": "Utah Jazz",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Hand Fracture",
+   "report_block": "UTA@LAC",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600239",
+     "team_printed_in_book": "UTAH JAZZ",
+     "opponent": "San Antonio Spurs",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_SASUTA_book.pdf",
+     "source_label": "Official NBA gamebook, SAS@UTA 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Jazz - Markkanen (Injury/Illness - Right Hand Fracture)"
+    }
+   ]
+  },
+  {
+   "report_name": "Nurkic, Jusuf",
+   "report_team_cell": "Utah Jazz",
+   "report_team": "Utah Jazz",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Right Foot; 2nd Plantar Plate Tear",
+   "report_block": "UTA@LAC",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600239",
+     "team_printed_in_book": "UTAH JAZZ",
+     "opponent": "San Antonio Spurs",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_SASUTA_book.pdf",
+     "source_label": "Official NBA gamebook, SAS@UTA 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Jazz - Nurkić (Injury/Illness - Right 2nd Plantar Plate Tear)"
+    }
+   ]
+  },
+  {
+   "report_name": "Beal, Bradley",
+   "report_team_cell": "LA Clippers",
+   "report_team": "LA Clippers",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Knee Injury Management",
+   "report_block": "UTA@LAC",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600238",
+     "team_printed_in_book": "LA CLIPPERS",
+     "opponent": "Charlotte Hornets",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_CHALAC_book.pdf",
+     "source_label": "Official NBA gamebook, CHA@LAC 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Clippers - Beal (Injury/Illness - Right Knee Injury Management)"
+    }
+   ]
+  },
+  {
+   "report_name": "Ingram, Brandon",
+   "report_team_cell": "LA Clippers",
+   "report_team": "LA Clippers",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Heel Surgery",
+   "report_block": "UTA@LAC",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600238",
+     "team_printed_in_book": "LA CLIPPERS",
+     "opponent": "Charlotte Hornets",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_CHALAC_book.pdf",
+     "source_label": "Official NBA gamebook, CHA@LAC 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Clippers - Ingram (Injury/Illness - Right Heel Surgery )"
+    }
+   ]
+  },
+  {
+   "report_name": "Miller, Jordan",
+   "report_team_cell": "LA Clippers",
+   "report_team": "LA Clippers",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Rotator Cuff Surgery",
+   "report_block": "UTA@LAC",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600238",
+     "team_printed_in_book": "LA CLIPPERS",
+     "opponent": "Charlotte Hornets",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_CHALAC_book.pdf",
+     "source_label": "Official NBA gamebook, CHA@LAC 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Clippers - Miller (Injury/Illness - Left Rotator Cuff Surgery )"
+    }
+   ]
+  },
+  {
+   "report_name": "Niederhauser, Yanic Konan",
+   "report_team_cell": "LA Clippers",
+   "report_team": "LA Clippers",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Lisfranc Surgery",
+   "report_block": "UTA@LAC",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600238",
+     "team_printed_in_book": "LA CLIPPERS",
+     "opponent": "Charlotte Hornets",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_CHALAC_book.pdf",
+     "source_label": "Official NBA gamebook, CHA@LAC 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Clippers - Niederhäuser (Injury/Illness - Right Lisfranc Surgery )"
+    }
+   ]
+  },
+  {
+   "report_name": "Ajayi, Michael",
+   "report_team_cell": "Charlotte Hornets",
+   "report_team": "Charlotte Hornets",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "CHA@LAL",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600238",
+     "team_printed_in_book": "Charlotte Hornets",
+     "opponent": "LA CLIPPERS",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_CHALAC_book.pdf",
+     "source_label": "Official NBA gamebook, CHA@LAC 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Hornets - Ajayi (G League - Two-Way)"
+    }
+   ]
+  },
+  {
+   "report_name": "Boswell, Kylan",
+   "report_team_cell": "Charlotte Hornets",
+   "report_team": "Charlotte Hornets",
+   "report_status": "Out",
+   "report_reason": "G League - Two-Way",
+   "report_block": "CHA@LAL",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600238",
+     "team_printed_in_book": "Charlotte Hornets",
+     "opponent": "LA CLIPPERS",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_CHALAC_book.pdf",
+     "source_label": "Official NBA gamebook, CHA@LAC 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Hornets - Boswell (G League - Two-Way)"
+    }
+   ]
+  },
+  {
+   "report_name": "Knueppel, Kon",
+   "report_team_cell": "Charlotte Hornets",
+   "report_team": "Charlotte Hornets",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Hamstring Strain",
+   "report_block": "CHA@LAL",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600238",
+     "team_printed_in_book": "Charlotte Hornets",
+     "opponent": "LA CLIPPERS",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_CHALAC_book.pdf",
+     "source_label": "Official NBA gamebook, CHA@LAC 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Hornets - Knueppel (Injury/Illness - Left Hamstring Strain)"
+    }
+   ]
+  },
+  {
+   "report_name": "Schroder, Dennis",
+   "report_team_cell": "Charlotte Hornets",
+   "report_team": "Charlotte Hornets",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Hamstring Strain",
+   "report_block": "CHA@LAL",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600238",
+     "team_printed_in_book": "Charlotte Hornets",
+     "opponent": "LA CLIPPERS",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_CHALAC_book.pdf",
+     "source_label": "Official NBA gamebook, CHA@LAC 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Hornets - Schröder (Injury/Illness - Left Hamstring Strain)"
+    }
+   ]
+  },
+  {
+   "report_name": "Steinbach, Hannes",
+   "report_team_cell": "Charlotte Hornets",
+   "report_team": "Charlotte Hornets",
+   "report_status": "Out",
+   "report_reason": "G League - On Assignment",
+   "report_block": "CHA@LAL",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600238",
+     "team_printed_in_book": "Charlotte Hornets",
+     "opponent": "LA CLIPPERS",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_CHALAC_book.pdf",
+     "source_label": "Official NBA gamebook, CHA@LAC 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Hornets - Steinbach (G League - On Assignment)"
+    }
+   ]
+  },
+  {
+   "report_name": "Grimes, Quentin",
+   "report_team_cell": "Los Angeles Lakers",
+   "report_team": "Los Angeles Lakers",
+   "report_status": "Available",
+   "report_reason": "Injury/Illness - Right Finger Splint",
+   "report_block": "CHA@LAL",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600237",
+     "team_printed_in_book": "Los Angeles Lakers",
+     "opponent": "PHOENIX SUNS",
+     "designation": "played",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_LALPHX_book.pdf",
+     "source_label": "Official NBA gamebook, LAL@PHX 2026-11-15 (box score + inactive list)",
+     "min_printed": "37:26",
+     "pts_printed": "22",
+     "reb_printed": "6",
+     "ast_printed": "1",
+     "line_printed": "5 Quentin Grimes | G | 37:26 | 7-10 FG | 5-6 3P | 3-4 FT | 2 OR | 4 DR | 6 TOT | 1 A | 22 PTS"
+    }
+   ]
+  },
+  {
+   "report_name": "Kessler, Walker",
+   "report_team_cell": "Los Angeles Lakers",
+   "report_team": "Los Angeles Lakers",
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Right Lower Leg Soreness",
+   "report_block": "CHA@LAL",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600237",
+     "team_printed_in_book": "Los Angeles Lakers",
+     "opponent": "PHOENIX SUNS",
+     "designation": "played",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_LALPHX_book.pdf",
+     "source_label": "Official NBA gamebook, LAL@PHX 2026-11-15 (box score + inactive list)",
+     "min_printed": "32:26",
+     "pts_printed": "14",
+     "reb_printed": "12",
+     "ast_printed": "3",
+     "line_printed": "14 Walker Kessler | C | 32:26 | 4-5 FG | 0-0 3P | 6-6 FT | 6 OR | 6 DR | 12 TOT | 3 A | 14 PTS"
+    }
+   ]
+  },
+  {
+   "report_name": "Reaves, Austin",
+   "report_team_cell": "__lost__",
+   "report_team": null,
+   "report_status": "Out",
+   "report_reason": "Injury/Illness - Left Heel Contusion / Bone Bruise",
+   "report_block": "CHA@LAL",
+   "games": [
+    {
+     "date": "2026-11-15",
+     "game_id": "0022600237",
+     "team_printed_in_book": "Los Angeles Lakers",
+     "opponent": "PHOENIX SUNS",
+     "designation": "inactive",
+     "source_url": "https://statsdmz.nba.com/pdfs/20261115/20261115_LALPHX_book.pdf",
+     "source_label": "Official NBA gamebook, LAL@PHX 2026-11-15 (box score + inactive list)",
+     "min_printed": null,
+     "pts_printed": null,
+     "reb_printed": null,
+     "ast_printed": null,
+     "designation_printed": "Inactive: Lakers - Reaves (Injury/Illness - Left Heel Contusion / Bone Bruise)",
+     "attribution_note": "the injury report row lost its team cell at a PDF page break and stays blank there; this game-log row's team comes from the gamebook's own team header, which prints the player on the Lakers inactive list"
+    }
+   ],
+   "report_team_flag": "team cell not printed on this row (PDF page break); no value was inferred"
+  }
+ ]
+}
