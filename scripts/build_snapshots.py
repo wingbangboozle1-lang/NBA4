@@ -108,7 +108,7 @@ def load(name: str) -> dict:
 
 def render_slate() -> str:
     data = load("slate-2026-11-17.json")
-    # The schedule PDF text prints no "at" token on rows 253-259, so away/home order
+    # The schedule PDF text prints no "at" token on rows 215-259, so away/home order
     # is shown as "at" only when the schedule itself prints the token (rows 260+) or
     # the 10:30 AM injury report independently prints the same AWAY@HOME code for the
     # same game date. Every other row shows printed order and is flagged. Matching
@@ -131,7 +131,7 @@ def render_slate() -> str:
         lost = sum(1 for r in g["rows"] if r.get("team") == "__lost__")
         parts = [f"{TEAM_ABBR.get(t, t)} {n} Out" for t, n in per_team.items()]
         if lost:
-            parts.append(f"{lost} row{'s' if lost != 1 else ''} team cell lost")
+            parts.append(f"{lost} rows team cell lost")
         availability[g["game_date"] + g["matchup"]] = "; ".join(parts) if parts else "0 rows printing Out"
     rows: list[str] = []
     for game in data["games"]:
@@ -202,7 +202,7 @@ def game_label(game: dict) -> str:
     date = game.get("game_date") or game.get("game_date_from_schedule") or ""
     tip = game.get("tip_et_from_schedule") or ""
     short = date[5:].replace("-", "/") if date else ""
-    return f"{e(short)} {e(tip)} ET"
+    return f"{e(short)} {e(tip)} ET".strip() + ("" if tip else " (no tip printed)")
 
 
 def render_injuries() -> str:
@@ -298,7 +298,7 @@ INJ_DIFF = "injuries-2026-11-17-1015-to-1030.diff.json"
 RESULTS_1116 = "results-2026-11-16.json"
 STANDINGS_1117 = "standings-2026-11-17.json"
 AGGREGATES_1117 = "aggregates-2026-11-17.json"
-TEAM_STATS_1116 = "team-stats-2026-11-16.json"
+TEAM_STATS_1117 = "team-stats-2026-11-17.json"
 
 
 def _row(cells: list[str]) -> str:
@@ -352,13 +352,19 @@ def render_results() -> str:
     data = load(RESULTS_1116)
     rows: list[str] = []
     for row in data["rows"]:
-        (gid, date, tip, arena, city, away, home, aq, af, hq, hf, winner, loser, url) = row
-        for team, quarters, final in ((away, aq, af), (home, hq, hf)):
+        (gid, date, tip, arena, city, away, home, aq, af, hq, hf, winner, loser, url) = row[:14]
+        # rows carry the four quarter scores; overtime periods sit in quarters[4:]
+        # (2026-11-15 schema) or in the trailing away_ot/home_ot arrays
+        # (2026-11-16 schema). Both are printed periods; neither is reconstructed.
+        aot = row[14] if len(row) > 14 else []
+        hot = row[15] if len(row) > 15 else []
+        for team, quarters, final, ot_periods in ((away, aq, af, aot), (home, hq, hf, hot)):
             total = sum(quarters)
             ok = total == final
             # quarters holds every printed period (four quarters, plus OT when printed);
             # the single OT column shows the overtime period(s) or stays empty.
-            ot = " / ".join(str(q) for q in quarters[4:]) if len(quarters) > 4 else ""
+            ot_vals = quarters[4:] if len(quarters) > 4 else ot_periods
+            ot = " / ".join(str(q) for q in ot_vals)
             cells = [
                 f'<td>{e(gid)}</td>',
                 f'<td>{e(date)} {e(tip)} ET</td>',
@@ -628,7 +634,6 @@ def render_availability_summary() -> str:
         and row["reason"] != "NOT YET SUBMITTED"
         and "team has not submitted" not in row.get("flag", "")
     ]
-    context_blocks = [g for g in hand["games"] if g["cells_source"] == "report-context"]
     disagreeing = [
         g["matchup"] for g in hand["games"] if g.get("tip_disagreement")
     ]
@@ -662,12 +667,9 @@ def render_availability_summary() -> str:
             "official report PDF",
         ),
         (
-            "Page-break cell handling (this report)",
-            f"{len(column_loss)} reason cell joined verbatim across the page 2/3 break "
-            "(Kessler, Walker: page-2 fragment joined, flagged, Sorber precedent); "
-            f"{len(context_blocks)} game blocks print no date column on pages 2/4 "
-            "(date from block context with cells_source report-context); "
-            "no cell is repaired or inferred",
+            "Cells lost at page breaks (columns other than team)",
+            f"{len(column_loss)} rows lost date/time/matchup or status/reason cells at page breaks: the "
+            "printed cells are kept, the lost cells stay blank, never repaired",
             hand["source_url"],
             "official report PDF",
         ),
@@ -677,12 +679,14 @@ def render_availability_summary() -> str:
             f'{counts["printing_variances"]} name-cell variance between '
             f'{diff["old"]["revision_label"]} and {diff["new"]["revision_label"]}',
             diff["source_url"],
-            "10:15 AM revision PDF",
+            "09:45 AM revision PDF",
         ),
         (
             "Tip-clock disagreements inside this report",
-            (", ".join(disagreeing) + " — every printed value kept on the slate row; no tip is "
-             "overwritten (extends flags AN-02 / P9-04)") if disagreeing else "none",
+            (", ".join(disagreeing) + " — the printed values disagree between the live official sources "
+             "and the August schedule PDF; both values are published, neither is overwritten")
+            if disagreeing
+            else "none",
             SCHEDULE_URL,
             "schedule PDF",
         ),
@@ -712,7 +716,7 @@ def render_availability_summary() -> str:
     )
     return head + "\n".join(out) + "\n</tbody></table></div>"
 def render_team_stats() -> str:
-    data = load(TEAM_STATS_1116)
+    data = load(TEAM_STATS_1117)
     adv = {r["team"]: r for r in data["advanced_rows"]}
     opp = {r["team"]: r for r in data["opponent_rows"]}
     src = data["sources"]

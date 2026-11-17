@@ -3,20 +3,20 @@
   "kind": "derived_from_official_snapshots",
   "source_url": "https://www.nba.com/standings",
   "source_document_header": "NBA 2026-27 Regular Season Standings (as printed on the standings page)",
-  "fetched_at_utc": "2026-11-17T16:03:00Z",
+  "fetched_at_utc": "2026-11-17T15:50:00Z",
   "extraction_tool": "scripts/build_brief_data.py (derived; performs no fetching)",
   "derived_from": {
-    "results": "https://www.nba.com/games?date=2026-11-16",
+    "results": "https://statsdmz.nba.com/pdfs/20261116/",
     "standings": "https://www.nba.com/standings",
     "injuries": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf",
     "slate": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
   },
-  "derived_at_utc": "2026-11-17T16:10:00Z",
+  "derived_at_utc": "2026-11-17T16:25:00Z",
   "inputs": {
     "results": "results-2026-11-16.json",
     "standings": "standings-2026-11-17.json",
-    "injuries": "injuries-2026-11-17-1030am.json",
-    "slate": "slate-2026-11-17.json"
+    "injuries": "injuries-2026-11-17-1030am",
+    "slate": "slate-2026-11-17"
   },
   "result_feed": {
     "games": 8,
@@ -266,7 +266,7 @@
         "agrees": true
       }
     ],
-    "source_url": "https://www.nba.com/games",
+    "source_url": "https://www.nba.com/games?date=2026-11-16",
     "note": "The feed is SETTLED only when every team line's printed period scores (four quarters, plus any overtime periods the game printed) add to the printed final. 2026-11-16 passes 16 of 16, so the day is eligible; the ledger stamps the settlement check at the fetch time of this file."
   },
   "home_court": {
@@ -296,30 +296,31 @@
     "league_wins": 205,
     "league_losses": 205,
     "wins_equal_losses": true,
-    "note": "Two league games are played at a neutral site, so HOME + ROAD + NEUTRAL games must equal the total games played: checked below.",
-    "home_plus_road_plus_neutral": null
+    "note": "2 league team-game lines are printed in the NEUTRAL column, so HOME + ROAD + NEUTRAL games must equal the total games played: checked below.",
+    "home_plus_road_plus_neutral": 410
   },
   "injury_load": {
     "revision": "11/17/26 10:30 AM",
     "revision_document": "Injury Report: 11/17/26 10:30 AM",
     "revision_utc": "2026-11-17T15:30:00Z",
-    "retrieved_utc": "2026-11-17T15:53:00Z",
-    "rows": 59,
+    "retrieved_utc": "2026-11-17T15:49:00Z",
+    "rows": 60,
     "rows_with_a_status": 33,
     "not_yet_submitted_rows": 26,
-    "unverified_rows_after_page_breaks": 1,
+    "unverified_rows_after_page_breaks": 2,
     "status_counts": {
       "Out": 31,
       "Doubtful": 1,
       "NOT YET SUBMITTED": 26,
+      "(not printed)": 1,
       "Available": 1
     },
     "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf"
   },
   "slate": {
     "games": 21,
-    "window_start_utc": "2026-11-17T16:00:00Z",
-    "window_end_utc": "2026-11-20T16:00:00Z",
+    "window_start_utc": "2026-11-17T15:45:00Z",
+    "window_end_utc": "2026-11-20T15:45:00Z",
     "source_url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
   }
 }

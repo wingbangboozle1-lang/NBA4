@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Build the per-player game-log block on results.html from the dated snapshot.
 
-Task BI (arena/dab321e7-nba4), refreshed by task BM (arena/0fec89b5-nba4) for the
-2026-11-17 report cycle. The snapshot file is a hand-captured, verified
+Task BI (arena/dab321e7-nba4); refreshed for the 2026-11-17 cycle (task BM, arena/5cca4190-nba4). The snapshot file is a hand-captured, verified
 transcription of the official gamebooks (see its extraction_notes); this script
 only re-derives the published table from that file and refuses to render if any
-mirrored injury-report cell disagrees with data/snapshots/injuries-2026-11-17-1030am.json.
+mirrored injury-report cell disagrees with data/snapshots/injuries-2026-11-16-0915am.json.
 
 Usage:
     python3 scripts/build_gamelogs.py          # splice the block into results.html
@@ -24,7 +23,7 @@ import build_snapshots  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SNAPSHOTS = ROOT / "data" / "snapshots"
-GAMELOGS = "player-gamelogs-2026-11-14_to_2026-11-15-anchor-2026-11-17.json"
+GAMELOGS = "player-gamelogs-2026-11-15_to_2026-11-16.json"
 INJURY_FILE = "injuries-2026-11-17-1030am.json"
 
 REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf"

@@ -4,16 +4,16 @@ revision_et_label: 11/17/26 10:30 AM
 document_header: "Injury Report: 11/17/26 10:30 AM"
 source_url: https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf
 source_index_url: https://official.nba.com/nba-injury-report-2026-27-season/
-fetched_at_utc: 2026-11-17T15:53:00Z
+fetched_at_utc: 2026-11-17T15:49:00Z
 extraction_tool: fetch_page (PDF text extraction to markdown tables, single chunk)
 fields: game_date|game_time_et|matchup|team|player|status|reason
-# Strictly verbatim: a cell the extracted document does not print is recorded blank.
-# Continuation rows that lose cells at page breaks stay blank here; the JSON snapshot
-# attaches them to game blocks by document order with explicit flags. Nothing is filled in.
-# Page 2 and page 4 of the extraction carry no Game Date column: those rows record a blank
-# game_date. The Kessler, Walker reason cell is joined verbatim across the page 2/3 break
-# ("Injury/Illness - Right Lower Leg " + "Soreness") per the Sorber precedent; the joined
-# row is flagged in the JSON snapshot and no fragment row is invented.
+# Cells the PDF prints only on the first line of a block are recorded blank on continuation rows.
+# No cell below is filled in, corrected or inferred; blank means the extracted document prints nothing there.
+# Page-break column loss, recorded as extracted: the Minnesota Timberwolves row prints no date/time/matchup;
+# the 'Soreness' fragment prints only that word; the Austin Reaves row prints no date/time/matchup/team;
+# the eight rows of the last block (GSW@DAL, BOS@DEN, PHX@SAC, UTA@LAL) print five cells each, so the
+# marker 'NOT YET SUBMITTED' is recorded in the reason cell and the player/status cells stay blank.
+# The published file flags every one of these rows; nothing here is repaired.
 11/17/2026|07:30 (ET)|NYK@TOR|Toronto Raptors|Bittle, Nate|Out|Injury/Illness - Right Foot Avulsion Fracture
 11/17/2026|07:30 (ET)|NYK@TOR|Toronto Raptors|Leonard, Kawhi|Out|Injury/Illness - Left Knee Injury Management
 11/17/2026|07:30 (ET)|NYK@TOR|Toronto Raptors|McCullar Jr., Kevin|Out|G League - Two-Way
@@ -47,7 +47,8 @@ fields: game_date|game_time_et|matchup|team|player|status|reason
 |11:00 (ET)|CHA@LAL|Charlotte Hornets|Schroder, Dennis|Out|Injury/Illness - Left Hamstring Strain
 |11:00 (ET)|CHA@LAL|Charlotte Hornets|Steinbach, Hannes|Out|G League - On Assignment
 |11:00 (ET)|CHA@LAL|Los Angeles Lakers|Grimes, Quentin|Available|Injury/Illness - Right Finger Splint
-|11:00 (ET)|CHA@LAL|Los Angeles Lakers|Kessler, Walker|Out|Injury/Illness - Right Lower Leg Soreness
+|11:00 (ET)|CHA@LAL|Los Angeles Lakers|Kessler, Walker|Out|Injury/Illness - Right Lower Leg
+||||Soreness||
 ||||Reaves, Austin|Out|Injury/Illness - Left Heel Contusion / Bone Bruise
 11/18/2026|07:00 (ET)|HOU@IND|Houston Rockets|||NOT YET SUBMITTED
 11/18/2026|07:00 (ET)|HOU@IND|Indiana Pacers|||NOT YET SUBMITTED

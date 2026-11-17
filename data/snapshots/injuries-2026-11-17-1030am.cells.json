@@ -7,9 +7,9 @@
   "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
   "revision_et_label": "11/17/26 10:30 AM",
   "revision_utc": "2026-11-17T15:30:00Z",
-  "fetched_at_utc": "2026-11-17T15:53:00Z",
+  "fetched_at_utc": "2026-11-17T15:49:00Z",
   "extraction_tool": "fetch_page (PDF text extraction to markdown tables, single chunk)",
-  "row_count": 59,
+  "row_count": 60,
   "extraction_notes": [
     "Verbatim extraction of the report named in source_url. Blank cells are blank because the extracted document prints nothing there at a page break; they are never filled in.",
     "Rows whose matchup and team cells are both blank carry unverified=true: the row's team is readable only from the block it continues, which this file does not assert.",
@@ -198,6 +198,15 @@
         {
           "team": "",
           "team_printed": false,
+          "player": "Soreness",
+          "status": "",
+          "reason": "",
+          "unverified": true,
+          "flag": "matchup/team cells not printed on this row (PDF page break); no value was inferred"
+        },
+        {
+          "team": "",
+          "team_printed": false,
           "player": "Reaves, Austin",
           "status": "Out",
           "reason": "Injury/Illness - Left Heel Contusion / Bone Bruise",
@@ -367,7 +376,7 @@
           "team_printed": true,
           "player": "Kessler, Walker",
           "status": "Out",
-          "reason": "Injury/Illness - Right Lower Leg Soreness",
+          "reason": "Injury/Illness - Right Lower Leg",
           "unverified": false,
           "flag": ""
         }
@@ -676,10 +685,10 @@
   ],
   "cross_check": {
     "counterpart_file": "injuries-2026-11-17-1030am.json",
-    "counterpart_source_document": "NBA Official Injury Report",
-    "rows_in_this_extraction": 59,
-    "rows_in_the_counterpart": 59,
-    "rows_matching_row_for_row": 59,
+    "counterpart_source_document": "Injury Report: 11/17/26 10:30 AM",
+    "rows_in_this_extraction": 60,
+    "rows_in_the_counterpart": 60,
+    "rows_matching_row_for_row": 60,
     "only_in_this_extraction": [],
     "only_in_the_counterpart": [],
     "rule": "a one-sided row is reported, never deleted from either file; the document is re-read and whichever extraction the document contradicts is corrected"

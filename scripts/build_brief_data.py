@@ -230,12 +230,14 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
             )
             bad += s != final
     # --- 2. Home-court advantage, pinned to the measured home-win rate.
-    hw = hl = nw = nl = 0
+    hw = hl = nw = nl = rw = rl = 0
     for r in standings["rows"]:
         a, b = rec(r["home"])
         hw, hl = hw + a, hl + b
         a, b = rec(r["neutral"])
         nw, nl = nw + a, nl + b
+        a, b = rec(r["road"])
+        rw, rl = rw + a, rl + b
     home_games = hw + hl
     home_rate = hw / home_games if home_games else None
     pin = pin_home_advantage(standings["rows"], source_url=standings["source_url"])
@@ -247,7 +249,6 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
     for x in rows:
         key = x["status"] or ("NOT YET SUBMITTED" if x["reason"] == "NOT YET SUBMITTED" else "(not printed)")
         status_counts[key] = status_counts.get(key, 0) + 1
-    names = input_names or {}
     return {
         "aggregate_id": agg_id,
         "kind": "derived_from_official_snapshots",
@@ -265,11 +266,12 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
             "slate": slate["source_url"],
         },
         "derived_at_utc": derived_at,
-        "inputs": {
-            "results": names.get("results", "results-2026-11-15.json"),
-            "standings": names.get("standings", "standings-2026-11-16.json"),
-            "injuries": names.get("injuries", injuries["snapshot_id"]),
-            "slate": names.get("slate", slate["snapshot_id"]),
+        "inputs": input_names
+        or {
+            "results": "results-2026-11-15.json",
+            "standings": "standings-2026-11-16.json",
+            "injuries": injuries["snapshot_id"],
+            "slate": slate["snapshot_id"],
         },
         "result_feed": {
             "games": len(results["rows"]),
@@ -304,9 +306,9 @@ def build_aggregates(results: dict, standings: dict, injuries: dict, slate: dict
             "league_wins": tw,
             "league_losses": tl,
             "wins_equal_losses": tw == tl,
-            "note": "Two league games are played at a neutral site, so HOME + ROAD + NEUTRAL games must "
-            "equal the total games played: checked below.",
-            "home_plus_road_plus_neutral": None,
+            "note": f"{nw + nl} league team-game lines are printed in the NEUTRAL column, so HOME + ROAD + "
+            "NEUTRAL games must equal the total games played: checked below.",
+            "home_plus_road_plus_neutral": (hw + hl) + (rw + rl) + (nw + nl),
         },
         "injury_load": {
             "revision": injuries["revision_et_label"],
@@ -345,7 +347,7 @@ PAIR = {
     "standings": "standings-2026-11-17.json",
     "slate": "slate-2026-11-17.json",
     "aggregates_id": "aggregates-2026-11-17",
-    "derived_at_utc": "2026-11-17T16:10:00Z",
+    "derived_at_utc": "2026-11-17T16:25:00Z",
 }
 
 
@@ -376,14 +378,17 @@ def main(argv: list[str]) -> int:
     slate = json.loads((SNAP / PAIR["slate"]).read_text(encoding="utf-8"))
     new["cross_check"] = cross_check(new, SNAP / PAIR["file_of_record"])
     agg = build_aggregates(
-        results, standings, new, slate,
+        results,
+        standings,
+        new,
+        slate,
         agg_id=PAIR["aggregates_id"],
         derived_at=PAIR["derived_at_utc"],
         input_names={
             "results": PAIR["results"],
             "standings": PAIR["standings"],
-            "injuries": PAIR["file_of_record"],
-            "slate": PAIR["slate"],
+            "injuries": new["snapshot_id"],
+            "slate": slate["snapshot_id"],
         },
     )
     targets = {

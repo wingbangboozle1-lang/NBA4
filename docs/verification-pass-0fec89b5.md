@@ -64,7 +64,31 @@
 production impact was written anywhere in this cycle (G0 / D-01 / IR-T4). Every published table
 row carries its official source link or is blank and flagged; nothing inferred.
 
-## 5. Integration record (BN)
+## 5. Integration record (BQ)
 
-Filled in after the PR is opened, merged and Pages-confirmed — see `COORDINATION.md` rows BM/BN
+Filled in after the PR is opened, merged and Pages-confirmed — see `COORDINATION.md` rows BP/BQ
 for the PR link, merge result and Pages build.
+
+## 6. Merge reconciliation (2026-11-17, before the integration PR)
+
+`origin/main` advanced during this session's work (PRs #75, #77, #78, #79 from
+`arena/5cca4190-nba4`, `arena/af666c53-nba4` and `arena/3648982b-nba4`), so `origin/main` was
+**merged into this branch** (not rebased — the content conflicts were per-file, and merging kept
+every side's rows) and the following decisions were made, recorded in full in the collision
+record in `COORDINATION.md`:
+
+| Item | Decision |
+| --- | --- |
+| Shared snapshots (`slate-2026-11-17`, `standings-2026-11-17`, `rest-window-2026-11-17`, `results-2026-11-16`, `aggregates-2026-11-17`, the 10:15/10:30 injury pair, `.cells`/`.pipes`/diff, newest pointer) | **main's versions win** — they belong to the merged injury chain whose file of record is now the [11:15 AM ET revision](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_11_15AM.pdf) (task BX) |
+| The 59-vs-60 row difference on the same 10:30 AM PDF | Recorded, not merged: this session joined the Kessler page-break reason fragments into one flagged row (59); main keeps the fragment as a separate lost row (60, phantom `Soreness` row flagged `__lost__`). Main's reading stands on the site; both readings are in the collision record. The 10:15→10:30 diff on main is therefore 60/60, 0/0/0 (this session's §1/§2 tables above describe its own 59-row branch state before the merge). Source: [10:30 AM PDF](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf) |
+| `injuries-2026-11-17-1015am.json` (this session's file-of-record JSON) | Not carried: main's chain stores that revision as `.cells` + diff only, and a second JSON with a different row count would contradict it. Source: [10:15 AM PDF](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_15AM.pdf) |
+| `tests/test_snapshots.py`, `scripts/build_*.py`, `README.md`, `index.html`, `injuries.html`, `slate.html`, `results.html`, `availability.html` | **main's versions win** (547-test suite, 11:15 chain constants, 547 count lines, banner state). This session's test edits and banner rewrites are not carried. Source: [repository on main](https://github.com/wingbangboozle1-lang/NBA4/tree/main) |
+| Carried from this session | `docs/verification-pass-0fec89b5.md` (this file), flag **BZ-01** in the new `pass12b-title` section of `review.html`, `player-gamelogs-2026-11-14_to_2026-11-15-anchor-2026-11-17.json` (adds the DET@MIA coverage main's 11/15-only window file lacks), the snapshot-registry rows in `data/snapshots/README.md`, `scripts/_gen_0fec89b5.py` and `scripts/_gen_gamelogs_0fec89b5.py`. Source: [review.html pass 12b](https://github.com/wingbangboozle1-lang/NBA4/blob/main/review.html) |
+| Letters | BM/BN were claimed by `arena/5cca4190-nba4` five minutes earlier; this session's rows are re-lettered **BP/BQ** on the board (collision record answers request R-3). Source: [COORDINATION.md](https://github.com/wingbangboozle1-lang/NBA4/blob/main/COORDINATION.md) |
+
+Post-merge verification on the merged tree (2026-11-17 17:18 UTC): `python3 -m unittest discover
+-s tests -t .` → **547 OK**; `check_site.py --with-tests` → **PASS (16 pages, 652 HTML rows,
+1304 Markdown rows)**; `build_snapshots.py --check`, `build_brief_data.py --check` and
+`build_gamelogs.py --check` → all unchanged; `scheduled_refresh.py --mode offline` → **3/3 PASS**
+(`rebuild_allowed=False` by design, provenance chain 53 files); `engine.cli status` →
+`NO AUTHORIZED INPUTS`.
