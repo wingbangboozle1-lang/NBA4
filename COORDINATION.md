@@ -551,3 +551,26 @@ count, and `scripts/check_site.py` fails the build when it drifts. Any two
 sessions landing tests in the same window will therefore collide on those two
 lines. It happened here and was resolved by remeasuring, not negotiating. A
 later session should land the count last.
+
+## Session `arena/aef0e3d8-nba4` — claim (2026-11-17T15:42Z, tasks BM–BT)
+
+**Branch.** `arena/aef0e3d8-nba4`, branched from `96434de` (the PR #69 merge). One branch per this session's rules; the board's `session-<id>/<task>` convention is noted and not followed, for the same reason recorded at V4-09.
+
+**Letters.** The board records A–BL as taken. This session checked `grep -c` for BM…BZ in this file before writing and found **0** occurrences of each, so BM–BT are claimed fresh rather than re-lettered. If another session claims the same letters between this write and the merge, the conflict is recorded here and the later row is re-lettered — nothing is discarded.
+
+**Standing constraints this session does not override.** The G0 rights gate (NBA Terms §9), the D-01/IR-T4 owner decision on publishing NBA-derived model output, and the refusal-by-default rule in every engine module all remain in force. This session publishes **official-source observations and derived arithmetic on official observations only**; it originates no line, price, probability or pick, and it does not relax a single gate to make a page look fuller.
+
+| Task | Status | Owner | Files in scope |
+| --- | --- | --- | --- |
+| BM. Eleventh daily refresh cycle (2026-11-17): official schedule window, newest injury-report pair, consecutive-revision diff, standings, and official results for any game day that closed | in progress (claimed 2026-11-17T15:42Z) | `arena/aef0e3d8-nba4` | `data/snapshots/**` (new dated files only; no existing file rewritten in place), `scripts/build_snapshots.py` (report URL/label constants + snapshot file names), `slate.html`, `injuries.html`, `results.html`, `tests/test_snapshots.py` |
+| BN. Requirements-coverage audit against the 2026-11-17 brief, performed line by line against the working tree rather than against the board's prior claims | in progress (claimed 2026-11-17T15:42Z) | `arena/aef0e3d8-nba4` | `docs/requirements-audit-aef0e3d8.md` (new file only) |
+| BO. Decision-readiness register: the questions that must be answered, the information that already exists, the information that is missing, and the discovery steps for each gap | in progress (claimed 2026-11-17T15:42Z) | `arena/aef0e3d8-nba4` | `docs/decision-readiness-aef0e3d8.md` (new file only), `questions.html` (new section only) |
+| BP. Executive summary refresh and suggestion queue with a review-and-choose surface | in progress (claimed 2026-11-17T15:42Z) | `arena/aef0e3d8-nba4` | `index.html` (executive-summary section), `suggestions.html` (new section only) |
+| BQ. Flagged-for-Review page: this session's irregularities with source links | in progress (claimed 2026-11-17T15:42Z) | `arena/aef0e3d8-nba4` | `review.html` (new section only) |
+| BR. Independent verification pass 12 (quote-check of every source re-read this session, plus line-by-line engine spot-check) | in progress (claimed 2026-11-17T15:42Z) | `arena/aef0e3d8-nba4` | `docs/verification-pass-aef0e3d8.md` (new file only) |
+| BS. Final integration: re-verify the combined tree, `check_site.py --with-tests`, full suite, `build_snapshots.py --check`, PR to `main`, merge without waiting, Pages confirmation | unclaimed until BN–BR land | `arena/aef0e3d8-nba4` | `COORDINATION.md`, `README.md` (counts/publication record) |
+| BT. Record the PR and Pages result on this board | blocked on BS | `arena/aef0e3d8-nba4` | `COORDINATION.md` |
+
+**Overlap avoidance.** `data/snapshots/**`, `slate.html`, `injuries.html`, `results.html`, `tests/test_snapshots.py` and `scripts/build_snapshots.py` are the same files earlier refresh sessions claimed; no session has a live claim on `main` newer than this branch point (the newest board row is `arena/835f1cbe-nba4` BL, merged as PR #68, and it edits `COORDINATION.md`, `review.html` and its own doc only). This session therefore takes the daily-refresh scope **fresh for 2026-11-17** and does not touch BL's files beyond adding a new section.
+
+**Test-count hotspot.** `README.md` and `index.html` both state the unit-test count and `scripts/check_site.py` fails the build when it drifts. Per the BI integration note, the count is landed **last**, remeasured on the rebased tree rather than carried across a rebase.
