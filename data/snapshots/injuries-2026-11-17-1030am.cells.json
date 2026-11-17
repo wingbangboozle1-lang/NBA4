@@ -1,0 +1,696 @@
+{
+  "snapshot_id": "injuries-2026-11-17-1030am",
+  "kind": "official_injury_report_rows",
+  "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf",
+  "source_document": "Injury Report: 11/17/26 10:30 AM",
+  "source_document_header": "Injury Report: 11/17/26 10:30 AM",
+  "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+  "revision_et_label": "11/17/26 10:30 AM",
+  "revision_utc": "2026-11-17T15:30:00Z",
+  "fetched_at_utc": "2026-11-17T15:49:00Z",
+  "extraction_tool": "fetch_page (PDF text extraction to markdown tables, single chunk)",
+  "row_count": 60,
+  "extraction_notes": [
+    "Verbatim extraction of the report named in source_url. Blank cells are blank because the extracted document prints nothing there at a page break; they are never filled in.",
+    "Rows whose matchup and team cells are both blank carry unverified=true: the row's team is readable only from the block it continues, which this file does not assert.",
+    "The report's own header line (revision_et_label) is the revision timestamp; fetched_at_utc is when we read it. Both are published in the Injuries page banner."
+  ],
+  "games": [
+    {
+      "game_date": "11/17/2026",
+      "tip_et": "07:30 (ET)",
+      "matchup": "NYK@TOR",
+      "rows": [
+        {
+          "team": "Toronto Raptors",
+          "team_printed": true,
+          "player": "Bittle, Nate",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Foot Avulsion Fracture",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Toronto Raptors",
+          "team_printed": true,
+          "player": "Leonard, Kawhi",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Knee Injury Management",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Toronto Raptors",
+          "team_printed": true,
+          "player": "McCullar Jr., Kevin",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Toronto Raptors",
+          "team_printed": true,
+          "player": "Smith, Malachi",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "11/17/2026",
+      "tip_et": "08:00 (ET)",
+      "matchup": "DET@SAS",
+      "rows": [
+        {
+          "team": "Detroit Pistons",
+          "team_printed": true,
+          "player": "Duren, Jalen",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Hamstring Strain",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Detroit Pistons",
+          "team_printed": true,
+          "player": "Holland II, Ronald",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Knee Contusion / Bone Bruise",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Detroit Pistons",
+          "team_printed": true,
+          "player": "Joe, Isaiah",
+          "status": "Doubtful",
+          "reason": "Injury/Illness - Right Hip Contusion",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Detroit Pistons",
+          "team_printed": true,
+          "player": "Okorie, Ebuka",
+          "status": "Out",
+          "reason": "G League - On Assignment",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Detroit Pistons",
+          "team_printed": true,
+          "player": "Onyenso, Ugonna",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Detroit Pistons",
+          "team_printed": true,
+          "player": "Prince, Taurean",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Knee Soreness",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Detroit Pistons",
+          "team_printed": true,
+          "player": "Robinson, Duncan",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Quadriceps Strain",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "San Antonio Spurs",
+          "team_printed": true,
+          "player": "Brown, Maliq",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "San Antonio Spurs",
+          "team_printed": true,
+          "player": "Gillespie, Ja'Kobi",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "San Antonio Spurs",
+          "team_printed": true,
+          "player": "Harris, Tobias",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Calf Strain",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "San Antonio Spurs",
+          "team_printed": true,
+          "player": "Quaintance, Jayden",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Knee Surgery",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "11/17/2026",
+      "tip_et": "08:00 (ET)",
+      "matchup": "POR@MIN",
+      "rows": [
+        {
+          "team": "Portland Trail Blazers",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "",
+      "tip_et": "",
+      "matchup": "",
+      "rows": [
+        {
+          "team": "Minnesota Timberwolves",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "",
+          "team_printed": false,
+          "player": "Soreness",
+          "status": "",
+          "reason": "",
+          "unverified": true,
+          "flag": "matchup/team cells not printed on this row (PDF page break); no value was inferred"
+        },
+        {
+          "team": "",
+          "team_printed": false,
+          "player": "Reaves, Austin",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Heel Contusion / Bone Bruise",
+          "unverified": true,
+          "flag": "matchup/team cells not printed on this row (PDF page break); no value was inferred"
+        }
+      ]
+    },
+    {
+      "game_date": "",
+      "tip_et": "10:30 (ET)",
+      "matchup": "UTA@LAC",
+      "rows": [
+        {
+          "team": "Utah Jazz",
+          "team_printed": true,
+          "player": "Bufkin, Kobe",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Utah Jazz",
+          "team_printed": true,
+          "player": "Hayes, Jaxson",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Knee Strain",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Utah Jazz",
+          "team_printed": true,
+          "player": "Ingram, Harrison",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Utah Jazz",
+          "team_printed": true,
+          "player": "Jackson Jr., Jaren",
+          "status": "Out",
+          "reason": "Injury/Illness - Right MCL Tear",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Utah Jazz",
+          "team_printed": true,
+          "player": "Markkanen, Lauri",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Hand Fracture",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Utah Jazz",
+          "team_printed": true,
+          "player": "Nurkic, Jusuf",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Right Foot; 2nd Plantar Plate Tear",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "LA Clippers",
+          "team_printed": true,
+          "player": "Beal, Bradley",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Knee Injury Management",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "LA Clippers",
+          "team_printed": true,
+          "player": "Ingram, Brandon",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Heel Surgery",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "LA Clippers",
+          "team_printed": true,
+          "player": "Miller, Jordan",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Rotator Cuff Surgery",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "LA Clippers",
+          "team_printed": true,
+          "player": "Niederhauser, Yanic Konan",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Lisfranc Surgery",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "",
+      "tip_et": "11:00 (ET)",
+      "matchup": "CHA@LAL",
+      "rows": [
+        {
+          "team": "Charlotte Hornets",
+          "team_printed": true,
+          "player": "Ajayi, Michael",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Charlotte Hornets",
+          "team_printed": true,
+          "player": "Boswell, Kylan",
+          "status": "Out",
+          "reason": "G League - Two-Way",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Charlotte Hornets",
+          "team_printed": true,
+          "player": "Knueppel, Kon",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Hamstring Strain",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Charlotte Hornets",
+          "team_printed": true,
+          "player": "Schroder, Dennis",
+          "status": "Out",
+          "reason": "Injury/Illness - Left Hamstring Strain",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Charlotte Hornets",
+          "team_printed": true,
+          "player": "Steinbach, Hannes",
+          "status": "Out",
+          "reason": "G League - On Assignment",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Los Angeles Lakers",
+          "team_printed": true,
+          "player": "Grimes, Quentin",
+          "status": "Available",
+          "reason": "Injury/Illness - Right Finger Splint",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Los Angeles Lakers",
+          "team_printed": true,
+          "player": "Kessler, Walker",
+          "status": "Out",
+          "reason": "Injury/Illness - Right Lower Leg",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "11/18/2026",
+      "tip_et": "07:00 (ET)",
+      "matchup": "HOU@IND",
+      "rows": [
+        {
+          "team": "Houston Rockets",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Indiana Pacers",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "11/18/2026",
+      "tip_et": "07:00 (ET)",
+      "matchup": "MEM@CLE",
+      "rows": [
+        {
+          "team": "Memphis Grizzlies",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Cleveland Cavaliers",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "11/18/2026",
+      "tip_et": "07:00 (ET)",
+      "matchup": "MIL@MIA",
+      "rows": [
+        {
+          "team": "Milwaukee Bucks",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Miami Heat",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "11/18/2026",
+      "tip_et": "07:00 (ET)",
+      "matchup": "PHI@ORL",
+      "rows": [
+        {
+          "team": "Philadelphia 76ers",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Orlando Magic",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "11/18/2026",
+      "tip_et": "07:30 (ET)",
+      "matchup": "CHI@BKN",
+      "rows": [
+        {
+          "team": "Chicago Bulls",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Brooklyn Nets",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "11/18/2026",
+      "tip_et": "07:30 (ET)",
+      "matchup": "WAS@TOR",
+      "rows": [
+        {
+          "team": "Washington Wizards",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Toronto Raptors",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "11/18/2026",
+      "tip_et": "08:00 (ET)",
+      "matchup": "ATL@OKC",
+      "rows": [
+        {
+          "team": "Atlanta Hawks",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Oklahoma City Thunder",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "11/18/2026",
+      "tip_et": "08:00 (ET)",
+      "matchup": "DET@NOP",
+      "rows": [
+        {
+          "team": "Detroit Pistons",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "New Orleans Pelicans",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "",
+      "tip_et": "",
+      "matchup": "GSW@DAL",
+      "rows": [
+        {
+          "team": "Golden State Warriors",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Dallas Mavericks",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "",
+      "tip_et": "09:30 (ET)",
+      "matchup": "BOS@DEN",
+      "rows": [
+        {
+          "team": "Boston Celtics",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Denver Nuggets",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "",
+      "tip_et": "10:00 (ET)",
+      "matchup": "PHX@SAC",
+      "rows": [
+        {
+          "team": "Phoenix Suns",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Sacramento Kings",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    },
+    {
+      "game_date": "",
+      "tip_et": "10:00 (ET)",
+      "matchup": "UTA@LAL",
+      "rows": [
+        {
+          "team": "Utah Jazz",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        },
+        {
+          "team": "Los Angeles Lakers",
+          "team_printed": true,
+          "player": "",
+          "status": "",
+          "reason": "NOT YET SUBMITTED",
+          "unverified": false,
+          "flag": ""
+        }
+      ]
+    }
+  ],
+  "cross_check": {
+    "counterpart_file": "injuries-2026-11-17-1030am.json",
+    "counterpart_source_document": "Injury Report: 11/17/26 10:30 AM",
+    "rows_in_this_extraction": 60,
+    "rows_in_the_counterpart": 60,
+    "rows_matching_row_for_row": 60,
+    "only_in_this_extraction": [],
+    "only_in_the_counterpart": [],
+    "rule": "a one-sided row is reported, never deleted from either file; the document is re-read and whichever extraction the document contradicts is corrected"
+  }
+}
