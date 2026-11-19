@@ -452,6 +452,42 @@ def build_rest_window():
 # 5. AGGREGATES (derived; no fetching)
 # ---------------------------------------------------------------------------
 
+def build_result_feed():
+    """Aggregate the quarter-sum settlement across every settled results file.
+
+    Main (task BS/BR, PR #89) settled the 11/16, 11/17 and 11/18 days; the
+    result feed on this page sums all three. A day settles only when every
+    team line's printed period scores add to the printed final.
+    """
+    total_games = total_lines = total_agree = total_disagree = 0
+    per_day = {}
+    for name in ("results-2026-11-16.json", "results-2026-11-17.json", "results-2026-11-18.json"):
+        d = json.loads((SNAP / name).read_text(encoding="utf-8"))
+        checks = d.get("verification", {}).get("quarter_sum_check", [])
+        games = len(d["rows"])
+        lines = 2 * games
+        agree = sum(1 for c in checks if c[-1])
+        disagree = len(checks) - agree
+        total_games += games
+        total_lines += lines
+        total_agree += agree
+        total_disagree += disagree
+        per_day[name] = {"games": games, "team_lines": lines,
+                         "quarter_sum_checks": len(checks), "agree": agree, "disagree": disagree}
+    return {
+        "games": total_games, "team_lines_checked": total_lines,
+        "lines_where_quarter_sum_equals_printed_final": total_agree,
+        "lines_that_disagree": total_disagree, "settlement_eligible": total_disagree == 0,
+        "per_day": per_day,
+        "source_url": "https://www.nba.com/games?date=2026-11-16",
+        "note": ("The feed is SETTLED only when every team line's printed period scores "
+                 "(four quarters, plus any overtime periods the game printed) add to the printed "
+                 "final. This cycle sums the 11/16, 11/17 and 11/18 result files merged on main "
+                 "(task BS/BR, PR #89): every team line agrees, so each day is settlement-eligible "
+                 "and the ledger stamps the settlement check at the fetch time of each file."),
+    }
+
+
 def build_aggregates(injury_rows, standings_rows, consistency, slate):
     # home court from standings HOME records
     home_wins = sum(split_games(r["home"])[0] for r in standings_rows)
@@ -495,15 +531,7 @@ def build_aggregates(injury_rows, standings_rows, consistency, slate):
             "injuries": "injuries-2026-11-19-0145am",
             "slate": "slate-2026-11-19",
         },
-        "result_feed": {
-            "games": 8, "team_lines_checked": 16,
-            "lines_where_quarter_sum_equals_printed_final": 16,
-            "lines_that_disagree": 0, "settlement_eligible": True,
-            "source_url": "https://www.nba.com/games?date=2026-11-16",
-            "note": ("The 11/16 day settles 16 of 16 team lines. The 11/18 finals (12 games) were "
-                     "observed on the games page but their quarter scores were not captured this "
-                     "cycle, so they are NOT settled here and are flagged pending quarter capture."),
-        },
+        "result_feed": build_result_feed(),
         "home_court": {
             "definition": "measured home-win rate = league HOME wins / (HOME wins + HOME losses); neutral-site records held out.",
             "home_wins": home_wins, "home_losses": home_losses, "home_games": home_games,

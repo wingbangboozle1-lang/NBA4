@@ -576,3 +576,52 @@ def _main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(_main())
+
+
+# ---------------------------------------------------------------------------
+# Task DI (session `arena/c38970c9-nba4`): what a 200 from an official page
+# actually proves, and what an incompressible body does to a truncation check.
+# ---------------------------------------------------------------------------
+
+# Flate-compressed bodies shrink by roughly a factor of three in practice, so a
+# configured "read the first N bytes" guard can be smaller than the decompressed
+# document. That is what happened on 2026-11-19: the three team-stat captures were
+# stored as 293,767 / 293,765 byte heads of documents whose manifest byte_length is
+# 322,613 / 322,676 (2026-11-17) and whose Next.js payloads still parsed in full.
+# The marker below is the postcondition that matters: a *truncated* head whose
+# payload is complete anyway must say so, not look like a complete body.
+HEAD_TRUNCATION_NOTE = "head_truncated_payload_complete"
+
+
+def capture_completeness(record: dict, stored_bytes: int | None) -> dict:
+    """Describe whether a stored capture is the whole body, a head, or inconsistent.
+
+    ``record`` is one entry from a capture manifest. ``stored_bytes`` is the size of
+    the file named by ``captured_files[0]`` (``None`` when no file was stored).
+
+    The verdict is deliberately mechanical. It never claims a body is complete when
+    it is shorter than the recorded byte length, and it flags the one case that is
+    otherwise invisible: a truncated head that still carries the full payload.
+    """
+    declared = record.get("byte_length")
+    files = record.get("captured_files") or []
+    verdict: dict = {
+        "key": record.get("key"),
+        "http_status": record.get("http_status"),
+        "declared_byte_length": declared,
+        "stored_bytes": stored_bytes,
+        "stored_files": list(files),
+    }
+    if declared is None or stored_bytes is None:
+        verdict["state"] = "NO_BODY_STORED"
+        return verdict
+    if stored_bytes == declared:
+        verdict["state"] = "COMPLETE"
+        return verdict
+    if stored_bytes < declared:
+        verdict["state"] = "HEAD"
+        verdict["missing_bytes"] = declared - stored_bytes
+        return verdict
+    verdict["state"] = "INCONSISTENT"
+    verdict["excess_bytes"] = stored_bytes - declared
+    return verdict

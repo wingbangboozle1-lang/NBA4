@@ -32,11 +32,19 @@ SLATE_FILES = {
     "slate-2026-11-14.json": ({"2026-11-14", "2026-11-15", "2026-11-16"}, 231, 252, 22),
 }
 
-CURRENT_INJURY_FILE = "injuries-2026-11-19-0145am.json"
+CURRENT_INJURY_FILE = "injuries-2026-11-17-1030am.json"
 INJURY_20261116_FILE = "injuries-2026-11-16-1000am.json"
 PREVIOUS_INJURY_FILE = "injuries-2026-11-15-0615am.json"
 HISTORICAL_INJURY_FILE = "injuries-2026-11-14-0430am.json"
 CURRENT_SLATE_FILE = "slate-2026-11-19.json"
+# The 11/17 injury report's schedule_row cells reference rows of the 11/17
+# schedule (253-269), so the injury cross-check reads the 11/17 slate even
+# though the slate page itself now renders the 11/19 refresh window.
+INJURY_SLATE_FILE = "slate-2026-11-17.json"
+# The 11/19 refresh's file of record, used where a test checks the slate page's
+# report-code corroboration against the 01:45 AM report (the injuries window
+# table itself still renders the 11/17 report).
+LATEST_INJURY_FILE = "injuries-2026-11-19-0145am.json"
 GAMELOGS = "player-gamelogs-2026-11-15_to_2026-11-16.json"
 
 VALID_STATUSES = {"Out", "Available", "Probable", "Questionable", "Doubtful"}
@@ -141,7 +149,7 @@ class CurrentInjurySnapshotTests(unittest.TestCase):
     def test_provenance_present(self) -> None:
         for key in REQUIRED_PROVENANCE:
             self.assertTrue(self.data[key], key)
-        self.assertIn("01:45 AM", self.data["source_document_header"])
+        self.assertIn("10:30 AM", self.data["source_document_header"])
         self.assertIn("supersede", self.data["supersession_note"])
         self.assertTrue(self.data["newest_report_listed_at_check"]["rows_transcribed"])
 
@@ -157,49 +165,59 @@ class CurrentInjurySnapshotTests(unittest.TestCase):
                     self.assertTrue(row["flag"], row)
 
     def test_row_count_and_lost_team_cells_are_empty_and_flagged(self) -> None:
-        # 44 = every row the 01:45 AM document prints (2026-11-19 refresh).
-        self.assertEqual(len(self.rows), 44)
+        # 60 = every row the 10:30 AM document prints (2026-11-17 refresh).
+        self.assertEqual(len(self.rows), 60)
         lost = [row for row in self.rows if row["team"] == "__lost__"]
-        self.assertEqual(len(lost), 2)  # the two GSW rows (Kuminga, Pullin) printed at a page break
+        self.assertEqual(len(lost), 2)  # the 'Soreness' fragment and the Reaves row
         for row in lost:
             self.assertTrue(row["player"], "lost-team row must keep the printed player cell")
             self.assertTrue(row["unverified"])
             self.assertTrue(row["flag"])
 
     def test_page_break_rows_are_recorded_as_extracted(self) -> None:
-        # 2026-11-19 01:45 report: the 11/20 Cup blocks print at page breaks, so
-        # several rows lose cells. The printed cells stay, the lost cells stay
-        # blank and flagged, and nothing is inferred.
-        # TOR@DET Toronto row: printed team cell kept, time/status/reason lost.
-        toronto = [row for row in self.rows if row["team"] == "Toronto Raptors" and row["player"] == ""]
-        self.assertEqual(len(toronto), 1)
-        self.assertEqual(toronto[0]["status"], "")
-        self.assertTrue(toronto[0]["unverified"])
-        self.assertIn("page break", toronto[0]["flag"])
-        # ORL@BKN Brooklyn row: reason NOT YET SUBMITTED printed, matchup cell lost.
-        brooklyn = [row for row in self.rows if row["team"] == "Brooklyn Nets"]
-        self.assertEqual(len(brooklyn), 1)
-        self.assertEqual(brooklyn[0]["reason"], "NOT YET SUBMITTED")
-        self.assertTrue(brooklyn[0]["unverified"])
-        self.assertIn("matchup cell lost", brooklyn[0]["flag"])
-        # The two GSW rows whose team cell was lost keep the printed player cell.
-        lost_team = [row for row in self.rows if row["team"] == "__lost__"]
-        self.assertEqual([row["player"] for row in lost_team], ["Kuminga, Jonathan", "Pullin, Zyon"])
-        for row in lost_team:
-            self.assertTrue(row["status"], "lost-team row must keep the printed status cell")
-            self.assertTrue(row["unverified"])
+        # Minnesota row: the printed row lost its date/time/matchup cells; the team
+        # cell is printed and must stay.
+        minnesota = [row for row in self.rows if row["player"] == "" and row["team"] == "Minnesota Timberwolves"]
+        self.assertEqual(len(minnesota), 1)
+        self.assertEqual(minnesota[0]["status"], "")
+        self.assertTrue(minnesota[0]["unverified"])
+        self.assertIn("page break", minnesota[0]["flag"])
+        # 'Soreness' fragment: the printed row carries only that word.
+        fragment = [row for row in self.rows if row["player"] == "Soreness"]
+        self.assertEqual(len(fragment), 1)
+        self.assertEqual(fragment[0]["status"], "")
+        self.assertEqual(fragment[0]["reason"], "")
+        self.assertTrue(fragment[0]["unverified"])
+        # Reaves row: player/status/reason printed, date/time/matchup/team lost.
+        reaves = [row for row in self.rows if row["player"] == "Reaves, Austin"]
+        self.assertEqual(len(reaves), 1)
+        self.assertEqual(reaves[0]["status"], "Out")
+        self.assertEqual(reaves[0]["reason"], "Injury/Illness - Left Heel Contusion / Bone Bruise")
+        self.assertEqual(reaves[0]["team"], "__lost__")
+        self.assertTrue(reaves[0]["unverified"])
+        # The eight five-cell NOT YET SUBMITTED rows of the 11/18 block keep the
+        # marker in the reason cell and no player/status is inferred.
+        five_cell = [row for row in self.rows if row.get("flag", "").startswith("the printed row carries five cells")]
+        self.assertEqual(len(five_cell), 8)
+        for row in five_cell:
+            self.assertEqual(row["reason"], "NOT YET SUBMITTED")
+            self.assertEqual(row["player"], "")
+            self.assertEqual(row["status"], "")
 
-    def test_report_revision_is_the_0145_document(self) -> None:
-        # 2026-11-19 refresh: the file of record is the 01:45 AM ET revision.
-        self.assertIn("01:45 AM", load(CURRENT_INJURY_FILE)["source_document_header"])
+    def test_report_revision_is_the_1030_document(self) -> None:
+        # folded from the parallel BM session (adapted: this file records the
+        # revision in the printed header, not a separate revision label field)
+        self.assertIn("10:30 AM", load(CURRENT_INJURY_FILE)["source_document_header"])
         self.assertEqual(self.data["source_url"], build_snapshots.REPORT_URL)
 
     def test_lost_team_rows_are_kept_not_unattributed(self) -> None:
-        # 2026-11-19 refresh: the two GSW rows printed at a page break keep a blank
-        # lost team cell inside their block rather than a separate unattributed list.
-        self.assertEqual(len(self.rows), 44)
+        # folded from the parallel BM session (adapted to this extraction, which
+        # keeps both printed page-break rows inside their blocks with a blank
+        # lost team cell rather than a separate unattributed_rows list — the
+        # printed 'Soreness' fragment would be unpublished otherwise)
+        self.assertEqual(len(self.rows), 60)
         lost = [row for row in self.rows if row["team"] == "__lost__"]
-        self.assertEqual([row["player"] for row in lost], ["Kuminga, Jonathan", "Pullin, Zyon"])
+        self.assertEqual([row["player"] for row in lost], ["Soreness", "Reaves, Austin"])
         for row in lost:
             self.assertTrue(row["unverified"])
             self.assertTrue(row["flag"])
@@ -214,47 +232,42 @@ class CurrentInjurySnapshotTests(unittest.TestCase):
                     row["player"] == "" and row["reason"] != "NOT YET SUBMITTED"
                 ):
                     self.assertTrue(row["unverified"], row)
-        # a Cup block whose printed matchup cell was lost at a page break rests on
-        # block position alone for the affected row
-        orl_bkn = [g for g in self.data["games"] if g["matchup"] == "ORL@BKN"]
-        self.assertEqual(len(orl_bkn), 1)
+        minnesota = [g for g in self.data["games"] if g["matchup"] == "POR@MIN"]
+        self.assertEqual(len(minnesota), 1)
 
     def test_not_yet_submitted_rows_are_reporting_states(self) -> None:
         nys = [row for row in self.rows if row["reason"] == "NOT YET SUBMITTED"]
-        # 15 NOT YET SUBMITTED rows: the 11/19 GSW/MEM reporting rows, the 11/20
-        # Cup reporting rows, and the MIL reporting row on POR@MIL. A reporting
-        # state, never a player status.
-        self.assertEqual(len(nys), 15)
+        # 24 future matchup rows on 11/18 + the POR@MIN reporting rows (Portland's
+        # own row and the Minnesota fragment row that carries the marker)
+        self.assertEqual(len(nys), 26)
         for row in nys:
             self.assertEqual(row["player"], "")
             self.assertEqual(row["status"], "")
 
-    def test_nyk_min_block_prints_timberwolves_rows_only(self) -> None:
-        block = [g for g in self.data["games"] if g["matchup"] == "NYK@MIN"]
+    def test_nyk_tor_block_prints_raptors_rows_only(self) -> None:
+        block = [g for g in self.data["games"] if g["matchup"] == "NYK@TOR"]
         self.assertEqual(len(block), 1)
         teams = {r["team"] for r in block[0]["rows"]}
-        self.assertEqual(teams, {"Minnesota Timberwolves"})
+        self.assertEqual(teams, {"Toronto Raptors"})
 
     def test_game_cells_come_from_the_report_and_match_the_slate(self) -> None:
-        slate = {game["row"]: game for game in load(CURRENT_SLATE_FILE)["games"]}
+        # the 11/17 injury report's schedule rows are rows of the 11/17 schedule
+        slate = {game["row"]: game for game in load(INJURY_SLATE_FILE)["games"]}
 
         def clock(value: str) -> str:
             hour, minute = value.split(":")
             minute_digits = "".join(ch for ch in minute if ch.isdigit())
             return f"{int(hour)}:{minute_digits}"
 
-        checked = 0
         for game in self.data["games"]:
             self.assertTrue(game["cells_source"].startswith("report"), game["matchup"])
             row = game["schedule_row"]
             self.assertIn(row, slate)
             printed = f'{slate[row]["tip_et_col1"]} / {slate[row]["tip_et_col2"]}'
             self.assertIn(game["tip_et_from_schedule"], printed)
-            # Rows whose Game Time cell was lost at a page break print no report
-            # clock; they are skipped (the cell stays blank and flagged, never filled).
-            if not game.get("tip_et_from_report"):
-                continue
             if game.get("tip_disagreement"):
+                # both clocks are printed by official documents; the report's own clock
+                # must be the one named in the disagreement note, never overwritten
                 self.assertIn(
                     game["tip_et_from_report"].replace(" (ET)", ""), game["tip_disagreement"]
                 )
@@ -267,8 +280,6 @@ class CurrentInjurySnapshotTests(unittest.TestCase):
                 clock(slate[row]["tip_et_col2"]),
                 game["matchup"],
             )
-            checked += 1
-        self.assertGreater(checked, 0)
 
     def test_no_derived_or_model_values(self) -> None:
         for row in self.rows:
@@ -276,14 +287,62 @@ class CurrentInjurySnapshotTests(unittest.TestCase):
                 self.assertNotIn(key, ("probability", "minutes", "impact", "pick"), key)
 
     def test_cross_check_against_the_independent_extraction_is_complete(self) -> None:
-        cells = load("injuries-2026-11-19-0145am.cells.json")
+        cells = load("injuries-2026-11-17-1030am.cells.json")
         check = cells["cross_check"]
-        self.assertEqual(check["rows_in_this_extraction"], 44)
-        self.assertEqual(check["rows_in_the_counterpart"], 44)
-        self.assertEqual(check["rows_matching_row_for_row"], 44)
+        self.assertEqual(check["rows_in_this_extraction"], 60)
+        self.assertEqual(check["rows_in_the_counterpart"], 60)
+        self.assertEqual(check["rows_matching_row_for_row"], 60)
         self.assertEqual(check["only_in_this_extraction"], [])
         self.assertEqual(check["only_in_the_counterpart"], [])
 
+
+
+class InjuriesLatest20261119Tests(unittest.TestCase):
+    """The 2026-11-19 01:45 AM ET file of record, transcribed by task BS/BR (PR #89).
+
+    Main's design keeps the injuries.html window table on the 11/17 report and
+    renders the 11/19 revision through the dedicated injuries-latest block; these
+    tests cover that block and the file it reads.
+    """
+
+    INJ_LATEST = "injuries-2026-11-19-0145am.json"
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.data = load(cls.INJ_LATEST)
+
+    def test_provenance_and_revision(self) -> None:
+        for key in REQUIRED_PROVENANCE:
+            self.assertTrue(self.data[key], key)
+        self.assertIn("01:45 AM", self.data["source_document_header"])
+        self.assertEqual(
+            self.data["source_url"],
+            "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf",
+        )
+
+    def test_row_count_and_block_shape(self) -> None:
+        self.assertEqual(self.data["row_count"], 44)
+        self.assertEqual(len(self.data["games"]), 13)
+        # the two page-break rows whose cells were lost sit in unattributed_rows,
+        # not assigned to a team or game
+        self.assertEqual(len(self.data.get("unattributed_rows", [])), 2)
+        players = sorted(r["player"] for r in self.data.get("unattributed_rows", []))
+        self.assertEqual(players, ["Kuminga, Jonathan", "Pullin, Zyon"])
+
+    def test_not_yet_submitted_is_a_reporting_state(self) -> None:
+        rows = [r for g in self.data["games"] for r in g["rows"]]
+        nys = [r for r in rows if r["reason"] == "NOT YET SUBMITTED"]
+        self.assertGreater(len(nys), 0)
+        for r in nys:
+            self.assertEqual(r["player"], "")
+            self.assertEqual(r["status"], "")
+
+    def test_rendered_latest_block_cites_the_1119_report(self) -> None:
+        html = build_snapshots.render_injuries_latest()
+        self.assertEqual(
+            html.count("Injury-Report_2026-11-19_01_45AM.pdf"), 44
+        )
+        self.assertEqual(html.count("<tr>"), 45)  # header + 44 rows
 
 class InjurySnapshot20261116Tests(unittest.TestCase):
     """The 2026-11-16 10:00 AM snapshot is historical; its own assertions stay."""
@@ -471,8 +530,12 @@ class Aggregates20261119Tests(unittest.TestCase):
         self.assertFalse(pin.authorized)
 
     def test_result_feed_is_settlement_eligible(self) -> None:
+        # This cycle sums the 11/16, 11/17 and 11/18 result files (task BS/BR,
+        # PR #89): 25 games / 50 team lines, every line agreeing.
         rf = self.agg["result_feed"]
-        self.assertEqual(rf["team_lines_checked"], 16)
+        self.assertEqual(rf["games"], 25)
+        self.assertEqual(rf["team_lines_checked"], 50)
+        self.assertEqual(rf["lines_where_quarter_sum_equals_printed_final"], 50)
         self.assertEqual(rf["lines_that_disagree"], 0)
         self.assertTrue(rf["settlement_eligible"])
 
@@ -598,7 +661,8 @@ class RenderedPageTests(unittest.TestCase):
         self.assertEqual(slate_html.count(build_snapshots.SCHEDULE_URL), 19)
 
         injuries_html = build_snapshots.render_injuries()
-        self.assertEqual(injuries_html.count(build_snapshots.REPORT_URL), 44)  # one per report row
+        # the injuries window table renders the 11/17 10:30 AM report (60 rows)
+        self.assertEqual(injuries_html.count(build_snapshots.REPORT_URL), 60)  # one per report row
         self.assertEqual(
             injuries_html.count(build_snapshots.SCHEDULE_URL),
             sum(
@@ -644,7 +708,7 @@ class AwayHomeBasisTests(unittest.TestCase):
     def test_code_corroborated_rows_are_the_injury_report_games(self) -> None:
         report_codes = {
             (g.get("game_date") or g.get("game_date_from_schedule", ""), g["matchup"])
-            for g in load(CURRENT_INJURY_FILE)["games"]
+            for g in load(LATEST_INJURY_FILE)["games"]
         }
         corroborated = set()
         for game in load(CURRENT_SLATE_FILE)["games"]:
@@ -746,3 +810,147 @@ class GameLogTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SchedulePdfAtTokenTests(unittest.TestCase):
+    """Task DH (session `arena/c38970c9-nba4`): measure the schedule PDF, do not
+    repeat a claim about it.
+
+    Three documents in the tree state that the official 2026-27 schedule PDF prints
+    no `at` token on rows 215-259 (`scripts/build_snapshots.py`,
+    `data/snapshots/slate-2026-11-17.json` -> `basis.away_home_rule`, and the
+    pass-7 wording on `review.html`). The PDF was captured into this repository on
+    2026-11-17 by the `capture-official-pages` workflow, so the claim can be
+    measured instead of repeated. It does not reproduce: the PDF's own text cells
+    for row 253 are `253 | Tue. | 11/17/26 | New York | at | Toronto | 7:30 PM |
+    7:30 PM`, and 1,197 standalone `at` cells appear in the document.
+
+    This test uses only the standard library: it inflates the PDF's content
+    streams with zlib and reads the literal text-showing operands, so it runs in
+    any environment, with or without pypdf installed.
+    """
+
+    PDF = ROOT / "data" / "official-pages" / "2026-11-17" / "schedule_pdf.pdf"
+    SLATE = ROOT / "data" / "snapshots" / "slate-2026-11-17.json"
+    BASELINE = ROOT / "data" / "snapshots" / "raw" / "ci" / "schedule-sha-baseline.txt"
+    WINDOW = range(253, 274)
+
+    def setUp(self):
+        if not self.PDF.is_file():
+            self.skipTest(f"no captured official PDF at {self.PDF}")
+
+    @staticmethod
+    def _text_cells(document: bytes) -> list[str]:
+        """Every literal string shown by a text operator, in stream order.
+
+        Stream boundaries are taken from the `/Length` entry when it is a direct
+        integer, because a PDF may contain incompressible binary data and the bytes
+        `endstream` can occur inside it - taking the first `endstream` would silently
+        drop text. The fallback scans forward only when `/Length` is indirect or
+        missing, and the scan starts after the previous stream's end.
+        """
+        import re as _re
+        import zlib as _zlib
+
+        cells: list[str] = []
+        consumed = 0
+        for match in _re.finditer(rb"stream\r?\n", document):
+            if match.start() < consumed:
+                continue
+            start = match.end()
+            header = document[max(0, match.start() - 400):match.start()]
+            length_match = _re.search(rb"/Length\s+(\d+)(?!\s+\d+\s+R)", header)
+            end = None
+            if length_match:
+                candidate = start + int(length_match.group(1))
+                if document[candidate:candidate + 20].lstrip().startswith(b"endstream"):
+                    end = candidate
+            if end is None:
+                end = document.find(b"endstream", start)
+            consumed = end
+            try:
+                stream = _zlib.decompress(document[start:end])
+            except Exception:
+                continue
+            for op in _re.finditer(rb"\[(.*?)\]\s*TJ|\((.*?)\)\s*Tj", stream, _re.S):
+                body = op.group(1) if op.group(1) is not None else op.group(2)
+                parts = [m.group(1) for m in _re.finditer(rb"\((.*?)(?<!\\)\)", body, _re.S)]
+                if not parts and op.group(2) is not None:
+                    parts = [op.group(2)]
+                if not parts:
+                    continue
+                text = b"".join(parts).decode("latin-1")
+                text = text.replace("\\(", "(").replace("\\)", ")").replace("\\\\", "\\")
+                cells.append(text)
+        return cells
+
+    def _cells(self) -> list[str]:
+        if not hasattr(self, "_cached_cells"):
+            self._cached_cells = self._text_cells(self.PDF.read_bytes())
+        return self._cached_cells
+
+    def test_pdf_is_the_document_the_drift_gate_compares(self):
+        import hashlib  # noqa: PLC0415
+
+        digest = hashlib.sha256(self.PDF.read_bytes()).hexdigest()
+        self.assertTrue(self.BASELINE.is_file(), "the drift baseline is missing")
+        self.assertEqual(self.BASELINE.read_text(encoding="utf-8").strip(), digest)
+
+    def test_the_pdf_shows_a_standalone_at_cell_throughout(self):
+        cells = self._cells()
+        self.assertGreater(len(cells), 1000, "the PDF text operands did not parse")
+        standalone = [c for c in cells if c.strip() == "at"]
+        self.assertGreater(len(standalone), 500, "fewer 'at' cells than a 999-row schedule needs")
+
+    def test_every_window_row_has_away_at_home_cells(self):
+        cells = self._cells()
+        positions = [i for i, c in enumerate(cells) if c.strip() in {str(n) for n in self.WINDOW}]
+        self.assertGreaterEqual(len(positions), 21, "window row numbers not found")
+        checked = 0
+        for index in positions:
+            number = int(cells[index].strip())
+            window = cells[index + 1:index + 12]
+            # cells: weekday | date | away | at | home | time | time | (tv?) | next row no
+            self.assertRegex(window[0].strip(), r"^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\.$", number)
+            self.assertRegex(window[1].strip(), r"^\d{1,2}/\d{1,2}/\d{2}$", number)
+            self.assertEqual(window[3].strip(), "at", f"row {number}: no ' at ' cell")
+            self.assertRegex(window[5].strip(), r"^\d{1,2}:\d{2} [AP]M$", number)
+            self.assertRegex(window[6].strip(), r"^\d{1,2}:\d{2} [AP]M$", number)
+            checked += 1
+        self.assertEqual(checked, 21)
+
+    def test_published_window_rows_match_the_pdf_cells(self):
+        cells = self._cells()
+        slate = json.loads(self.SLATE.read_text(encoding="utf-8"))
+        by_number = {}
+        for i, c in enumerate(cells):
+            stripped = c.strip()
+            if stripped.isdigit() and len(stripped) <= 3:
+                by_number.setdefault(int(stripped), i)
+        checked = 0
+        for game in slate["games"]:
+            index = by_number.get(int(game["row"]))
+            self.assertIsNotNone(index, f"row {game['row']} not found in the PDF")
+            window = cells[index + 1:index + 9]
+            self.assertEqual(window[0].strip(), game["weekday"], game["row"])
+            month, day, year = window[1].strip().split("/")
+            self.assertEqual(game["date"], f"20{year}-{int(month):02d}-{int(day):02d}", game["row"])
+            self.assertEqual(window[2].strip(), game["away"], game["row"])
+            self.assertEqual(window[3].strip(), "at", game["row"])
+            self.assertEqual(window[4].strip(), game["home"], game["row"])
+            self.assertEqual(window[5].strip(), game["tip_et_col1"], game["row"])
+            self.assertEqual(window[6].strip(), game["tip_et_col2"], game["row"])
+            checked += 1
+        self.assertEqual(checked, 21, "the slate snapshot must publish 21 window rows")
+
+    def test_the_disproved_premise_is_still_flagged_where_it_lives(self):
+        """While the premise text is still in other sessions' files, this test keeps
+        it visible: it fails once the text is removed so flag DS-01 can be closed,
+        and it never lets a *new* file adopt the premise silently."""
+        build = (ROOT / "scripts" / "build_snapshots.py").read_text(encoding="utf-8")
+        slate = json.loads(self.SLATE.read_text(encoding="utf-8"))
+        premise = 'prints no "at"' in build or "prints no 'at'" in json.dumps(slate)
+        self.assertTrue(
+            premise,
+            "the 'no at token' premise is gone from both files: close flag DS-01 and delete this test",
+        )

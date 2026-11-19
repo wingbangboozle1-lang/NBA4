@@ -13,19 +13,42 @@
   },
   "derived_at_utc": "2026-11-19T07:05:00Z",
   "inputs": {
-    "results": "results-2026-11-16.json",
+    "results": "results-2026-11-16.json + results-2026-11-17.json + results-2026-11-18.json",
     "standings": "standings-2026-11-19.json",
     "injuries": "injuries-2026-11-19-0145am",
     "slate": "slate-2026-11-19"
   },
   "result_feed": {
-    "games": 8,
-    "team_lines_checked": 16,
-    "lines_where_quarter_sum_equals_printed_final": 16,
+    "games": 25,
+    "team_lines_checked": 50,
+    "lines_where_quarter_sum_equals_printed_final": 50,
     "lines_that_disagree": 0,
     "settlement_eligible": true,
+    "per_day": {
+      "results-2026-11-16.json": {
+        "games": 8,
+        "team_lines": 16,
+        "quarter_sum_checks": 16,
+        "agree": 16,
+        "disagree": 0
+      },
+      "results-2026-11-17.json": {
+        "games": 5,
+        "team_lines": 10,
+        "quarter_sum_checks": 10,
+        "agree": 10,
+        "disagree": 0
+      },
+      "results-2026-11-18.json": {
+        "games": 12,
+        "team_lines": 24,
+        "quarter_sum_checks": 24,
+        "agree": 24,
+        "disagree": 0
+      }
+    },
     "source_url": "https://www.nba.com/games?date=2026-11-16",
-    "note": "The 11/16 day settles 16 of 16 team lines. The 11/18 finals (12 games) were observed on the games page but their quarter scores were not captured this cycle, so they are NOT settled here and are flagged pending quarter capture."
+    "note": "The feed is SETTLED only when every team line's printed period scores (four quarters, plus any overtime periods the game printed) add to the printed final. This cycle sums the 11/16, 11/17 and 11/18 result files merged on main (task BS/BR, PR #89): every team line agrees, so each day is settlement-eligible and the ledger stamps the settlement check at the fetch time of each file."
   },
   "home_court": {
     "definition": "measured home-win rate = league HOME wins / (HOME wins + HOME losses); neutral-site records held out.",
@@ -68,9 +91,9 @@
     "unverified_rows_after_page_breaks": 15,
     "status_counts": {
       "NOT YET SUBMITTED": 15,
-      "Questionable": 4,
       "Out": 17,
       "Available": 2,
+      "Questionable": 4,
       "(not printed)": 6
     },
     "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf"

@@ -1,0 +1,22 @@
+# Verbatim rows of the official 2026-27 NBA regular-season schedule PDF for 11/20/26 and 11/21/26, read in the 2026-11-19 session window (06:59Z-07:07Z) by fetch_page, chunk 2 of 13.
+# Header printed on the document: "2026-27 NBA REGULAR SEASON SCHEDULE AS OF AUGUST 13, 2026 | SUBJECT TO CHANGE"
+# Source: https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf
+# Columns: GAME|DAY|DATE|TEAM 1|TEAM 2|LOCAL|ET|PRINTED TRAILING CELLS. TEAM 1 = away, TEAM 2 = home unless the row prints "at" in TEAM 2.
+# Trailing cells are the non-empty cells printed after the ET column (NAT TV, R and an unlabeled C/R column). The extraction does not give a consistent column header for them on the 11/20 rows, so they are kept as printed, not assigned.
+# The 11/20 rows print GAME numbers 43-51, a separate numbering block from the 11/17-11/19 rows (253-273).
+# The 11/20 rows are the games the 01:45 AM ET injury report prints as CHA@ATL, IND@CLE, ORL@BKN, TOR@DET, WAS@CHI, NOP@OKC, PHX@UTA, HOU@DEN and SAC@LAL.
+43|Fri.|11/20/26|Charlotte|at|Atlanta|7:00 PM|7:00 PM|C
+44|Fri.|11/20/26|Orlando|at|Brooklyn|7:30 PM|7:30 PM|C
+45|Fri.|11/20/26|Indiana|at|Cleveland|7:30 PM|7:30 PM|C
+46|Fri.|11/20/26|Toronto|at|Detroit|7:30 PM|7:30 PM|Prime, C
+47|Fri.|11/20/26|Washington|at|Chicago|7:00 PM|8:00 PM|C
+48|Fri.|11/20/26|New Orleans|at|Oklahoma City|7:00 PM|8:00 PM|C
+49|Fri.|11/20/26|Phoenix|at|Utah|7:30 PM|9:30 PM|C
+50|Fri.|11/20/26|Houston|at|Denver|8:00 PM|10:00 PM|Prime, R
+51|Fri.|11/20/26|Sacramento|at|LA Lakers|7:00 PM|10:00 PM|C
+274|Sat.|11/21/26|Milwaukee|at|Philadelphia|1:00 PM|1:00 PM|
+275|Sat.|11/21/26|Portland|at|New York|7:30 PM|7:30 PM|
+276|Sat.|11/21/26|LA Clippers|at|Dallas|7:00 PM|8:00 PM|
+277|Sat.|11/21/26|Memphis|at|Minnesota|7:00 PM|8:00 PM|
+278|Sat.|11/21/26|New Orleans|at|San Antonio|7:00 PM|8:00 PM|
+279|Sat.|11/21/26|Boston|at|Sacramento|7:00 PM|10:00 PM|

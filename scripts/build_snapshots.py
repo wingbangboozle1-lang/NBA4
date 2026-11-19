@@ -29,8 +29,12 @@ SNAPSHOTS = ROOT / "data" / "snapshots"
 SCHEDULE_URL = (
     "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
 )
-REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf"
-REPORT_LABEL = "2026-11-19 01:45 AM ET report"
+REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf"
+REPORT_LABEL = "2026-11-17 10:30 AM ET report"
+# The 11/19 refresh cycle's file of record, used by the slate page's rotation
+# availability column (the availability data is read from the 11/19 report).
+REPORT_URL_1119 = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf"
+REPORT_LABEL_1119 = "2026-11-19 01:45 AM ET report"
 
 # Engine reason codes (engine/pipeline.py REASON_CODES) applied to every game.
 NO_PICK_REASONS = (
@@ -160,7 +164,7 @@ def render_slate() -> str:
         sources = [
             link(SCHEDULE_URL, "Schedule PDF row " + str(game["row"])),
             link(game["games_page_url"], "Games page " + game["games_page_game_id"]),
-            link(REPORT_URL, "Availability: " + REPORT_LABEL),
+            link(REPORT_URL_1119, "Availability: " + REPORT_LABEL_1119),
         ]
         rows.append(
             "              <tr>"
@@ -186,7 +190,7 @@ def render_slate() -> str:
         '<th scope="col">Tip-off: home-venue local / ET (PDF header LOCAL | ET)</th>'
         '<th scope="col">Game</th>'
         '<th scope="col">Matchup</th>'
-        f'<th scope="col">Rotation availability ({e(REPORT_LABEL)})</th>'
+        f'<th scope="col">Rotation availability ({e(REPORT_LABEL_1119)})</th>'
         '<th scope="col">Originated line</th>'
         '<th scope="col">Fair probability</th>'
         '<th scope="col">Decision</th>'
@@ -206,7 +210,7 @@ def game_label(game: dict) -> str:
 
 
 def render_injuries() -> str:
-    data = load("injuries-2026-11-19-0145am.json")
+    data = load("injuries-2026-11-17-1030am.json")
     rows: list[str] = []
     for game in data["games"]:
         from_schedule = game["cells_source"].startswith("schedule")
@@ -293,8 +297,9 @@ def splice(page: Path, block_id: str, body: str) -> str | None:
 # snapshot file it names, so a published row can be re-derived from that file.
 # ---------------------------------------------------------------------------
 
-INJ_NEW = "injuries-2026-11-19-0145am.cells.json"
+INJ_NEW = "injuries-2026-11-17-1030am.cells.json"
 INJ_DIFF = "injuries-2026-11-19-0130-to-0145.diff.json"
+INJ_LATEST = "injuries-2026-11-19-0145am.json"
 RESULTS_1116 = "results-2026-11-16.json"
 STANDINGS_1119 = "standings-2026-11-19.json"
 AGGREGATES_1119 = "aggregates-2026-11-19.json"
@@ -348,8 +353,7 @@ def render_injuries_diff() -> str:
     return head + "\n".join(rows) + "\n            </tbody>\n          </table>\n        </div>"
 
 
-def render_results() -> str:
-    data = load(RESULTS_1116)
+def _result_rows(data: dict) -> list[str]:
     rows: list[str] = []
     for row in data["rows"]:
         (gid, date, tip, arena, city, away, home, aq, af, hq, hf, winner, loser, url) = row[:14]
@@ -359,7 +363,8 @@ def render_results() -> str:
         aot = row[14] if len(row) > 14 else []
         hot = row[15] if len(row) > 15 else []
         for team, quarters, final, ot_periods in ((away, aq, af, aot), (home, hq, hf, hot)):
-            total = sum(quarters)
+            # printed overtime periods (2026-11-17/18 schema) are part of the printed final
+            total = sum(quarters) + sum(ot_periods)
             ok = total == final
             # quarters holds every printed period (four quarters, plus OT when printed);
             # the single OT column shows the overtime period(s) or stays empty.
@@ -381,6 +386,16 @@ def render_results() -> str:
                 f"<td>{link(url, f'Official game page {gid}')}</td>",
             ]
             rows.append(_row(cells))
+    return rows
+
+
+RESULTS_FILES = (RESULTS_1116, "results-2026-11-17.json", "results-2026-11-18.json")
+
+
+def render_results() -> str:
+    rows: list[str] = []
+    for name in RESULTS_FILES:
+        rows.extend(_result_rows(load(name)))
     head = (
         '<div class="table-card table-wrap">\n          <table class="data-table">\n'
         "            <thead><tr>"
@@ -622,9 +637,9 @@ def render_rest() -> str:
 
 def render_availability_summary() -> str:
     """Counts and verdicts for the current injury snapshot, read from the files."""
-    hand = load("injuries-2026-11-19-0145am.json")
-    cells = load("injuries-2026-11-19-0145am.cells.json")
-    diff = load("injuries-2026-11-19-0130-to-0145.diff.json")
+    hand = load("injuries-2026-11-17-1030am.json")
+    cells = load("injuries-2026-11-17-1030am.cells.json")
+    diff = load("injuries-2026-11-17-1015-to-1030.diff.json")
     rows = [row for game in hand["games"] for row in game["rows"]]
     nys = [row for row in rows if row["status"] == "" and row["reason"] == "NOT YET SUBMITTED"]
     lost = [row for row in rows if row["team"] == "__lost__"]
@@ -765,12 +780,48 @@ BLOCKS.update(
         "availability-rest": ("availability.html", render_rest),
         "availability-summary": ("availability.html", render_availability_summary),
         "injuries-diff": ("injuries.html", render_injuries_diff),
+        "injuries-latest": ("injuries.html", lambda: render_injuries_latest()),
         "results-lines": ("results.html", render_results),
         "standings-table": ("results.html", render_standings),
         "aggregates-table": ("results.html", render_aggregates),
         "team-stats-table": ("team-stats.html", render_team_stats),
     }
 )
+
+
+def render_injuries_latest() -> str:
+    """Rows of the newest official revision read this cycle (11/19 01:45 AM ET), every row as printed."""
+    data = load(INJ_LATEST)
+    head_cells = ("Game date", "Game time (as printed)", "Matchup", "Team", "Player", "Status", "Reason", "Flags", "Official source")
+    # File of record (PR #84) nests rows under games; the page-break rows with no matchup sit in unattributed_rows.
+    flat = []
+    for g in data["games"]:
+        for r in g["rows"]:
+            flat.append({"game_date": g["game_date_printed"], "game_time_et": g["tip_et_from_report"], "matchup": g["matchup"], **r})
+    for r in data["unattributed_rows"]:
+        flat.append({"game_date": "", "game_time_et": "", "matchup": "", **r})
+    rows: list[str] = []
+    for r in flat:
+        flags = [r["flag"]] if r.get("flag") else []
+        cells = [
+            f"<td>{e(r['game_date'])}</td>" if r["game_date"] else empty(),
+            f"<td>{e(r['game_time_et'])}</td>" if r["game_time_et"] else empty(),
+            f"<td>{e(r['matchup'])}</td>" if r["matchup"] else empty(),
+            f"<td>{e(r['team'])}</td>" if r["team"] else empty(),
+            f"<td>{e(r['player'])}</td>" if r["player"] else empty(),
+            f"<td>{e(r['status'])}</td>" if r["status"] else empty(),
+            f"<td>{e(r['reason'])}</td>" if r["reason"] else empty(),
+            f"<td>{'; '.join(e(f) for f in flags)}</td>" if flags else empty(),
+            f"<td>{link(data['source_url'], '11/19 01:45 AM ET report')}</td>",
+        ]
+        rows.append(_row(cells))
+    head = (
+        '<div class="table-card table-wrap">\n          <table class="data-table">\n'
+        "            <thead><tr>"
+        + "".join(f'<th scope="col">{h}</th>' for h in head_cells)
+        + "</tr></thead>\n            <tbody>\n"
+    )
+    return head + "\n".join(rows) + "\n            </tbody>\n          </table>\n        </div>"
 
 
 def main(argv: list[str]) -> int:

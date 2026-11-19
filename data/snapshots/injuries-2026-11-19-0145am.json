@@ -1,472 +1,555 @@
 {
-  "snapshot_id": "injuries-2026-11-19-0145am",
-  "kind": "official_injury_report_rows",
+ "snapshot_id": "injuries-2026-11-19-0145am",
+ "kind": "official_injury_report_rows",
+ "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf",
+ "source_document": "Injury Report: 11/19/26 01:45 AM",
+ "source_document_header": "Injury Report: 11/19/26 01:45 AM",
+ "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+ "secondary_source_url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf",
+ "raw_extraction": "data/snapshots/raw/injury-2026-11-19T0145am-et.txt",
+ "revision_et_label": "11/19/26 01:45 AM",
+ "revision_utc": "2026-11-19T06:45:00Z",
+ "fetched_at_utc": "2026-11-19T06:58:12Z",
+ "extraction_tool": "fetch_page (PDF text extraction to markdown tables, single chunk, hasMore=false)",
+ "fetch_time_note": "The fetch tool does not return its own timestamp. fetched_at_utc is the sandbox clock at the first shell call after the PDF fetch; the fetch itself happened no later than that.",
+ "index_listing_checked": "The November 19 entries of the official injury-report index, read 2026-11-19 (session BR). The index lists 11/19 reports from 12:00 a.m. to 1:45 a.m. ET; 1:45 a.m. ET was the newest listed at the check. Later revisions are not in this file and supersede it.",
+ "newest_report_listed_at_check": {
+  "label": "11/19 01:45 AM ET report",
   "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf",
-  "source_document": "Injury Report: 11/19/26 01:45 AM",
-  "source_document_header": "Injury Report: 11/19/26 01:45 AM",
-  "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
-  "secondary_source_url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf",
-  "fetched_at_utc": "2026-11-19T07:05:00Z",
-  "extraction_tool": "fetch_page (PDF text extraction to markdown tables, single chunk)",
-  "index_listing_checked": "The official injury-report index was read on 2026-11-19 at ~07:00 UTC (2:00 a.m. ET): it lists the 11/19 reports every 15 minutes from 12:00 a.m. through 1:45 a.m. ET, and the 1:45 a.m. ET report was the newest listed at the check time.",
-  "newest_report_listed_at_check": {
-    "label": "11/19 01:45 AM ET report",
-    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf",
-    "source_document_header": "Injury Report: 11/19/26 01:45 AM",
-    "checked_at_utc": "2026-11-19T07:05:00Z",
-    "rows_transcribed": true,
-    "transcription_note": "Full row-level transcription is stored in injuries-2026-11-19-0145am.json (this file)."
-  },
-  "superseded_snapshot": {
-    "snapshot_id": "injuries-2026-11-17-1115am",
-    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_11_15AM.pdf",
-    "status_on_site": "Kept as a dated historical snapshot in data/snapshots; the 11/17 report is two days old and no longer current."
-  },
-  "supersession_note": "This is one dated snapshot, not the newest report. The league publishes updated reports on a continual basis; any later file supersedes it.",
-  "extraction_notes": [
-    "Verbatim extraction of the report named in source_url. Blank cells are blank because the extracted document prints nothing there at a page break; they are never filled in.",
-    "Rows whose matchup and team cells are both blank carry unverified=true: the row's team is readable only from the block it continues, which this file does not assert.",
-    "NOT YET SUBMITTED is a reporting state, not a player status; it never becomes a status, probability or pick.",
-    "The 11/20 blocks are Emirates NBA Cup group games and are NOT YET SUBMITTED reporting states at this revision.",
-    "Game Time in the PDF is a 24-hour clock with no AM/PM marker; the printed value is kept as 'HH:MM (ET)' and the schedule PDF's ET column is recorded alongside."
-  ],
-  "matchups_not_in_snapshot": [],
-  "row_count": 44,
-  "games": [
+  "checked_at_utc": "2026-11-19T06:58:12Z"
+ },
+ "superseded_snapshot_chain": [],
+ "supersession_note": "This is one dated revision of the 11/19 slate. The league publishes revisions continually; any later revision supersedes this file.",
+ "extraction_notes": [
+  "Rows are transcribed from the printed text in raw/injury-2026-11-19T0145am-et.txt by scripts/_gen_2026_11_19_injury.py; blank cells stay blank.",
+  "The NYK@MIN block prints four Minnesota Timberwolves rows and no New York Knicks row (neither an injury row nor a NOT YET SUBMITTED row). The absence is not interpreted.",
+  "Where the report prints no game date or tip time (POR@MIL on page 2; TOR@DET, WAS@CHI, SAC@LAL on page 3; and the NOP@OKC, PHX@UTA and HOU@DEN dates), the date and ET tip are taken from the official schedule PDF GAME row cited in schedule_row (schedule-context, both documents cited). Printed tip times are compared with the schedule; see tip_disagreement.",
+  "Two page-2 rows (Kuminga, Jonathan and Pullin, Zyon) print a status and reason but no date, time, matchup or team. They are kept in unattributed_rows as printed and are not assigned to any team or game.",
+  "Page-3 rows for TOR@DET, NOP@OKC, WAS@CHI, PHX@UTA, HOU@DEN and SAC@LAL print a matchup and team but the status cell of the printed team row is absent. Those status cells are left blank; the reporting state is not inferred.",
+  "The page-3 matchups have no printed date; the official schedule lists each one as a 11/20 game (GAME 43-51), so the schedule date is used. Repository copies (rest-window-2026-11-17.json) end at row 273 and were not used for these games.",
+  "The report prints tip times without AM/PM (for example '08:00 (ET)'). Every printed tip in this report is an evening tip per the schedule, so the agreement check reads them as PM; tip_disagreement records any mismatch and none was found.",
+  "The reporting-state rows (NOT YET SUBMITTED) are a reporting state, not a status, probability or pick.",
+  "No availability probability, minute estimate or production impact is stored here or derived from these rows."
+ ],
+ "matchups_not_in_snapshot": [],
+ "schedule_read": {
+  "source_url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf",
+  "read_by": "fetch_page chunks 1-2 (GAME 161-311 printed rows)",
+  "rows_used": "GAME 43-51 and 270-273",
+  "fetched_at_utc": "2026-11-19T06:58:12Z"
+ },
+ "row_count": 44,
+ "games_counted": 13,
+ "games": [
+  {
+   "matchup": "GSW@MEM",
+   "game_date": "2026-11-19",
+   "game_date_printed": "11/19/2026",
+   "game_date_source": "report",
+   "tip_et_from_report": "08:00 (ET)",
+   "tip_et_from_schedule": "8:00 PM",
+   "tip_disagreement": null,
+   "rows": [
     {
-      "matchup": "GSW@MEM",
-      "game_date": "2026-11-19",
-      "schedule_row": 270,
-      "tip_et_from_report": "08:00 (ET)",
-      "tip_et_from_schedule": "8:00 PM",
-      "cells_source": "report",
-      "rows": [
-        {
-          "team": "Golden State Warriors",
-          "player": "",
-          "status": "",
-          "reason": "NOT YET SUBMITTED"
-        },
-        {
-          "team": "Memphis Grizzlies",
-          "player": "",
-          "status": "",
-          "reason": "NOT YET SUBMITTED"
-        },
-        {
-          "team": "__lost__",
-          "player": "Kuminga, Jonathan",
-          "status": "Questionable",
-          "reason": "Injury/Illness - Right Shoulder Contusion",
-          "unverified": true,
-          "flag": "date/time/matchup/team cells lost at page break; the row prints in the block that continues GSW@MEM; the team cell is not printed and is not inferred"
-        },
-        {
-          "team": "__lost__",
-          "player": "Pullin, Zyon",
-          "status": "Questionable",
-          "reason": "Injury/Illness - Right Quadriceps Contusion",
-          "unverified": true,
-          "flag": "date/time/matchup/team cells lost at page break; the row prints in the block that continues GSW@MEM; the team cell is not printed and is not inferred"
-        }
-      ],
-      "block_note": "The block prints NOT YET SUBMITTED for Golden State on page 1 yet two GSW player rows (Kuminga, Pullin) print on page 2 with lost cells; the block is internally inconsistent and the player rows stay unattributed."
+     "team": "Golden State Warriors",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": false,
+     "flag": ""
     },
     {
-      "matchup": "LAC@SAS",
-      "game_date": "2026-11-19",
-      "schedule_row": 273,
-      "tip_et_from_report": "08:00 (ET)",
-      "tip_et_from_schedule": "8:00 PM",
-      "cells_source": "report",
-      "rows": [
-        {
-          "team": "LA Clippers",
-          "player": "Beal, Bradley",
-          "status": "Out",
-          "reason": "Injury/Illness - Right Knee Injury Management"
-        },
-        {
-          "team": "LA Clippers",
-          "player": "Ingram, Brandon",
-          "status": "Out",
-          "reason": "Injury/Illness - Right Heel Surgery"
-        },
-        {
-          "team": "LA Clippers",
-          "player": "Martinelli, Nick",
-          "status": "Out",
-          "reason": "G League - Two-Way"
-        },
-        {
-          "team": "LA Clippers",
-          "player": "Miller, Jordan",
-          "status": "Out",
-          "reason": "Injury/Illness - Left Rotator Cuff Surgery"
-        },
-        {
-          "team": "San Antonio Spurs",
-          "player": "Brown, Maliq",
-          "status": "Out",
-          "reason": "G League - Two-Way"
-        },
-        {
-          "team": "San Antonio Spurs",
-          "player": "Gillespie, Ja'Kobi",
-          "status": "Out",
-          "reason": "G League - Two-Way"
-        },
-        {
-          "team": "San Antonio Spurs",
-          "player": "Harper, Dylan",
-          "status": "Out",
-          "reason": "Injury/Illness - Left Hip Soreness"
-        },
-        {
-          "team": "San Antonio Spurs",
-          "player": "Harris, Tobias",
-          "status": "Out",
-          "reason": "Injury/Illness - Left Calf Strain"
-        },
-        {
-          "team": "San Antonio Spurs",
-          "player": "Quaintance, Jayden",
-          "status": "Out",
-          "reason": "Injury/Illness - Right Knee Surgery"
-        }
-      ]
-    },
-    {
-      "matchup": "NYK@MIN",
-      "game_date": "2026-11-19",
-      "schedule_row": 272,
-      "tip_et_from_report": "08:00 (ET)",
-      "tip_et_from_schedule": "8:00 PM",
-      "cells_source": "report",
-      "rows": [
-        {
-          "team": "Minnesota Timberwolves",
-          "player": "Beringer, Joan",
-          "status": "Available",
-          "reason": "Injury/Illness - Face Mask"
-        },
-        {
-          "team": "Minnesota Timberwolves",
-          "player": "Clark, Jaylen",
-          "status": "Out",
-          "reason": "Injury/Illness - Right Hamstring Strain"
-        },
-        {
-          "team": "Minnesota Timberwolves",
-          "player": "DiVincenzo, Donte",
-          "status": "Out",
-          "reason": "Injury/Illness - Right Achilles Tendon Repair / Surgery"
-        },
-        {
-          "team": "Minnesota Timberwolves",
-          "player": "Edwards, Anthony",
-          "status": "Out",
-          "reason": "Injury/Illness - Right Knee Arthroscopy"
-        }
-      ],
-      "block_note": "The report prints Minnesota Timberwolves rows only; no New York Knicks row is printed for this game at this revision."
-    },
-    {
-      "matchup": "POR@MIL",
-      "game_date": "2026-11-19",
-      "schedule_row": 271,
-      "tip_et_from_report": "08:00 (ET)",
-      "tip_et_from_schedule": "8:00 PM",
-      "cells_source": "report",
-      "rows": [
-        {
-          "team": "Portland Trail Blazers",
-          "player": "Avdija, Deni",
-          "status": "Questionable",
-          "reason": "Injury/Illness - Left Foot Inflammation / Soreness"
-        },
-        {
-          "team": "Portland Trail Blazers",
-          "player": "Camara, Toumani",
-          "status": "Questionable",
-          "reason": "Injury/Illness - Abdominal Soreness"
-        },
-        {
-          "team": "Portland Trail Blazers",
-          "player": "Carlson, Branden",
-          "status": "Available",
-          "reason": "Injury/Illness - Face Mask"
-        },
-        {
-          "team": "Portland Trail Blazers",
-          "player": "Krejci, Vit",
-          "status": "Out",
-          "reason": "Injury/Illness - Left Ankle Fracture"
-        },
-        {
-          "team": "Portland Trail Blazers",
-          "player": "Morant, Ja",
-          "status": "Out",
-          "reason": "Injury/Illness - Left Hamstring Strain"
-        },
-        {
-          "team": "Portland Trail Blazers",
-          "player": "Sharpe, Shaedon",
-          "status": "Out",
-          "reason": "Injury/Illness - Right Meniscus Surgery"
-        },
-        {
-          "team": "Portland Trail Blazers",
-          "player": "Williams III, Robert",
-          "status": "Out",
-          "reason": "Rest"
-        },
-        {
-          "team": "Portland Trail Blazers",
-          "player": "Youngblood, Chris",
-          "status": "Out",
-          "reason": "Injury/Illness - Right Heel Contusion / Bone Bruise"
-        },
-        {
-          "team": "Milwaukee Bucks",
-          "player": "",
-          "status": "",
-          "reason": "NOT YET SUBMITTED"
-        }
-      ]
-    },
-    {
-      "matchup": "CHA@ATL",
-      "game_date": "2026-11-20",
-      "schedule_row": 43,
-      "tip_et_from_report": "07:00 (ET)",
-      "tip_et_from_schedule": "7:00 PM",
-      "cells_source": "report",
-      "rows": [
-        {
-          "team": "Charlotte Hornets",
-          "player": "",
-          "status": "",
-          "reason": "NOT YET SUBMITTED"
-        },
-        {
-          "team": "Atlanta Hawks",
-          "player": "",
-          "status": "",
-          "reason": "NOT YET SUBMITTED"
-        }
-      ],
-      "block_note": "Emirates NBA Cup group game (schedule PDF row marked C)."
-    },
-    {
-      "matchup": "ORL@BKN",
-      "game_date": "2026-11-20",
-      "schedule_row": 44,
-      "tip_et_from_report": "07:30 (ET)",
-      "tip_et_from_schedule": "7:30 PM",
-      "cells_source": "report",
-      "rows": [
-        {
-          "team": "Orlando Magic",
-          "player": "",
-          "status": "",
-          "reason": "NOT YET SUBMITTED"
-        },
-        {
-          "team": "Brooklyn Nets",
-          "player": "",
-          "status": "",
-          "reason": "NOT YET SUBMITTED",
-          "unverified": true,
-          "flag": "matchup cell lost at page break; reason NOT YET SUBMITTED printed"
-        }
-      ],
-      "block_note": "Emirates NBA Cup group game (schedule PDF row marked C)."
-    },
-    {
-      "matchup": "IND@CLE",
-      "game_date": "2026-11-20",
-      "schedule_row": 45,
-      "tip_et_from_report": "07:30 (ET)",
-      "tip_et_from_schedule": "7:30 PM",
-      "cells_source": "report",
-      "rows": [
-        {
-          "team": "Indiana Pacers",
-          "player": "",
-          "status": "",
-          "reason": "NOT YET SUBMITTED"
-        },
-        {
-          "team": "Cleveland Cavaliers",
-          "player": "",
-          "status": "",
-          "reason": "NOT YET SUBMITTED"
-        }
-      ],
-      "block_note": "Emirates NBA Cup group game (schedule PDF row marked C)."
-    },
-    {
-      "matchup": "TOR@DET",
-      "game_date": "2026-11-20",
-      "schedule_row": 46,
-      "tip_et_from_report": "",
-      "tip_et_from_schedule": "7:30 PM",
-      "cells_source": "report",
-      "rows": [
-        {
-          "team": "Toronto Raptors",
-          "player": "",
-          "status": "",
-          "reason": "",
-          "unverified": true,
-          "flag": "time/status/reason cells lost at page break; 11/20 NOT YET SUBMITTED block (no player entries printed)"
-        },
-        {
-          "team": "Detroit Pistons",
-          "player": "",
-          "status": "",
-          "reason": "NOT YET SUBMITTED",
-          "unverified": true,
-          "flag": "matchup cell lost at page break; reason NOT YET SUBMITTED printed"
-        }
-      ],
-      "block_note": "Emirates NBA Cup group game (schedule PDF row marked C, broadcast Prime)."
-    },
-    {
-      "matchup": "WAS@CHI",
-      "game_date": "2026-11-20",
-      "schedule_row": 47,
-      "tip_et_from_report": "08:00 (ET)",
-      "tip_et_from_schedule": "8:00 PM",
-      "cells_source": "report",
-      "rows": [
-        {
-          "team": "Washington Wizards",
-          "player": "",
-          "status": "",
-          "reason": "",
-          "unverified": true,
-          "flag": "status/reason cells lost at page break; 11/20 NOT YET SUBMITTED block (no player entries printed)"
-        },
-        {
-          "team": "Chicago Bulls",
-          "player": "",
-          "status": "",
-          "reason": "NOT YET SUBMITTED",
-          "unverified": true,
-          "flag": "matchup cell lost at page break; reason NOT YET SUBMITTED printed"
-        }
-      ],
-      "block_note": "Emirates NBA Cup group game (schedule PDF row marked C)."
-    },
-    {
-      "matchup": "NOP@OKC",
-      "game_date": "2026-11-20",
-      "schedule_row": 48,
-      "tip_et_from_report": "08:00 (ET)",
-      "tip_et_from_schedule": "8:00 PM",
-      "cells_source": "report",
-      "rows": [
-        {
-          "team": "New Orleans Pelicans",
-          "player": "",
-          "status": "",
-          "reason": "",
-          "unverified": true,
-          "flag": "status/reason cells lost at page break; 11/20 NOT YET SUBMITTED block (no player entries printed)"
-        },
-        {
-          "team": "Oklahoma City Thunder",
-          "player": "",
-          "status": "",
-          "reason": "NOT YET SUBMITTED",
-          "unverified": true,
-          "flag": "matchup cell lost at page break; reason NOT YET SUBMITTED printed"
-        }
-      ],
-      "block_note": "Emirates NBA Cup group game (schedule PDF row marked C)."
-    },
-    {
-      "matchup": "PHX@UTA",
-      "game_date": "2026-11-20",
-      "schedule_row": 49,
-      "tip_et_from_report": "09:30 (ET)",
-      "tip_et_from_schedule": "9:30 PM",
-      "cells_source": "report",
-      "rows": [
-        {
-          "team": "Phoenix Suns",
-          "player": "",
-          "status": "",
-          "reason": "",
-          "unverified": true,
-          "flag": "status/reason cells lost at page break; 11/20 NOT YET SUBMITTED block (no player entries printed)"
-        },
-        {
-          "team": "Utah Jazz",
-          "player": "",
-          "status": "",
-          "reason": "NOT YET SUBMITTED",
-          "unverified": true,
-          "flag": "matchup cell lost at page break; reason NOT YET SUBMITTED printed"
-        }
-      ],
-      "block_note": "Emirates NBA Cup group game (schedule PDF row marked C)."
-    },
-    {
-      "matchup": "HOU@DEN",
-      "game_date": "2026-11-20",
-      "schedule_row": 50,
-      "tip_et_from_report": "10:00 (ET)",
-      "tip_et_from_schedule": "10:00 PM",
-      "cells_source": "report",
-      "rows": [
-        {
-          "team": "Houston Rockets",
-          "player": "",
-          "status": "",
-          "reason": "",
-          "unverified": true,
-          "flag": "status/reason cells lost at page break; 11/20 NOT YET SUBMITTED block (no player entries printed)"
-        },
-        {
-          "team": "Denver Nuggets",
-          "player": "",
-          "status": "",
-          "reason": "NOT YET SUBMITTED",
-          "unverified": true,
-          "flag": "matchup cell lost at page break; reason NOT YET SUBMITTED printed"
-        }
-      ],
-      "block_note": "Emirates NBA Cup group game (schedule PDF row marked C, broadcast Prime)."
-    },
-    {
-      "matchup": "SAC@LAL",
-      "game_date": "2026-11-20",
-      "schedule_row": 51,
-      "tip_et_from_report": "10:00 (ET)",
-      "tip_et_from_schedule": "10:00 PM",
-      "cells_source": "report",
-      "rows": [
-        {
-          "team": "Sacramento Kings",
-          "player": "",
-          "status": "",
-          "reason": "",
-          "unverified": true,
-          "flag": "status/reason cells lost at page break; 11/20 NOT YET SUBMITTED block (no player entries printed)"
-        },
-        {
-          "team": "Los Angeles Lakers",
-          "player": "",
-          "status": "",
-          "reason": "NOT YET SUBMITTED",
-          "unverified": true,
-          "flag": "matchup cell lost at page break; reason NOT YET SUBMITTED printed"
-        }
-      ],
-      "block_note": "Emirates NBA Cup group game (schedule PDF row marked C)."
+     "team": "Memphis Grizzlies",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": false,
+     "flag": ""
     }
-  ]
+   ],
+   "schedule_row": 270
+  },
+  {
+   "matchup": "LAC@SAS",
+   "game_date": "2026-11-19",
+   "game_date_printed": "11/19/2026",
+   "game_date_source": "report",
+   "tip_et_from_report": "08:00 (ET)",
+   "tip_et_from_schedule": "8:00 PM",
+   "tip_disagreement": null,
+   "rows": [
+    {
+     "team": "LA Clippers",
+     "player": "Beal, Bradley",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Knee Injury Management",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "LA Clippers",
+     "player": "Ingram, Brandon",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Heel Surgery",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "LA Clippers",
+     "player": "Martinelli, Nick",
+     "status": "Out",
+     "reason": "G League - Two-Way",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "LA Clippers",
+     "player": "Miller, Jordan",
+     "status": "Out",
+     "reason": "Injury/Illness - Left Rotator Cuff Surgery",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "San Antonio Spurs",
+     "player": "Brown, Maliq",
+     "status": "Out",
+     "reason": "G League - Two-Way",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "San Antonio Spurs",
+     "player": "Gillespie, Ja'Kobi",
+     "status": "Out",
+     "reason": "G League - Two-Way",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "San Antonio Spurs",
+     "player": "Harper, Dylan",
+     "status": "Out",
+     "reason": "Injury/Illness - Left Hip Soreness",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "San Antonio Spurs",
+     "player": "Harris, Tobias",
+     "status": "Out",
+     "reason": "Injury/Illness - Left Calf Strain",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "San Antonio Spurs",
+     "player": "Quaintance, Jayden",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Knee Surgery",
+     "unverified": false,
+     "flag": ""
+    }
+   ],
+   "schedule_row": 273
+  },
+  {
+   "matchup": "NYK@MIN",
+   "game_date": "2026-11-19",
+   "game_date_printed": "11/19/2026",
+   "game_date_source": "report",
+   "tip_et_from_report": "08:00 (ET)",
+   "tip_et_from_schedule": "8:00 PM",
+   "tip_disagreement": null,
+   "rows": [
+    {
+     "team": "Minnesota Timberwolves",
+     "player": "Beringer, Joan",
+     "status": "Available",
+     "reason": "Injury/Illness - Face Mask",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "Minnesota Timberwolves",
+     "player": "Clark, Jaylen",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Hamstring Strain",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "Minnesota Timberwolves",
+     "player": "DiVincenzo, Donte",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Achilles Tendon Repair / Surgery",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "Minnesota Timberwolves",
+     "player": "Edwards, Anthony",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Knee Arthroscopy",
+     "unverified": false,
+     "flag": ""
+    }
+   ],
+   "schedule_row": 272
+  },
+  {
+   "matchup": "POR@MIL",
+   "game_date": "2026-11-19",
+   "game_date_printed": "",
+   "game_date_source": "schedule-context (both documents cited)",
+   "tip_et_from_report": "",
+   "tip_et_from_schedule": "8:00 PM",
+   "tip_disagreement": null,
+   "rows": [
+    {
+     "team": "Portland Trail Blazers",
+     "player": "Avdija, Deni",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Left Foot Inflammation / Soreness",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "Portland Trail Blazers",
+     "player": "Camara, Toumani",
+     "status": "Questionable",
+     "reason": "Injury/Illness - Abdominal Soreness",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "Portland Trail Blazers",
+     "player": "Carlson, Branden",
+     "status": "Available",
+     "reason": "Injury/Illness - Face Mask",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "Portland Trail Blazers",
+     "player": "Krejci, Vit",
+     "status": "Out",
+     "reason": "Injury/Illness - Left Ankle Fracture",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "Portland Trail Blazers",
+     "player": "Morant, Ja",
+     "status": "Out",
+     "reason": "Injury/Illness - Left Hamstring Strain",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "Portland Trail Blazers",
+     "player": "Sharpe, Shaedon",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Meniscus Surgery",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "Portland Trail Blazers",
+     "player": "Williams III, Robert",
+     "status": "Out",
+     "reason": "Rest",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "Portland Trail Blazers",
+     "player": "Youngblood, Chris",
+     "status": "Out",
+     "reason": "Injury/Illness - Right Heel Contusion / Bone Bruise",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "Milwaukee Bucks",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": false,
+     "flag": ""
+    }
+   ],
+   "schedule_row": 271
+  },
+  {
+   "matchup": "CHA@ATL",
+   "game_date": "2026-11-20",
+   "game_date_printed": "11/20/2026",
+   "game_date_source": "report",
+   "tip_et_from_report": "07:00 (ET)",
+   "tip_et_from_schedule": "7:00 PM",
+   "tip_disagreement": null,
+   "rows": [
+    {
+     "team": "Charlotte Hornets",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "Atlanta Hawks",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": false,
+     "flag": ""
+    }
+   ],
+   "schedule_row": 43
+  },
+  {
+   "matchup": "IND@CLE",
+   "game_date": "2026-11-20",
+   "game_date_printed": "11/20/2026",
+   "game_date_source": "report",
+   "tip_et_from_report": "07:30 (ET)",
+   "tip_et_from_schedule": "7:30 PM",
+   "tip_disagreement": null,
+   "rows": [
+    {
+     "team": "Indiana Pacers",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "Cleveland Cavaliers",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": false,
+     "flag": ""
+    }
+   ],
+   "schedule_row": 45
+  },
+  {
+   "matchup": "ORL@BKN",
+   "game_date": "2026-11-20",
+   "game_date_printed": "11/20/2026",
+   "game_date_source": "report",
+   "tip_et_from_report": "07:30 (ET)",
+   "tip_et_from_schedule": "7:30 PM",
+   "tip_disagreement": null,
+   "rows": [
+    {
+     "team": "Orlando Magic",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": false,
+     "flag": ""
+    },
+    {
+     "team": "Brooklyn Nets",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team and reporting-state cells printed on a page-break row with no matchup cell; attached to the preceding game block by document order and not asserted to belong to it"
+    }
+   ],
+   "schedule_row": 44
+  },
+  {
+   "matchup": "TOR@DET",
+   "game_date": "2026-11-20",
+   "game_date_printed": "",
+   "game_date_source": "schedule-context (both documents cited)",
+   "tip_et_from_report": "",
+   "tip_et_from_schedule": "7:30 PM",
+   "tip_disagreement": null,
+   "rows": [
+    {
+     "team": "Toronto Raptors",
+     "player": "",
+     "status": "",
+     "reason": "",
+     "unverified": true,
+     "flag": "page-break row printed with matchup and team only; the status and reason cells are not printed and are left blank, not inferred"
+    },
+    {
+     "team": "Detroit Pistons",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team and reporting-state cells printed on a page-break row with no matchup cell; attached to the preceding game block by document order and not asserted to belong to it"
+    }
+   ],
+   "schedule_row": 46
+  },
+  {
+   "matchup": "NOP@OKC",
+   "game_date": "2026-11-20",
+   "game_date_printed": "",
+   "game_date_source": "schedule-context (both documents cited)",
+   "tip_et_from_report": "08:00 (ET)",
+   "tip_et_from_schedule": "8:00 PM",
+   "tip_disagreement": null,
+   "rows": [
+    {
+     "team": "New Orleans Pelicans",
+     "player": "",
+     "status": "",
+     "reason": "",
+     "unverified": true,
+     "flag": "page-break row printed with matchup and team only; the status and reason cells are not printed and are left blank, not inferred"
+    },
+    {
+     "team": "Oklahoma City Thunder",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team and reporting-state cells printed on a page-break row with no matchup cell; attached to the preceding game block by document order and not asserted to belong to it"
+    }
+   ],
+   "schedule_row": 48
+  },
+  {
+   "matchup": "WAS@CHI",
+   "game_date": "2026-11-20",
+   "game_date_printed": "",
+   "game_date_source": "schedule-context (both documents cited)",
+   "tip_et_from_report": "",
+   "tip_et_from_schedule": "8:00 PM",
+   "tip_disagreement": null,
+   "rows": [
+    {
+     "team": "Washington Wizards",
+     "player": "",
+     "status": "",
+     "reason": "",
+     "unverified": true,
+     "flag": "page-break row printed with matchup and team only; the status and reason cells are not printed and are left blank, not inferred"
+    },
+    {
+     "team": "Chicago Bulls",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team and reporting-state cells printed on a page-break row with no matchup cell; attached to the preceding game block by document order and not asserted to belong to it"
+    }
+   ],
+   "schedule_row": 47
+  },
+  {
+   "matchup": "PHX@UTA",
+   "game_date": "2026-11-20",
+   "game_date_printed": "",
+   "game_date_source": "schedule-context (both documents cited)",
+   "tip_et_from_report": "09:30 (ET)",
+   "tip_et_from_schedule": "9:30 PM",
+   "tip_disagreement": null,
+   "rows": [
+    {
+     "team": "Phoenix Suns",
+     "player": "",
+     "status": "",
+     "reason": "",
+     "unverified": true,
+     "flag": "page-break row printed with matchup and team only; the status and reason cells are not printed and are left blank, not inferred"
+    },
+    {
+     "team": "Utah Jazz",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team and reporting-state cells printed on a page-break row with no matchup cell; attached to the preceding game block by document order and not asserted to belong to it"
+    }
+   ],
+   "schedule_row": 49
+  },
+  {
+   "matchup": "HOU@DEN",
+   "game_date": "2026-11-20",
+   "game_date_printed": "",
+   "game_date_source": "schedule-context (both documents cited)",
+   "tip_et_from_report": "10:00 (ET)",
+   "tip_et_from_schedule": "10:00 PM",
+   "tip_disagreement": null,
+   "rows": [
+    {
+     "team": "Houston Rockets",
+     "player": "",
+     "status": "",
+     "reason": "",
+     "unverified": true,
+     "flag": "page-break row printed with matchup and team only; the status and reason cells are not printed and are left blank, not inferred"
+    },
+    {
+     "team": "Denver Nuggets",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team and reporting-state cells printed on a page-break row with no matchup cell; attached to the preceding game block by document order and not asserted to belong to it"
+    }
+   ],
+   "schedule_row": 50
+  },
+  {
+   "matchup": "SAC@LAL",
+   "game_date": "2026-11-20",
+   "game_date_printed": "",
+   "game_date_source": "schedule-context (both documents cited)",
+   "tip_et_from_report": "",
+   "tip_et_from_schedule": "10:00 PM",
+   "tip_disagreement": null,
+   "rows": [
+    {
+     "team": "Sacramento Kings",
+     "player": "",
+     "status": "",
+     "reason": "",
+     "unverified": true,
+     "flag": "page-break row printed with matchup and team only; the status and reason cells are not printed and are left blank, not inferred"
+    },
+    {
+     "team": "Los Angeles Lakers",
+     "player": "",
+     "status": "",
+     "reason": "NOT YET SUBMITTED",
+     "unverified": true,
+     "flag": "team and reporting-state cells printed on a page-break row with no matchup cell; attached to the preceding game block by document order and not asserted to belong to it"
+    }
+   ],
+   "schedule_row": 51
+  }
+ ],
+ "unattributed_rows": [
+  {
+   "team": "",
+   "player": "Kuminga, Jonathan",
+   "status": "Questionable",
+   "reason": "Injury/Illness - Right Shoulder Contusion",
+   "unverified": true,
+   "flag": "orphan fragment on a continuation page: no date, time, matchup or team cell printed; kept as printed, not assigned to a game or a team, no reason inferred"
+  },
+  {
+   "team": "",
+   "player": "Pullin, Zyon",
+   "status": "Questionable",
+   "reason": "Injury/Illness - Right Quadriceps Contusion",
+   "unverified": true,
+   "flag": "orphan fragment on a continuation page: no date, time, matchup or team cell printed; kept as printed, not assigned to a game or a team, no reason inferred"
+  }
+ ]
 }
