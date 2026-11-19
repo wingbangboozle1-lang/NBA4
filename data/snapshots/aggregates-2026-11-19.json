@@ -1,0 +1,84 @@
+{
+  "aggregate_id": "aggregates-2026-11-19",
+  "kind": "derived_from_official_snapshots",
+  "source_url": "https://www.nba.com/standings",
+  "source_document_header": "NBA 2026-27 Regular Season Standings (as printed on the standings page)",
+  "fetched_at_utc": "2026-11-19T07:05:00Z",
+  "extraction_tool": "scripts/_gen_1119.py (derived; performs no fetching)",
+  "derived_from": {
+    "results": "https://www.nba.com/games?date=2026-11-16",
+    "standings": "https://www.nba.com/standings",
+    "injuries": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf",
+    "slate": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
+  },
+  "derived_at_utc": "2026-11-19T07:05:00Z",
+  "inputs": {
+    "results": "results-2026-11-16.json",
+    "standings": "standings-2026-11-19.json",
+    "injuries": "injuries-2026-11-19-0145am",
+    "slate": "slate-2026-11-19"
+  },
+  "result_feed": {
+    "games": 8,
+    "team_lines_checked": 16,
+    "lines_where_quarter_sum_equals_printed_final": 16,
+    "lines_that_disagree": 0,
+    "settlement_eligible": true,
+    "source_url": "https://www.nba.com/games?date=2026-11-16",
+    "note": "The 11/16 day settles 16 of 16 team lines. The 11/18 finals (12 games) were observed on the games page but their quarter scores were not captured this cycle, so they are NOT settled here and are flagged pending quarter capture."
+  },
+  "home_court": {
+    "definition": "measured home-win rate = league HOME wins / (HOME wins + HOME losses); neutral-site records held out.",
+    "home_wins": 111,
+    "home_losses": 110,
+    "home_games": 221,
+    "measured_home_win_rate": 0.5023,
+    "neutral_wins": 2,
+    "neutral_losses": 0,
+    "source_url": "https://www.nba.com/standings",
+    "pin": {
+      "measured_home_win_rate": 0.5023,
+      "margin_sd_points": 12.0,
+      "z": 0.0057,
+      "home_advantage_points": 0.068,
+      "conversion": "delegates to ratings.home_advantage_from_win_rate(rate, margin_sd) = margin_sd * Phi^-1(rate)",
+      "rows_used": 30,
+      "rows_without_home_cell": 0,
+      "authorized_for_ratings": false,
+      "source_url": "https://www.nba.com/standings",
+      "note": "neutral-site games held out of the rate"
+    },
+    "pinning_rule": "engine/homerate.py refuses to fit home advantage freely: it converts this measured rate to a point value through one published conversion and nothing else."
+  },
+  "standings_consistency": {
+    "league_wins": 222,
+    "league_losses": 222,
+    "wins_equal_losses": true,
+    "note": "HOME + ROAD + NEUTRAL games must equal the total games played.",
+    "home_plus_road_plus_neutral": 444
+  },
+  "injury_load": {
+    "revision": "11/19/26 01:45 AM",
+    "revision_document": "Injury Report: 11/19/26 01:45 AM",
+    "revision_utc": "2026-11-19T06:45:00Z",
+    "retrieved_utc": "2026-11-19T07:05:00Z",
+    "rows": 44,
+    "rows_with_a_status": 23,
+    "not_yet_submitted_rows": 15,
+    "unverified_rows_after_page_breaks": 15,
+    "status_counts": {
+      "NOT YET SUBMITTED": 15,
+      "Questionable": 4,
+      "Out": 17,
+      "Available": 2,
+      "(not printed)": 6
+    },
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf"
+  },
+  "slate": {
+    "games": 19,
+    "window_start_utc": "2026-11-19T07:05:00Z",
+    "window_end_utc": "2026-11-22T07:05:00Z",
+    "source_url": "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
+  }
+}

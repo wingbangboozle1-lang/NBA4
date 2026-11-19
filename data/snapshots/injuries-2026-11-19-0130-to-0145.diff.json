@@ -1,0 +1,31 @@
+{
+  "snapshot_id": "injuries-2026-11-19-0130-to-0145.diff",
+  "diff_id": "injuries-2026-11-19-0130-to-0145.diff",
+  "kind": "injury_report_consecutive_diff",
+  "source_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+  "source_document_header": "Injury Report: 11/19/26 01:45 AM",
+  "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+  "old": {
+    "revision_label": "11/19/26 01:30 AM",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_30AM.pdf",
+    "source_document_header": "Injury Report: 11/19/26 01:30 AM"
+  },
+  "new": {
+    "revision_label": "11/19/26 01:45 AM",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf",
+    "source_document_header": "Injury Report: 11/19/26 01:45 AM"
+  },
+  "fetched_at_utc": "2026-11-19T07:05:00Z",
+  "extraction_tool": "scripts/_gen_1119.py (machine diff of the two verbatim extractions)",
+  "alignment": "row-for-row on (matchup, player, team, status, reason); both revisions print 44 rows in the same block order",
+  "rule": "rows matched on the identity cells each row prints; a one-for-one leftover with identical status and reason is a printing variance",
+  "changes": [],
+  "counts": {
+    "old_rows": 44,
+    "new_rows": 44,
+    "status_changes": 0,
+    "reason_changes": 0,
+    "printing_variances": 0
+  },
+  "note": "The 01:30 and 01:45 AM ET revisions print the same 44 rows with identical cells; the diff is 0 status changes, 0 reason changes, 0 printing variances."
+}
