@@ -37,25 +37,45 @@ class FinalsSettlementTests(unittest.TestCase):
 
 
 class InjuryRevisionTests(unittest.TestCase):
+    """The 01:45 AM ET file of record is owned by PR #84 (session 639c095c); these tests only read it."""
+
     def test_latest_revision_has_44_rows_and_flags_the_gaps(self):
         data = load("injuries-2026-11-19-0145am.json")
-        self.assertEqual(data["row_count"], 44)
-        flagged = [r for r in data["rows"] if r["flags"]]
-        self.assertEqual(len(flagged), 15)  # 2 page-break (IR-19-01), 6 no-status (IR-19-02), 7 position-placed continuation (IR-19-05)
-        self.assertTrue(all(r["flags"][0].startswith("IR-19-") for r in flagged))
+        rows = [r for g in data["games"] for r in g["rows"]] + data["unattributed_rows"]
+        self.assertEqual(len(rows), data["row_count"], 44)
+        self.assertEqual(len(rows), 44)
+        flagged = [r for r in rows if r.get("flag")]
+        self.assertEqual(len(flagged), 15)
+        self.assertEqual(len(data["unattributed_rows"]), 2)
+
+    def test_eleven_twenty_games_match_the_schedule_rows_43_to_51(self):
+        data = load("injuries-2026-11-19-0145am.json")
+        nov20 = {g["matchup"] for g in data["games"] if g["game_date"] == "2026-11-20"}
+        self.assertEqual(len(nov20), 9)
+        raw = (SNAP / "raw" / "schedule-2026-11-20-11-21-rows-43-51-274-279.txt").read_text(encoding="utf-8").splitlines()
+        game_rows = [l.split("|") for l in raw if l and not l.startswith("#")]
+        self.assertEqual([r[0] for r in game_rows if r[2] == "11/20/26"], [str(n) for n in range(43, 52)])
+        self.assertEqual([r[0] for r in game_rows if r[2] == "11/21/26"], [str(n) for n in range(274, 280)])
+        self.assertEqual(len(game_rows), 15)
 
     def test_consecutive_diff_reports_no_changes_and_names_the_gap(self):
         diff = load("injuries-2026-11-19-0130-to-0145.diff.json")
         self.assertEqual(diff["counts"]["old_rows"], diff["counts"]["new_rows"], 44)
         self.assertEqual(diff["counts"]["status_changes"], 0)
         self.assertEqual(diff["counts"]["reason_changes"], 0)
+        self.assertEqual(diff["counts"]["team_changes"], 0)
         self.assertIn("unobserved gap", diff["consecutive_in_index"])
 
     def test_raw_extracts_have_seven_cells_per_row(self):
         for name in ("injury-2026-11-19T0130am-et.pipes", "injury-2026-11-19T0145am-et.pipes"):
-            body = [l for l in (SNAP / "raw" / name).read_text(encoding="utf-8").splitlines() if l and not l.startswith("#") and "|" in l and not l.split("|")[0].startswith(("revision", "document", "source", "fetched", "extraction", "fields"))]
+            body = [l for l in (SNAP / "raw" / name).read_text(encoding="utf-8").splitlines() if l and not l.startswith("#") and "|" in l and not l.startswith(("revision", "document", "source", "fetched", "extraction", "fields"))]
             self.assertEqual(len(body), 44, name)
             self.assertTrue(all(len(l.split("|")) == 7 for l in body), name)
+
+    def test_both_raw_extracts_agree_cell_for_cell(self):
+        def body(name):
+            return [l for l in (SNAP / "raw" / name).read_text(encoding="utf-8").splitlines() if l and not l.startswith("#") and "|" in l and not l.startswith(("revision", "document", "source", "fetched", "extraction", "fields"))]
+        self.assertEqual(body("injury-2026-11-19T0130am-et.pipes"), body("injury-2026-11-19T0145am-et.pipes"))
 
 
 class BuildAndPagesTests(unittest.TestCase):

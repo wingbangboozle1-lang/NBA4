@@ -789,8 +789,16 @@ def render_injuries_latest() -> str:
     """Rows of the newest official revision read this cycle (11/19 01:45 AM ET), every row as printed."""
     data = load(INJ_LATEST)
     head_cells = ("Game date", "Game time (as printed)", "Matchup", "Team", "Player", "Status", "Reason", "Flags", "Official source")
+    # File of record (PR #84) nests rows under games; the page-break rows with no matchup sit in unattributed_rows.
+    flat = []
+    for g in data["games"]:
+        for r in g["rows"]:
+            flat.append({"game_date": g["game_date_printed"], "game_time_et": g["tip_et_from_report"], "matchup": g["matchup"], **r})
+    for r in data["unattributed_rows"]:
+        flat.append({"game_date": "", "game_time_et": "", "matchup": "", **r})
     rows: list[str] = []
-    for r in data["rows"]:
+    for r in flat:
+        flags = [r["flag"]] if r.get("flag") else []
         cells = [
             f"<td>{e(r['game_date'])}</td>" if r["game_date"] else empty(),
             f"<td>{e(r['game_time_et'])}</td>" if r["game_time_et"] else empty(),
@@ -799,7 +807,7 @@ def render_injuries_latest() -> str:
             f"<td>{e(r['player'])}</td>" if r["player"] else empty(),
             f"<td>{e(r['status'])}</td>" if r["status"] else empty(),
             f"<td>{e(r['reason'])}</td>" if r["reason"] else empty(),
-            f"<td>{'; '.join(e(f) for f in r['flags'])}</td>" if r["flags"] else empty(),
+            f"<td>{'; '.join(e(f) for f in flags)}</td>" if flags else empty(),
             f"<td>{link(data['source_url'], '11/19 01:45 AM ET report')}</td>",
         ]
         rows.append(_row(cells))

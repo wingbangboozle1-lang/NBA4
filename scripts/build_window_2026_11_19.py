@@ -15,8 +15,10 @@ Inputs (transcribed by hand from official pages, recorded here so the build is r
 Outputs:
 
 * ``data/snapshots/results-2026-11-17.json``, ``data/snapshots/results-2026-11-18.json``
-* ``data/snapshots/injuries-2026-11-19-0145am.json``, ``injuries-2026-11-19-0130-to-0145.diff.json``,
-  ``injuries-newest-pointer-2026-11-19.json``
+* ``data/snapshots/injuries-2026-11-19-0130-to-0145.diff.json`` (the consecutive 01:30 -> 01:45 AM ET diff)
+
+The 01:45 AM ET injury file of record (``injuries-2026-11-19-0145am.json``), its newest pointer and the
+schedule rows are owned by the other 11/19 session (merged in PR #84) and are not written here.
 
 Every settlement rule is applied in code: a team line is SETTLEMENT_ELIGIBLE only when its printed
 period scores (including any printed overtime) add to its printed final and the scoreboard final agrees.
@@ -149,39 +151,8 @@ def injury_outputs():
         if a["reason"] != b["reason"]:
             reason_changes += 1
             changes.append({"type": "reason", "old": a["reason"], "new": b["reason"], "row": key(b)})
-    flagged = []
-    for i, r in enumerate(r45):
-        flags = []
-        if r["matchup"] == "" and r["team"] == "" and r["player"]:
-            flags.append("IR-19-01 page-break: date/time/matchup/team not printed; block by position")
-        # A team row with no status and no reason printed (the first-listed team of a 3-cell pair):
-        # the sibling row of the block prints the NOT YET SUBMITTED state; the blank is kept, never copied.
-        if r["team"] and not r["player"] and r["status"] == "" and r["reason"] == "":
-            flags.append("IR-19-02 status cell not printed in extraction")
-        # A 3-cell continuation row prints NOT YET SUBMITTED with no column header; its column is inferred by position.
-        if r["team"] and not r["player"] and r["status"] == "NOT YET SUBMITTED":
-            flags.append("IR-19-05 3-cell continuation row: the printed NOT YET SUBMITTED is placed in the status column by position; the column is not printed")
-        flagged.append({**r, "flags": flags, "row_no": i + 1})
     rev_url = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf"
     prev_url = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_30AM.pdf"
-    inj = {
-        "snapshot_id": "injuries-2026-11-19-0145am",
-        "kind": "official_injury_report_rows",
-        "source_url": rev_url,
-        "source_document_header": "Injury Report: 11/19/26 01:45 AM",
-        "source_index_url": INDEX,
-        "fetched_at_utc": FETCHED,
-        "extraction_tool": "fetch_page (PDF text extraction to markdown tables, single chunk)",
-        "index_listing_checked": "The official index (fetched in the 2026-11-19 session window, 06:59Z-07:07Z) lists 11/19 reports from 12:00 a.m. to 1:45 a.m. ET; the 1:45 a.m. ET report is the newest listed at the check.",
-        "row_count": len(r45),
-        "rows": flagged,
-        "matchup_blocks": sorted({r["matchup"] for r in r45 if r["matchup"]}),
-        "raw_extract": "data/snapshots/raw/injury-2026-11-19T0145am-et.pipes",
-        "notes": [
-            "Every cell is as printed; blanks are cells the extraction did not print. Nothing is inferred from the schedule or the games page.",
-            "Game-time cells print 24-hour values such as 08:00 (ET); the games page prints 8:00 PM ET for the same matchups. Kept as printed (flag IR-19-03).",
-        ],
-    }
     diff = {
         "diff_id": "injuries-2026-11-19-0130-to-0145.diff",
         "kind": "official_injury_report_consecutive_diff",
@@ -197,31 +168,14 @@ def injury_outputs():
         "extraction_tool": "scripts/build_window_2026_11_19.py (stdlib comparison of the two verbatim extracts)",
         "source_index_url": INDEX,
     }
-    pointer = {
-        "snapshot_id": "injuries-newest-pointer-2026-11-19",
-        "kind": "official_injury_report_index_pointer",
-        "source_url": INDEX,
-        "source_document_header": "Injury report index (entries listed 11/19/26 12:00 a.m. to 1:45 a.m. ET)",
-        "extraction_tool": "fetch_page (index listing, read as markdown)",
-        "fetched_at_utc": FETCHED,
-        "purpose": "Metadata only: the 11/19 1:45 a.m. ET report was the newest listed on the official index at the check; rows and the 1:30->1:45 diff are in the files named here.",
-        "index_entries_seen_nov_19": ["12:00 a.m ET", "12:15 a.m ET", "12:30 a.m ET", "12:45 a.m ET", "1:00 a.m ET", "1:15 a.m ET", "1:30 a.m ET", "1:45 a.m ET"],
-        "revision_time_et": "2026-11-19 01:45 AM ET",
-        "retrieved_utc": FETCHED,
-        "files": ["injuries-2026-11-19-0145am.json", "injuries-2026-11-19-0130-to-0145.diff.json"],
-        "gap_note": "1:15 a.m. and earlier 11/19 revisions were not transcribed this cycle; the stored 11/17 11:15 AM revision is the last stored before this gap.",
-    }
-    return inj, diff, pointer
+    return diff
 
 
 def outputs():
     out = {}
     out["results-2026-11-17.json"] = results_doc("2026-11-17", FINALS_1117, "11/17")
     out["results-2026-11-18.json"] = results_doc("2026-11-18", FINALS_1118, "11/18")
-    inj, diff, pointer = injury_outputs()
-    out["injuries-2026-11-19-0145am.json"] = inj
-    out["injuries-2026-11-19-0130-to-0145.diff.json"] = diff
-    out["injuries-newest-pointer-2026-11-19.json"] = pointer
+    out["injuries-2026-11-19-0130-to-0145.diff.json"] = injury_outputs()
     return {k: json.dumps(v, indent=2, ensure_ascii=False) + "\n" for k, v in out.items()}
 
 

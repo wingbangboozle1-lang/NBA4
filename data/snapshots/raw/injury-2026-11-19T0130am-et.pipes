@@ -6,6 +6,7 @@ source_index_url: https://official.nba.com/nba-injury-report-2026-27-season/
 fetched_at_utc: 2026-11-19T07:04:24Z
 extraction_tool: fetch_page (PDF text extraction to markdown tables, single chunk)
 fields: game_date|game_time_et|matchup|team|player|status|reason
+# NOT YET SUBMITTED printed in a 3-cell continuation row is written in the reason cell, the same cell as the 7-cell rows that print it (matches the file of record injuries-2026-11-19-0145am.json). The printed column is not shown; flag IR-19-05.
 # No cell below is filled in, corrected or inferred; a blank means the extracted document prints nothing in that cell.
 # Page-break loss, recorded as extracted: Kuminga and Pullin print no date/time/matchup/team cells after the page break; they sit inside the NYK@MIN block by position only (flag IR-19-01).
 # Three-cell continuation rows (time/matchup/team, or team/status) print no status cell for the first-listed team of each pair; the sibling team row prints NOT YET SUBMITTED. The blank status is kept, not copied (flag IR-19-02).
@@ -43,16 +44,16 @@ fields: game_date|game_time_et|matchup|team|player|status|reason
 11/20/2026|07:30 (ET)|IND@CLE|Indiana Pacers|||NOT YET SUBMITTED
 11/20/2026|07:30 (ET)|IND@CLE|Cleveland Cavaliers|||NOT YET SUBMITTED
 11/20/2026|07:30 (ET)|ORL@BKN|Orlando Magic|||NOT YET SUBMITTED
-|||Brooklyn Nets||NOT YET SUBMITTED|
+|||Brooklyn Nets|||NOT YET SUBMITTED
 ||TOR@DET|Toronto Raptors|||
-|||Detroit Pistons||NOT YET SUBMITTED|
+|||Detroit Pistons|||NOT YET SUBMITTED
 |08:00 (ET)|NOP@OKC|New Orleans Pelicans|||
-|||Oklahoma City Thunder||NOT YET SUBMITTED|
+|||Oklahoma City Thunder|||NOT YET SUBMITTED
 ||WAS@CHI|Washington Wizards|||
-|||Chicago Bulls||NOT YET SUBMITTED|
+|||Chicago Bulls|||NOT YET SUBMITTED
 |09:30 (ET)|PHX@UTA|Phoenix Suns|||
-|||Utah Jazz||NOT YET SUBMITTED|
+|||Utah Jazz|||NOT YET SUBMITTED
 |10:00 (ET)|HOU@DEN|Houston Rockets|||
-|||Denver Nuggets||NOT YET SUBMITTED|
+|||Denver Nuggets|||NOT YET SUBMITTED
 ||SAC@LAL|Sacramento Kings|||
-|||Los Angeles Lakers||NOT YET SUBMITTED|
+|||Los Angeles Lakers|||NOT YET SUBMITTED
