@@ -1,0 +1,35 @@
+{
+  "diff_id": "injuries-2026-11-19-0130-to-0145.diff",
+  "kind": "official_injury_report_consecutive_diff",
+  "old": {
+    "revision_label": "11/19/26 01:30 AM",
+    "document": "Injury Report: 11/19/26 01:30 AM",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_30AM.pdf",
+    "retrieved_utc": "2026-11-19 (session window 06:59Z-07:07Z; per-document time not logged)",
+    "raw_extract": "data/snapshots/raw/injury-2026-11-19T0130am-et.pipes"
+  },
+  "new": {
+    "revision_label": "11/19/26 01:45 AM",
+    "document": "Injury Report: 11/19/26 01:45 AM",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf",
+    "retrieved_utc": "2026-11-19 (session window 06:59Z-07:07Z; per-document time not logged)",
+    "raw_extract": "data/snapshots/raw/injury-2026-11-19T0145am-et.pipes"
+  },
+  "alignment": "position-aligned: both revisions print 44 rows in the same order; identity cells compared row by row",
+  "changes": [],
+  "counts": {
+    "old_rows": 44,
+    "new_rows": 44,
+    "status_changes": 0,
+    "reason_changes": 0,
+    "team_changes": 0,
+    "printing_variances": 0,
+    "realigned": 0
+  },
+  "consecutive_in_index": "1:30 a.m. and 1:45 a.m. ET are consecutive entries of the official index listing (12:00 a.m. through 1:45 a.m. ET). The stored predecessor 11/17 11:15 AM is NOT consecutive: the index listing read in this session shows 11/19 entries only from 12:00 a.m. to 1:45 a.m. ET; no 11/18 entries were transcribed, so 11/17 11:15 AM to 11/19 12:00 AM is an unobserved gap (flag IR-19-04).",
+  "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf",
+  "source_document_header": "Injury Report: 11/19/26 01:45 AM",
+  "fetched_at_utc": "2026-11-19 (session window 06:59Z-07:07Z; per-document time not logged)",
+  "extraction_tool": "scripts/build_window_2026_11_19.py (stdlib comparison of the two verbatim extracts)",
+  "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/"
+}

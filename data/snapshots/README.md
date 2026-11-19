@@ -69,3 +69,20 @@ python3 -c "import json;d=json.load(open('data/snapshots/injuries-2026-11-15-061
 ```
 
 To re-check a value, open the `source_url`, find the row by game/matchup and player, and compare with the value on [Upcoming slate](../slate.html) or [Injuries & flow](../injuries.html). If the document has moved on (a newer report exists), the older snapshot is stale by definition — see [Flagged for review](../review.html).
+
+## Eleventh daily refresh cycle — 2026-11-19 (task BS, `arena/76f88812-nba4`)
+
+Fetches for this cycle ran 06:59–07:07 UTC on 2026-11-19; per-document times were not logged, so no file carries a finer time.
+
+| File | What it holds | Official source | Source document timestamp | Written by |
+| --- | --- | --- | --- | --- |
+| `results-2026-11-17.json` | Every 11/17 final (5 games): regulation periods and printed OT, printed Final, quarter-sum check (10 of 10 lines agree). | Game summary pages `https://www.nba.com/game/<slug>` (LINESCORES and GAME INFO); scoreboard [11/17](https://www.nba.com/games?date=2026-11-17) | No clock printed on the summary page; the session window is recorded in `fetched_at_utc` | `scripts/build_window_2026_11_19.py` |
+| `results-2026-11-18.json` | Every 11/18 final (12 games), same schema (24 of 24 lines agree). | Game summary pages; scoreboard [11/18](https://www.nba.com/games?date=2026-11-18) | As above | `scripts/build_window_2026_11_19.py` |
+| `injuries-2026-11-19-0130-to-0145.diff.json` | Consecutive diff 01:30 → 01:45 AM ET: 0 status, 0 reason, 0 team changes. | [01:30 AM PDF](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_30AM.pdf), [01:45 AM PDF](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf) | Headers "Injury Report: 11/19/26 01:30 AM" and "01:45 AM" | `scripts/build_window_2026_11_19.py` |
+| `raw/injury-2026-11-19T0130am-et.pipes` | Verbatim 7-cell extract of the 01:30 AM ET revision (blank = not printed). | [01:30 AM PDF](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_30AM.pdf) | Header "Injury Report: 11/19/26 01:30 AM" | this session |
+| `raw/injury-2026-11-19T0145am-et.pipes` | Verbatim 7-cell extract of the 01:45 AM ET revision, same content as the file of record. | [01:45 AM PDF](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf) | Header "Injury Report: 11/19/26 01:45 AM" | this session |
+| `raw/schedule-2026-11-20-11-21-rows-43-51-274-279.txt` | Verbatim schedule rows for 11/20 (GAME 43–51) and 11/21 (GAME 274–279). Trailing cells kept as printed. | [2026–27 schedule PDF](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) | Header "2026-27 NBA REGULAR SEASON SCHEDULE AS OF AUGUST 13, 2026" | this session |
+
+**Owned by another session (not overwritten here):** `injuries-2026-11-19-0145am.json` (the 01:45 AM ET file of record, nested by game) and `injuries-newest-pointer-2026-11-19.json`, both merged from PR #84 (session `639c095c-nba4`). `injuries.html` renders the newest revision from the file of record.
+
+Built by `python3 scripts/build_window_2026_11_19.py` (check with `--check`). Not refreshed this cycle: standings and team statistics (flag BR-S2), and per-player game logs.
