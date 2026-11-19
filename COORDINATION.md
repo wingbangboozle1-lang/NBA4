@@ -853,3 +853,22 @@ thirteen suites) rather than negotiated. No other session's content was discarde
 **Not done, deliberately.** No NBA page was fetched by this session (no egress); no snapshot,
 injury row or slate row was edited; the 02:00 AM report was not transcribed; and no value from
 a document this session could not fetch is published anywhere.
+
+### Publication record — session `arena/c38970c9-nba4` (tasks DG–DS)
+
+| Item | Value |
+| --- | --- |
+| PR | [#87](https://github.com/wingbangboozle1-lang/NBA4/pull/87) — opened and merged without waiting for approval |
+| Merged | 2026-11-19T07:20:54Z as `a5cc5f1` (merge commit) |
+| GitHub Pages | build for `a5cc5f1`: **`built`**, created 2026-11-19T07:20:56Z (`GET /repos/…/pages/builds/latest`); `GET /repos/…/pages` → `status: built`, `https_enforced: true`, source `main /` |
+| Live content | the deployed tree at `main` (`a5cc5f1`) contains the pass-13 section, `Q-DO-01…06`, suggestion section E and the status block (checked by reading the built commit, not by fetching `wingbangboozle1-lang.github.io`, which this sandbox cannot reach — the same limit earlier sessions recorded) |
+| Checks before merge | 583 unit tests OK; `check_site.py --with-tests` PASS (16 pages, 776 HTML rows, 1446 Markdown rows); the three `--check` generators unchanged; `scheduled_refresh.py --mode offline` 3/3 PASS |
+| Second capture | the repaired workflow ran again on the PR branch (run [44478638840](https://github.com/wingbangboozle1-lang/NBA4/actions/runs/44478638840)) and produced a **byte-identical schedule PDF** and the same statistics verdict, so the finding reproduces |
+
+**Open item left for the owner (not merged, on purpose).** PR
+[#72](https://github.com/wingbangboozle1-lang/NBA4/pull/72) (`arena/ec0a4dc9-nba4`, untouched
+since 2026-11-17T16:22Z) is stale: its head would **remove 51,346 lines** from `main`,
+including `tests/test_official_pages.py`, `tests/test_window_2026_11_19.py` and newer snapshot
+files, because it was cut before PRs #83–#86 landed. It should be **closed, not merged**. This
+session did not close it, because the PR belongs to another session's record, and did not merge
+it, because merging it would destroy current work.
