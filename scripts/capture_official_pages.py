@@ -167,6 +167,38 @@ TARGETS: dict[str, dict[str, str]] = {
         },
         "drop_default_headers": True,
     },
+
+    # ---- batch 4: client-rendered page data endpoints (task DI, 2026-11-19) ---
+    # Batches 1-3 established that the four www.nba.com pages return a shell and that
+    # cdn.nba.com/static/json/** is refused with HTTP 403 whatever the headers are.
+    # What was never probed is the JSON a browser requests after that shell loads.
+    # These are candidates, not sources: nothing is parsed from them, and a failure
+    # is recorded as NOT REACHED.
+    "stats_nba_origin_title": {
+        "url": "https://stats.nba.com/",
+        "kind": "html",
+        "note": "stats.nba.com origin document: does the host answer at all, and with what status?",
+    },
+    "cdn_boxscore_live": {
+        "url": "https://cdn.nba.com/static/json/liveData/boxscore/boxscore_0022600253.json",
+        "kind": "json",
+        "note": "cdn.nba.com per-game boxscore JSON for one real 11/17 game id (0022600253 = NYK@TOR)",
+    },
+    "cdn_playbyplay_live": {
+        "url": "https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_0022600253.json",
+        "kind": "json",
+        "note": "cdn.nba.com play-by-play JSON for the same game (game-flow input candidate)",
+    },
+    "cdn_schedule_leaguedate": {
+        "url": "https://cdn.nba.com/static/json/staticData/scheduleLeagueV2.json",
+        "kind": "json",
+        "note": "older cdn static schedule path (batch 2 probed scheduleLeagueV2_1.json)",
+    },
+    "www_advanced_sorted": {
+        "url": "https://www.nba.com/stats/teams/advanced?dir=-1&sort=PTS",
+        "kind": "html",
+        "note": "the advanced page with its own query string: does the shell ever server-render rows?",
+    },
 }
 
 
