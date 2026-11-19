@@ -2420,9 +2420,9 @@
      ]
     }
    ],
-   "region": "united-states"
+   "region": "international-australia"
   },
-  "xRegionMap": "united-states",
+  "xRegionMap": "international-australia",
   "isIndex": false,
   "cmsSiteSettings": {
    "games": {
@@ -7093,7 +7093,7 @@
    }
   ],
   "akamaiHeaders": {
-   "xAkamaiEdgescape": "georegion=252,country_code=US,region_code=GA,city=MACON,dma=503,msa=4680,areacode=478,county=BIBB,fips=13021,lat=32.8993,long=-83.468,timezone=EST,zip=31201-31213+31216-31217+31220-31221+31294-31297,continent=NA,throughput=vhigh,bw=5000,asnum=399673,location_id=0",
+   "xAkamaiEdgescape": "georegion=16,country_code=AU,region_code=SA,city=ADELAIDE,lat=-34.93,long=138.60,timezone=GMT+9.50,continent=OC,throughput=vhigh,bw=5000,asnum=7545,location_id=0",
    "xRegionMap": "united-states",
    "xLpPackageCountry": "US",
    "xTargetMarket": "with-commercials"
