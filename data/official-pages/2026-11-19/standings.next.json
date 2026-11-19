@@ -7093,7 +7093,7 @@
    }
   ],
   "akamaiHeaders": {
-   "xAkamaiEdgescape": "georegion=252,country_code=US,region_code=GA,city=MACON,dma=503,msa=4680,areacode=478,county=BIBB,fips=13021,lat=32.8993,long=-83.468,timezone=EST,zip=31201-31213+31216-31217+31220-31221+31294-31297,continent=NA,throughput=vhigh,bw=5000,asnum=399673,location_id=0",
+   "xAkamaiEdgescape": "georegion=286,country_code=US,region_code=UT,city=SALTLAKECITY,dma=770,msa=7160,areacode=801,county=SALTLAKE,fips=49035,lat=40.7566,long=-111.8992,timezone=MST,zip=84101-84134+84136+84138-84139+84141+84143+84145+84147-84148+84150-84152+84157-84158+84165+84170-84171+84180+84184+84189-84190+84199,continent=NA,throughput=vhigh,bw=5000,network=qwest,asnum=209,location_id=0",
    "xRegionMap": "united-states",
    "xLpPackageCountry": "US",
    "xTargetMarket": "with-commercials"
