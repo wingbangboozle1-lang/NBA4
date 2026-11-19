@@ -1,0 +1,746 @@
+{
+  "snapshot_id": "results-2026-11-18",
+  "kind": "official_finals_observation",
+  "source_document": "official nba.com game summary pages (LINESCORES and GAME INFO) for every game of the date; scoreboard totals from the games page",
+  "source_document_header": "LINESCORES / GAME INFO as printed on each official game summary page; Final totals on the scoreboard",
+  "source_url": "https://www.nba.com/game/<game slug> (one per row; see column 14)",
+  "source_index_url": "https://www.nba.com/games?date=2026-11-18",
+  "fetched_at_utc": "2026-11-19 (session window 06:59Z-07:07Z; per-document time not logged)",
+  "extraction_tool": "fetch_page (web page extraction of the nba.com game summary LINESCORES and GAME INFO tables; scoreboard totals from the games page)",
+  "row_format": [
+    "game_id",
+    "date",
+    "tip_et",
+    "arena",
+    "city",
+    "away",
+    "home",
+    "away_q",
+    "away_final",
+    "home_q",
+    "home_final",
+    "winner",
+    "loser",
+    "source_url",
+    "away_ot",
+    "home_ot"
+  ],
+  "row_format_note": "away_q/home_q hold the four printed regulation periods; any printed overtime period sits in away_ot/home_ot (the 2026-11-16 schema). The total used for the check is the regulation periods plus the printed OT periods. The tip is the GAME INFO start time as printed.",
+  "rows": [
+    [
+      "0022600258",
+      "2026-11-18",
+      "7:00 PM",
+      "Rocket Arena",
+      "Cleveland, OH",
+      "MEM",
+      "CLE",
+      [
+        30,
+        41,
+        29,
+        24
+      ],
+      124,
+      [
+        37,
+        35,
+        27,
+        22
+      ],
+      121,
+      "MEM",
+      "CLE",
+      "https://www.nba.com/game/mem-vs-cle-0022600258",
+      [],
+      []
+    ],
+    [
+      "0022600259",
+      "2026-11-18",
+      "7:00 PM",
+      "Gainbridge Fieldhouse",
+      "Indianapolis, IN",
+      "HOU",
+      "IND",
+      [
+        39,
+        23,
+        31,
+        26
+      ],
+      119,
+      [
+        28,
+        18,
+        30,
+        28
+      ],
+      104,
+      "HOU",
+      "IND",
+      "https://www.nba.com/game/hou-vs-ind-0022600259",
+      [],
+      []
+    ],
+    [
+      "0022600260",
+      "2026-11-18",
+      "7:00 PM",
+      "Kaseya Center",
+      "Miami, FL",
+      "MIL",
+      "MIA",
+      [
+        23,
+        25,
+        38,
+        44
+      ],
+      130,
+      [
+        34,
+        40,
+        38,
+        25
+      ],
+      137,
+      "MIA",
+      "MIL",
+      "https://www.nba.com/game/mil-vs-mia-0022600260",
+      [],
+      []
+    ],
+    [
+      "0022600261",
+      "2026-11-18",
+      "7:00 PM",
+      "Kia Center",
+      "Orlando, FL",
+      "PHI",
+      "ORL",
+      [
+        27,
+        37,
+        28,
+        29
+      ],
+      121,
+      [
+        40,
+        29,
+        28,
+        19
+      ],
+      116,
+      "PHI",
+      "ORL",
+      "https://www.nba.com/game/phi-vs-orl-0022600261",
+      [],
+      []
+    ],
+    [
+      "0022600262",
+      "2026-11-18",
+      "7:30 PM",
+      "Barclays Center",
+      "Brooklyn, NY",
+      "CHI",
+      "BKN",
+      [
+        37,
+        39,
+        35,
+        26
+      ],
+      137,
+      [
+        21,
+        30,
+        26,
+        30
+      ],
+      107,
+      "CHI",
+      "BKN",
+      "https://www.nba.com/game/chi-vs-bkn-0022600262",
+      [],
+      []
+    ],
+    [
+      "0022600263",
+      "2026-11-18",
+      "7:30 PM",
+      "Scotiabank Arena",
+      "Toronto, ON",
+      "WAS",
+      "TOR",
+      [
+        29,
+        20,
+        29,
+        25
+      ],
+      103,
+      [
+        23,
+        24,
+        32,
+        20
+      ],
+      99,
+      "WAS",
+      "TOR",
+      "https://www.nba.com/game/was-vs-tor-0022600263",
+      [],
+      []
+    ],
+    [
+      "0022600264",
+      "2026-11-18",
+      "8:00 PM",
+      "Smoothie King Center",
+      "New Orleans, LA",
+      "DET",
+      "NOP",
+      [
+        31,
+        36,
+        25,
+        30
+      ],
+      122,
+      [
+        31,
+        29,
+        26,
+        23
+      ],
+      109,
+      "DET",
+      "NOP",
+      "https://www.nba.com/game/det-vs-nop-0022600264",
+      [],
+      []
+    ],
+    [
+      "0022600265",
+      "2026-11-18",
+      "8:00 PM",
+      "Paycom Center",
+      "Oklahoma City, OK",
+      "ATL",
+      "OKC",
+      [
+        31,
+        33,
+        19,
+        34
+      ],
+      117,
+      [
+        29,
+        22,
+        32,
+        29
+      ],
+      112,
+      "ATL",
+      "OKC",
+      "https://www.nba.com/game/atl-vs-okc-0022600265",
+      [],
+      []
+    ],
+    [
+      "0022600266",
+      "2026-11-18",
+      "9:30 PM",
+      "Ball Arena",
+      "Denver, CO",
+      "BOS",
+      "DEN",
+      [
+        30,
+        31,
+        19,
+        21
+      ],
+      101,
+      [
+        24,
+        25,
+        31,
+        25
+      ],
+      105,
+      "DEN",
+      "BOS",
+      "https://www.nba.com/game/bos-vs-den-0022600266",
+      [],
+      []
+    ],
+    [
+      "0022600267",
+      "2026-11-18",
+      "8:00 PM",
+      "American Airlines Center",
+      "Dallas, TX",
+      "GSW",
+      "DAL",
+      [
+        25,
+        24,
+        23,
+        22
+      ],
+      94,
+      [
+        35,
+        27,
+        30,
+        24
+      ],
+      116,
+      "DAL",
+      "GSW",
+      "https://www.nba.com/game/gsw-vs-dal-0022600267",
+      [],
+      []
+    ],
+    [
+      "0022600268",
+      "2026-11-18",
+      "10:00 PM",
+      "Crypto.com Arena",
+      "Los Angeles, CA",
+      "UTA",
+      "LAL",
+      [
+        29,
+        27,
+        22,
+        31
+      ],
+      109,
+      [
+        34,
+        20,
+        22,
+        21
+      ],
+      97,
+      "UTA",
+      "LAL",
+      "https://www.nba.com/game/uta-vs-lal-0022600268",
+      [],
+      []
+    ],
+    [
+      "0022600269",
+      "2026-11-18",
+      "10:00 PM",
+      "Golden 1 Center",
+      "Sacramento, CA",
+      "PHX",
+      "SAC",
+      [
+        36,
+        29,
+        34,
+        29
+      ],
+      128,
+      [
+        31,
+        29,
+        24,
+        23
+      ],
+      107,
+      "PHX",
+      "SAC",
+      "https://www.nba.com/game/phx-vs-sac-0022600269",
+      [],
+      []
+    ]
+  ],
+  "verification": {
+    "quarter_sum_rule": "For every row the printed periods (regulation, plus any printed OT) were added and compared with the printed Final.",
+    "quarter_sum_check": [
+      [
+        "0022600258",
+        "MEM",
+        [
+          30,
+          41,
+          29,
+          24
+        ],
+        [],
+        124,
+        124,
+        true
+      ],
+      [
+        "0022600258",
+        "CLE",
+        [
+          37,
+          35,
+          27,
+          22
+        ],
+        [],
+        121,
+        121,
+        true
+      ],
+      [
+        "0022600259",
+        "HOU",
+        [
+          39,
+          23,
+          31,
+          26
+        ],
+        [],
+        119,
+        119,
+        true
+      ],
+      [
+        "0022600259",
+        "IND",
+        [
+          28,
+          18,
+          30,
+          28
+        ],
+        [],
+        104,
+        104,
+        true
+      ],
+      [
+        "0022600260",
+        "MIL",
+        [
+          23,
+          25,
+          38,
+          44
+        ],
+        [],
+        130,
+        130,
+        true
+      ],
+      [
+        "0022600260",
+        "MIA",
+        [
+          34,
+          40,
+          38,
+          25
+        ],
+        [],
+        137,
+        137,
+        true
+      ],
+      [
+        "0022600261",
+        "PHI",
+        [
+          27,
+          37,
+          28,
+          29
+        ],
+        [],
+        121,
+        121,
+        true
+      ],
+      [
+        "0022600261",
+        "ORL",
+        [
+          40,
+          29,
+          28,
+          19
+        ],
+        [],
+        116,
+        116,
+        true
+      ],
+      [
+        "0022600262",
+        "CHI",
+        [
+          37,
+          39,
+          35,
+          26
+        ],
+        [],
+        137,
+        137,
+        true
+      ],
+      [
+        "0022600262",
+        "BKN",
+        [
+          21,
+          30,
+          26,
+          30
+        ],
+        [],
+        107,
+        107,
+        true
+      ],
+      [
+        "0022600263",
+        "WAS",
+        [
+          29,
+          20,
+          29,
+          25
+        ],
+        [],
+        103,
+        103,
+        true
+      ],
+      [
+        "0022600263",
+        "TOR",
+        [
+          23,
+          24,
+          32,
+          20
+        ],
+        [],
+        99,
+        99,
+        true
+      ],
+      [
+        "0022600264",
+        "DET",
+        [
+          31,
+          36,
+          25,
+          30
+        ],
+        [],
+        122,
+        122,
+        true
+      ],
+      [
+        "0022600264",
+        "NOP",
+        [
+          31,
+          29,
+          26,
+          23
+        ],
+        [],
+        109,
+        109,
+        true
+      ],
+      [
+        "0022600265",
+        "ATL",
+        [
+          31,
+          33,
+          19,
+          34
+        ],
+        [],
+        117,
+        117,
+        true
+      ],
+      [
+        "0022600265",
+        "OKC",
+        [
+          29,
+          22,
+          32,
+          29
+        ],
+        [],
+        112,
+        112,
+        true
+      ],
+      [
+        "0022600266",
+        "BOS",
+        [
+          30,
+          31,
+          19,
+          21
+        ],
+        [],
+        101,
+        101,
+        true
+      ],
+      [
+        "0022600266",
+        "DEN",
+        [
+          24,
+          25,
+          31,
+          25
+        ],
+        [],
+        105,
+        105,
+        true
+      ],
+      [
+        "0022600267",
+        "GSW",
+        [
+          25,
+          24,
+          23,
+          22
+        ],
+        [],
+        94,
+        94,
+        true
+      ],
+      [
+        "0022600267",
+        "DAL",
+        [
+          35,
+          27,
+          30,
+          24
+        ],
+        [],
+        116,
+        116,
+        true
+      ],
+      [
+        "0022600268",
+        "UTA",
+        [
+          29,
+          27,
+          22,
+          31
+        ],
+        [],
+        109,
+        109,
+        true
+      ],
+      [
+        "0022600268",
+        "LAL",
+        [
+          34,
+          20,
+          22,
+          21
+        ],
+        [],
+        97,
+        97,
+        true
+      ],
+      [
+        "0022600269",
+        "PHX",
+        [
+          36,
+          29,
+          34,
+          29
+        ],
+        [],
+        128,
+        128,
+        true
+      ],
+      [
+        "0022600269",
+        "SAC",
+        [
+          31,
+          29,
+          24,
+          23
+        ],
+        [],
+        107,
+        107,
+        true
+      ]
+    ],
+    "agreement": "24 of 24 team lines agree; scoreboard Final equals the linescore Final for all 12 games.",
+    "settlement_status": "SETTLEMENT_ELIGIBLE for every team line"
+  },
+  "extraction_notes": [
+    "One row per game of 2026-11-18; 12 games on the scoreboard for this date.",
+    "Overtime: none.",
+    "The gamebook PDF link printed on each game summary page was not readable from the fetch tool in this cycle (statsdmz.nba.com returned errors, including for the 11/16 book read earlier); the game summary LINESCORES table was used instead."
+  ],
+  "secondary_sources": {
+    "games_page": "https://www.nba.com/games?date=2026-11-18",
+    "game_pages": {
+      "0022600258": "https://www.nba.com/game/mem-vs-cle-0022600258",
+      "0022600259": "https://www.nba.com/game/hou-vs-ind-0022600259",
+      "0022600260": "https://www.nba.com/game/mil-vs-mia-0022600260",
+      "0022600261": "https://www.nba.com/game/phi-vs-orl-0022600261",
+      "0022600262": "https://www.nba.com/game/chi-vs-bkn-0022600262",
+      "0022600263": "https://www.nba.com/game/was-vs-tor-0022600263",
+      "0022600264": "https://www.nba.com/game/det-vs-nop-0022600264",
+      "0022600265": "https://www.nba.com/game/atl-vs-okc-0022600265",
+      "0022600266": "https://www.nba.com/game/bos-vs-den-0022600266",
+      "0022600267": "https://www.nba.com/game/gsw-vs-dal-0022600267",
+      "0022600268": "https://www.nba.com/game/uta-vs-lal-0022600268",
+      "0022600269": "https://www.nba.com/game/phx-vs-sac-0022600269"
+    },
+    "gamebook_links_printed_not_read": [
+      "https://statsdmz.nba.com/pdfs/20261118/20261118_MEMCLE_book.pdf",
+      "https://statsdmz.nba.com/pdfs/20261118/20261118_HOUIND_book.pdf",
+      "https://statsdmz.nba.com/pdfs/20261118/20261118_MILMIA_book.pdf",
+      "https://statsdmz.nba.com/pdfs/20261118/20261118_PHIORL_book.pdf",
+      "https://statsdmz.nba.com/pdfs/20261118/20261118_CHIBKN_book.pdf",
+      "https://statsdmz.nba.com/pdfs/20261118/20261118_WASTOR_book.pdf",
+      "https://statsdmz.nba.com/pdfs/20261118/20261118_DETNOP_book.pdf",
+      "https://statsdmz.nba.com/pdfs/20261118/20261118_ATLOKC_book.pdf",
+      "https://statsdmz.nba.com/pdfs/20261118/20261118_BOSDEN_book.pdf",
+      "https://statsdmz.nba.com/pdfs/20261118/20261118_GSWDAL_book.pdf",
+      "https://statsdmz.nba.com/pdfs/20261118/20261118_UTALAL_book.pdf",
+      "https://statsdmz.nba.com/pdfs/20261118/20261118_PHXSAC_book.pdf"
+    ]
+  }
+}

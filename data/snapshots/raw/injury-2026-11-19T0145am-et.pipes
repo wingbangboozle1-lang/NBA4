@@ -1,0 +1,58 @@
+# NBA Official Injury Report - verbatim table extraction
+revision_et_label: 11/19/26 01:45 AM
+document_header: "Injury Report: 11/19/26 01:45 AM"
+source_url: https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf
+source_index_url: https://official.nba.com/nba-injury-report-2026-27-season/
+fetched_at_utc: 2026-11-19T07:04:24Z
+extraction_tool: fetch_page (PDF text extraction to markdown tables, single chunk)
+fields: game_date|game_time_et|matchup|team|player|status|reason
+# No cell below is filled in, corrected or inferred; a blank means the extracted document prints nothing in that cell.
+# Page-break loss, recorded as extracted: Kuminga and Pullin print no date/time/matchup/team cells after the page break; they sit inside the NYK@MIN block by position only (flag IR-19-01).
+# Three-cell continuation rows (time/matchup/team, or team/status) print no status cell for the first-listed team of each pair; the sibling team row prints NOT YET SUBMITTED. The blank status is kept, not copied (flag IR-19-02).
+# Game-time cells are printed as 24-hour clock values ('08:00 (ET)' = 8:00 PM ET on the games page). Kept as printed; flag IR-19-03.
+# Rows with a blank game-time cell were printed without one; none is filled from the schedule.
+
+11/19/2026|08:00 (ET)|GSW@MEM|Golden State Warriors|||NOT YET SUBMITTED
+11/19/2026|08:00 (ET)|GSW@MEM|Memphis Grizzlies|||NOT YET SUBMITTED
+11/19/2026|08:00 (ET)|LAC@SAS|LA Clippers|Beal, Bradley|Out|Injury/Illness - Right Knee Injury Management
+11/19/2026|08:00 (ET)|LAC@SAS|LA Clippers|Ingram, Brandon|Out|Injury/Illness - Right Heel Surgery
+11/19/2026|08:00 (ET)|LAC@SAS|LA Clippers|Martinelli, Nick|Out|G League - Two-Way
+11/19/2026|08:00 (ET)|LAC@SAS|LA Clippers|Miller, Jordan|Out|Injury/Illness - Left Rotator Cuff Surgery
+11/19/2026|08:00 (ET)|LAC@SAS|San Antonio Spurs|Brown, Maliq|Out|G League - Two-Way
+11/19/2026|08:00 (ET)|LAC@SAS|San Antonio Spurs|Gillespie, Ja'Kobi|Out|G League - Two-Way
+11/19/2026|08:00 (ET)|LAC@SAS|San Antonio Spurs|Harper, Dylan|Out|Injury/Illness - Left Hip Soreness
+11/19/2026|08:00 (ET)|LAC@SAS|San Antonio Spurs|Harris, Tobias|Out|Injury/Illness - Left Calf Strain
+11/19/2026|08:00 (ET)|LAC@SAS|San Antonio Spurs|Quaintance, Jayden|Out|Injury/Illness - Right Knee Surgery
+11/19/2026|08:00 (ET)|NYK@MIN|Minnesota Timberwolves|Beringer, Joan|Available|Injury/Illness - Face Mask
+11/19/2026|08:00 (ET)|NYK@MIN|Minnesota Timberwolves|Clark, Jaylen|Out|Injury/Illness - Right Hamstring Strain
+11/19/2026|08:00 (ET)|NYK@MIN|Minnesota Timberwolves|DiVincenzo, Donte|Out|Injury/Illness - Right Achilles Tendon Repair / Surgery
+11/19/2026|08:00 (ET)|NYK@MIN|Minnesota Timberwolves|Edwards, Anthony|Out|Injury/Illness - Right Knee Arthroscopy
+||||Kuminga, Jonathan|Questionable|Injury/Illness - Right Shoulder Contusion
+||||Pullin, Zyon|Questionable|Injury/Illness - Right Quadriceps Contusion
+||POR@MIL|Portland Trail Blazers|Avdija, Deni|Questionable|Injury/Illness - Left Foot Inflammation / Soreness
+||POR@MIL|Portland Trail Blazers|Camara, Toumani|Questionable|Injury/Illness - Abdominal Soreness
+||POR@MIL|Portland Trail Blazers|Carlson, Branden|Available|Injury/Illness - Face Mask
+||POR@MIL|Portland Trail Blazers|Krejci, Vit|Out|Injury/Illness - Left Ankle Fracture
+||POR@MIL|Portland Trail Blazers|Morant, Ja|Out|Injury/Illness - Left Hamstring Strain
+||POR@MIL|Portland Trail Blazers|Sharpe, Shaedon|Out|Injury/Illness - Right Meniscus Surgery
+||POR@MIL|Portland Trail Blazers|Williams III, Robert|Out|Rest
+||POR@MIL|Portland Trail Blazers|Youngblood, Chris|Out|Injury/Illness - Right Heel Contusion / Bone Bruise
+||POR@MIL|Milwaukee Bucks|||NOT YET SUBMITTED
+11/20/2026|07:00 (ET)|CHA@ATL|Charlotte Hornets|||NOT YET SUBMITTED
+11/20/2026|07:00 (ET)|CHA@ATL|Atlanta Hawks|||NOT YET SUBMITTED
+11/20/2026|07:30 (ET)|IND@CLE|Indiana Pacers|||NOT YET SUBMITTED
+11/20/2026|07:30 (ET)|IND@CLE|Cleveland Cavaliers|||NOT YET SUBMITTED
+11/20/2026|07:30 (ET)|ORL@BKN|Orlando Magic|||NOT YET SUBMITTED
+|||Brooklyn Nets||NOT YET SUBMITTED|
+||TOR@DET|Toronto Raptors|||
+|||Detroit Pistons||NOT YET SUBMITTED|
+|08:00 (ET)|NOP@OKC|New Orleans Pelicans|||
+|||Oklahoma City Thunder||NOT YET SUBMITTED|
+||WAS@CHI|Washington Wizards|||
+|||Chicago Bulls||NOT YET SUBMITTED|
+|09:30 (ET)|PHX@UTA|Phoenix Suns|||
+|||Utah Jazz||NOT YET SUBMITTED|
+|10:00 (ET)|HOU@DEN|Houston Rockets|||
+|||Denver Nuggets||NOT YET SUBMITTED|
+||SAC@LAL|Sacramento Kings|||
+|||Los Angeles Lakers||NOT YET SUBMITTED|
