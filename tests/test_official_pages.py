@@ -471,3 +471,185 @@ class PageSpecIntegrity(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CaptureWorkflowContractTests(unittest.TestCase):
+    """Task DI (session `arena/c38970c9-nba4`): the capture workflow must be able
+    to run at all.
+
+    Background: the workflow's `push` trigger was pinned to
+    `arena/af666c53-nba4`. That branch merged (PR #71) and is dead, so after the
+    merge no event could start the capture job — the only transport-evidence
+    path in the repository was unreachable. These assertions read the workflow
+    file as text (no YAML dependency, no network) and fail if the trigger is
+    pinned to one branch again or if the job cannot be started on demand.
+    """
+
+    WORKFLOW = ROOT / ".github" / "workflows" / "capture-official-pages.yml"
+
+    def _text(self) -> str:
+        self.assertTrue(self.WORKFLOW.is_file(), f"missing {self.WORKFLOW}")
+        return self.WORKFLOW.read_text(encoding="utf-8")
+
+    def test_workflow_has_on_demand_trigger(self):
+        text = self._text()
+        self.assertIn("workflow_dispatch:", text)
+        self.assertIn("on:", text)
+
+    def test_workflow_is_not_pinned_to_one_arena_branch(self):
+        text = self._text()
+        self.assertIn('- "arena/**"', text)
+        self.assertIn("      - main", text)
+        # No specific arena branch may appear as a *branch entry*. Comments that
+        # explain the old pin are expected and are not triggers.
+        entries = [
+            line.strip()[1:].strip().strip('"')
+            for line in text.splitlines()
+            if line.strip().startswith("- ") and "arena/" in line
+        ]
+        self.assertEqual(entries, ["arena/**"], entries)
+
+    def test_workflow_checks_out_the_run_branch_and_pushes_there(self):
+        text = self._text()
+        self.assertIn("ref: ${{ github.ref }}", text)
+        self.assertIn('git push origin "HEAD:${GITHUB_REF#refs/heads/}"', text)
+
+    def test_capture_script_declares_every_probe_target_with_a_kind(self):
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import capture_official_pages as cap  # noqa: PLC0415
+
+        self.assertGreaterEqual(len(cap.TARGETS), 16)
+        for key, spec in cap.TARGETS.items():
+            self.assertIn(spec.get("kind"), {"html", "json", "pdf"}, key)
+            self.assertTrue(spec.get("url", "").startswith("https://"), key)
+            self.assertTrue(spec.get("note"), key)
+        # The batch-4 probes exist so the open transport question can be measured.
+        for key in ("stats_nba_origin_title", "cdn_boxscore_live", "cdn_playbyplay_live"):
+            self.assertIn(key, cap.TARGETS)
+
+
+class CapturedManifestReproducibilityTests(unittest.TestCase):
+    """The 2026-11-17 capture must reproduce from the files committed with it.
+
+    A capture whose manifest hash cannot be recomputed from the stored body is
+    not evidence. Full bodies are checked byte-for-byte; a body stored as a
+    300 KB head is checked for length only, and the test says so rather than
+    passing silently.
+    """
+
+    def test_every_captured_body_matches_its_manifest_hash_or_is_a_truncated_head(self):
+        _require_captures(self)
+        import hashlib
+
+        for record in _manifest().get("records", []):
+            files = record.get("captured_files") or []
+            if not files:
+                continue
+            path = CAPTURE_DIR / files[0]
+            self.assertTrue(path.is_file(), f"manifest names a missing file: {path}")
+            body = path.read_bytes()
+            if record.get("byte_length") == len(body):
+                self.assertEqual(
+                    hashlib.sha256(body).hexdigest(),
+                    record.get("sha256"),
+                    f"{record['key']}: stored body does not hash to the manifest value",
+                )
+            else:
+                # A head capture is a truncated body: only its length can be checked.
+                self.assertLess(len(body), record.get("byte_length") or 0, record["key"])
+
+    def test_the_schedule_pdf_is_stored_whole_and_is_the_drift_baseline(self):
+        _require_captures(self)
+        import hashlib
+
+        record = _record("schedule_pdf")
+        self.assertIsNotNone(record)
+        body = (CAPTURE_DIR / record["captured_files"][0]).read_bytes()
+        digest = hashlib.sha256(body).hexdigest()
+        self.assertEqual(len(body), record["byte_length"])
+        self.assertEqual(digest, record["sha256"])
+        baseline = ROOT / "data" / "snapshots" / "raw" / "ci" / "schedule-sha-baseline.txt"
+        if baseline.is_file():
+            self.assertEqual(
+                baseline.read_text(encoding="utf-8").strip(),
+                digest,
+                "the schedule-PDF drift baseline and the stored official PDF disagree",
+            )
+
+
+class CaptureAuditMarkerTests(unittest.TestCase):
+    """Task DI (session `arena/c38970c9-nba4`): the auditor must not be fooled.
+
+    Three markers were tried against the captured official pages and two of them
+    produced a false "carries statistics" verdict. Each trap is reproduced here as
+    a small synthetic body, so a future edit that reintroduces one fails a test
+    instead of publishing a wrong conclusion:
+
+      1. team names — the pages ship a navigation blob naming all 30 teams;
+      2. dropdown labels — `<option value="W">Wins</option>` is a filter, not a column;
+      3. formatted numbers — inline SVG path data is full of one-decimal values.
+
+    The surviving marker is a structural JSON row key (`rowSet`, `headers`,
+    `teamId`, `teamTricode`, `gamesPlayed`), because only a real feed carries them.
+    """
+
+    @staticmethod
+    def _audit():
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import audit_official_capture as audit  # noqa: PLC0415
+
+        return audit
+
+    def test_team_names_alone_are_not_evidence(self):
+        audit = self._audit()
+        body = " ".join(audit.TEAM_NAMES) + ' "teamName": "Celtics"'
+        evidence = audit._statistics_evidence(body)
+        self.assertEqual(evidence["teams_named"], 30)
+        self.assertFalse(evidence["carries_statistics"])
+
+    def test_filter_dropdown_labels_are_not_evidence(self):
+        audit = self._audit()
+        body = (
+            " ".join(audit.TEAM_NAMES)
+            + '<select><option value="W">Wins</option><option value="L">Losses</option></select>'
+        )
+        self.assertFalse(audit._statistics_evidence(body)["carries_statistics"])
+
+    def test_svg_path_numbers_are_not_evidence(self):
+        audit = self._audit()
+        body = " ".join(audit.TEAM_NAMES) + " M118.4 271 89.6 371.4 88.5 500c1.1 128.6 29.9 229"
+        evidence = audit._statistics_evidence(body)
+        self.assertFalse(evidence["carries_statistics"])
+
+    def test_a_real_row_payload_is_evidence(self):
+        audit = self._audit()
+        body = '{"headers": ["TEAM"], "rowSet": [["Boston Celtics", 1, 2]]}'
+        self.assertTrue(audit._statistics_evidence(body)["carries_statistics"])
+
+    def test_the_two_captures_agree_that_no_statistics_payload_is_present(self):
+        for day in ("2026-11-17", "2026-11-19"):
+            capture = ROOT / "data" / "official-pages" / day
+            if not (capture / "manifest.json").is_file():
+                continue
+            result = self._audit().audit(capture)
+            for row in result["records"]:
+                if row["key"] in {
+                    "standings",
+                    "teamstats_traditional",
+                    "teamstats_opponent",
+                    "teamstats_advanced",
+                }:
+                    self.assertEqual(row["http_status"], 200, day)
+                    self.assertFalse(row["carries_statistics"], f"{day} {row['key']}")
+                    self.assertEqual(row["teams_present"], 30, f"{day} {row['key']}")
+
+    def test_head_captures_are_labelled_not_assumed_complete(self):
+        for day in ("2026-11-17", "2026-11-19"):
+            capture = ROOT / "data" / "official-pages" / day
+            if not (capture / "manifest.json").is_file():
+                continue
+            result = self._audit().audit(capture)
+            states = {row["key"]: row["stored"]["state"] for row in result["records"]}
+            for state in states.values():
+                self.assertIn(state, {"COMPLETE", "HEAD", "INCONSISTENT", "NO_BODY_STORED"})
+            self.assertEqual(states["schedule_pdf"], "COMPLETE", day)

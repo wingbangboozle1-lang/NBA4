@@ -14,10 +14,11 @@
 # own output commits land under `data/official-pages/**` only, so the job cannot
 # re-trigger itself or race the daily-refresh job.
 #
-# NOTE: `workflow_dispatch` is declared but could not be invoked from this
+# NOTE (task DI, 2026-11-19): `workflow_dispatch` could not be invoked from a
 # session's GitHub credentials (HTTP 403 "Resource not accessible by
-# integration"), which is itself recorded as flag BU-02. The push trigger below
-# is the path actually used.
+# integration"), recorded as flag BU-02. That is a token-permission setting on the
+# account that starts the run, not a defect in this file; the push trigger remains
+# the permission-free path. The trigger below is no longer pinned to a dead branch.
 #
 # Output (committed to the branch it ran on):
 #   data/official-pages/<date>/manifest.json   one record per URL
@@ -28,28 +29,32 @@
 name: capture-official-pages
 
 on:
-  push:
-    branches:
-      - arena/af666c53-nba4
-    paths:
-      - ".github/workflows/capture-official-pages.yml"
-      - "scripts/capture_official_pages.py"
   workflow_dispatch:
     inputs:
       date:
-        description: "UTC date label for the capture directory, YYYY-MM-DD"
+        description: "UTC date label for the capture directory, YYYY-MM-DD (blank = today)"
         type: string
-        required: true
+        required: false
       targets:
         description: "comma-separated keys from TARGETS below, or 'all'"
         type: string
         default: all
+  # Any arena/** branch (or main) that changes the capture script or this file
+  # captures its own evidence. The old trigger was pinned to arena/af666c53-nba4,
+  # which is merged and dead — that is the defect task DI repairs.
+  push:
+    branches:
+      - "arena/**"
+      - main
+    paths:
+      - ".github/workflows/capture-official-pages.yml"
+      - "scripts/capture_official_pages.py"
 
 permissions:
   contents: write
 
 concurrency:
-  group: capture-official-pages
+  group: capture-official-pages-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -57,8 +62,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Check out this branch
+      - name: Check out the branch this run was started from
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -71,7 +78,7 @@ jobs:
           CAPTURE_TARGETS: ${{ github.event.inputs.targets }}
         run: python3 scripts/capture_official_pages.py
 
-      - name: Commit the capture
+      - name: Commit the capture to the run branch
         run: |
           if [ -z "$(git status --porcelain)" ]; then
             echo "no capture to commit"
@@ -80,7 +87,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "BU: capture official pages from a GitHub-hosted runner ($CAPTURE_DATE)"
-          git push origin HEAD:"${GITHUB_REF#refs/heads/}"
+          git commit -m "capture-official-pages: ${CAPTURE_DATE:-today} capture from a GitHub-hosted runner (${GITHUB_REF#refs/heads/})"
+          git push origin "HEAD:${GITHUB_REF#refs/heads/}"
         env:
           CAPTURE_DATE: ${{ github.event.inputs.date }}
