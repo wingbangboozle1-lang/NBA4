@@ -745,3 +745,5 @@ Four sessions worked the 2026-11-17 cycle in parallel. Recorded so no letter, fi
 - **Not done, deliberately.** No injury PDF was transcribed in this session: a 60-row transcription with page-break checks and a consecutive diff is a separate task, and transcribing it without a claim would conflict with the board rules. No model output, line, price or pick was published; the G0 rights gate is unchanged.
 - **Checks.** `python3 -m unittest discover -s tests` → 547 tests OK. `scripts/check_site.py --with-tests` → PASS (16 pages, 653 HTML data rows, 1310 Markdown data rows).
 
+
+- **Publication (task CA).** PR [#82](https://github.com/wingbangboozle1-lang/NBA4/pull/82) merged to `main` as `9b93387` (merge commit, `gh pr merge --merge`). GitHub Pages build for `9b93387`: `built` at 2026-11-19T07:00:12Z (Pages API). The live URL could not be fetched from this sandbox (outside the outbound allowlist), so live reachability is confirmed by the Pages API status only.
