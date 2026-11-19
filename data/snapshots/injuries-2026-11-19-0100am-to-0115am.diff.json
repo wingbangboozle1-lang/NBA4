@@ -1,0 +1,40 @@
+{
+  "old": {
+    "revision_label": "11/19/26 01:00 AM",
+    "document": "Injury Report: 11/19/26 01:00 AM",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_00AM.pdf",
+    "retrieved_utc": "2026-11-19T07:06:00Z",
+    "rows": 44,
+    "player_rows": 23,
+    "unaligned_rows": 0
+  },
+  "new": {
+    "revision_label": "11/19/26 01:15 AM",
+    "document": "Injury Report: 11/19/26 01:15 AM",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_15AM.pdf",
+    "retrieved_utc": "2026-11-19T07:08:00Z",
+    "rows": 44,
+    "player_rows": 23,
+    "unaligned_rows": 0
+  },
+  "alignment": "key(matchup/team/player) with positional tie-break; 44 of 44 old rows and 44 new rows matched; 0 old rows and 0 new rows unaligned",
+  "changes": [],
+  "counts": {
+    "old_rows": 44,
+    "new_rows": 44,
+    "status_changes": 0,
+    "reason_changes": 0,
+    "team_changes": 0,
+    "printing_variances": 0,
+    "realigned": 0
+  },
+  "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_15AM.pdf",
+  "diff_id": "injuries-2026-11-19-0100am-to-0115am.diff",
+  "kind": "official_injury_report_consecutive_diff",
+  "printing_variance_note": null,
+  "source_document_header": "Injury Report: 11/19/26 01:15 AM",
+  "fetched_at_utc": "2026-11-19T07:08:00Z",
+  "extraction_tool": "fetch_page (PDF text extraction to markdown tables)",
+  "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+  "rule": "A status change requires a matched row whose status cell differs. Rows are matched on the identity cells the row prints (matchup/team/player); rows that do not match on any revision are reported as unaligned, never merged or dropped."
+}

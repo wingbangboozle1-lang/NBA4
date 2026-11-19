@@ -1,0 +1,40 @@
+{
+  "old": {
+    "revision_label": "11/19/26 12:30 AM",
+    "document": "Injury Report: 11/19/26 12:30 AM",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_12_30AM.pdf",
+    "retrieved_utc": "2026-11-19T07:04:00Z",
+    "rows": 42,
+    "player_rows": 23,
+    "unaligned_rows": 1
+  },
+  "new": {
+    "revision_label": "11/19/26 12:45 AM",
+    "document": "Injury Report: 11/19/26 12:45 AM",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_12_45AM.pdf",
+    "retrieved_utc": "2026-11-19T07:06:00Z",
+    "rows": 44,
+    "player_rows": 23,
+    "unaligned_rows": 3
+  },
+  "alignment": "key(matchup/team/player) with positional tie-break; 41 of 42 old rows and 44 new rows matched; 1 old rows and 3 new rows unaligned",
+  "changes": [],
+  "counts": {
+    "old_rows": 42,
+    "new_rows": 44,
+    "status_changes": 0,
+    "reason_changes": 0,
+    "team_changes": 0,
+    "printing_variances": 0,
+    "realigned": 0
+  },
+  "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_12_45AM.pdf",
+  "diff_id": "injuries-2026-11-19-1230am-to-1245am.diff",
+  "kind": "official_injury_report_consecutive_diff",
+  "printing_variance_note": "the 12:30 a.m. ET revision prints the 11/20 BKN/TOR/DET rows as ONE merged cell row (matchup and team cells merged), so those rows do not align one-to-one with the separately-printed rows of every other revision. The merged row is kept verbatim in the 12:30 raw pipe file; the file of record keeps the separate rows. This is a printing variance, not a status or data change",
+  "source_document_header": "Injury Report: 11/19/26 12:45 AM",
+  "fetched_at_utc": "2026-11-19T07:06:00Z",
+  "extraction_tool": "fetch_page (PDF text extraction to markdown tables)",
+  "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+  "rule": "A status change requires a matched row whose status cell differs. Rows are matched on the identity cells the row prints (matchup/team/player); rows that do not match on any revision are reported as unaligned, never merged or dropped."
+}

@@ -3,7 +3,8 @@
 The site's slate and injury tables are generated from ``data/snapshots/*.json``
 by ``scripts/build_snapshots.py``. These tests keep the data honest (provenance,
 no invented values) and keep the published pages in sync with the data. The
-current snapshot is the 2026-11-17 refresh; the 2026-11-16, 2026-11-15 and
+current snapshot is the 2026-11-19 refresh (injury file of record
+``injuries-2026-11-19-0145am.json``); the 2026-11-17, 2026-11-16, 2026-11-15 and
 2026-11-14 files are kept as dated historical snapshots and stay covered by
 their own assertions.
 """
@@ -31,7 +32,8 @@ SLATE_FILES = {
     "slate-2026-11-14.json": ({"2026-11-14", "2026-11-15", "2026-11-16"}, 231, 252, 22),
 }
 
-CURRENT_INJURY_FILE = "injuries-2026-11-17-1030am.json"
+CURRENT_INJURY_FILE = "injuries-2026-11-19-0145am.json"
+INJURY_20261117_FILE = "injuries-2026-11-17-1030am.json"
 INJURY_20261116_FILE = "injuries-2026-11-16-1000am.json"
 PREVIOUS_INJURY_FILE = "injuries-2026-11-15-0615am.json"
 HISTORICAL_INJURY_FILE = "injuries-2026-11-14-0430am.json"
@@ -128,11 +130,14 @@ class SlateSnapshotTests(unittest.TestCase):
         self.assertEqual(matches, 17)
 
 
-class CurrentInjurySnapshotTests(unittest.TestCase):
+class InjurySnapshot20261117Tests(unittest.TestCase):
+    """The 2026-11-17 10:30 AM snapshot is historical after the 2026-11-19 refresh;
+    its own assertions stay."""
+
     @classmethod
     def setUpClass(cls) -> None:
-        cls.data = load(CURRENT_INJURY_FILE)
-        cls.rows = injury_rows(CURRENT_INJURY_FILE)
+        cls.data = load(INJURY_20261117_FILE)
+        cls.rows = injury_rows(INJURY_20261117_FILE)
 
     def test_provenance_present(self) -> None:
         for key in REQUIRED_PROVENANCE:
@@ -195,8 +200,11 @@ class CurrentInjurySnapshotTests(unittest.TestCase):
     def test_report_revision_is_the_1030_document(self) -> None:
         # folded from the parallel BM session (adapted: this file records the
         # revision in the printed header, not a separate revision label field)
-        self.assertIn("10:30 AM", load(CURRENT_INJURY_FILE)["source_document_header"])
-        self.assertEqual(self.data["source_url"], build_snapshots.REPORT_URL)
+        self.assertIn("10:30 AM", load(INJURY_20261117_FILE)["source_document_header"])
+        self.assertEqual(
+            self.data["source_url"],
+            "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf",
+        )
 
     def test_lost_team_rows_are_kept_not_unattributed(self) -> None:
         # folded from the parallel BM session (adapted to this extraction, which
@@ -596,7 +604,7 @@ class RenderedPageTests(unittest.TestCase):
         self.assertEqual(slate_html.count(build_snapshots.SCHEDULE_URL), 21)
 
         injuries_html = build_snapshots.render_injuries()
-        self.assertEqual(injuries_html.count(build_snapshots.REPORT_URL), 60)  # one per report row
+        self.assertEqual(injuries_html.count(build_snapshots.REPORT_URL), 44)  # one per report row
         self.assertEqual(
             injuries_html.count(build_snapshots.SCHEDULE_URL),
             sum(
@@ -635,28 +643,40 @@ class TeamStatsSnapshotTests(unittest.TestCase):
 
 class AwayHomeBasisTests(unittest.TestCase):
     """The slate page shows "at" only where an official document confirms the order:
-    the injury report's own matchup code for the same game date, or the schedule's
-    printed "at" token. Code-only matching is not enough: POR@MIN appears as an
-    11/17 report block and again as the 11/18 slate row 264."""
+    the current injury report's own matchup code for the same game date, or the
+    schedule's printed "at" token. Code-only matching is not enough: POR@MIN appears
+    as an 11/17 report block and again as the 11/18 slate row 264.
 
-    def test_code_corroborated_rows_are_exactly_253_to_269(self) -> None:
+    After the 2026-11-19 refresh the file of record covers the 11/19 slate only, so
+    the 11/17-11/18 rows are corroborated by the schedule's printed "at" token where
+    it exists (rows 260-269) and fall back to flagged printed order otherwise
+    (rows 253-259) - never to an inferred order."""
+
+    def test_report_code_corroborated_rows_are_exactly_the_1119_slate(self) -> None:
+        # The file of record covers 11/19 and 11/20 game blocks. Only the 11/19
+        # blocks carry the schedule rows in the 3-day window; the 11/20 blocks
+        # are the next slate and are outside slate-2026-11-17.json (rows 253-273),
+        # so they corroborate no current slate row.
         report_codes = {
             (g.get("game_date") or g.get("game_date_from_schedule", ""), g["matchup"])
             for g in load(CURRENT_INJURY_FILE)["games"]
+            if g.get("schedule_row") is not None
         }
         corroborated = set()
         for game in load(CURRENT_SLATE_FILE)["games"]:
             if (game["date"], f"{build_snapshots.ABBR[game['away']]}@{build_snapshots.ABBR[game['home']]}") in report_codes:
                 corroborated.add(game["row"])
-        self.assertEqual(corroborated, set(range(253, 270)))
+        self.assertEqual(corroborated, {270, 271, 272, 273})
 
-    def test_every_window_row_is_corroborated(self) -> None:
+    def test_window_rows_are_corroborated_by_report_code_or_at_token(self) -> None:
         html = build_snapshots.render_slate()
-        # 17 report-code rows (11/17 + 11/18) + 4 rows with the schedule's "at" token
-        # (11/19) cover all 21 games; no row shows printed order alone
-        self.assertEqual(html.count("</strong> at <strong>"), 21)
-        self.assertEqual(html.count("(order unverified)"), 0)
-        self.assertEqual(html.count('prints no "at"'), 0)
+        # 4 report-code rows (11/19) + 10 rows with the schedule's "at" token
+        # (11/18 rows 260-269) show "at"; the 7 rows 253-259 print no "at" token and
+        # no current-report code, so they show flagged printed order, never an
+        # inferred order
+        self.assertEqual(html.count("</strong> at <strong>"), 14)
+        self.assertEqual(html.count("(order unverified)"), 7)
+        self.assertEqual(html.count('prints no "at"'), 7)
 
     def test_at_token_rows_are_not_flagged(self) -> None:
         data = load(CURRENT_SLATE_FILE)
@@ -737,6 +757,171 @@ class GameLogTests(unittest.TestCase):
             build_snapshots.splice(page, "player-gamelogs", self.build_gamelogs.render_gamelogs()),
             "results.html is out of date; run python3 scripts/build_gamelogs.py",
         )
+
+
+class CurrentInjurySnapshot20261119Tests(unittest.TestCase):
+    """Task CA (session arena/edfbc063-nba4): the 2026-11-19 1:45 AM ET revision is
+    the injury file of record after the 2026-11-19 refresh."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.data = load(CURRENT_INJURY_FILE)
+        cls.rows = injury_rows(CURRENT_INJURY_FILE)
+
+    def test_provenance_present(self) -> None:
+        for key in REQUIRED_PROVENANCE:
+            self.assertTrue(self.data[key], key)
+        self.assertIn("01:45 AM", self.data["source_document_header"])
+        self.assertIn("supersede", self.data["supersession_note"])
+        self.assertTrue(self.data["newest_report_listed_at_check"]["rows_transcribed"])
+
+    def test_file_of_record_matches_the_build_constants(self) -> None:
+        self.assertEqual(self.data["source_url"], build_snapshots.REPORT_URL)
+        self.assertEqual(build_snapshots.REPORT_URL,
+                         "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf")
+        self.assertEqual(build_snapshots.INJ_NEW, "injuries-2026-11-19-0145am.cells.json")
+        self.assertEqual(build_snapshots.INJ_DIFF, "injuries-2026-11-19-0130am-to-0145am.diff.json")
+
+    def test_row_count_and_game_blocks(self) -> None:
+        # 44 = every row the 1:45 AM document prints: the 11/19 slate (23 player
+        # rows + GSW/MEM/MIL NOT YET SUBMITTED team rows) plus the 11/20 next-slate
+        # NOT YET SUBMITTED blocks. Mirrors the 11/17 file of record, which keeps
+        # every block the report prints. 13 game blocks total.
+        self.assertEqual(len(self.rows), 44)
+        self.assertEqual(self.data["row_count"], 44)
+        self.assertEqual(self.data["games_counted"], 13)
+        self.assertEqual(self.data["player_rows_counted"], 23)
+        # The 11/19 slate (the four blocks the 3-day window covers) and the
+        # 11/20 next-slate blocks.
+        self.assertEqual(
+            {g["matchup"] for g in self.data["games"] if g["schedule_row"] is not None},
+            {"GSW@MEM", "LAC@SAS", "NYK@MIN", "POR@MIL"},
+        )
+        self.assertEqual(
+            {g["matchup"] for g in self.data["games"] if g["schedule_row"] is None},
+            {"CHA@ATL", "IND@CLE", "ORL@BKN", "TOR@DET", "NOP@OKC", "WAS@CHI",
+             "PHX@UTA", "HOU@DEN", "SAC@LAL"},
+        )
+
+    def test_schedule_rows_are_270_to_273(self) -> None:
+        sched = {g["matchup"]: g["schedule_row"] for g in self.data["games"] if g["schedule_row"] is not None}
+        self.assertEqual(sched, {"GSW@MEM": 270, "POR@MIL": 271, "NYK@MIN": 272, "LAC@SAS": 273})
+
+    def test_page_break_rows_are_unverified_not_repaired(self) -> None:
+        unverified = [row for row in self.rows if row["unverified"]]
+        self.assertEqual([row["player"] for row in unverified], ["Kuminga, Jonathan", "Pullin, Zyon"])
+        for row in unverified:
+            self.assertEqual(row["team"], "")
+            self.assertIn("page break", row["flag"])
+            self.assertIn("not asserted", row["flag"])
+
+    def test_every_row_has_a_status_or_reports_not_submitted(self) -> None:
+        for row in self.rows:
+            if row["status"]:
+                self.assertIn(row["status"], VALID_STATUSES)
+            else:
+                self.assertEqual(row["reason"], "NOT YET SUBMITTED", row)
+
+    def test_not_yet_submitted_rows_are_reporting_states(self) -> None:
+        nys = [row for row in self.rows if row["reason"] == "NOT YET SUBMITTED"]
+        # 3 on the 11/19 slate (GSW, MEM, MIL team rows) + 18 on the 11/20 next
+        # slate (2 team rows per block × 9 blocks) = 21
+        self.assertEqual(len(nys), 21)
+        for row in nys:
+            self.assertEqual(row["player"], "")
+            self.assertEqual(row["status"], "")
+
+    def test_por_mil_block_is_report_context(self) -> None:
+        # the POR@MIL rows print no date cell; the date comes from the report's
+        # same-date grouping (report context), corroborated by schedule row 271.
+        # The schema mirrors the 11/17 file of record: cells_source "report", and
+        # the date set from report context - never inferred.
+        por = [g for g in self.data["games"] if g["matchup"] == "POR@MIL"]
+        self.assertEqual(len(por), 1)
+        self.assertEqual(por[0]["cells_source"], "report")
+        self.assertEqual(por[0]["game_date"], "2026-11-19")
+        self.assertEqual(por[0]["schedule_row"], 271)
+
+    def test_tip_disagreements_are_flagged_not_resolved(self) -> None:
+        # the schedule PDF prints two tip times (7:00 PM / 8:00 PM) for 11/19; the
+        # report and games page print 8:00 PM ET; both are published, neither overwritten
+        for game in self.data["games"]:
+            self.assertTrue(game["tip_disagreement"], game["matchup"])
+            if game["schedule_row"] is not None:
+                self.assertIn("7:00 PM", game["tip_disagreement"])
+
+    def test_no_derived_or_model_values(self) -> None:
+        for row in self.rows:
+            for key in row:
+                self.assertNotIn(key, ("probability", "minutes", "impact", "pick"), key)
+
+    def test_cross_check_against_the_independent_extraction_is_complete(self) -> None:
+        cells = load("injuries-2026-11-19-0145am.cells.json")
+        check = cells["cross_check"]
+        self.assertEqual(check["rows_in_this_extraction"], 44)
+        self.assertEqual(check["rows_in_the_counterpart"], 44)
+        self.assertEqual(check["rows_matching_row_for_row"], 44)
+        self.assertEqual(check["only_in_this_extraction"], [])
+        self.assertEqual(check["only_in_the_counterpart"], [])
+
+
+class InjuryChain20261119Tests(unittest.TestCase):
+    """The 2026-11-19 revision chain: eight dated revisions, seven consecutive
+    diffs, one boundary diff across the 11/18 gap, and the newest pointer."""
+
+    REVISIONS = [
+        "1200am", "1215am", "1230am", "1245am",
+        "0100am", "0115am", "0130am", "0145am",
+    ]
+
+    def test_every_revision_is_transcribed_with_provenance(self) -> None:
+        for clock in self.REVISIONS:
+            data = load(f"injuries-2026-11-19-{clock}.json")
+            for key in REQUIRED_PROVENANCE:
+                self.assertTrue(data[key], (clock, key))
+            self.assertEqual(data["player_rows_counted"], 23, clock)
+            # The 12:30 AM revision prints the 11/20 BKN/TOR/DET rows as ONE merged
+            # cell row, so it carries 42 printed rows instead of 44 - a printing
+            # variance kept verbatim, not a data change.
+            expected_rows = 42 if clock == "1230am" else 44
+            self.assertEqual(data["row_count"], expected_rows, clock)
+            raw = SNAPSHOTS / "raw" / f"injury-2026-11-19T{clock}-et.pipes"
+            self.assertTrue(raw.exists(), raw)
+            self.assertIn("Injury Report: 11/19/26", raw.read_text(encoding="utf-8"))
+
+    def test_consecutive_diffs_report_no_status_changes(self) -> None:
+        for i in range(len(self.REVISIONS) - 1):
+            a, b = self.REVISIONS[i], self.REVISIONS[i + 1]
+            diff = load(f"injuries-2026-11-19-{a}-to-{b}.diff.json")
+            self.assertEqual(diff["kind"], "official_injury_report_consecutive_diff")
+            self.assertEqual(diff["counts"]["status_changes"], 0, (a, b))
+            self.assertEqual(diff["counts"]["reason_changes"], 0, (a, b))
+            self.assertEqual(diff["counts"]["team_changes"], 0, (a, b))
+            # The 12:30 revision prints the 11/20 BKN/TOR/DET rows as one merged
+            # cell row (a printing variance); every other consecutive pair aligns
+            # row-for-row with zero unaligned rows.
+            if (a, b) == ("1215am", "1230am") or (a, b) == ("1230am", "1245am"):
+                self.assertTrue(diff.get("printing_variance_note"), (a, b))
+            else:
+                self.assertEqual(diff["counts"]["old_rows"], 44, (a, b))
+                self.assertEqual(diff["counts"]["new_rows"], 44, (a, b))
+                self.assertEqual(diff["old"]["unaligned_rows"], 0, (a, b))
+                self.assertEqual(diff["new"]["unaligned_rows"], 0, (a, b))
+
+    def test_boundary_diff_across_the_1118_gap_is_flagged_not_filled(self) -> None:
+        diff = load("injuries-2026-11-17-1115-to-2026-11-19-1200.diff.json")
+        self.assertEqual(diff["kind"], "official_injury_report_boundary_diff")
+        self.assertEqual(diff["old"]["rows"], 60)
+        self.assertEqual(diff["new"]["rows"], 44)
+        self.assertEqual(diff["counts"]["status_changes"], 0)
+        self.assertIn("no 11/18 revisions", diff["alignment"])
+
+    def test_newest_pointer_names_the_145_revision_and_the_gap(self) -> None:
+        pointer = load("injuries-newest-pointer-2026-11-19.json")
+        self.assertEqual(pointer["newest_listed"]["label"], "11/19 1:45 a.m. ET report")
+        self.assertEqual(len(pointer["chain_transcribed"]), 8)
+        self.assertIn("no 11/18", pointer["gap_note"])
+        self.assertTrue(pointer["newest_listed"]["rows_transcribed"])
 
 
 if __name__ == "__main__":

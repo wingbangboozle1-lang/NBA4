@@ -1,0 +1,40 @@
+{
+  "snapshot_id": "injuries-newest-pointer-2026-11-19",
+  "kind": "official_injury_report_index_pointer",
+  "source_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+  "source_document_header": "NBA Injury Report: 2026-27 Season | NBA Official",
+  "fetched_at_utc": "2026-11-19T07:10:00Z",
+  "extraction_tool": "fetch_page (web page extraction)",
+  "purpose": "Metadata only: the 11/19 1:45 a.m. ET report was the newest listed on the official index at the check time and is fully transcribed in injuries-2026-11-19-0145am.json; the whole 11/19 series (12:00 a.m.-1:45 a.m. ET) is transcribed in the chain files.",
+  "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+  "source_index_title": "NBA Injury Report: 2026-27 Season | NBA Official",
+  "index_entries_seen_nov_19": [
+    "12:00 a.m ET",
+    "12:15 a.m ET",
+    "12:30 a.m ET",
+    "12:45 a.m ET",
+    "1:00 a.m ET",
+    "1:15 a.m ET",
+    "1:30 a.m ET",
+    "1:45 a.m ET"
+  ],
+  "newest_listed": {
+    "label": "11/19 1:45 a.m. ET report",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf",
+    "source_document_header": "Injury Report: 11/19/26 01:45 AM",
+    "checked_at_utc": "2026-11-19T07:10:00Z",
+    "rows_transcribed": true
+  },
+  "chain_transcribed": [
+    "12:00 a.m. ET",
+    "12:15 a.m. ET",
+    "12:30 a.m. ET",
+    "12:45 a.m. ET",
+    "1:00 a.m. ET",
+    "1:15 a.m. ET",
+    "1:30 a.m. ET",
+    "1:45 a.m. ET"
+  ],
+  "gap_note": "The index listed no 11/18 injury-report revisions at the check; the 11/17 11:15 a.m. ET file of record is compared against the 11/19 12:00 a.m. ET revision as a boundary diff (injuries-2026-11-17-1115-to-2026-11-19-1200.diff.json), flagged, never filled.",
+  "checked_at_utc": "2026-11-19T07:10:00Z"
+}
