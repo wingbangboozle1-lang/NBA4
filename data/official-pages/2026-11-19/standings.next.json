@@ -2420,9 +2420,9 @@
      ]
     }
    ],
-   "region": "international"
+   "region": "united-states"
   },
-  "xRegionMap": "international",
+  "xRegionMap": "united-states",
   "isIndex": false,
   "cmsSiteSettings": {
    "games": {
@@ -7093,7 +7093,7 @@
    }
   ],
   "akamaiHeaders": {
-   "xAkamaiEdgescape": "georegion=173,country_code=PH,region_code=00,city=MANILA,lat=14.58,long=121.00,timezone=GMT+8,continent=AS,throughput=vhigh,bw=5000,asnum=15169,location_id=0",
+   "xAkamaiEdgescape": "georegion=252,country_code=US,region_code=GA,city=MACON,dma=503,msa=4680,areacode=478,county=BIBB,fips=13021,lat=32.8993,long=-83.468,timezone=EST,zip=31201-31213+31216-31217+31220-31221+31294-31297,continent=NA,throughput=vhigh,bw=5000,asnum=399673,location_id=0",
    "xRegionMap": "united-states",
    "xLpPackageCountry": "US",
    "xTargetMarket": "with-commercials"
