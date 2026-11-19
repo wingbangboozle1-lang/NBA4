@@ -741,3 +741,147 @@ class GameLogTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SchedulePdfAtTokenTests(unittest.TestCase):
+    """Task DH (session `arena/c38970c9-nba4`): measure the schedule PDF, do not
+    repeat a claim about it.
+
+    Three documents in the tree state that the official 2026-27 schedule PDF prints
+    no `at` token on rows 215-259 (`scripts/build_snapshots.py`,
+    `data/snapshots/slate-2026-11-17.json` -> `basis.away_home_rule`, and the
+    pass-7 wording on `review.html`). The PDF was captured into this repository on
+    2026-11-17 by the `capture-official-pages` workflow, so the claim can be
+    measured instead of repeated. It does not reproduce: the PDF's own text cells
+    for row 253 are `253 | Tue. | 11/17/26 | New York | at | Toronto | 7:30 PM |
+    7:30 PM`, and 1,197 standalone `at` cells appear in the document.
+
+    This test uses only the standard library: it inflates the PDF's content
+    streams with zlib and reads the literal text-showing operands, so it runs in
+    any environment, with or without pypdf installed.
+    """
+
+    PDF = ROOT / "data" / "official-pages" / "2026-11-17" / "schedule_pdf.pdf"
+    SLATE = ROOT / "data" / "snapshots" / "slate-2026-11-17.json"
+    BASELINE = ROOT / "data" / "snapshots" / "raw" / "ci" / "schedule-sha-baseline.txt"
+    WINDOW = range(253, 274)
+
+    def setUp(self):
+        if not self.PDF.is_file():
+            self.skipTest(f"no captured official PDF at {self.PDF}")
+
+    @staticmethod
+    def _text_cells(document: bytes) -> list[str]:
+        """Every literal string shown by a text operator, in stream order.
+
+        Stream boundaries are taken from the `/Length` entry when it is a direct
+        integer, because a PDF may contain incompressible binary data and the bytes
+        `endstream` can occur inside it - taking the first `endstream` would silently
+        drop text. The fallback scans forward only when `/Length` is indirect or
+        missing, and the scan starts after the previous stream's end.
+        """
+        import re as _re
+        import zlib as _zlib
+
+        cells: list[str] = []
+        consumed = 0
+        for match in _re.finditer(rb"stream\r?\n", document):
+            if match.start() < consumed:
+                continue
+            start = match.end()
+            header = document[max(0, match.start() - 400):match.start()]
+            length_match = _re.search(rb"/Length\s+(\d+)(?!\s+\d+\s+R)", header)
+            end = None
+            if length_match:
+                candidate = start + int(length_match.group(1))
+                if document[candidate:candidate + 20].lstrip().startswith(b"endstream"):
+                    end = candidate
+            if end is None:
+                end = document.find(b"endstream", start)
+            consumed = end
+            try:
+                stream = _zlib.decompress(document[start:end])
+            except Exception:
+                continue
+            for op in _re.finditer(rb"\[(.*?)\]\s*TJ|\((.*?)\)\s*Tj", stream, _re.S):
+                body = op.group(1) if op.group(1) is not None else op.group(2)
+                parts = [m.group(1) for m in _re.finditer(rb"\((.*?)(?<!\\)\)", body, _re.S)]
+                if not parts and op.group(2) is not None:
+                    parts = [op.group(2)]
+                if not parts:
+                    continue
+                text = b"".join(parts).decode("latin-1")
+                text = text.replace("\\(", "(").replace("\\)", ")").replace("\\\\", "\\")
+                cells.append(text)
+        return cells
+
+    def _cells(self) -> list[str]:
+        if not hasattr(self, "_cached_cells"):
+            self._cached_cells = self._text_cells(self.PDF.read_bytes())
+        return self._cached_cells
+
+    def test_pdf_is_the_document_the_drift_gate_compares(self):
+        import hashlib  # noqa: PLC0415
+
+        digest = hashlib.sha256(self.PDF.read_bytes()).hexdigest()
+        self.assertTrue(self.BASELINE.is_file(), "the drift baseline is missing")
+        self.assertEqual(self.BASELINE.read_text(encoding="utf-8").strip(), digest)
+
+    def test_the_pdf_shows_a_standalone_at_cell_throughout(self):
+        cells = self._cells()
+        self.assertGreater(len(cells), 1000, "the PDF text operands did not parse")
+        standalone = [c for c in cells if c.strip() == "at"]
+        self.assertGreater(len(standalone), 500, "fewer 'at' cells than a 999-row schedule needs")
+
+    def test_every_window_row_has_away_at_home_cells(self):
+        cells = self._cells()
+        positions = [i for i, c in enumerate(cells) if c.strip() in {str(n) for n in self.WINDOW}]
+        self.assertGreaterEqual(len(positions), 21, "window row numbers not found")
+        checked = 0
+        for index in positions:
+            number = int(cells[index].strip())
+            window = cells[index + 1:index + 12]
+            # cells: weekday | date | away | at | home | time | time | (tv?) | next row no
+            self.assertRegex(window[0].strip(), r"^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\.$", number)
+            self.assertRegex(window[1].strip(), r"^\d{1,2}/\d{1,2}/\d{2}$", number)
+            self.assertEqual(window[3].strip(), "at", f"row {number}: no ' at ' cell")
+            self.assertRegex(window[5].strip(), r"^\d{1,2}:\d{2} [AP]M$", number)
+            self.assertRegex(window[6].strip(), r"^\d{1,2}:\d{2} [AP]M$", number)
+            checked += 1
+        self.assertEqual(checked, 21)
+
+    def test_published_window_rows_match_the_pdf_cells(self):
+        cells = self._cells()
+        slate = json.loads(self.SLATE.read_text(encoding="utf-8"))
+        by_number = {}
+        for i, c in enumerate(cells):
+            stripped = c.strip()
+            if stripped.isdigit() and len(stripped) <= 3:
+                by_number.setdefault(int(stripped), i)
+        checked = 0
+        for game in slate["games"]:
+            index = by_number.get(int(game["row"]))
+            self.assertIsNotNone(index, f"row {game['row']} not found in the PDF")
+            window = cells[index + 1:index + 9]
+            self.assertEqual(window[0].strip(), game["weekday"], game["row"])
+            month, day, year = window[1].strip().split("/")
+            self.assertEqual(game["date"], f"20{year}-{int(month):02d}-{int(day):02d}", game["row"])
+            self.assertEqual(window[2].strip(), game["away"], game["row"])
+            self.assertEqual(window[3].strip(), "at", game["row"])
+            self.assertEqual(window[4].strip(), game["home"], game["row"])
+            self.assertEqual(window[5].strip(), game["tip_et_col1"], game["row"])
+            self.assertEqual(window[6].strip(), game["tip_et_col2"], game["row"])
+            checked += 1
+        self.assertEqual(checked, 21, "the slate snapshot must publish 21 window rows")
+
+    def test_the_disproved_premise_is_still_flagged_where_it_lives(self):
+        """While the premise text is still in other sessions' files, this test keeps
+        it visible: it fails once the text is removed so flag DS-01 can be closed,
+        and it never lets a *new* file adopt the premise silently."""
+        build = (ROOT / "scripts" / "build_snapshots.py").read_text(encoding="utf-8")
+        slate = json.loads(self.SLATE.read_text(encoding="utf-8"))
+        premise = 'prints no "at"' in build or "prints no 'at'" in json.dumps(slate)
+        self.assertTrue(
+            premise,
+            "the 'no at token' premise is gone from both files: close flag DS-01 and delete this test",
+        )

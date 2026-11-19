@@ -575,3 +575,81 @@ class CapturedManifestReproducibilityTests(unittest.TestCase):
                 digest,
                 "the schedule-PDF drift baseline and the stored official PDF disagree",
             )
+
+
+class CaptureAuditMarkerTests(unittest.TestCase):
+    """Task DI (session `arena/c38970c9-nba4`): the auditor must not be fooled.
+
+    Three markers were tried against the captured official pages and two of them
+    produced a false "carries statistics" verdict. Each trap is reproduced here as
+    a small synthetic body, so a future edit that reintroduces one fails a test
+    instead of publishing a wrong conclusion:
+
+      1. team names — the pages ship a navigation blob naming all 30 teams;
+      2. dropdown labels — `<option value="W">Wins</option>` is a filter, not a column;
+      3. formatted numbers — inline SVG path data is full of one-decimal values.
+
+    The surviving marker is a structural JSON row key (`rowSet`, `headers`,
+    `teamId`, `teamTricode`, `gamesPlayed`), because only a real feed carries them.
+    """
+
+    @staticmethod
+    def _audit():
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import audit_official_capture as audit  # noqa: PLC0415
+
+        return audit
+
+    def test_team_names_alone_are_not_evidence(self):
+        audit = self._audit()
+        body = " ".join(audit.TEAM_NAMES) + ' "teamName": "Celtics"'
+        evidence = audit._statistics_evidence(body)
+        self.assertEqual(evidence["teams_named"], 30)
+        self.assertFalse(evidence["carries_statistics"])
+
+    def test_filter_dropdown_labels_are_not_evidence(self):
+        audit = self._audit()
+        body = (
+            " ".join(audit.TEAM_NAMES)
+            + '<select><option value="W">Wins</option><option value="L">Losses</option></select>'
+        )
+        self.assertFalse(audit._statistics_evidence(body)["carries_statistics"])
+
+    def test_svg_path_numbers_are_not_evidence(self):
+        audit = self._audit()
+        body = " ".join(audit.TEAM_NAMES) + " M118.4 271 89.6 371.4 88.5 500c1.1 128.6 29.9 229"
+        evidence = audit._statistics_evidence(body)
+        self.assertFalse(evidence["carries_statistics"])
+
+    def test_a_real_row_payload_is_evidence(self):
+        audit = self._audit()
+        body = '{"headers": ["TEAM"], "rowSet": [["Boston Celtics", 1, 2]]}'
+        self.assertTrue(audit._statistics_evidence(body)["carries_statistics"])
+
+    def test_the_two_captures_agree_that_no_statistics_payload_is_present(self):
+        for day in ("2026-11-17", "2026-11-19"):
+            capture = ROOT / "data" / "official-pages" / day
+            if not (capture / "manifest.json").is_file():
+                continue
+            result = self._audit().audit(capture)
+            for row in result["records"]:
+                if row["key"] in {
+                    "standings",
+                    "teamstats_traditional",
+                    "teamstats_opponent",
+                    "teamstats_advanced",
+                }:
+                    self.assertEqual(row["http_status"], 200, day)
+                    self.assertFalse(row["carries_statistics"], f"{day} {row['key']}")
+                    self.assertEqual(row["teams_present"], 30, f"{day} {row['key']}")
+
+    def test_head_captures_are_labelled_not_assumed_complete(self):
+        for day in ("2026-11-17", "2026-11-19"):
+            capture = ROOT / "data" / "official-pages" / day
+            if not (capture / "manifest.json").is_file():
+                continue
+            result = self._audit().audit(capture)
+            states = {row["key"]: row["stored"]["state"] for row in result["records"]}
+            for state in states.values():
+                self.assertIn(state, {"COMPLETE", "HEAD", "INCONSISTENT", "NO_BODY_STORED"})
+            self.assertEqual(states["schedule_pdf"], "COMPLETE", day)
