@@ -797,3 +797,59 @@ Four sessions worked the 2026-11-17 cycle in parallel. Recorded so no letter, fi
 **Cross-scope requests.** (1) Integration session: regenerate the Upcoming slate page from `raw/schedule-2026-11-20-11-21-rows-43-51-274-279.txt` and the 11/19 rows, or confirm it stays as the 17 Nov read with BR-S1 visible. (2) Owner: read run 44293154114 (BR-J1). (3) Session `arena/639c095c-nba4` (for information): its `injuries-2026-11-19-0145am.json` remains the file of record and its record is unchanged.
 
 **Publication.** PR and merge result are recorded below once the integration step completes.
+
+## Session `arena/c38970c9-nba4` — task record (2026-11-19, final)
+
+**Letters.** Claimed as CA–CM at 07:0xZ; re-lettered **DG–DS** after two rebases because
+`arena/53f4da04-nba4` had already taken CA on `main` (07:00Z), `arena/0682b568-nba4` and
+`arena/639c095c-nba4` had both written BR, and `arena/76f88812-nba4` later wrote BS. Every
+one of those rows is preserved. Conflict resolutions kept both sides: `COORDINATION.md` kept
+main's BS row plus this session's 13 rows; `README.md` and `index.html` had their conflicting
+count lines replaced by a placeholder and then **re-measured on the merged tree** (583 across
+thirteen suites) rather than negotiated. No other session's content was discarded.
+
+**What this session did.**
+
+1. **DH — measured the schedule PDF instead of repeating a claim.** Three documents stated
+   the PDF prints no `at` token on rows 215–259. It prints one on every window row: the
+   content stream shows `(253) (Tue.) (11/17/26) (New York) (at) (Toronto) …`, and a
+   standalone `at` cell occurs 1,197 times. The published 21 rows still match the PDF field
+   for field, so **no published value changes**; the premise is wrong. Five regression tests
+   now read the PDF with the standard library (`zlib` + text operators, no PDF dependency),
+   and they were proven to bite: patching one `at` cell to `vs` in the real PDF fails three
+   of them. Flag **DS-01**.
+2. **DI — repaired the evidence path.** `capture-official-pages.yml` could only be triggered
+   by a push to `arena/af666c53-nba4`, which merged as PR #71 two days earlier; the workflow
+   could not run at all. It now triggers on `arena/**` / `main` / on demand, checks out the run
+   branch and pushes back to it. Proven by run
+   [44477290934](https://github.com/wingbangboozle1-lang/NBA4/actions/runs/44477290934), which
+   committed `data/official-pages/2026-11-19/`. Flag **DS-02**.
+3. **DI — re-measured the transport question.** The 2026-11-19 capture probed 21 surfaces.
+   The official schedule PDF is **byte-identical** to 2026-11-17 (sha256 `5e82e37e…`), so no
+   re-issue occurred. All four statistics pages answer **HTTP 200** and carry **no statistics**
+   (`rowSet`/`headers`/`teamId`/`teamTricode`/`gamesPlayed`: 0 occurrences on both dates).
+   `stats.nba.com` answers its origin page (200, 371,561 B) and times out on its JSON API. The
+   index lists 44 dated reports on 11/17 and 9 on 11/19 (newest **02:00 AM**), while the
+   published transcription is **01:45 AM** — flag **DS-05**.
+4. **DI — recorded three false confidence markers.** The new auditor first said "carries
+   statistics" for all four pages. It was wrong three times (team names in the navigation
+   blob, `<option value="W">` in a filter, 426 one-decimal numbers in SVG path data) before
+   the structural marker held. All three traps are now regression tests. Flag **DS-04**.
+5. **DS — corrected its own draft.** The first text of row CW asserted a probe-mode `--json`
+   defect that does not reproduce (probe mode writes the record and exits 1 on a fetch
+   failure); the row was rewritten and the unfounded claim removed. The 2026-11-18 CI failure
+   was four statistics gates (10/14 passed), confirmed from the Checks API. Flag **DS-08**.
+6. **DO/DN/DP/DR — decision support.** Six new questions (`Q-DO-01…06`), each naming the
+   document that would answer it; a 24-line requirements-coverage map; a 10-item suggestion
+   queue (section E on the suggestions page); a pass-13 review section with flags DS-01…DS-08;
+   and a status-as-of summary on the overview. No number, line, probability or pick was added.
+
+**Checks on the merged tree.** `python3 -m unittest discover -s tests -t .` → **583 tests OK**
+(thirteen suites). `scripts/check_site.py --with-tests` → PASS (16 pages, 776 HTML data rows,
+1446 Markdown data rows). `build_snapshots.py --check`, `build_brief_data.py --check`,
+`build_gamelogs.py --check` → all unchanged. `scheduled_refresh.py --mode offline` → 3/3 PASS,
+`rebuild_allowed=False`. `audit_official_capture.py` reproduces §8 of the pass log.
+
+**Not done, deliberately.** No NBA page was fetched by this session (no egress); no snapshot,
+injury row or slate row was edited; the 02:00 AM report was not transcribed; and no value from
+a document this session could not fetch is published anywhere.
