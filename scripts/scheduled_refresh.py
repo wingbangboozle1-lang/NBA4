@@ -49,7 +49,7 @@ import time
 import urllib.error
 import urllib.request
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Callable
 
@@ -377,16 +377,41 @@ def gate_official_feed(
 
 
 def parse_slate_window(snapshot: dict[str, Any]) -> tuple[datetime, datetime] | None:
+    """Read the explicit UTC interval, or derive a date-only envelope from ``dates``.
+
+    Date-only snapshots have no tip-time boundary, so their interval is the
+    UTC calendar envelope [first date midnight, day-after-last midnight).
+    Malformed or empty date lists fail closed.
+    """
     window = snapshot.get("window") or {}
     try:
         start = datetime.fromisoformat(window["start_utc"].replace("Z", "+00:00"))
         end = datetime.fromisoformat(window["end_utc"].replace("Z", "+00:00"))
-    except Exception:
-        return None
+    except (KeyError, AttributeError, TypeError, ValueError):
+        dates = window.get("dates")
+        if not isinstance(dates, list) or not dates:
+            return None
+        parsed = []
+        for value in dates:
+            if not isinstance(value, str):
+                return None
+            try:
+                parsed.append(datetime.strptime(value, "%m/%d/%Y").date())
+            except ValueError:
+                try:
+                    parsed.append(datetime.strptime(value, "%Y-%m-%d").date())
+                except ValueError:
+                    return None
+        first, last = min(parsed), max(parsed)
+        start = datetime(first.year, first.month, first.day, tzinfo=timezone.utc)
+        end_date = last + timedelta(days=1)
+        end = datetime(end_date.year, end_date.month, end_date.day, tzinfo=timezone.utc)
     if start.tzinfo is None:
         start = start.replace(tzinfo=timezone.utc)
     if end.tzinfo is None:
         end = end.replace(tzinfo=timezone.utc)
+    if end <= start:
+        return None
     return start, end
 
 

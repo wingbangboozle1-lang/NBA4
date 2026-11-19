@@ -109,6 +109,18 @@ class ParseTests(unittest.TestCase):
         self.assertTrue(start <= NOW <= end)
         self.assertIsNone(sr.parse_slate_window({"window": {}}))
 
+    def test_slate_window_date_list_shape(self):
+        start, end = sr.parse_slate_window({"window": {"dates": ["11/17/2026", "11/19/2026"]}})
+        self.assertEqual(start.isoformat(), "2026-11-17T00:00:00+00:00")
+        self.assertEqual(end.isoformat(), "2026-11-20T00:00:00+00:00")
+
+    def test_slate_window_date_list_iso_and_rejects_malformed(self):
+        start, end = sr.parse_slate_window({"window": {"dates": ["2026-11-17"]}})
+        self.assertEqual((start.day, end.day), (17, 18))
+        self.assertIsNone(sr.parse_slate_window({"window": {"dates": []}}))
+        self.assertIsNone(sr.parse_slate_window({"window": {"dates": ["not-a-date"]}}))
+        self.assertIsNone(sr.parse_slate_window({"window": {"start_utc": "2026-11-18T00:00:00Z", "end_utc": "2026-11-17T00:00:00Z"}}))
+
 
 class FreshnessGateTests(unittest.TestCase):
     def _pointer(self, fetched_at: str) -> dict:
