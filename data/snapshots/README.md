@@ -69,3 +69,16 @@ python3 -c "import json;d=json.load(open('data/snapshots/injuries-2026-11-15-061
 ```
 
 To re-check a value, open the `source_url`, find the row by game/matchup and player, and compare with the value on [Upcoming slate](../slate.html) or [Injuries & flow](../injuries.html). If the document has moved on (a newer report exists), the older snapshot is stale by definition — see [Flagged for review](../review.html).
+
+## Eleventh daily refresh cycle — 2026-11-19 (task BR, `arena/76f88812-nba4`)
+
+| File | What it holds | Official source | Source document timestamp | Fetched (UTC) |
+| --- | --- | --- | --- | --- |
+| `results-2026-11-17.json` | Every 11/17 final (5 games): regulation periods and printed OT, printed Final, quarter-sum check (10 of 10 lines agree). | Game summary pages `https://www.nba.com/game/<slug>` (LINESCORES and GAME INFO); scoreboard [11/17](https://www.nba.com/games?date=2026-11-17) | page prints no clock; retrieval time recorded | 2026-11-19 (session window 06:59Z-07:07Z) |
+| `results-2026-11-18.json` | Every 11/18 final (12 games), same schema (24 of 24 lines agree). | Game summary pages; scoreboard [11/18](https://www.nba.com/games?date=2026-11-18) | same | 2026-11-19 (session window 06:59Z-07:07Z) |
+| `injuries-2026-11-19-0145am.json` | Every row of the 01:45 AM ET 11/19 revision (44 rows), with per-row flags IR-19-01, IR-19-02 and IR-19-05 (15 flagged rows). | [01:45 AM PDF](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf) | header: "Injury Report: 11/19/26 01:45 AM" | 2026-11-19 (session window 06:59Z-07:07Z) |
+| `injuries-2026-11-19-0130-to-0145.diff.json` | Consecutive diff 01:30 → 01:45 AM ET: 0 status, 0 reason, 0 team changes. | [01:30 AM PDF](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_30AM.pdf), [01:45 AM PDF](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf) | both headers | 2026-11-19 (session window 06:59Z-07:07Z) |
+| `injuries-newest-pointer-2026-11-19.json` | Index listing seen at check: 12:00 a.m. to 1:45 a.m. ET; gap note for IR-19-04. | [injury index](https://official.nba.com/nba-injury-report-2026-27-season/) | index listing | 2026-11-19 (session window 06:59Z-07:07Z) |
+| `raw/injury-2026-11-19T0130am-et.pipes`, `raw/injury-2026-11-19T0145am-et.pipes` | Verbatim 7-cell extracts of the two revisions (blank = not printed). | as above | as above | 2026-11-19 (session window 06:59Z-07:07Z) |
+
+Built by `python3 scripts/build_window_2026_11_19.py` (check with `--check`). Not refreshed this cycle: the schedule window beyond 11/17–11/19, standings, team statistics, and per-player game logs (flags BR-S1, BR-S2, BR-S3).
