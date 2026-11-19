@@ -735,3 +735,37 @@ Four sessions worked the 2026-11-17 cycle in parallel. Recorded so no letter, fi
 - **Transcription difference recorded, not merged.** Both sessions transcribed the same 10:30 AM PDF independently: this session joined the Kessler page-break reason fragments verbatim into one row (59 rows, Sorber precedent, flagged) while main's extraction keeps the fragment as a separate lost row (60 rows, phantom `Soreness` row flagged `__lost__`). Main's reading stands on the site; neither PDF text was altered and both readings are preserved here. The same 59-vs-60 note applies to the 10:15 pair and the 10:15→10:30 diff (main: 60/60, 0/0/0).
 - **Unique pieces landed from this session** (none of them overwriting main): flag **BZ-01** (untranscribed 11/16 10:15 a.m.–11:45 p.m. + 11/17 12:00–10:00 a.m. revisions, with three direct reads of the 11/16 10:15 AM / 7:45 PM / 11:45 PM PDFs; plus the five later 11/17 revisions 10:45–11:45 a.m. that supersede the 10:30 snapshot) in a new `pass12b-title` section on `review.html`; `docs/verification-pass-0fec89b5.md`; `data/snapshots/player-gamelogs-2026-11-14_to_2026-11-15-anchor-2026-11-17.json` (33 players of the 10:30 anchor, five gamebooks — an additional dated capture alongside main's 11/15→11/16 window file); the snapshot-registry rows for previously undocumented 11/16 files in `data/snapshots/README.md`; `scripts/_gen_0fec89b5.py` and `scripts/_gen_gamelogs_0fec89b5.py` (transcription generators).
 - **Open requests honored.** `arena/3648982b-nba4`'s R-1/R-2 (adopt 11:15 AM as newest, align page-break grouping) stay directed at the `injuries.html` owner and are untouched by this merge; `arena/af666c53-nba4`'s open coordination request is preserved from `main`.
+
+
+## Session claim — `arena/3ddd06bf-nba4` (2026-11-19, before work)
+
+**Session ID:** `arena/3ddd06bf-nba4`, branched from `8e94c1f` (the PR #80 merge on `main`).
+**Letters verified free at claim time:** `grep -cE "^\| BR\."` → 0, likewise BS/BT/CA/CB/CC
+(letters BA–BZ, CA–CZ are all taken or reserved by earlier rows; BR–BT and CA–CC are the first
+free block after BY/BZ). **No other session holds an open claim for this scope at the time of
+writing:** the board's newest rows are BY (in progress, `arena/3648982b-nba4`, 2026-11-17, no
+commits since that date — taken over below under the 60-minute rule) and the PR #80 row BP/BQ.
+
+**Why this scope.** The 2026-11-19 cycle is unclaimed: the newest published injury revision is
+11/17 11:15 AM ET and the newest published finals are 11/16. The three-day window from
+2026-11-19 covers 11/19–11/21, so the slate, injury, results, standings and team-stat tables on
+the live site are all two days stale relative to the official documents.
+
+| Task | Status | Owner | File scope | Method |
+| --- | --- | --- | --- | --- |
+| **BR.** Eleventh daily refresh cycle (2026-11-19): official re-read of the rolling three-day schedule window (11/19–11/21), the newest injury-report index/PDF + consecutive-revision diffs, standings, the three official team-stat pages (traditional/opponent/advanced), the 11/17 + 11/18 finals, and per-player game logs for injury-report players. Dated snapshot files with provenance, generated site tables, recomputed home-win rate. | **in progress** — claimed 2026-11-19 before work | `arena/3ddd06bf-nba4` | `data/snapshots/**` (new dated files + README), NEW `scripts/build_window_2026_11_19.py`, `scripts/build_snapshots.py`, `slate.html`, `injuries.html`, `results.html`, `team-stats.html`, `availability.html` (injury-banner timestamps + rotation column only), `index.html`/`README.md` (counts and dates only), `tests/test_snapshots.py` | Only values printed on an official document are published; a cell the extraction loses stays blank and is flagged; no model output, line, price, probability or pick is published. Sources: [schedule PDF](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf), [injury index](https://official.nba.com/nba-injury-report-2026-27-season/), [standings](https://www.nba.com/standings), [advanced](https://www.nba.com/stats/teams/advanced), [opponent](https://www.nba.com/stats/teams/opponent), [traditional](https://www.nba.com/stats/teams/traditional/), [games](https://www.nba.com/games). |
+| **BS.** Data-access reality check (2026-11-19): re-test every official surface the pipeline depends on from this session's environment and record REACHED / NOT REACHED with the HTTP status or failure signature and a UTC timestamp. No value is inferred from a non-response. | **in progress** — same claim | `arena/3ddd06bf-nba4` | NEW `docs/data-access-3ddd06bf.md`, NEW `data/snapshots/data-access-2026-11-19.json` | Every result is a measurement; where a surface is unreachable the dependent value is not published rather than estimated. |
+| **BT.** Verification pass 13: quote-check the sources this span cites, re-derive the published rows independently, log flags on the Flagged-for-Review page. | **in progress** — same claim | `arena/3ddd06bf-nba4` | NEW `docs/verification-pass-3ddd06bf.md`, `review.html` (new pass-13 section only) | Literal quotations, row counts, arithmetic checks; a flag does not block a merge (repo rule). |
+| **CA.** Final integration: re-verify the combined tree, open the PR from this branch to `main`, merge without waiting for approval, confirm the GitHub Pages build, record the PR link and merge result here. | **in progress** — same claim | `arena/3ddd06bf-nba4` | `COORDINATION.md`, `README.md` (counts) | Do not merge a tree whose checks fail. |
+
+**Takeover record.** `arena/3648982b-nba4`'s BY row (integration for the 11/17 cycle) has had no
+commits since 2026-11-17, more than 60 minutes before this claim; it asserted "no rendered page
+changes", which is not true of the 11/17→11/19 delta. This session therefore performs the
+integration the row describes and does not reopen it; nothing of that session's work is discarded.
+
+**Explicitly out of scope** (another session's declared scope or a standing owner decision):
+`engine/**` (all modules are frozen at PR #80; this session edits no engine file),
+`.github/workflows/**`, `scripts/official_pages.py`, `scripts/scheduled_refresh.py`,
+`scripts/capture_official_pages.py`, `data/official-pages/**`, `assets/site.css`, and the
+`G0` rights decision (D-01 / IR-T4), which remains an owner decision and is not made here.
+
