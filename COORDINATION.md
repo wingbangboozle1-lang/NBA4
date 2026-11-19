@@ -892,3 +892,14 @@ including `tests/test_official_pages.py`, `tests/test_window_2026_11_19.py` and 
 files, because it was cut before PRs #83–#86 landed. It should be **closed, not merged**. This
 session did not close it, because the PR belongs to another session's record, and did not merge
 it, because merging it would destroy current work.
+
+### Publication record — session `arena/556d7a9c-nba4` (task CB, 2026-11-19)
+
+| Item | Value |
+| --- | --- |
+| PR | [#90](https://github.com/wingbangboozle1-lang/NBA4/pull/90) — the 2026-11-19 refresh cycle (task CB) merged with `main` tip `fb00a22` (PR #89) |
+| Merged | 2026-11-19T07:55:05Z as `abf0acd` (merge commit, `gh pr merge 90 --merge`) |
+| GitHub Pages | `GET /repos/…/pages` → **`status: built`**, `https_enforced: true`, source `main /`; latest build created 2026-11-19T07:55:06Z |
+| Collision resolution | complementary collision with main (PR #89): main owns the 11/19 01:45 AM ET injury transcription (nested `games` + `unattributed_rows`) and the multi-file results refactor; this session owns the slate/standings/rest-window/aggregates refresh. Union merge — injury files and `build_snapshots.py` taken from main's authority then repointed to 11/19; `COORDINATION.md` and `review.html` resolved by union (no session's work discarded) |
+| Checks before merge | `python3 -m unittest discover -s tests -t .` → **587 tests OK** (14 suites); `check_site.py --with-tests` → PASS (16 pages, 775 HTML data rows, 1446 Markdown data rows); `build_snapshots.py --check` clean |
+| Merge method | `git merge fb00a22 --no-edit` (a `git pull --rebase` was attempted first, conflicted, and was abandoned in favour of the union merge) |
