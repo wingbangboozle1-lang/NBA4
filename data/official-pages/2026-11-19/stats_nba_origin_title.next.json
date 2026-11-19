@@ -8907,7 +8907,7 @@
    }
   ],
   "akamaiHeaders": {
-   "xAkamaiEdgescape": "georegion=252,country_code=US,region_code=GA,city=ATLANTA,dma=524,msa=0520,areacode=404+770,county=FULTON+DEKALB,fips=13121+13089,lat=33.7486,long=-84.3884,timezone=EST,zip=30301-30322+30324-30334+30336-30346+30348-30350+30353-30364+30366+30368-30371+30374-30375+30377-30378+30380+30384-30385+30388+30392+30394+30396+30398+31106-31107+31119+31126+31131+31136+31139+31141+31145-31146+31150+31156+31192-31193+31195-31196+39901,continent=NA,throughput=low,bw=1,network=microsoft,asnum=8075,network_type=hosted,location_id=0",
+   "xAkamaiEdgescape": "georegion=285,country_code=US,region_code=TX,city=HOUSTON,dma=618,pmsa=3360,msa=3362,areacode=713+281,county=HARRIS,fips=48201,lat=29.7634,long=-95.3634,timezone=CST,zip=77001-77096+77098-77099+77201-77210+77212-77213+77215-77231+77233-77238+77240-77245+77248-77249+77251-77259+77261-77263+77265-77275+77277+77279-77280+77282+77284+77287-77293+77297+77299,continent=NA,throughput=vhigh,bw=5000,asnum=40156,location_id=0",
    "xRegionMap": "united-states",
    "xLpPackageCountry": "US",
    "xTargetMarket": "with-commercials"
