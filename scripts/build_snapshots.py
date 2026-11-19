@@ -31,6 +31,10 @@ SCHEDULE_URL = (
 )
 REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf"
 REPORT_LABEL = "2026-11-17 10:30 AM ET report"
+# The 11/19 refresh cycle's file of record, used by the slate page's rotation
+# availability column (the availability data is read from the 11/19 report).
+REPORT_URL_1119 = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf"
+REPORT_LABEL_1119 = "2026-11-19 01:45 AM ET report"
 
 # Engine reason codes (engine/pipeline.py REASON_CODES) applied to every game.
 NO_PICK_REASONS = (
@@ -107,7 +111,7 @@ def load(name: str) -> dict:
 
 
 def render_slate() -> str:
-    data = load("slate-2026-11-17.json")
+    data = load("slate-2026-11-19.json")
     # The schedule PDF text prints no "at" token on rows 215-259, so away/home order
     # is shown as "at" only when the schedule itself prints the token (rows 260+) or
     # the 10:30 AM injury report independently prints the same AWAY@HOME code for the
@@ -116,14 +120,14 @@ def render_slate() -> str:
     # appears on 11/16 and again on 11/17), which would falsely corroborate rows.
     report_codes = {
         (g.get("game_date") or g.get("game_date_from_schedule", ""), g["matchup"])
-        for g in load("injuries-2026-11-17-1030am.json")["games"]
+        for g in load("injuries-2026-11-19-0145am.json")["games"]
     }
     # Rotation availability per game: counts of rows whose printed status cell is
     # exactly "Out", per team, from the same dated report. Arithmetic on printed
     # cells only; NOT YET SUBMITTED rows are excluded because that is a reporting
     # state, not a status.
     availability: dict[str, str] = {}
-    for g in load("injuries-2026-11-17-1030am.json")["games"]:
+    for g in load("injuries-2026-11-19-0145am.json")["games"]:
         per_team: dict[str, int] = {}
         for r in g["rows"]:
             if r.get("status") == "Out" and r.get("team") and r["team"] != "__lost__":
@@ -160,7 +164,7 @@ def render_slate() -> str:
         sources = [
             link(SCHEDULE_URL, "Schedule PDF row " + str(game["row"])),
             link(game["games_page_url"], "Games page " + game["games_page_game_id"]),
-            link(REPORT_URL, "Availability: " + REPORT_LABEL),
+            link(REPORT_URL_1119, "Availability: " + REPORT_LABEL_1119),
         ]
         rows.append(
             "              <tr>"
@@ -186,7 +190,7 @@ def render_slate() -> str:
         '<th scope="col">Tip-off: home-venue local / ET (PDF header LOCAL | ET)</th>'
         '<th scope="col">Game</th>'
         '<th scope="col">Matchup</th>'
-        f'<th scope="col">Rotation availability ({e(REPORT_LABEL)})</th>'
+        f'<th scope="col">Rotation availability ({e(REPORT_LABEL_1119)})</th>'
         '<th scope="col">Originated line</th>'
         '<th scope="col">Fair probability</th>'
         '<th scope="col">Decision</th>'
@@ -297,8 +301,8 @@ INJ_NEW = "injuries-2026-11-17-1030am.cells.json"
 INJ_DIFF = "injuries-2026-11-19-0130-to-0145.diff.json"
 INJ_LATEST = "injuries-2026-11-19-0145am.json"
 RESULTS_1116 = "results-2026-11-16.json"
-STANDINGS_1117 = "standings-2026-11-17.json"
-AGGREGATES_1117 = "aggregates-2026-11-17.json"
+STANDINGS_1119 = "standings-2026-11-19.json"
+AGGREGATES_1119 = "aggregates-2026-11-19.json"
 TEAM_STATS_1117 = "team-stats-2026-11-17.json"
 
 
@@ -404,7 +408,7 @@ def render_results() -> str:
 
 
 def render_standings() -> str:
-    data = load(STANDINGS_1117)
+    data = load(STANDINGS_1119)
     rows: list[str] = []
     for r in data["rows"]:
         cells = [
@@ -465,12 +469,12 @@ def _feed_lag_window() -> str:
 
 
 def render_aggregates() -> str:
-    data = load(AGGREGATES_1117)
+    data = load(AGGREGATES_1119)
     hc = data["home_court"]
     rf = data["result_feed"]
     il = data["injury_load"]
     sc = data["standings_consistency"]
-    st = load(STANDINGS_1117)["consistency_checks"]
+    st = load(STANDINGS_1119)["consistency_checks"]
     diff_data = load(INJ_DIFF)
     diff_counts = diff_data["counts"]
     diff_old_label = diff_data["old"]["revision_label"]
@@ -493,7 +497,7 @@ def render_aggregates() -> str:
             f'<strong>{hc["measured_home_win_rate"]}</strong> ({hc["home_wins"]}-{hc["home_losses"]} over '
             f'{hc["home_games"]} home games)',
             "league HOME wins / (HOME wins + HOME losses); neutral-site games held out",
-            load(STANDINGS_1117)["source_url"],
+            load(STANDINGS_1119)["source_url"],
             "input to engine/homerate.py, which converts it to points and refuses to apply it before "
             "pre-registration and rights gate G0 clear",
         ),
@@ -502,7 +506,7 @@ def render_aggregates() -> str:
             f'+{hc["pin"]["home_advantage_points"]} pts (proposed, not applied)',
             f'points = MARGIN_SD_DEFAULT x Phi^-1(rate) = {hc["pin"]["margin_sd_points"]} x '
             f'{hc["pin"]["z"]}; the exact inverse of ratings.win_probability',
-            load(STANDINGS_1117)["source_url"],
+            load(STANDINGS_1119)["source_url"],
             "ratings.HOME_ADVANTAGE_POINTS stays 0.0 until the gates clear; no per-arena or altitude term is fitted",
         ),
         row(
@@ -546,7 +550,7 @@ def render_aggregates() -> str:
             f'neutral = {st["league_team_game_lines"]} team-game lines; league W {sc["league_wins"]} = L '
             f'{sc["league_losses"]}',
             "each game prints one HOME line and one ROAD line (both NEUTRAL at a neutral site)",
-            load(STANDINGS_1117)["source_url"],
+            load(STANDINGS_1119)["source_url"],
             "a reader can re-check the extraction without re-fetching the page",
         ),
         row(
@@ -581,7 +585,7 @@ def render_rest() -> str:
     sys.path.insert(0, str(ROOT))
     from engine.rest import ScheduleRow, TeamCalendar, slate_rest_table
 
-    rest = load("rest-window-2026-11-17.json")
+    rest = load("rest-window-2026-11-19.json")
     rows = [
         ScheduleRow(
             game_date=r["date"],
@@ -594,7 +598,7 @@ def render_rest() -> str:
         for r in rest["rows"]
     ]
     calendar = TeamCalendar(rows)
-    slate = load("slate-2026-11-17.json")
+    slate = load("slate-2026-11-19.json")
     games = [(g["date"], g["away"], g["home"]) for g in slate["games"]]
     table = slate_rest_table(calendar, games)
     by_row = {(g["date"], g["away"], g["home"]): g for g in slate["games"]}
