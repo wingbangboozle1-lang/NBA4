@@ -49,7 +49,7 @@ import time
 import urllib.error
 import urllib.request
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Callable
 
@@ -377,16 +377,41 @@ def gate_official_feed(
 
 
 def parse_slate_window(snapshot: dict[str, Any]) -> tuple[datetime, datetime] | None:
+    """Return the slate's UTC half-open window from explicit bounds or its dates list.
+
+    Snapshot producers historically used both ``window.start_utc/end_utc`` and
+    ``window.dates``. Dates-only snapshots are interpreted as calendar dates in
+    UTC, with the end boundary at midnight after the last listed date.
+    """
     window = snapshot.get("window") or {}
     try:
-        start = datetime.fromisoformat(window["start_utc"].replace("Z", "+00:00"))
-        end = datetime.fromisoformat(window["end_utc"].replace("Z", "+00:00"))
-    except Exception:
+        if window.get("start_utc") and window.get("end_utc"):
+            start = datetime.fromisoformat(window["start_utc"].replace("Z", "+00:00"))
+            end = datetime.fromisoformat(window["end_utc"].replace("Z", "+00:00"))
+            if start.tzinfo is None:
+                start = start.replace(tzinfo=timezone.utc)
+            if end.tzinfo is None:
+                end = end.replace(tzinfo=timezone.utc)
+        else:
+            dates = window.get("dates")
+            if not isinstance(dates, list) or not dates:
+                return None
+            parsed = []
+            for value in dates:
+                if not isinstance(value, str):
+                    return None
+                try:
+                    parsed.append(date.fromisoformat(value))
+                except ValueError:
+                    parsed.append(datetime.strptime(value, "%m/%d/%Y").date())
+            if parsed != sorted(set(parsed)):
+                return None
+            start = datetime.combine(parsed[0], datetime.min.time(), tzinfo=timezone.utc)
+            end = datetime.combine(parsed[-1] + timedelta(days=1), datetime.min.time(), tzinfo=timezone.utc)
+    except (KeyError, TypeError, ValueError, OverflowError):
         return None
-    if start.tzinfo is None:
-        start = start.replace(tzinfo=timezone.utc)
-    if end.tzinfo is None:
-        end = end.replace(tzinfo=timezone.utc)
+    if end <= start:
+        return None
     return start, end
 
 

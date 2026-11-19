@@ -107,7 +107,18 @@ class ParseTests(unittest.TestCase):
         snapshot = {"window": {"start_utc": "2026-11-15T11:29:57Z", "end_utc": "2026-11-18T11:29:57Z"}}
         start, end = sr.parse_slate_window(snapshot)
         self.assertTrue(start <= NOW <= end)
+        dates_only = sr.parse_slate_window({"window": {"dates": ["11/17/2026", "11/18/2026", "11/19/2026"]}})
+        self.assertEqual(dates_only, (
+            datetime(2026, 11, 17, tzinfo=timezone.utc),
+            datetime(2026, 11, 20, tzinfo=timezone.utc),
+        ))
+        self.assertEqual(
+            sr.parse_slate_window({"window": {"dates": ["2026-11-17", "2026-11-18"]}}),
+            (datetime(2026, 11, 17, tzinfo=timezone.utc), datetime(2026, 11, 19, tzinfo=timezone.utc)),
+        )
         self.assertIsNone(sr.parse_slate_window({"window": {}}))
+        self.assertIsNone(sr.parse_slate_window({"window": {"dates": ["not-a-date"]}}))
+        self.assertIsNone(sr.parse_slate_window({"window": {"dates": ["2026-11-18", "2026-11-17"]}}))
 
 
 class FreshnessGateTests(unittest.TestCase):
