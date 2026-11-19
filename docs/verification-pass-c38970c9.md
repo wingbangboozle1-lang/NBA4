@@ -23,11 +23,11 @@ Three documents state that the official 2026–27 schedule PDF prints no `at` to
 between the two team cells on rows 215–259, and that this is why those rows needed
 out-of-document corroboration for away/home order:
 
-| Document | Text |
-| --- | --- |
-| [`scripts/build_snapshots.py`](../scripts/build_snapshots.py) line 111 | `The schedule PDF text prints no "at" token on rows 215-259` |
-| [`data/snapshots/slate-2026-11-17.json`](../data/snapshots/slate-2026-11-17.json) → `basis.away_home_rule` | `The schedule PDF prints two team cells and, on rows 215-259, prints no 'at' or 'vs' token between them.` |
-| [`review.html`](../review.html) (pass 7 / P7-02 wording) | `the schedule's away/home basis for rows 215–259` |
+| Document | Text | Source |
+| --- | --- | --- |
+| [`scripts/build_snapshots.py`](../scripts/build_snapshots.py) line 111 | `The schedule PDF text prints no "at" token on rows 215-259` | [https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/build_snapshots.py](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/build_snapshots.py) |
+| [`data/snapshots/slate-2026-11-17.json`](../data/snapshots/slate-2026-11-17.json) → `basis.away_home_rule` | `The schedule PDF prints two team cells and, on rows 215-259, prints no 'at' or 'vs' token between them.` | [https://github.com/wingbangboozle1-lang/NBA4/blob/main/data/snapshots/slate-2026-11-17.json](https://github.com/wingbangboozle1-lang/NBA4/blob/main/data/snapshots/slate-2026-11-17.json) |
+| [`review.html`](../review.html) (pass 7 / P7-02 wording) | `the schedule's away/home basis for rows 215–259` | [https://github.com/wingbangboozle1-lang/NBA4/blob/main/review.html](https://github.com/wingbangboozle1-lang/NBA4/blob/main/review.html) |
 
 [`tests/test_snapshots.py`](../tests/test_snapshots.py) line 659 asserts the *rendered*
 page never contains the phrase `prints no "at"`, so the site is consistent with itself;
@@ -46,11 +46,11 @@ scheduled job compares against.
 
 Three independent extractions were run on it:
 
-| Extractor | Method | Window rows found | Rows with ` at ` |
-| --- | --- | --- | --- |
-| `pypdf` 5.1.0 | `page.extract_text()` default | 23 (rows 252–274) | 23 of 23 |
-| `pypdf` 5.1.0 | `extract_text(extraction_mode="layout")` | 23 | 23 of 23 |
-| `pdfminer.six` 20250506 | character stream grouped by `y0` baseline, sorted by `x0` | 23 | 23 of 23 |
+| Extractor | Method | Window rows found | Rows with ` at ` | Source |
+| --- | --- | --- | --- | --- |
+| `pypdf` 5.1.0 | `page.extract_text()` default | 23 (rows 252–274) | 23 of 23 | [https://github.com/wingbangboozle1-lang/NBA4/tree/main/data/official-pages/2026-11-17](https://github.com/wingbangboozle1-lang/NBA4/tree/main/data/official-pages/2026-11-17) |
+| `pypdf` 5.1.0 | `extract_text(extraction_mode="layout")` | 23 | 23 of 23 | [https://github.com/wingbangboozle1-lang/NBA4/tree/main/data/official-pages/2026-11-17](https://github.com/wingbangboozle1-lang/NBA4/tree/main/data/official-pages/2026-11-17) |
+| `pdfminer.six` 20250506 | character stream grouped by `y0` baseline, sorted by `x0` | 23 | 23 of 23 | [https://github.com/wingbangboozle1-lang/NBA4/tree/main/data/official-pages/2026-11-17](https://github.com/wingbangboozle1-lang/NBA4/tree/main/data/official-pages/2026-11-17) |
 
 Representative rows, verbatim (pypdf layout mode; page numbers are PDF pages):
 
@@ -82,11 +82,11 @@ test needs no PDF dependency and cannot skip.
 **The test was proven to bite.** The PDF was temporarily patched so that row 253's cell read
 `[(vs)] TJ` instead of `[(at)] TJ` (one stream recompressed, everything else untouched):
 
-| Test | Result on the patched PDF | Result after restoring the original |
-| --- | --- | --- |
-| `test_every_window_row_has_away_at_home_cells` | **FAIL** — `row 253: no ' at ' cell` | pass |
-| `test_published_window_rows_match_the_pdf_cells` | **FAIL** — `'vs' != 'at'` | pass |
-| `test_pdf_is_the_document_the_drift_gate_compares` | **FAIL** — sha256 changed | pass |
+| Test | Result on the patched PDF | Result after restoring the original | Source |
+| --- | --- | --- | --- |
+| `test_every_window_row_has_away_at_home_cells` | **FAIL** — `row 253: no ' at ' cell` | pass | [https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_snapshots.py](https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_snapshots.py) |
+| `test_published_window_rows_match_the_pdf_cells` | **FAIL** — `'vs' != 'at'` | pass | [https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_snapshots.py](https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_snapshots.py) |
+| `test_pdf_is_the_document_the_drift_gate_compares` | **FAIL** — sha256 changed | pass | [https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_snapshots.py](https://github.com/wingbangboozle1-lang/NBA4/blob/main/tests/test_snapshots.py) |
 
 The file was restored and its sha256 re-checked against the drift baseline
 (`5e82e37e…b3570`) before anything was committed. A first version of the extractor stopped at
@@ -139,13 +139,13 @@ check possible at all; the pass that made the claim did not have the bytes to ch
 
 Measured, not assumed:
 
-| Observation | Evidence |
-| --- | --- |
-| the workflow was triggered only by pushes to `arena/af666c53-nba4` | the file before this session's change, `on.push.branches` |
-| that branch merged as PR #71 on 2026-11-17T16:17:36Z | `gh pr view 71` |
-| after the merge the workflow could not be started by any push | no other branch was listed |
-| on-demand start was refused to this session's token | `gh workflow run …` → `HTTP 403: Resource not accessible by integration` (reproduced 2026-11-19T07:07Z) |
-| the repaired trigger works | run [44477290934](https://github.com/wingbangboozle1-lang/NBA4/actions/runs/44477290934) started on this branch at 2026-11-19T07:08:15Z from a push that touched `scripts/capture_official_pages.py` |
+| Observation | Evidence | Source |
+| --- | --- | --- |
+| the workflow was triggered only by pushes to `arena/af666c53-nba4` | the file before this session's change, `on.push.branches` | [https://github.com/wingbangboozle1-lang/NBA4/commits/main/.github/workflows/capture-official-pages.yml](https://github.com/wingbangboozle1-lang/NBA4/commits/main/.github/workflows/capture-official-pages.yml) |
+| that branch merged as PR #71 on 2026-11-17T16:17:36Z | `gh pr view 71` | [https://github.com/wingbangboozle1-lang/NBA4/pull/71](https://github.com/wingbangboozle1-lang/NBA4/pull/71) |
+| after the merge the workflow could not be started by any push | no other branch was listed | [https://github.com/wingbangboozle1-lang/NBA4/actions/workflows/capture-official-pages.yml](https://github.com/wingbangboozle1-lang/NBA4/actions/workflows/capture-official-pages.yml) |
+| on-demand start was refused to this session's token | `gh workflow run …` → `HTTP 403: Resource not accessible by integration` (reproduced 2026-11-19T07:07Z) | [https://github.com/wingbangboozle1-lang/NBA4/actions](https://github.com/wingbangboozle1-lang/NBA4/actions) |
+| the repaired trigger works | run [44477290934](https://github.com/wingbangboozle1-lang/NBA4/actions/runs/44477290934) started on this branch at 2026-11-19T07:08:15Z from a push that touched `scripts/capture_official_pages.py` | [https://github.com/wingbangboozle1-lang/NBA4/actions/runs/44477290934](https://github.com/wingbangboozle1-lang/NBA4/actions/runs/44477290934) |
 
 So the "transport evidence" path in the repository was dead for two days, and the
 `daily-refresh` job's four red statistics gates were being explained by a capture that could
@@ -164,14 +164,14 @@ and is therefore the path the repository relies on. Both are recorded.
 The sandbox this pass ran in has outbound access to GitHub, npm and PyPI only. Measured
 2026-11-19T06:56Z with `curl -sS -o /dev/null -w "%{http_code}"`:
 
-| Host | Result |
-| --- | --- |
-| `github.com` | 200 |
-| `www.nba.com` | no response (exit 000) |
-| `stats.nba.com` | no response |
-| `cdn.nba.com` | no response |
-| `official.nba.com` | no response |
-| `ak-static.cms.nba.com` | no response |
+| Host | Result | Procedure |
+| --- | --- | --- |
+| `github.com` | 200 | URL probed: [https://github.com/](https://github.com/) — measured in this session (`curl -sS -o /dev/null -w "%{http_code}"`, 2026-11-19T06:56Z) |
+| `www.nba.com` | no response (exit 000) | URL probed: [https://www.nba.com/](https://www.nba.com/) — measured in this session (`curl -sS -o /dev/null -w "%{http_code}"`, 2026-11-19T06:56Z) |
+| `stats.nba.com` | no response | URL probed: [https://stats.nba.com/](https://stats.nba.com/) — measured in this session (`curl -sS -o /dev/null -w "%{http_code}"`, 2026-11-19T06:56Z) |
+| `cdn.nba.com` | no response | URL probed: [https://cdn.nba.com/](https://cdn.nba.com/) — measured in this session (`curl -sS -o /dev/null -w "%{http_code}"`, 2026-11-19T06:56Z) |
+| `official.nba.com` | no response | URL probed: [https://official.nba.com/](https://official.nba.com/) — measured in this session (`curl -sS -o /dev/null -w "%{http_code}"`, 2026-11-19T06:56Z) |
+| `ak-static.cms.nba.com` | no response | URL probed: [https://ak-static.cms.nba.com/](https://ak-static.cms.nba.com/) — measured in this session (`curl -sS -o /dev/null -w "%{http_code}"`, 2026-11-19T06:56Z) |
 
 Consequences, stated plainly:
 
@@ -193,15 +193,15 @@ Consequences, stated plainly:
 Read from `data/snapshots/injuries-2026-11-19-0145am.json` (another session's file, not
 edited here):
 
-| Check | Result |
-| --- | --- |
-| `row_count` vs rows inside `games` + `unattributed_rows` | 44 vs 42 + 2 = 44 ✅ |
-| `games_counted` vs `len(games)` | 13 vs 13 ✅ |
-| matchup codes vs the official schedule row cited per block | 13 of 13 match the `schedule_row` recorded in each block ✅ |
-| printed tip vs schedule tip where both exist | 12 blocks agree (`08:00 (ET)` vs `8:00 PM`); POR@MIL prints no tip cell and records `tip_et_from_report: ""` ✅ (blank kept blank) |
-| statuses | 21 NOT YET SUBMITTED rows keep a blank status and the printed reason text; 17 Out, 2 Available, 2 Questionable ✅ |
-| orphan rows | 2 (Kuminga, Pullin) carry no date/time/matchup/team and are stored unassigned with an unverified flag ✅ |
-| NYK@MIN block | 4 Minnesota rows, 0 New York rows — the absence is recorded and not interpreted ✅ |
+| Check | Result | Source |
+| --- | --- | --- |
+| `row_count` vs rows inside `games` + `unattributed_rows` | 44 vs 42 + 2 = 44 ✅ | [transcription file](https://github.com/wingbangboozle1-lang/NBA4/blob/main/data/snapshots/injuries-2026-11-19-0145am.json) |
+| `games_counted` vs `len(games)` | 13 vs 13 ✅ | [transcription file](https://github.com/wingbangboozle1-lang/NBA4/blob/main/data/snapshots/injuries-2026-11-19-0145am.json) |
+| matchup codes vs the official schedule row cited per block | 13 of 13 match the `schedule_row` recorded in each block ✅ | [11/19 01:45 AM official report](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf) |
+| printed tip vs schedule tip where both exist | 12 blocks agree (`08:00 (ET)` vs `8:00 PM`); POR@MIL prints no tip cell and records `tip_et_from_report: ""` ✅ (blank kept blank) | [11/19 01:45 AM official report](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf) |
+| statuses | 21 NOT YET SUBMITTED rows keep a blank status and the printed reason text; 17 Out, 2 Available, 2 Questionable ✅ | [11/19 01:45 AM official report](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf) |
+| orphan rows | 2 (Kuminga, Pullin) carry no date/time/matchup/team and are stored unassigned with an unverified flag ✅ | [11/19 01:45 AM official report](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf) |
+| NYK@MIN block | 4 Minnesota rows, 0 New York rows — the absence is recorded and not interpreted ✅ | [11/19 01:45 AM official report](https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf) |
 
 **Not checkable here:** whether every printed cell matches the PDF. The PDF is not in the
 repository and the host is unreachable from this sandbox. That check stays open and is
@@ -211,14 +211,14 @@ listed as such on the review page.
 
 ## 5. Numbers this pass re-measured
 
-| Measurement | Command | Result |
-| --- | --- | --- |
-| unit tests | `python3 -m unittest discover -s tests -t .` | 547 before this session's additions (§6) |
-| site check | `python3 scripts/check_site.py --with-tests` | PASS, 16 pages, 652 HTML data rows, 1310 Markdown data rows |
-| snapshot regeneration | `python3 scripts/build_snapshots.py --check` | exit 0, `unchanged team-stats.html` |
-| refresh gates, offline | `python3 scripts/scheduled_refresh.py --mode offline` | 3/3 PASS, `rebuild_allowed=False` |
-| refresh gates, probe | `… --mode probe --now 2026-11-19T07:00:00Z` | 5/12 PASS, exit 1 — every NBA host fails from this sandbox with `TLS/SSL connection has been closed` |
-| nightly CI on `main`, 2026-11-18 | Checks API annotations for run 44293154114 | `gates 10/14 passed; failed=standings_fetch,teamstats_traditional_fetch,teamstats_advanced_fetch,teamstats_opponent_fetch` |
+| Measurement | Command | Result | Source |
+| --- | --- | --- | --- |
+| unit tests | `python3 -m unittest discover -s tests -t .` | 547 before this session's additions (§6) | [https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
+| site check | `python3 scripts/check_site.py --with-tests` | PASS, 16 pages, 652 HTML data rows, 1310 Markdown data rows | [https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
+| snapshot regeneration | `python3 scripts/build_snapshots.py --check` | exit 0, `unchanged team-stats.html` | [https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
+| refresh gates, offline | `python3 scripts/scheduled_refresh.py --mode offline` | 3/3 PASS, `rebuild_allowed=False` | [https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
+| refresh gates, probe | `… --mode probe --now 2026-11-19T07:00:00Z` | 5/12 PASS, exit 1 — every NBA host fails from this sandbox with `TLS/SSL connection has been closed` | [https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
+| nightly CI on `main`, 2026-11-18 | Checks API annotations for run 44293154114 | `gates 10/14 passed; failed=standings_fetch,teamstats_traditional_fetch,teamstats_advanced_fetch,teamstats_opponent_fetch` | [https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
 
 The CI reading matters for the strategy work: **on a GitHub-hosted runner the schedule and
 injury feeds already succeed.** Only the four statistics transports are red, and they are red
@@ -229,11 +229,11 @@ return HTTP 200 with a rendered shell that carries no rows.
 
 ## 6. This session's own additions (each with its test)
 
-| Addition | Test | What is asserted |
-| --- | --- | --- |
-| `SchedulePdfAtTokenTests` (`tests/test_snapshots.py`) | 4 tests | the committed official PDF prints ` at ` on every window row under two extractors; the 21 published rows match the PDF field for field |
-| `CaptureWorkflowContractTests` (`tests/test_official_pages.py`) | 4 tests | the capture workflow has an on-demand trigger, no single-branch pin, checks out and pushes to the run branch, and every probe target declares a kind and an https URL |
-| `CapturedManifestReproducibilityTests` (`tests/test_official_pages.py`) | 2 tests | every stored body hashes to its manifest value (or is a declared truncated head); the stored schedule PDF equals the drift baseline |
+| Addition | Test | What is asserted | Source |
+| --- | --- | --- | --- |
+| `SchedulePdfAtTokenTests` (`tests/test_snapshots.py`) | 4 tests | the committed official PDF prints ` at ` on every window row under two extractors; the 21 published rows match the PDF field for field | [https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
+| `CaptureWorkflowContractTests` (`tests/test_official_pages.py`) | 4 tests | the capture workflow has an on-demand trigger, no single-branch pin, checks out and pushes to the run branch, and every probe target declares a kind and an https URL | [https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
+| `CapturedManifestReproducibilityTests` (`tests/test_official_pages.py`) | 2 tests | every stored body hashes to its manifest value (or is a declared truncated head); the stored schedule PDF equals the drift baseline | [https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests](https://github.com/wingbangboozle1-lang/NBA4/tree/main/tests) |
 
 ---
 
@@ -241,13 +241,13 @@ return HTTP 200 with a rendered shell that carries no rows.
 
 | Claim in this pass | Source | How it was read |
 | --- | --- | --- |
-| every window row prints ` at ` | [official 2026–27 schedule PDF](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) | the captured copy in this repository, three extractors (§1) |
-| the PDF is the August 13, 2026 issue | same PDF, extracted header text; `source_document_header` in `data/snapshots/slate-2026-11-17.json` | extracted text |
-| the drift baseline is the same document | `data/snapshots/raw/ci/schedule-sha-baseline.txt` vs the stored PDF's sha256 | recomputed |
-| the workflow was unreachable | PR #71 merge record; the pre-change workflow file | `gh pr view 71`; file history |
-| on-demand start is refused to this token | `gh workflow run …` response | reproduced twice |
-| nightly CI gate counts | run 44293154114 annotations via the Checks API | API read only (the raw log host returns `EOF` from this sandbox) |
-| the 11/19 injury transcription's internal consistency | `data/snapshots/injuries-2026-11-19-0145am.json` | computed (§4) |
+| every window row prints ` at ` | [official 2026–27 schedule PDF](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) | the captured copy in this repository, three extractors (§1) | [https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) |
+| the PDF is the August 13, 2026 issue | same PDF, extracted header text; `source_document_header` in `data/snapshots/slate-2026-11-17.json` | extracted text | [https://github.com/wingbangboozle1-lang/NBA4/blob/main/data/snapshots/slate-2026-11-17.json](https://github.com/wingbangboozle1-lang/NBA4/blob/main/data/snapshots/slate-2026-11-17.json) |
+| the drift baseline is the same document | `data/snapshots/raw/ci/schedule-sha-baseline.txt` vs the stored PDF's sha256 | recomputed | [https://github.com/wingbangboozle1-lang/NBA4/blob/main/data/snapshots/raw/ci/schedule-sha-baseline.txt](https://github.com/wingbangboozle1-lang/NBA4/blob/main/data/snapshots/raw/ci/schedule-sha-baseline.txt) |
+| the workflow was unreachable | PR #71 merge record; the pre-change workflow file | `gh pr view 71`; file history | [https://github.com/wingbangboozle1-lang/NBA4/pull/71](https://github.com/wingbangboozle1-lang/NBA4/pull/71) |
+| on-demand start is refused to this token | `gh workflow run …` response | reproduced twice | [https://github.com/wingbangboozle1-lang/NBA4/actions](https://github.com/wingbangboozle1-lang/NBA4/actions) |
+| nightly CI gate counts | run 44293154114 annotations via the Checks API | API read only (the raw log host returns `EOF` from this sandbox) | [https://github.com/wingbangboozle1-lang/NBA4/actions/runs/44293154114](https://github.com/wingbangboozle1-lang/NBA4/actions/runs/44293154114) |
+| the 11/19 injury transcription's internal consistency | `data/snapshots/injuries-2026-11-19-0145am.json` | computed (§4) | [https://github.com/wingbangboozle1-lang/NBA4/blob/main/data/snapshots/injuries-2026-11-19-0145am.json](https://github.com/wingbangboozle1-lang/NBA4/blob/main/data/snapshots/injuries-2026-11-19-0145am.json) |
 
 **Not read from an official source in this pass:** any live NBA page. That limit is flag
 DS-03 and applies to this whole document.
@@ -262,17 +262,17 @@ at 2026-11-19T07:08Z. The manifest is `data/official-pages/2026-11-19/manifest.j
 `conclusion: success`). Twenty-one targets were probed. The result, with the numbers read
 from that manifest and the stored bodies:
 
-| Surface | 2026-11-17 | 2026-11-19 | What the body holds |
-| --- | --- | --- | --- |
-| official schedule PDF | 200, 541,060 B, sha `5e82e37e…` | 200, 541,060 B, **sha `5e82e37e…` (identical)** | the `SUBJECT TO CHANGE` August 13 issue, unchanged for two days |
-| injury-report index | 200, 41,606 B | 200, 36,940 B | server-rendered and it does carry its data: 44 distinct dated report links on 11/17 (newest listed 10:45 AM) vs 9 on 11/19 (newest listed **02:00 AM**) |
-| `www.nba.com/standings` | 200, 254,098 B | 200, 225,385 B | **no** statistics payload |
-| `www.nba.com/stats/teams/{traditional,opponent,advanced}` | 200, ~322 KB | 200, ~293 KB | **no** statistics payload |
-| `stats.nba.com` origin | *not probed* | **200, 371,561 B** | a Next.js shell for `/stats/players/traditional`; still no statistics payload |
-| `stats.nba.com` JSON endpoints (3) | no response (timeout 45 s) | no response (timeout 25 s) | — |
-| `cdn.nba.com/static/json/**` (5 paths) | 403 | 403 (all five) | path-level refusal, not header-level |
-| `data.nba.net` | certificate mismatch | certificate mismatch | — |
-| `www.nba.com/api/v1/standings` | 404 | 404 | — |
+| Surface | 2026-11-17 | 2026-11-19 | What the body holds | Source |
+| --- | --- | --- | --- | --- |
+| official schedule PDF | 200, 541,060 B, sha `5e82e37e…` | 200, 541,060 B, **sha `5e82e37e…` (identical)** | the `SUBJECT TO CHANGE` August 13 issue, unchanged for two days | [https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) |
+| injury-report index | 200, 41,606 B | 200, 36,940 B | server-rendered and it does carry its data: 44 distinct dated report links on 11/17 (newest listed 10:45 AM) vs 9 on 11/19 (newest listed **02:00 AM**) | [https://official.nba.com/nba-injury-report-2026-27-season/](https://official.nba.com/nba-injury-report-2026-27-season/) |
+| `www.nba.com/standings` | 200, 254,098 B | 200, 225,385 B | **no** statistics payload | [https://www.nba.com/standings](https://www.nba.com/standings) |
+| `www.nba.com/stats/teams/{traditional,opponent,advanced}` | 200, ~322 KB | 200, ~293 KB | **no** statistics payload | [https://www.nba.com/stats/teams/traditional](https://www.nba.com/stats/teams/traditional) |
+| `stats.nba.com` origin | *not probed* | **200, 371,561 B** | a Next.js shell for `/stats/players/traditional`; still no statistics payload | [https://stats.nba.com/](https://stats.nba.com/) |
+| `stats.nba.com` JSON endpoints (3) | no response (timeout 45 s) | no response (timeout 25 s) | — | [https://stats.nba.com/stats/leaguestandingsv3](https://stats.nba.com/stats/leaguestandingsv3) |
+| `cdn.nba.com/static/json/**` (5 paths) | 403 | 403 (all five) | path-level refusal, not header-level | [https://cdn.nba.com/static/json/staticData/scheduleLeagueV2.json](https://cdn.nba.com/static/json/staticData/scheduleLeagueV2.json) |
+| `data.nba.net` | certificate mismatch | certificate mismatch | — | probed host `data.nba.net` is **not** an approved source domain (the TLS certificate is not valid for it), so the source column cites where the probe is recorded instead: [capture workflow](https://github.com/wingbangboozle1-lang/NBA4/blob/main/scripts/capture_official_pages.py) |
+| `www.nba.com/api/v1/standings` | 404 | 404 | — | [https://www.nba.com/api/v1/standings](https://www.nba.com/api/v1/standings) |
 
 **The important correction to the earlier reading.** A first version of this session's
 auditor counted team names in the body and reported "carries statistics" for all four
@@ -330,12 +330,12 @@ The index link list is the authority here; the PDF itself was not fetched by thi
 The measurements in §8 reduce the open transport question to a decision that only the
 owner can take. Options, with what each would require and what it would cost:
 
-| Option | What it needs | Evidence it would produce | Cost / risk |
-| --- | --- | --- | --- |
-| A. Licensed statistics feed | a contract with the NBA (or an authorised distributor) that permits the intended use | the four feeds become authorised inputs; G0 can clear | money, time; the Terms §9 gambling clause still governs any betting use |
-| B. Written permission for this specific use | a written reply from the NBA permitting it | the same, for a non-commercial reading | the Terms FAQ says statistics are not available for download for personal or academic use, so a refusal is the likely answer |
-| C. A public non-NBA data source, re-verified to the same standard | a source that publishes its own data under a licence that permits this use, plus a row-level provenance chain for every value | rows that are *not* NBA-published values, clearly labelled | the site can no longer call them "official NBA statistics"; the current verification standard would have to change |
-| D. Stay observation-only | nothing further | the schedule PDF, the injury report and the game pages — all reachable, all quoted | the model never gets its statistical inputs; every pick stays NO PICK |
+| Option | What it needs | Evidence it would produce | Cost / risk | Source of the constraint |
+| --- | --- | --- | --- | --- |
+| A. Licensed statistics feed | a contract with the NBA (or an authorised distributor) that permits the intended use | the four feeds become authorised inputs; G0 can clear | money, time; the Terms §9 gambling clause still governs any betting use | [NBA Terms of Use](https://www.nba.com/termsofuse) |
+| B. Written permission for this specific use | a written reply from the NBA permitting it | the same, for a non-commercial reading | the Terms FAQ says statistics are not available for download for personal or academic use, so a refusal is the likely answer | [NBA Stats FAQ](https://www.nba.com/stats/help/faq) |
+| C. A public non-NBA data source, re-verified to the same standard | a source that publishes its own data under a licence that permits this use, plus a row-level provenance chain for every value | rows that are *not* NBA-published values, clearly labelled | the site can no longer call them "official NBA statistics"; the current verification standard would have to change | [https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/sources.md](https://github.com/wingbangboozle1-lang/NBA4/blob/main/docs/sources.md) |
+| D. Stay observation-only | nothing further | the schedule PDF, the injury report and the game pages — all reachable, all quoted | the model never gets its statistical inputs; every pick stays NO PICK | [https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf](https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf) |
 
 **Recommendation (not a decision):** D now, A when there is a budget, with B as a
 low-cost attempt in parallel. C is the only option that would let the model run without a
