@@ -1,0 +1,622 @@
+{
+  "schema": "player-gamelogs-1",
+  "snapshot_id": "player-gamelogs-2026-11-17_to_2026-11-18",
+  "kind": "per-player game log capture (dated attributed observations)",
+  "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf",
+  "source_document_header": "Injury Report: 11/19/26 01:45 AM (roster anchor) + three official NBA gamebooks of 2026-11-17 (UTA@LAC, DET@SAS, POR@MIN) - each game-log row cites its own gamebook in source_url/source_label",
+  "fetched_at_utc": "2026-11-19T07:30:00Z",
+  "extraction_tool": "manual verbatim transcription from gamebook PDF chunk text; verified by scripts/build_gamelogs.py (mirror check against the injury file of record)",
+  "observation_window": {
+    "from_date": "2026-11-17",
+    "to_date": "2026-11-18"
+  },
+  "generated_at_utc": "2026-11-19T07:30:00Z",
+  "purpose": "One dated, attributed observation row per player per game in the window, captured verbatim from the official gamebooks (played lines or the printed inactive/DNP/DND designation), for every printed row of the newest injury report that names a player. The four 11/19 matchups' teams all last played on 2026-11-17, so the three 11/17 gamebooks covering those teams are this window's most recent games for them; a team row with no player named (NOT YET SUBMITTED) is recorded as a window gap, never filled. These rows are evidence observations with row-level official links, NOT betting inputs: no projection, availability probability, minutes model or pick is derived from them (rights gate G0 and stances D-01/IR-T4 stand).",
+  "injury_report": {
+    "file": "injuries-2026-11-19-0145am.json",
+    "revision_label": "Injury Report: 11/19/26 01:45 AM ET",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf",
+    "players_listed": 22
+  },
+  "games_read": [
+    {
+      "date": "2026-11-17",
+      "matchup": "UTA@LAC",
+      "game_id": "0022600257",
+      "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_UTALAC_book.pdf",
+      "source_label": "Official NBA gamebook, UTA@LAC 2026-11-17 (box score + inactive list)"
+    },
+    {
+      "date": "2026-11-17",
+      "matchup": "DET@SAS",
+      "game_id": "0022600255",
+      "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_DETSAS_book.pdf",
+      "source_label": "Official NBA gamebook, DET@SAS 2026-11-17 (box score + inactive list)"
+    },
+    {
+      "date": "2026-11-17",
+      "matchup": "POR@MIN",
+      "game_id": "0022600254",
+      "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_PORMIN_book.pdf",
+      "source_label": "Official NBA gamebook, POR@MIN 2026-11-17 (box score + inactive list)"
+    }
+  ],
+  "games_read_note": "the 2026-11-19 01:45 AM ET report's 13 blocks cover the four 11/19 games and nine 11/20 games; every named player belongs to LAC, SAS, MIN or POR, whose most recent game before the report was 2026-11-17. The 11/17 gamebooks of those three games are read in full; the report's NOT YET SUBMITTED team rows (GSW, MEM and the 11/20 teams) name no player and are recorded as gaps.",
+  "players": [
+    {
+      "report_name": "Beal, Bradley",
+      "report_team_cell": "LA Clippers",
+      "report_team": "LA Clippers",
+      "report_status": "Out",
+      "report_reason": "Injury/Illness - Right Knee Injury Management",
+      "report_block": "LAC@SAS",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600257",
+          "team_printed_in_book": "LA Clippers",
+          "opponent": "Utah Jazz",
+          "designation": "inactive",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_UTALAC_book.pdf",
+          "source_label": "Official NBA gamebook, UTA@LAC 2026-11-17 (box score + inactive list)",
+          "designation_printed": "Inactive: Clippers - Beal (Injury/Illness - Right Knee Injury Management)",
+          "min_printed": null,
+          "pts_printed": null,
+          "reb_printed": null,
+          "ast_printed": null
+        }
+      ],
+      "report_row": 0
+    },
+    {
+      "report_name": "Ingram, Brandon",
+      "report_team_cell": "LA Clippers",
+      "report_team": "LA Clippers",
+      "report_status": "Out",
+      "report_reason": "Injury/Illness - Right Heel Surgery",
+      "report_block": "LAC@SAS",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600257",
+          "team_printed_in_book": "LA Clippers",
+          "opponent": "Utah Jazz",
+          "designation": "inactive",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_UTALAC_book.pdf",
+          "source_label": "Official NBA gamebook, UTA@LAC 2026-11-17 (box score + inactive list)",
+          "designation_printed": "Inactive: Clippers - ... Ingram (Injury/Illness - Right Heel Surgery )",
+          "min_printed": null,
+          "pts_printed": null,
+          "reb_printed": null,
+          "ast_printed": null,
+          "attribution_note": "the gamebook prints a Utah 'Ingr' (G League - Two-Way) and a Clippers 'Ingram (Right Heel Surgery)' in the same inactive list; the report row is the Clippers player"
+        }
+      ],
+      "report_row": 1
+    },
+    {
+      "report_name": "Martinelli, Nick",
+      "report_team_cell": "LA Clippers",
+      "report_team": "LA Clippers",
+      "report_status": "Out",
+      "report_reason": "G League - Two-Way",
+      "report_block": "LAC@SAS",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600257",
+          "team_printed_in_book": "LA Clippers",
+          "opponent": "Utah Jazz",
+          "designation": "played",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_UTALAC_book.pdf",
+          "source_label": "Official NBA gamebook, UTA@LAC 2026-11-17 (box score + inactive list)",
+          "designation_printed": null,
+          "min_printed": "04:22",
+          "pts_printed": "0",
+          "reb_printed": "1",
+          "ast_printed": "0",
+          "line_printed": "12 Nick Martinelli | 04:22 | 0-0 FG | 0-0 3P | 0-0 FT | 1 OR, 0 DR, 1 TOT | 0 A, 0 PF, 0 ST, 0 TO, 0 BS | -5 | 0 PTS"
+        }
+      ],
+      "report_row": 2
+    },
+    {
+      "report_name": "Miller, Jordan",
+      "report_team_cell": "LA Clippers",
+      "report_team": "LA Clippers",
+      "report_status": "Out",
+      "report_reason": "Injury/Illness - Left Rotator Cuff Surgery",
+      "report_block": "LAC@SAS",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600257",
+          "team_printed_in_book": "LA Clippers",
+          "opponent": "Utah Jazz",
+          "designation": "inactive",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_UTALAC_book.pdf",
+          "source_label": "Official NBA gamebook, UTA@LAC 2026-11-17 (box score + inactive list)",
+          "designation_printed": "Inactive: Clippers - ... Miller (Injury/Illness - Left Rotator Cuff Surgery )",
+          "min_printed": null,
+          "pts_printed": null,
+          "reb_printed": null,
+          "ast_printed": null
+        }
+      ],
+      "report_row": 3
+    },
+    {
+      "report_name": "Brown, Maliq",
+      "report_team_cell": "San Antonio Spurs",
+      "report_team": "San Antonio Spurs",
+      "report_status": "Out",
+      "report_reason": "G League - Two-Way",
+      "report_block": "LAC@SAS",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600255",
+          "team_printed_in_book": "San Antonio Spurs",
+          "opponent": "Detroit Pistons",
+          "designation": "inactive",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_DETSAS_book.pdf",
+          "source_label": "Official NBA gamebook, DET@SAS 2026-11-17 (box score + inactive list)",
+          "designation_printed": "Inactive: Spurs - Brown (G League - Two-Way)",
+          "min_printed": null,
+          "pts_printed": null,
+          "reb_printed": null,
+          "ast_printed": null
+        }
+      ],
+      "report_row": 4
+    },
+    {
+      "report_name": "Gillespie, Ja'Kobi",
+      "report_team_cell": "San Antonio Spurs",
+      "report_team": "San Antonio Spurs",
+      "report_status": "Out",
+      "report_reason": "G League - Two-Way",
+      "report_block": "LAC@SAS",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600255",
+          "team_printed_in_book": "San Antonio Spurs",
+          "opponent": "Detroit Pistons",
+          "designation": "inactive",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_DETSAS_book.pdf",
+          "source_label": "Official NBA gamebook, DET@SAS 2026-11-17 (box score + inactive list)",
+          "designation_printed": "Inactive: Spurs - ... Gillespie (G League - Two-Way)",
+          "min_printed": null,
+          "pts_printed": null,
+          "reb_printed": null,
+          "ast_printed": null
+        }
+      ],
+      "report_row": 5
+    },
+    {
+      "report_name": "Harper, Dylan",
+      "report_team_cell": "San Antonio Spurs",
+      "report_team": "San Antonio Spurs",
+      "report_status": "Out",
+      "report_reason": "Injury/Illness - Left Hip Soreness",
+      "report_block": "LAC@SAS",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600255",
+          "team_printed_in_book": "San Antonio Spurs",
+          "opponent": "Detroit Pistons",
+          "designation": "played",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_DETSAS_book.pdf",
+          "source_label": "Official NBA gamebook, DET@SAS 2026-11-17 (box score + inactive list)",
+          "designation_printed": null,
+          "min_printed": "34:32",
+          "pts_printed": "20",
+          "reb_printed": "4",
+          "ast_printed": "2",
+          "line_printed": "2 Dylan Harper | G | 34:32 | 8-14 FG | 0-4 3P | 4-5 FT | 2 OR, 2 DR, 4 TOT | 2 A, 0 PF, 0 ST, 0 TO, 2 BS | +7 | 20 PTS"
+        }
+      ],
+      "report_row": 6
+    },
+    {
+      "report_name": "Harris, Tobias",
+      "report_team_cell": "San Antonio Spurs",
+      "report_team": "San Antonio Spurs",
+      "report_status": "Out",
+      "report_reason": "Injury/Illness - Left Calf Strain",
+      "report_block": "LAC@SAS",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600255",
+          "team_printed_in_book": "San Antonio Spurs",
+          "opponent": "Detroit Pistons",
+          "designation": "inactive",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_DETSAS_book.pdf",
+          "source_label": "Official NBA gamebook, DET@SAS 2026-11-17 (box score + inactive list)",
+          "designation_printed": "Inactive: Spurs - ... Harris (Injury/Illness - Left Calf Strain)",
+          "min_printed": null,
+          "pts_printed": null,
+          "reb_printed": null,
+          "ast_printed": null
+        }
+      ],
+      "report_row": 7
+    },
+    {
+      "report_name": "Quaintance, Jayden",
+      "report_team_cell": "San Antonio Spurs",
+      "report_team": "San Antonio Spurs",
+      "report_status": "Out",
+      "report_reason": "Injury/Illness - Right Knee Surgery",
+      "report_block": "LAC@SAS",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600255",
+          "team_printed_in_book": "San Antonio Spurs",
+          "opponent": "Detroit Pistons",
+          "designation": "inactive",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_DETSAS_book.pdf",
+          "source_label": "Official NBA gamebook, DET@SAS 2026-11-17 (box score + inactive list)",
+          "designation_printed": "Inactive: Spurs - ... Quaintance (Injury/Illness - Right Knee Surgery)",
+          "min_printed": null,
+          "pts_printed": null,
+          "reb_printed": null,
+          "ast_printed": null
+        }
+      ],
+      "report_row": 8
+    },
+    {
+      "report_name": "Beringer, Joan",
+      "report_team_cell": "Minnesota Timberwolves",
+      "report_team": "Minnesota Timberwolves",
+      "report_status": "Available",
+      "report_reason": "Injury/Illness - Face Mask",
+      "report_block": "NYK@MIN",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600254",
+          "team_printed_in_book": "Minnesota Timberwolves",
+          "opponent": "Portland Trail Blazers",
+          "designation": "played",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_PORMIN_book.pdf",
+          "source_label": "Official NBA gamebook, POR@MIN 2026-11-17 (box score + inactive list)",
+          "designation_printed": null,
+          "min_printed": "25:30",
+          "pts_printed": "3",
+          "reb_printed": "13",
+          "ast_printed": "0",
+          "line_printed": "19 Joan Beringer | 25:30 | 1-3 FG | 0-0 3P | 1-6 FT | 6 OR, 7 DR, 13 TOT | 0 A, 3 PF, 1 ST, 1 TO, 4 BS | +6 | 3 PTS"
+        }
+      ],
+      "report_row": 9
+    },
+    {
+      "report_name": "Clark, Jaylen",
+      "report_team_cell": "Minnesota Timberwolves",
+      "report_team": "Minnesota Timberwolves",
+      "report_status": "Out",
+      "report_reason": "Injury/Illness - Right Hamstring Strain",
+      "report_block": "NYK@MIN",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600254",
+          "team_printed_in_book": "Minnesota Timberwolves",
+          "opponent": "Portland Trail Blazers",
+          "designation": "inactive",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_PORMIN_book.pdf",
+          "source_label": "Official NBA gamebook, POR@MIN 2026-11-17 (box score + inactive list)",
+          "designation_printed": "Inactive: Timberwolves - Clark (Injury/Illness - Right Hamstring Strain)",
+          "min_printed": null,
+          "pts_printed": null,
+          "reb_printed": null,
+          "ast_printed": null
+        }
+      ],
+      "report_row": 10
+    },
+    {
+      "report_name": "DiVincenzo, Donte",
+      "report_team_cell": "Minnesota Timberwolves",
+      "report_team": "Minnesota Timberwolves",
+      "report_status": "Out",
+      "report_reason": "Injury/Illness - Right Achilles Tendon Repair / Surgery",
+      "report_block": "NYK@MIN",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600254",
+          "team_printed_in_book": "Minnesota Timberwolves",
+          "opponent": "Portland Trail Blazers",
+          "designation": "inactive",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_PORMIN_book.pdf",
+          "source_label": "Official NBA gamebook, POR@MIN 2026-11-17 (box score + inactive list)",
+          "designation_printed": "Inactive: Timberwolves - DiVincenzo (Injury/Illness - Right Achilles Tendon Repair / Surgery)",
+          "min_printed": null,
+          "pts_printed": null,
+          "reb_printed": null,
+          "ast_printed": null
+        }
+      ],
+      "report_row": 11
+    },
+    {
+      "report_name": "Edwards, Anthony",
+      "report_team_cell": "Minnesota Timberwolves",
+      "report_team": "Minnesota Timberwolves",
+      "report_status": "Out",
+      "report_reason": "Injury/Illness - Right Knee Arthroscopy",
+      "report_block": "NYK@MIN",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600254",
+          "team_printed_in_book": "Minnesota Timberwolves",
+          "opponent": "Portland Trail Blazers",
+          "designation": "inactive",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_PORMIN_book.pdf",
+          "source_label": "Official NBA gamebook, POR@MIN 2026-11-17 (box score + inactive list)",
+          "designation_printed": "Inactive: Timberwolves - ... Edwards (Injury/Illness - Right Knee Arthroscopy)",
+          "min_printed": null,
+          "pts_printed": null,
+          "reb_printed": null,
+          "ast_printed": null
+        }
+      ],
+      "report_row": 12
+    },
+    {
+      "report_name": "Avdija, Deni",
+      "report_team_cell": "Portland Trail Blazers",
+      "report_team": "Portland Trail Blazers",
+      "report_status": "Questionable",
+      "report_reason": "Injury/Illness - Left Foot Inflammation / Soreness",
+      "report_block": "POR@MIL",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600254",
+          "team_printed_in_book": "Portland Trail Blazers",
+          "opponent": "Minnesota Timberwolves",
+          "designation": "dnd",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_PORMIN_book.pdf",
+          "source_label": "Official NBA gamebook, POR@MIN 2026-11-17 (box score + inactive list)",
+          "designation_printed": "8 Deni Avdija | DND - Injury/Illness - Left Foot Inflammation / Soreness",
+          "min_printed": null,
+          "pts_printed": null,
+          "reb_printed": null,
+          "ast_printed": null
+        }
+      ],
+      "report_row": 13
+    },
+    {
+      "report_name": "Camara, Toumani",
+      "report_team_cell": "Portland Trail Blazers",
+      "report_team": "Portland Trail Blazers",
+      "report_status": "Questionable",
+      "report_reason": "Injury/Illness - Abdominal Soreness",
+      "report_block": "POR@MIL",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600254",
+          "team_printed_in_book": "Portland Trail Blazers",
+          "opponent": "Minnesota Timberwolves",
+          "designation": "played",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_PORMIN_book.pdf",
+          "source_label": "Official NBA gamebook, POR@MIN 2026-11-17 (box score + inactive list)",
+          "designation_printed": null,
+          "min_printed": "32:53",
+          "pts_printed": "10",
+          "reb_printed": "8",
+          "ast_printed": "1",
+          "line_printed": "33 Toumani Camara | F | 32:53 | 4-16 FG | 2-8 3P | 0-0 FT | 2 OR, 6 DR, 8 TOT | 1 A, 4 PF, 1 ST, 2 TO, 0 BS | +11 | 10 PTS"
+        }
+      ],
+      "report_row": 14
+    },
+    {
+      "report_name": "Carlson, Branden",
+      "report_team_cell": "Portland Trail Blazers",
+      "report_team": "Portland Trail Blazers",
+      "report_status": "Available",
+      "report_reason": "Injury/Illness - Face Mask",
+      "report_block": "POR@MIL",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600254",
+          "team_printed_in_book": "Portland Trail Blazers",
+          "opponent": "Minnesota Timberwolves",
+          "designation": "played",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_PORMIN_book.pdf",
+          "source_label": "Official NBA gamebook, POR@MIN 2026-11-17 (box score + inactive list)",
+          "designation_printed": null,
+          "min_printed": "14:24",
+          "pts_printed": "6",
+          "reb_printed": "1",
+          "ast_printed": "0",
+          "line_printed": "10 Branden Carlson | 14:24 | 2-3 FG | 0-1 3P | 2-2 FT | 1 OR, 0 DR, 1 TOT | 0 A, 4 PF, 0 ST, 0 TO, 0 BS | -10 | 6 PTS"
+        }
+      ],
+      "report_row": 15
+    },
+    {
+      "report_name": "Krejci, Vit",
+      "report_team_cell": "Portland Trail Blazers",
+      "report_team": "Portland Trail Blazers",
+      "report_status": "Out",
+      "report_reason": "Injury/Illness - Left Ankle Fracture",
+      "report_block": "POR@MIL",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600254",
+          "team_printed_in_book": "Portland Trail Blazers",
+          "opponent": "Minnesota Timberwolves",
+          "designation": "inactive",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_PORMIN_book.pdf",
+          "source_label": "Official NBA gamebook, POR@MIN 2026-11-17 (box score + inactive list)",
+          "designation_printed": "Inactive: Trail Blazers - Krejci (Injury/Illness - Left Ankle Fracture)",
+          "min_printed": null,
+          "pts_printed": null,
+          "reb_printed": null,
+          "ast_printed": null
+        }
+      ],
+      "report_row": 16
+    },
+    {
+      "report_name": "Morant, Ja",
+      "report_team_cell": "Portland Trail Blazers",
+      "report_team": "Portland Trail Blazers",
+      "report_status": "Out",
+      "report_reason": "Injury/Illness - Left Hamstring Strain",
+      "report_block": "POR@MIL",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600254",
+          "team_printed_in_book": "Portland Trail Blazers",
+          "opponent": "Minnesota Timberwolves",
+          "designation": "inactive",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_PORMIN_book.pdf",
+          "source_label": "Official NBA gamebook, POR@MIN 2026-11-17 (box score + inactive list)",
+          "designation_printed": "Inactive: Trail Blazers - Morant (Injury/Illness - Left Hamstring Strain)",
+          "min_printed": null,
+          "pts_printed": null,
+          "reb_printed": null,
+          "ast_printed": null,
+          "attribution_note": "the report prints this row as Portland's; the gamebook prints the same inactive entry under Portland's inactive list - kept verbatim as printed on both documents"
+        }
+      ],
+      "report_row": 17
+    },
+    {
+      "report_name": "Sharpe, Shaedon",
+      "report_team_cell": "Portland Trail Blazers",
+      "report_team": "Portland Trail Blazers",
+      "report_status": "Out",
+      "report_reason": "Injury/Illness - Right Meniscus Surgery",
+      "report_block": "POR@MIL",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600254",
+          "team_printed_in_book": "Portland Trail Blazers",
+          "opponent": "Minnesota Timberwolves",
+          "designation": "inactive",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_PORMIN_book.pdf",
+          "source_label": "Official NBA gamebook, POR@MIN 2026-11-17 (box score + inactive list)",
+          "designation_printed": "Inactive: Trail Blazers - Sharpe (Injury/Illness - Right Meniscus Surgery)",
+          "min_printed": null,
+          "pts_printed": null,
+          "reb_printed": null,
+          "ast_printed": null
+        }
+      ],
+      "report_row": 18
+    },
+    {
+      "report_name": "Williams III, Robert",
+      "report_team_cell": "Portland Trail Blazers",
+      "report_team": "Portland Trail Blazers",
+      "report_status": "Out",
+      "report_reason": "Rest",
+      "report_block": "POR@MIL",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600254",
+          "team_printed_in_book": "Portland Trail Blazers",
+          "opponent": "Minnesota Timberwolves",
+          "designation": "played",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_PORMIN_book.pdf",
+          "source_label": "Official NBA gamebook, POR@MIN 2026-11-17 (box score + inactive list)",
+          "designation_printed": null,
+          "min_printed": "15:34",
+          "pts_printed": "6",
+          "reb_printed": "8",
+          "ast_printed": "4",
+          "line_printed": "35 Robert Williams III | 15:34 | 2-2 FG | 0-0 3P | 2-2 FT | 2 OR, 6 DR, 8 TOT | 4 A, 0 PF, 0 ST, 2 TO, 0 BS | -18 | 6 PTS"
+        }
+      ],
+      "report_row": 19
+    },
+    {
+      "report_name": "Youngblood, Chris",
+      "report_team_cell": "Portland Trail Blazers",
+      "report_team": "Portland Trail Blazers",
+      "report_status": "Out",
+      "report_reason": "Injury/Illness - Right Heel Contusion / Bone Bruise",
+      "report_block": "POR@MIL",
+      "games": [
+        {
+          "date": "2026-11-17",
+          "game_id": "0022600254",
+          "team_printed_in_book": "Portland Trail Blazers",
+          "opponent": "Minnesota Timberwolves",
+          "designation": "inactive",
+          "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_PORMIN_book.pdf",
+          "source_label": "Official NBA gamebook, POR@MIN 2026-11-17 (box score + inactive list)",
+          "designation_printed": "Inactive: Trail Blazers - Youngblood (Injury/Illness - Right Heel Contusion / Bone Bruise)",
+          "min_printed": null,
+          "pts_printed": null,
+          "reb_printed": null,
+          "ast_printed": null
+        }
+      ],
+      "report_row": 20
+    },
+    {
+      "report_name": "",
+      "report_team_cell": "Golden State Warriors",
+      "report_team": "Golden State Warriors",
+      "report_status": "",
+      "report_reason": "NOT YET SUBMITTED",
+      "report_block": "GSW@MEM",
+      "games": [],
+      "gap": "this team row prints NOT YET SUBMITTED (no player named), so there is no report player to follow; the team's most recent game (2026-11-18) is outside this capture's three gamebook reads and is not filled in here.",
+      "report_row": 21
+    },
+    {
+      "report_name": "",
+      "report_team_cell": "Memphis Grizzlies",
+      "report_team": "Memphis Grizzlies",
+      "report_status": "",
+      "report_reason": "NOT YET SUBMITTED",
+      "report_block": "GSW@MEM",
+      "games": [],
+      "gap": "this team row prints NOT YET SUBMITTED (no player named), so there is no report player to follow; the team's most recent game (2026-11-18) is outside this capture's three gamebook reads and is not filled in here.",
+      "report_row": 22
+    }
+  ],
+  "counts": {
+    "players": 23,
+    "game_rows": 21,
+    "played": 6,
+    "inactive": 14,
+    "dnp": 0,
+    "dnd": 1,
+    "window_gap_players": 2,
+    "games_read": 3,
+    "players_with_a_game_in_window": 21
+  },
+  "refusals": [
+    "no stat line is invented for a player the gamebook does not list; a player absent from all three books would be recorded as a gap, not as a zero line",
+    "no ORL/BKN/MIL 11/18 or other unlisted game is substituted for a window game: only the three books named in games_read were read for this capture"
+  ],
+  "extraction_notes": [
+    "every played line is copied from the gamebook's own totals table (MIN, FG-FTA, 3P, FT, rebounds, assists, +/-, PTS as printed)",
+    "inactive and DND designations are copied from the gamebook's Inactive list / player row exactly as printed",
+    "the report row indexes (report_row) are positions within the report's own game blocks, 0-based, as printed top to bottom"
+  ]
+}

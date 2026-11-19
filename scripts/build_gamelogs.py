@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Build the per-player game-log block on results.html from the dated snapshot.
 
-Task BI (arena/dab321e7-nba4); refreshed for the 2026-11-17 cycle (task BM, arena/5cca4190-nba4). The snapshot file is a hand-captured, verified
-transcription of the official gamebooks (see its extraction_notes); this script
+Task BI (arena/dab321e7-nba4); refreshed for the 2026-11-19 cycle (task BT, arena/c1a5dc6a-nba4). The snapshot file is a hand-captured, verified
+transcription of the official gamebooks (see its extraction_notes); the
+observation window is the two days before the slate day (2026-11-17 and
+2026-11-18). This script
 only re-derives the published table from that file and refuses to render if any
-mirrored injury-report cell disagrees with data/snapshots/injuries-2026-11-16-0915am.json.
+mirrored injury-report cell disagrees with data/snapshots/injuries-2026-11-19-0145am.json.
 
 Usage:
     python3 scripts/build_gamelogs.py          # splice the block into results.html
@@ -23,11 +25,11 @@ import build_snapshots  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SNAPSHOTS = ROOT / "data" / "snapshots"
-GAMELOGS = "player-gamelogs-2026-11-15_to_2026-11-16.json"
-INJURY_FILE = "injuries-2026-11-17-1030am.json"
+GAMELOGS = "player-gamelogs-2026-11-17_to_2026-11-18.json"
+INJURY_FILE = "injuries-2026-11-19-0145am.json"
 
-REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf"
-REPORT_LABEL = "2026-11-17 10:30 AM ET report"
+REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf"
+REPORT_LABEL = "2026-11-19 01:45 AM ET report"
 SCHEDULE_URL = build_snapshots.SCHEDULE_URL
 SCHEDULE_LABEL = "Schedule PDF"
 
@@ -55,8 +57,24 @@ def verify_against_injury_report(data: dict) -> None:
         for row in game["rows"]
         if row["player"]
     }
+    team_rows = {
+        (game["matchup"], row["team"]): row
+        for game in injury["games"]
+        for row in game["rows"]
+        if not row["player"] and row["team"]
+    }
     problems: list[str] = []
     for entry in data["players"]:
+        if not entry["report_name"]:
+            # a NOT YET SUBMITTED team row names no player: it is mirrored as a
+            # window gap and is checked against the team row of the file of record
+            key = (entry["report_block"], entry["report_team"])
+            row = team_rows.get(key)
+            if row is None:
+                problems.append(f"{key}: not on the injury report as a team row")
+            elif row["reason"] != entry["report_reason"]:
+                problems.append(f"{key}: mirrored reason differs from the file of record")
+            continue
         key = (entry["report_block"], entry["report_name"])
         row = rows.get(key)
         if row is None:
@@ -66,7 +84,7 @@ def verify_against_injury_report(data: dict) -> None:
             problems.append(f"{key}: mirrored status/reason differs from the file of record")
         if (row["team"] == "__lost__") != (entry["report_team_cell"] == "__lost__"):
             problems.append(f"{key}: team-lost marker differs from the file of record")
-    covered = {(p["report_block"], p["report_name"]) for p in data["players"]}
+    covered = {(p["report_block"], p["report_name"]) for p in data["players"] if p["report_name"]}
     missing = sorted(set(rows) - covered)
     if missing:
         problems.append(f"players missing from the capture: {missing}")

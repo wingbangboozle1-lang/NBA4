@@ -1,0 +1,24 @@
+# Verbatim window rows 270-273, 43-51 and 274-279 of the official 2026-27 NBA regular-season schedule PDF (cdn.nba.com), read by fetch_page on 2026-11-19 (chunks 0, 1 and 2 of 13).
+# Header printed on the document: "2026-27 NBA REGULAR SEASON SCHEDULE AS OF AUGUST 13, 2026 | SUBJECT TO CHANGE"
+# Columns: GAME|DAY|DATE|TEAM 1|at|TEAM 2|LOCAL|ET|NAT TV|R|#  (every window row prints the "at" token)
+# Source: https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf
+# Fetched (UTC): 2026-11-19T07:00:00Z
+270|Thu.|11/19/26|Golden State|at|Memphis|7:00 PM|8:00 PM|||
+271|Thu.|11/19/26|Portland|at|Milwaukee|7:00 PM|8:00 PM|||
+272|Thu.|11/19/26|New York|at|Minnesota|7:00 PM|8:00 PM|||
+273|Thu.|11/19/26|LA Clippers|at|San Antonio|7:00 PM|8:00 PM|||
+43|Fri.|11/20/26|Charlotte|at|Atlanta|7:00 PM|7:00 PM||C|
+44|Fri.|11/20/26|Orlando|at|Brooklyn|7:30 PM|7:30 PM||C|
+45|Fri.|11/20/26|Indiana|at|Cleveland|7:30 PM|7:30 PM||C|
+46|Fri.|11/20/26|Toronto|at|Detroit|7:30 PM|7:30 PM|Prime|C|
+47|Fri.|11/20/26|Washington|at|Chicago|7:00 PM|8:00 PM||C|
+48|Fri.|11/20/26|New Orleans|at|Oklahoma City|7:00 PM|8:00 PM||C|
+49|Fri.|11/20/26|Phoenix|at|Utah|7:30 PM|9:30 PM||C|
+50|Fri.|11/20/26|Houston|at|Denver|8:00 PM|10:00 PM|Prime|R|
+51|Fri.|11/20/26|Sacramento|at|LA Lakers|7:00 PM|10:00 PM||C|
+274|Sat.|11/21/26|Milwaukee|at|Philadelphia|1:00 PM|1:00 PM|||
+275|Sat.|11/21/26|Portland|at|New York|7:30 PM|7:30 PM|||
+276|Sat.|11/21/26|LA Clippers|at|Dallas|7:00 PM|8:00 PM|||
+277|Sat.|11/21/26|Memphis|at|Minnesota|7:00 PM|8:00 PM|||
+278|Sat.|11/21/26|New Orleans|at|San Antonio|7:00 PM|8:00 PM|||
+279|Sat.|11/21/26|Boston|at|Sacramento|7:00 PM|10:00 PM|||

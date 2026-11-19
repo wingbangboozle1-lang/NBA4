@@ -29,8 +29,8 @@ SNAPSHOTS = ROOT / "data" / "snapshots"
 SCHEDULE_URL = (
     "https://cdn.nba.com/manage/2026/08/2026-27-NBA-Regular-Season-Schedule-By-Date.pdf"
 )
-REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf"
-REPORT_LABEL = "2026-11-17 10:30 AM ET report"
+REPORT_URL = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf"
+REPORT_LABEL = "2026-11-19 01:45 AM ET report"
 
 # Engine reason codes (engine/pipeline.py REASON_CODES) applied to every game.
 NO_PICK_REASONS = (
@@ -107,23 +107,23 @@ def load(name: str) -> dict:
 
 
 def render_slate() -> str:
-    data = load("slate-2026-11-17.json")
-    # The schedule PDF text prints no "at" token on rows 215-259, so away/home order
-    # is shown as "at" only when the schedule itself prints the token (rows 260+) or
-    # the 10:30 AM injury report independently prints the same AWAY@HOME code for the
-    # same game date. Every other row shows printed order and is flagged. Matching
-    # the code alone is not enough: matchups repeat across dates (e.g. POR@MIN
-    # appears on 11/16 and again on 11/17), which would falsely corroborate rows.
+    data = load("slate-2026-11-19.json")
+    # Every window row of this cycle prints the "at" token between TEAM 1 and
+    # TEAM 2, so away/home order is read from the printed token itself. The
+    # 01:45 AM injury report's AWAY@HOME codes and the games-page slugs
+    # (away-vs-home) independently corroborate the same order; matching the code
+    # alone is not enough, because matchups repeat across dates (e.g. POR@NYK
+    # prints on 11/21 and POR@MIL on 11/19), which would falsely corroborate rows.
     report_codes = {
         (g.get("game_date") or g.get("game_date_from_schedule", ""), g["matchup"])
-        for g in load("injuries-2026-11-17-1030am.json")["games"]
+        for g in load("injuries-2026-11-19-0145am.json")["games"]
     }
     # Rotation availability per game: counts of rows whose printed status cell is
     # exactly "Out", per team, from the same dated report. Arithmetic on printed
     # cells only; NOT YET SUBMITTED rows are excluded because that is a reporting
     # state, not a status.
     availability: dict[str, str] = {}
-    for g in load("injuries-2026-11-17-1030am.json")["games"]:
+    for g in load("injuries-2026-11-19-0145am.json")["games"]:
         per_team: dict[str, int] = {}
         for r in g["rows"]:
             if r.get("status") == "Out" and r.get("team") and r["team"] != "__lost__":
@@ -206,11 +206,16 @@ def game_label(game: dict) -> str:
 
 
 def render_injuries() -> str:
-    data = load("injuries-2026-11-17-1030am.json")
+    data = load("injuries-2026-11-19-0145am.json")
     rows: list[str] = []
     for game in data["games"]:
-        from_schedule = game["cells_source"].startswith("schedule")
-        context_cells = game["cells_source"] == "report-context"
+        # schema note: the 11/17 file of record carried ``cells_source``; this
+        # file of record carries ``game_date_source`` ("report" when the row
+        # itself prints the date, "schedule-context ..." when a page break
+        # forced the schedule PDF to supply it).
+        source = game.get("cells_source") or game.get("game_date_source", "")
+        from_schedule = source.startswith("schedule")
+        context_cells = source == "report-context"
         for row in game["rows"]:
             team = row["team"]
             player = row["player"]
@@ -225,7 +230,7 @@ def render_injuries() -> str:
                 sources.append(link(SCHEDULE_URL, f'Schedule PDF row {game["schedule_row"]}'))
             if row.get("unverified"):
                 notes.append(row.get("flag", "unverified"))
-            if team == "__lost__":
+            if team == "__lost__" or not team:
                 team_cell = empty()
             else:
                 team_cell = f"<td>{e(team)}</td>"
@@ -249,6 +254,29 @@ def render_injuries() -> str:
                 + f"<td>{'<br>'.join(sources)}</td>"
                 "</tr>"
             )
+    # Rows the PDF printed with no date, time, matchup or team cell at all
+    # (continuation-page fragments) are kept in unattributed_rows: published
+    # here with blank game/matchup cells, never dropped and never assigned.
+    for row in data.get("unattributed_rows", []):
+        notes = [row.get("flag", "unverified")] if row.get("unverified") else []
+        team_cell = empty() if not row.get("team") else f"<td>{e(row['team'])}</td>"
+        note_cell = (
+            '<td><span class="flag">Unverified</span><br>' + "<br>".join(e(n) for n in notes) + "</td>"
+            if notes
+            else "<td>Verbatim from report</td>"
+        )
+        rows.append(
+            "              <tr>"
+            + empty()  # no printed game date/time
+            + empty()  # no printed matchup
+            + team_cell
+            + (f"<td>{e(row['player'])}</td>" if row.get("player") else empty())
+            + (f"<td>{e(row['status'])}</td>" if row.get("status") else empty())
+            + (f"<td>{e(row['reason'])}</td>" if row.get("reason") else empty())
+            + note_cell
+            + f"<td>{link(REPORT_URL, REPORT_LABEL)}</td>"
+            "</tr>"
+        )
     return (
         '<div class="table-card table-wrap">\n'
         '          <table class="data-table">\n'
@@ -293,12 +321,12 @@ def splice(page: Path, block_id: str, body: str) -> str | None:
 # snapshot file it names, so a published row can be re-derived from that file.
 # ---------------------------------------------------------------------------
 
-INJ_NEW = "injuries-2026-11-17-1030am.cells.json"
-INJ_DIFF = "injuries-2026-11-17-1015-to-1030.diff.json"
-RESULTS_1116 = "results-2026-11-16.json"
-STANDINGS_1117 = "standings-2026-11-17.json"
-AGGREGATES_1117 = "aggregates-2026-11-17.json"
-TEAM_STATS_1117 = "team-stats-2026-11-17.json"
+INJ_NEW = "injuries-2026-11-19-0145am.cells.json"
+INJ_DIFF = "injuries-2026-11-17-1030-to-1119-0145.diff.json"
+RESULTS_1116 = "results-2026-11-18.json"
+STANDINGS_1117 = "standings-2026-11-19.json"
+AGGREGATES_1117 = "aggregates-2026-11-19.json"
+TEAM_STATS_1117 = "team-stats-2026-11-19.json"
 
 
 def _row(cells: list[str]) -> str:
@@ -570,7 +598,7 @@ def render_rest() -> str:
     sys.path.insert(0, str(ROOT))
     from engine.rest import ScheduleRow, TeamCalendar, slate_rest_table
 
-    rest = load("rest-window-2026-11-17.json")
+    rest = load("rest-window-2026-11-19.json")
     rows = [
         ScheduleRow(
             game_date=r["date"],
@@ -583,7 +611,7 @@ def render_rest() -> str:
         for r in rest["rows"]
     ]
     calendar = TeamCalendar(rows)
-    slate = load("slate-2026-11-17.json")
+    slate = load("slate-2026-11-19.json")
     games = [(g["date"], g["away"], g["home"]) for g in slate["games"]]
     table = slate_rest_table(calendar, games)
     by_row = {(g["date"], g["away"], g["home"]): g for g in slate["games"]}
@@ -622,9 +650,9 @@ def render_rest() -> str:
 
 def render_availability_summary() -> str:
     """Counts and verdicts for the current injury snapshot, read from the files."""
-    hand = load("injuries-2026-11-17-1030am.json")
-    cells = load("injuries-2026-11-17-1030am.cells.json")
-    diff = load("injuries-2026-11-17-1015-to-1030.diff.json")
+    hand = load("injuries-2026-11-19-0145am.json")
+    cells = load("injuries-2026-11-19-0145am.cells.json")
+    diff = load("injuries-2026-11-17-1030-to-1119-0145.diff.json")
     rows = [row for game in hand["games"] for row in game["rows"]]
     nys = [row for row in rows if row["status"] == "" and row["reason"] == "NOT YET SUBMITTED"]
     lost = [row for row in rows if row["team"] == "__lost__"]
@@ -641,13 +669,22 @@ def render_availability_summary() -> str:
     facts = [
         (
             "Rows transcribed",
-            f"{len(rows)} rows across {len(hand['games'])} game blocks, every cell verbatim",
+            f"{len(rows)} rows across {len(hand['games'])} game blocks"
+            + (
+                f", plus {len(hand['unattributed_rows'])} rows kept outside the blocks "
+                "(their date, time, matchup and team cells were not printed on the "
+                "continuation page; published blank and flagged, never assigned)"
+                if hand.get("unattributed_rows")
+                else ""
+            )
+            + ", every cell verbatim",
             hand["source_url"],
             "official report PDF",
         ),
         (
             "Independent re-extraction",
-            f'{cells["cross_check"]["rows_matching_row_for_row"]} of {len(rows)} rows match row for row; '
+            f'{cells["cross_check"]["rows_matching_row_for_row"]} of '
+            f'{cells["cross_check"]["rows_in_this_extraction"]} rows match row for row; '
             "nothing one-sided",
             cells["source_url"],
             "official report PDF",
@@ -679,14 +716,18 @@ def render_availability_summary() -> str:
             f'{counts["printing_variances"]} name-cell variance between '
             f'{diff["old"]["revision_label"]} and {diff["new"]["revision_label"]}',
             diff["source_url"],
-            "09:45 AM revision PDF",
+            f'{diff["new"]["revision_label"]} revision PDF',
         ),
         (
             "Tip-clock disagreements inside this report",
             (", ".join(disagreeing) + " — the printed values disagree between the live official sources "
              "and the August schedule PDF; both values are published, neither is overwritten")
             if disagreeing
-            else "none",
+            else (
+                "none between this report and the August schedule PDF (they agree on every "
+                "printed game time); the slate table keeps any games-page clock that "
+                "disagrees with both, as printed on both sides"
+            ),
             SCHEDULE_URL,
             "schedule PDF",
         ),

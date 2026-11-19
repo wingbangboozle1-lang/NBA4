@@ -349,11 +349,15 @@ def audit_page_inventory() -> list[str]:
 
 def audit_team_stats() -> list[str]:
     """The team-stats snapshot must carry one row per NBA team on both official
-    pages, with RANK columns dropped and GP/W/L agreeing between the two reads."""
+    pages, with RANK columns dropped and GP/W/L agreeing between the two reads.
+    The audit follows the newest dated team-stats file (P12-02: a fixed pin went
+    stale on every refresh; the dated snapshots are ISO-named, so the lexicographic
+    maximum is the current one, and a missing file still fails closed)."""
     errors: list[str] = []
-    path = ROOT / "data" / "snapshots" / "team-stats-2026-11-16.json"
-    if not path.is_file():
-        return [f"missing team-stats snapshot: {path.name}"]
+    candidates = sorted((ROOT / "data" / "snapshots").glob("team-stats-*.json"))
+    if not candidates:
+        return ["missing team-stats snapshot: no data/snapshots/team-stats-*.json"]
+    path = candidates[-1]
     data = json.loads(path.read_text(encoding="utf-8"))
     for section in ("advanced_rows", "opponent_rows"):
         rows = data.get(section, [])

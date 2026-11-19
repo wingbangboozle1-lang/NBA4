@@ -1,0 +1,299 @@
+{
+  "snapshot_id": "results-2026-11-17",
+  "kind": "official_finals",
+  "source_document": "NBA gamebooks of 2026-11-17",
+  "source_document_header": "official NBA gamebook PDFs of 2026-11-17 (statsdmz.nba.com/pdfs/20261117/) and the day scoreboard https://www.nba.com/games?date=2026-11-17",
+  "source_url": "https://statsdmz.nba.com/pdfs/20261117/20261117_NYKTOR_book.pdf",
+  "source_index_url": "https://www.nba.com/games?date=2026-11-17",
+  "fetched_at_utc": "2026-11-19T07:00:00Z",
+  "extraction_tool": "fetch_page (gamebook PDF text extraction per game) + fetch_page on the day's games page for the independent finals cross-check",
+  "row_format": [
+    "game_id",
+    "date",
+    "tip_et",
+    "arena",
+    "city",
+    "away",
+    "home",
+    "away_q",
+    "away_final",
+    "home_q",
+    "home_final",
+    "winner",
+    "loser",
+    "source_url",
+    "away_ot",
+    "home_ot"
+  ],
+  "row_format_note": "away_q/home_q hold the four printed quarters; away_ot/home_ot hold printed overtime periods only (empty arrays when the game printed none); arena and city are blank when not read from an official document",
+  "rows": [
+    [
+      "0022600253",
+      "2026-11-17",
+      "7:30 PM",
+      "",
+      "",
+      "NYK",
+      "TOR",
+      [
+        23,
+        31,
+        26,
+        31
+      ],
+      111,
+      [
+        29,
+        21,
+        33,
+        19
+      ],
+      102,
+      "NYK",
+      "TOR",
+      "https://statsdmz.nba.com/pdfs/20261117/20261117_NYKTOR_book.pdf",
+      [],
+      []
+    ],
+    [
+      "0022600254",
+      "2026-11-17",
+      "8:00 PM",
+      "",
+      "",
+      "POR",
+      "MIN",
+      [
+        17,
+        31,
+        31,
+        26
+      ],
+      105,
+      [
+        29,
+        20,
+        30,
+        27
+      ],
+      106,
+      "MIN",
+      "POR",
+      "https://statsdmz.nba.com/pdfs/20261117/20261117_PORMIN_book.pdf",
+      [],
+      []
+    ],
+    [
+      "0022600255",
+      "2026-11-17",
+      "8:00 PM",
+      "",
+      "",
+      "DET",
+      "SAS",
+      [
+        26,
+        29,
+        23,
+        27
+      ],
+      105,
+      [
+        33,
+        21,
+        18,
+        21
+      ],
+      93,
+      "DET",
+      "SAS",
+      "https://statsdmz.nba.com/pdfs/20261117/20261117_DETSAS_book.pdf",
+      [],
+      []
+    ],
+    [
+      "0022600256",
+      "2026-11-17",
+      "10:00 PM",
+      "",
+      "",
+      "CHA",
+      "LAL",
+      [
+        34,
+        32,
+        28,
+        17
+      ],
+      114,
+      [
+        30,
+        29,
+        22,
+        30
+      ],
+      118,
+      "LAL",
+      "CHA",
+      "https://statsdmz.nba.com/pdfs/20261117/20261117_CHALAL_book.pdf",
+      [
+        3
+      ],
+      [
+        7
+      ]
+    ],
+    [
+      "0022600257",
+      "2026-11-17",
+      "11:00 PM",
+      "",
+      "",
+      "UTA",
+      "LAC",
+      [
+        35,
+        23,
+        30,
+        44
+      ],
+      132,
+      [
+        29,
+        33,
+        24,
+        21
+      ],
+      107,
+      "UTA",
+      "LAC",
+      "https://statsdmz.nba.com/pdfs/20261117/20261117_UTALAC_book.pdf",
+      [],
+      []
+    ]
+  ],
+  "verification": {
+    "quarter_sum_rule": "a team line settles only when its printed period scores (four quarters, plus any printed overtime periods) add to the printed final",
+    "quarter_sum_check": [
+      [
+        "0022600253",
+        "NYK",
+        23,
+        31,
+        26,
+        31,
+        111,
+        true
+      ],
+      [
+        "0022600253",
+        "TOR",
+        29,
+        21,
+        33,
+        19,
+        102,
+        true
+      ],
+      [
+        "0022600254",
+        "POR",
+        17,
+        31,
+        31,
+        26,
+        105,
+        true
+      ],
+      [
+        "0022600254",
+        "MIN",
+        29,
+        20,
+        30,
+        27,
+        106,
+        true
+      ],
+      [
+        "0022600255",
+        "DET",
+        26,
+        29,
+        23,
+        27,
+        105,
+        true
+      ],
+      [
+        "0022600255",
+        "SAS",
+        33,
+        21,
+        18,
+        21,
+        93,
+        true
+      ],
+      [
+        "0022600256",
+        "CHA",
+        34,
+        32,
+        28,
+        17,
+        3,
+        114,
+        true
+      ],
+      [
+        "0022600256",
+        "LAL",
+        30,
+        29,
+        22,
+        30,
+        7,
+        118,
+        true
+      ],
+      [
+        "0022600257",
+        "UTA",
+        35,
+        23,
+        30,
+        44,
+        132,
+        true
+      ],
+      [
+        "0022600257",
+        "LAC",
+        29,
+        33,
+        24,
+        21,
+        107,
+        true
+      ]
+    ],
+    "finals_cross_check": {
+      "second_official_source": "https://www.nba.com/games?date=2026-11-17",
+      "games_checked": 5,
+      "games_whose_two_documents_agree_on_both_finals": 5,
+      "rule": "the games page prints the final of every game of the date; a game whose two official documents disagree would produce no row"
+    },
+    "irregularity": "the gamebook's home (Toronto) period cells split across extraction chunks; the official game page LINESCORES (29/21/33/19/102) completes the row and matches the book's printed Q1/Q2 and final - recorded here"
+  },
+  "extraction_notes": [
+    "One row per game of 2026-11-17: all 5 games of the date, transcribed from the official gamebook PDF of each game (SCORE BY PERIOD block) and cross-checked against the official games page for the date (https://www.nba.com/games?date=2026-11-17).",
+    "Every printed final agrees between the two official documents (gamebook and games page).",
+    "one game of this date went to overtime (CHA@LAL): the OT column carries the printed OT period score and the period sum includes it",
+    "The arena and city columns are left blank because the day scoreboard does not print venues and this cycle did not fetch a venue document for these games; the cells are never guessed.",
+    "the NYK@TOR gamebook's home (Toronto) period cells split across the extraction chunks; the official game page LINESCORES for the same game prints 29/21/33/19/102, matching the gamebook's printed Q1 and Q2 and its printed final - the completed row is that reading."
+  ],
+  "secondary_sources": [
+    "https://www.nba.com/games?date=2026-11-17"
+  ]
+}

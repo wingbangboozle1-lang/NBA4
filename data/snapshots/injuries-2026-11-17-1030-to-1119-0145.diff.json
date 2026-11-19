@@ -1,0 +1,550 @@
+{
+  "old": {
+    "revision_label": "11/17/26 10:30 AM",
+    "document": "Injury Report: 11/17/26 10:30 AM",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-17_10_30AM.pdf",
+    "retrieved_utc": "2026-11-17T15:49:00Z",
+    "rows": 60,
+    "player_rows": 34,
+    "unaligned_rows": 0
+  },
+  "new": {
+    "revision_label": "11/19/26 01:45 AM",
+    "document": "Injury Report: 11/19/26 01:45 AM",
+    "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf",
+    "retrieved_utc": "2026-11-19T06:58:12Z",
+    "rows": 42,
+    "player_rows": 21,
+    "unaligned_rows": 0
+  },
+  "alignment": "key(matchup/team/player) with positional tie-break; 0 of 60 old rows and 42 new rows matched",
+  "changes": [
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 0,
+      "key": "NYK@TOR / Toronto Raptors / Bittle, Nate"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 1,
+      "key": "NYK@TOR / Toronto Raptors / Leonard, Kawhi"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 2,
+      "key": "NYK@TOR / Toronto Raptors / McCullar Jr., Kevin"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 3,
+      "key": "NYK@TOR / Toronto Raptors / Smith, Malachi"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 4,
+      "key": "DET@SAS / Detroit Pistons / Duren, Jalen"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 5,
+      "key": "DET@SAS / Detroit Pistons / Holland II, Ronald"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 6,
+      "key": "DET@SAS / Detroit Pistons / Joe, Isaiah"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 7,
+      "key": "DET@SAS / Detroit Pistons / Okorie, Ebuka"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 8,
+      "key": "DET@SAS / Detroit Pistons / Onyenso, Ugonna"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 9,
+      "key": "DET@SAS / Detroit Pistons / Prince, Taurean"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 10,
+      "key": "DET@SAS / Detroit Pistons / Robinson, Duncan"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 11,
+      "key": "DET@SAS / San Antonio Spurs / Brown, Maliq"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 12,
+      "key": "DET@SAS / San Antonio Spurs / Gillespie, Ja'Kobi"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 13,
+      "key": "DET@SAS / San Antonio Spurs / Harris, Tobias"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 14,
+      "key": "DET@SAS / San Antonio Spurs / Quaintance, Jayden"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 15,
+      "key": "POR@MIN / Portland Trail Blazers / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 16,
+      "key": "POR@MIN / Minnesota Timberwolves / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 17,
+      "key": "UTA@LAC / Utah Jazz / Bufkin, Kobe"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 18,
+      "key": "UTA@LAC / Utah Jazz / Hayes, Jaxson"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 19,
+      "key": "UTA@LAC / Utah Jazz / Ingram, Harrison"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 20,
+      "key": "UTA@LAC / Utah Jazz / Jackson Jr., Jaren"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 21,
+      "key": "UTA@LAC / Utah Jazz / Markkanen, Lauri"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 22,
+      "key": "UTA@LAC / Utah Jazz / Nurkic, Jusuf"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 23,
+      "key": "UTA@LAC / LA Clippers / Beal, Bradley"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 24,
+      "key": "UTA@LAC / LA Clippers / Ingram, Brandon"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 25,
+      "key": "UTA@LAC / LA Clippers / Miller, Jordan"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 26,
+      "key": "UTA@LAC / LA Clippers / Niederhauser, Yanic Konan"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 27,
+      "key": "CHA@LAL / Charlotte Hornets / Ajayi, Michael"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 28,
+      "key": "CHA@LAL / Charlotte Hornets / Boswell, Kylan"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 29,
+      "key": "CHA@LAL / Charlotte Hornets / Knueppel, Kon"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 30,
+      "key": "CHA@LAL / Charlotte Hornets / Schroder, Dennis"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 31,
+      "key": "CHA@LAL / Charlotte Hornets / Steinbach, Hannes"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 32,
+      "key": "CHA@LAL / Los Angeles Lakers / Grimes, Quentin"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 33,
+      "key": "CHA@LAL / Los Angeles Lakers / Kessler, Walker"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 34,
+      "key": "CHA@LAL / __lost__ / Soreness"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 35,
+      "key": "CHA@LAL / __lost__ / Reaves, Austin"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 36,
+      "key": "HOU@IND / Houston Rockets / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 37,
+      "key": "HOU@IND / Indiana Pacers / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 38,
+      "key": "MEM@CLE / Memphis Grizzlies / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 39,
+      "key": "MEM@CLE / Cleveland Cavaliers / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 40,
+      "key": "MIL@MIA / Milwaukee Bucks / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 41,
+      "key": "MIL@MIA / Miami Heat / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 42,
+      "key": "PHI@ORL / Philadelphia 76ers / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 43,
+      "key": "PHI@ORL / Orlando Magic / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 44,
+      "key": "CHI@BKN / Chicago Bulls / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 45,
+      "key": "CHI@BKN / Brooklyn Nets / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 46,
+      "key": "WAS@TOR / Washington Wizards / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 47,
+      "key": "WAS@TOR / Toronto Raptors / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 48,
+      "key": "ATL@OKC / Atlanta Hawks / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 49,
+      "key": "ATL@OKC / Oklahoma City Thunder / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 50,
+      "key": "DET@NOP / Detroit Pistons / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 51,
+      "key": "DET@NOP / New Orleans Pelicans / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 52,
+      "key": "GSW@DAL / Golden State Warriors / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 53,
+      "key": "GSW@DAL / Dallas Mavericks / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 54,
+      "key": "BOS@DEN / Boston Celtics / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 55,
+      "key": "BOS@DEN / Denver Nuggets / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 56,
+      "key": "PHX@SAC / Phoenix Suns / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 57,
+      "key": "PHX@SAC / Sacramento Kings / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 58,
+      "key": "UTA@LAL / Utah Jazz / [NO INPUT]"
+    },
+    {
+      "kind": "REMOVED_OR_REALIGNED",
+      "position": 59,
+      "key": "UTA@LAL / Los Angeles Lakers / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 0,
+      "key": "GSW@MEM / Golden State Warriors / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 1,
+      "key": "GSW@MEM / Memphis Grizzlies / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 2,
+      "key": "LAC@SAS / LA Clippers / Beal, Bradley"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 3,
+      "key": "LAC@SAS / LA Clippers / Ingram, Brandon"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 4,
+      "key": "LAC@SAS / LA Clippers / Martinelli, Nick"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 5,
+      "key": "LAC@SAS / LA Clippers / Miller, Jordan"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 6,
+      "key": "LAC@SAS / San Antonio Spurs / Brown, Maliq"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 7,
+      "key": "LAC@SAS / San Antonio Spurs / Gillespie, Ja'Kobi"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 8,
+      "key": "LAC@SAS / San Antonio Spurs / Harper, Dylan"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 9,
+      "key": "LAC@SAS / San Antonio Spurs / Harris, Tobias"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 10,
+      "key": "LAC@SAS / San Antonio Spurs / Quaintance, Jayden"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 11,
+      "key": "NYK@MIN / Minnesota Timberwolves / Beringer, Joan"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 12,
+      "key": "NYK@MIN / Minnesota Timberwolves / Clark, Jaylen"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 13,
+      "key": "NYK@MIN / Minnesota Timberwolves / DiVincenzo, Donte"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 14,
+      "key": "NYK@MIN / Minnesota Timberwolves / Edwards, Anthony"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 15,
+      "key": "POR@MIL / Portland Trail Blazers / Avdija, Deni"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 16,
+      "key": "POR@MIL / Portland Trail Blazers / Camara, Toumani"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 17,
+      "key": "POR@MIL / Portland Trail Blazers / Carlson, Branden"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 18,
+      "key": "POR@MIL / Portland Trail Blazers / Krejci, Vit"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 19,
+      "key": "POR@MIL / Portland Trail Blazers / Morant, Ja"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 20,
+      "key": "POR@MIL / Portland Trail Blazers / Sharpe, Shaedon"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 21,
+      "key": "POR@MIL / Portland Trail Blazers / Williams III, Robert"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 22,
+      "key": "POR@MIL / Portland Trail Blazers / Youngblood, Chris"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 23,
+      "key": "POR@MIL / Milwaukee Bucks / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 24,
+      "key": "CHA@ATL / Charlotte Hornets / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 25,
+      "key": "CHA@ATL / Atlanta Hawks / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 26,
+      "key": "IND@CLE / Indiana Pacers / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 27,
+      "key": "IND@CLE / Cleveland Cavaliers / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 28,
+      "key": "ORL@BKN / Orlando Magic / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 29,
+      "key": "ORL@BKN / Brooklyn Nets / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 30,
+      "key": "TOR@DET / Toronto Raptors / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 31,
+      "key": "TOR@DET / Detroit Pistons / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 32,
+      "key": "NOP@OKC / New Orleans Pelicans / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 33,
+      "key": "NOP@OKC / Oklahoma City Thunder / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 34,
+      "key": "WAS@CHI / Washington Wizards / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 35,
+      "key": "WAS@CHI / Chicago Bulls / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 36,
+      "key": "PHX@UTA / Phoenix Suns / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 37,
+      "key": "PHX@UTA / Utah Jazz / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 38,
+      "key": "HOU@DEN / Houston Rockets / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 39,
+      "key": "HOU@DEN / Denver Nuggets / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 40,
+      "key": "SAC@LAL / Sacramento Kings / [NO INPUT]"
+    },
+    {
+      "kind": "ADDED_OR_REALIGNED",
+      "position": 41,
+      "key": "SAC@LAL / Los Angeles Lakers / [NO INPUT]"
+    }
+  ],
+  "counts": {
+    "old_rows": 60,
+    "new_rows": 42,
+    "status_changes": 0,
+    "reason_changes": 0,
+    "team_changes": 0,
+    "printing_variances": 0,
+    "realigned": 102
+  },
+  "source_url": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-19_01_45AM.pdf",
+  "diff_id": "injuries-2026-11-17-1030-to-1119-0145.diff",
+  "kind": "official_injury_report_consecutive_diff",
+  "source_document_header": "Injury Report: 11/19/26 01:45 AM",
+  "fetched_at_utc": "2026-11-19T07:35:00Z",
+  "extraction_tool": "engine/injurystore.diff_revisions over the two file-of-record snapshots (no fetching)",
+  "source_index_url": "https://official.nba.com/nba-injury-report-2026-27-season/",
+  "rule": "A status change requires a matched row whose status cell differs. Rows are matched on the identity cells the row itself prints (matchup, team, player); a one-for-one leftover with identical status and reason is a printing variance, not a status change. Between 11/17 and 11/19 the printed matchups themselves change with the slate, so unmatched keys are reported as realignments (REMOVED_OR_REALIGNED / ADDED_OR_REALIGNED), never as status changes."
+}
